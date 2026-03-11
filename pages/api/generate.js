@@ -88,8 +88,20 @@ COVER LETTER REQUIREMENTS:
 - Close with confidence, not desperation — no "I look forward to hearing from you at your earliest convenience"
 - Conversational but professional tone
 - Do NOT use clichés or corporate filler
+- Do NOT include a contact info header — that will be added separately
+
+METADATA REQUIREMENTS:
+Extract from the LinkedIn profile and job description:
+- candidateName: full name of the candidate
+- candidateEmail: email address if present, else ""
+- candidatePhone: phone number if present, else ""
+- companyName: name of the company in the job description (short form, no Inc/LLC)
+- jobTitle: the job title from the job description (2-4 words max, no special chars)
 
 Respond in this exact format with these exact markers:
+
+===METADATA===
+{"candidateName":"...","candidateEmail":"...","candidatePhone":"...","companyName":"...","jobTitle":"..."}
 
 ===RESUME===
 [resume content here]
@@ -106,14 +118,31 @@ Respond in this exact format with these exact markers:
 
     const responseText = message.content[0].text
 
-    // Parse the response
+    // Parse metadata
+    let metadata = { candidateName: '', candidateEmail: '', candidatePhone: '', companyName: '', jobTitle: '' }
+    const metaMatch = responseText.match(/===METADATA===\s*(\{[\s\S]*?\})\s*===RESUME===/)
+    if (metaMatch) {
+      try { metadata = { ...metadata, ...JSON.parse(metaMatch[1]) } } catch (e) {}
+    }
+
+    // Parse resume and cover letter
     const resumeMatch = responseText.match(/===RESUME===([\s\S]*?)===COVER_LETTER===/)
     const coverMatch = responseText.match(/===COVER_LETTER===([\s\S]*)$/)
 
     const resume = resumeMatch ? resumeMatch[1].trim() : responseText
-    const coverLetter = coverMatch ? coverMatch[1].trim() : ''
 
-    return res.status(200).json({ resume, coverLetter })
+    // Build contact header for cover letter
+    const contactParts = [metadata.candidateName, metadata.candidateEmail, metadata.candidatePhone].filter(Boolean)
+    const contactHeader = contactParts.length > 0 ? contactParts.join(' · ') + '\n\n' : ''
+    const rawCoverLetter = coverMatch ? coverMatch[1].trim() : ''
+    const coverLetter = contactHeader + rawCoverLetter
+
+    // Build safe filename slug
+    const slug = (str) => str.replace(/[^a-zA-Z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '')
+    const fileBaseName = [slug(metadata.candidateName), slug(metadata.companyName), slug(metadata.jobTitle)]
+      .filter(Boolean).join('_') || 'resume'
+
+    return res.status(200).json({ resume, coverLetter, metadata, fileBaseName })
   } catch (err) {
     console.error('Claude API error:', err)
     return res.status(500).json({ error: 'Generation failed. Please try again.' })

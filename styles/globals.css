@@ -378,16 +378,39 @@ body {
 /* DOWNLOAD BUTTONS */
 .download-row {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   padding: 1.5rem 1.75rem;
   background: var(--warm);
   border-top: 1.5px solid var(--border);
   flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.download-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 180px;
+}
+
+.download-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.download-btns {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .download-btn {
   flex: 1;
-  min-width: 160px;
+  min-width: 60px;
   padding: 0.85rem 1.5rem;
   background: var(--ink);
   color: var(--cream);

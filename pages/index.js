@@ -60,7 +60,10 @@ export default function Home() {
     }
   }
 
-  const downloadText = (content, filename) => {
+  const downloadTxt = (content, label) => {
+    const filename = results?.fileBaseName
+      ? `${results.fileBaseName}_${label}.txt`
+      : `${label}.txt`
     const blob = new Blob([content], { type: 'text/plain' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -68,6 +71,23 @@ export default function Home() {
     a.download = filename
     a.click()
     URL.revokeObjectURL(url)
+  }
+
+  const downloadPdf = (content, label) => {
+    const filename = results?.fileBaseName
+      ? `${results.fileBaseName}_${label}`
+      : label
+    const win = window.open('', '_blank')
+    win.document.write(`<!DOCTYPE html><html><head>
+      <title>${filename}</title>
+      <style>
+        body { font-family: Georgia, serif; font-size: 12pt; line-height: 1.6; max-width: 680px; margin: 40px auto; padding: 0 20px; color: #111; }
+        pre { white-space: pre-wrap; font-family: inherit; font-size: inherit; }
+      </style>
+    </head><body><pre>${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+    <script>window.onload = () => { window.print(); }<\/script>
+    </body></html>`)
+    win.document.close()
   }
 
   const handleReset = () => {
@@ -201,18 +221,20 @@ export default function Home() {
               </div>
 
               <div className="download-row">
-                <button
-                  className="download-btn"
-                  onClick={() => downloadText(results.resume, 'resume.txt')}
-                >
-                  ↓ Download Resume
-                </button>
-                <button
-                  className="download-btn secondary"
-                  onClick={() => downloadText(results.coverLetter, 'cover-letter.txt')}
-                >
-                  ↓ Download Cover Letter
-                </button>
+                <div className="download-group">
+                  <div className="download-label">Resume</div>
+                  <div className="download-btns">
+                    <button className="download-btn" onClick={() => downloadTxt(results.resume, 'Resume')}>↓ TXT</button>
+                    <button className="download-btn secondary" onClick={() => downloadPdf(results.resume, 'Resume')}>↓ PDF</button>
+                  </div>
+                </div>
+                <div className="download-group">
+                  <div className="download-label">Cover Letter</div>
+                  <div className="download-btns">
+                    <button className="download-btn" onClick={() => downloadTxt(results.coverLetter, 'Cover_Letter')}>↓ TXT</button>
+                    <button className="download-btn secondary" onClick={() => downloadPdf(results.coverLetter, 'Cover_Letter')}>↓ PDF</button>
+                  </div>
+                </div>
               </div>
             </div>
 
