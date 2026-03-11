@@ -181,7 +181,7 @@ export default function Home() {
 
       <header className="header">
         <div className="logo">
-          <img src="/uncle-spin-icon.png" alt="" className="logo-icon" />
+          <img src="/uncle-spin-logo.png" alt="Uncle Spin" className="logo-icon" />
           <span className="logo-text">Jobs Uncle</span>
           <span className="logo-badge">Beta</span>
         </div>
@@ -207,7 +207,7 @@ export default function Home() {
             </p>
           </div>
           <div className="hero-mascot">
-            <img src="/uncle-spin.svg" alt="Uncle Spin" className="mascot-img" />
+            <img src="/uncle-spin-hero.png" alt="Uncle Spin" className="mascot-img" />
           </div>
         </div>
       </div>
