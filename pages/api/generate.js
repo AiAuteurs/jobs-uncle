@@ -142,6 +142,9 @@ Respond in this exact format with these exact markers:
     const fileBaseName = [slug(metadata.candidateName), slug(metadata.companyName), slug(metadata.jobTitle)]
       .filter(Boolean).join('_') || 'resume'
 
+    // Increment counter — fire and forget, never block the response
+    fetch((process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000') + '/api/counter', { method: 'POST' }).catch(() => {})
+
     return res.status(200).json({ resume, coverLetter, metadata, fileBaseName })
   } catch (err) {
     console.error('Claude API error:', err)

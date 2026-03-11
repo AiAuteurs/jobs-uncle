@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import Head from 'next/head'
 
 const renderMarkdown = (text) => {
@@ -28,7 +28,16 @@ export default function Home() {
   const [error, setError] = useState(null)
   const [dragover, setDragover] = useState(false)
   const [docxLoading, setDocxLoading] = useState(false)
+  const [resumeCount, setResumeCount] = useState(null)
   const fileInputRef = useRef(null)
+
+  // Fetch resume counter on mount
+  useEffect(() => {
+    fetch('/api/counter')
+      .then(r => r.json())
+      .then(d => setResumeCount(d.count))
+      .catch(() => {})
+  }, [])
 
   const handleFile = (file) => {
     if (file && file.type === 'application/pdf') {
@@ -172,19 +181,35 @@ export default function Home() {
 
       <header className="header">
         <div className="logo">
+          <img src="/uncle-spin-icon.png" alt="" className="logo-icon" />
           <span className="logo-text">Jobs Uncle</span>
           <span className="logo-badge">Beta</span>
         </div>
-        <span className="header-tagline">Everyone deserves an uncle in the business</span>
+        <div className="header-right">
+          {resumeCount !== null && (
+            <div className="counter">
+              <span className="counter-num">{resumeCount.toLocaleString()}</span>
+              <span className="counter-label">resumes generated</span>
+            </div>
+          )}
+          <span className="header-tagline">Everyone deserves an uncle in the business</span>
+        </div>
       </header>
 
       <div className="hero">
-        <p className="hero-eyebrow">AI-Powered Resume Intelligence</p>
-        <h1>Your resume, <em>tailored</em><br />to every job.</h1>
-        <p className="hero-sub">
-          Upload your resume or LinkedIn profile. Paste a job description.
-          Get a bespoke resume and cover letter — built for that specific role — in under 60 seconds.
-        </p>
+        <div className="hero-inner">
+          <div className="hero-copy">
+            <p className="hero-eyebrow">AI Resume Intelligence</p>
+            <h1>Your resume, <em>tailored</em><br />to every job.</h1>
+            <p className="hero-sub">
+              Upload your resume or LinkedIn profile. Paste a job description.
+              Get a bespoke resume and cover letter — built for that specific role — in under 60 seconds.
+            </p>
+          </div>
+          <div className="hero-mascot">
+            <img src="/uncle-spin.svg" alt="Uncle Spin" className="mascot-img" />
+          </div>
+        </div>
       </div>
 
       <div className="app-container">
