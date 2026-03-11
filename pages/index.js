@@ -13,6 +13,14 @@ const renderMarkdown = (text) => {
 }
 
 
+const stripMarkdown = (text) => {
+  if (!text) return ''
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/^#{1,3}\s+/gm, '')
+    .trim()
+}
+
 export default function Home() {
   const [pdfFile, setPdfFile] = useState(null)
   const [jobDescription, setJobDescription] = useState('')
@@ -72,7 +80,8 @@ export default function Home() {
     }
   }
 
-  const downloadTxt = (content, label) => {
+  const downloadTxt = (rawContent, label) => {
+    const content = stripMarkdown(rawContent)
     const filename = results?.fileBaseName
       ? `${results.fileBaseName}_${label}.txt`
       : `${label}.txt`

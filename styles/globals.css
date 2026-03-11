@@ -371,8 +371,15 @@ body {
   font-size: 0.85rem;
   line-height: 1.8;
   color: var(--ink);
-  white-space: pre-wrap;
   font-family: 'DM Sans', sans-serif;
+}
+
+.result-content p {
+  margin: 0 0 0.75rem 0;
+}
+
+.result-content p:last-child {
+  margin-bottom: 0;
 }
 
 /* DOWNLOAD BUTTONS */
