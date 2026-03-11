@@ -1,6 +1,18 @@
 import { useState, useRef, useCallback } from 'react'
 import Head from 'next/head'
 
+const renderMarkdown = (text) => {
+  if (!text) return ''
+  return text
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^#{1,3}\s+(.+)$/gm, '<strong>$1</strong>')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\n/g, '<br/>')
+    .replace(/^/, '<p>').replace(/$/, '</p>')
+}
+
+
 export default function Home() {
   const [pdfFile, setPdfFile] = useState(null)
   const [jobDescription, setJobDescription] = useState('')
@@ -212,12 +224,12 @@ export default function Home() {
 
               <div className="result-section">
                 <div className="result-section-title">Resume</div>
-                <div className="result-content">{results.resume}</div>
+                <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.resume)}} />
               </div>
 
               <div className="result-section">
                 <div className="result-section-title">Cover Letter</div>
-                <div className="result-content">{results.coverLetter}</div>
+                <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.coverLetter)}} />
               </div>
 
               <div className="download-row">
