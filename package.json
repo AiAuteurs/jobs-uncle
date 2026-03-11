@@ -14,7 +14,8 @@
     "pdf-lib": "^1.17.1",
     "pdf-parse": "^1.1.1",
     "@anthropic-ai/sdk": "^0.20.0",
-    "formidable": "^3.5.1"
+    "formidable": "^3.5.1",
+    "docx": "^8.5.0"
   },
   "devDependencies": {
     "@types/node": "^20",

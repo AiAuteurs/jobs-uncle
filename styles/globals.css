@@ -356,8 +356,6 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
-.result-section:last-child { border-bottom: none; }
-
 .result-section-title {
   font-size: 0.7rem;
   font-weight: 500;
@@ -382,69 +380,146 @@ body {
   margin-bottom: 0;
 }
 
-/* DOWNLOAD BUTTONS */
-.download-row {
-  display: flex;
-  gap: 1.5rem;
-  padding: 1.5rem 1.75rem;
-  background: var(--warm);
+/* ─── PURPOSE-DRIVEN DOWNLOAD SECTION ─────────────────────── */
+
+.download-section {
   border-top: 1.5px solid var(--border);
-  flex-wrap: wrap;
-  align-items: flex-end;
+  background: var(--warm);
 }
 
-.download-group {
+.download-section-header {
+  padding: 1.5rem 1.75rem 0;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.download-section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.download-section-sub {
+  font-size: 0.78rem;
+  color: var(--gray);
+}
+
+.format-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  padding: 1.25rem 1.75rem 1.75rem;
+}
+
+@media (max-width: 680px) {
+  .format-cards { grid-template-columns: 1fr; }
+}
+
+.format-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  flex: 1;
-  min-width: 180px;
 }
 
-.download-label {
-  font-size: 0.7rem;
+.format-card-featured {
+  border-color: var(--ink);
+  background: var(--white);
+  position: relative;
+}
+
+.format-badge {
+  display: inline-block;
+  font-size: 0.6rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.15em;
+  padding: 2px 7px;
+  border-radius: 2px;
+  width: fit-content;
+  margin-bottom: 0.25rem;
 }
 
-.download-btns {
-  display: flex;
-  gap: 0.5rem;
+.txt-badge {
+  background: #eef0f0;
+  color: #555;
 }
 
-.download-btn {
+.docx-badge {
+  background: #e8f0ff;
+  color: #2050b0;
+}
+
+.pdf-badge {
+  background: #ffeee8;
+  color: #b04020;
+}
+
+.format-purpose {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.format-desc {
+  font-size: 0.75rem;
+  color: var(--gray);
+  line-height: 1.55;
   flex: 1;
-  min-width: 60px;
-  padding: 0.85rem 1.5rem;
-  background: var(--ink);
-  color: var(--cream);
-  border: none;
-  border-radius: 4px;
+}
+
+.format-btns {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.format-btn {
+  flex: 1;
+  padding: 0.6rem 0.5rem;
+  background: transparent;
+  color: var(--ink);
+  border: 1.5px solid var(--border);
+  border-radius: 3px;
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.15s;
   text-align: center;
 }
 
-.download-btn:hover {
-  background: #2a2a28;
-}
-
-.download-btn.secondary {
-  background: transparent;
-  color: var(--ink);
-  border: 1.5px solid var(--ink);
-}
-
-.download-btn.secondary:hover {
+.format-btn:hover:not(:disabled) {
+  border-color: var(--ink);
   background: var(--ink);
   color: var(--cream);
 }
+
+.format-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.format-btn-featured {
+  background: var(--ink);
+  color: var(--cream);
+  border-color: var(--ink);
+}
+
+.format-btn-featured:hover:not(:disabled) {
+  background: #2a2a28;
+  border-color: #2a2a28;
+  color: var(--cream);
+}
+
+/* ─────────────────────────────────────────────────────────── */
 
 .reset-btn {
   width: 100%;
@@ -484,13 +559,6 @@ body {
   font-size: 0.75rem;
   color: var(--gray);
   letter-spacing: 0.05em;
-}
-
-/* DIVIDER */
-.rule {
-  border: none;
-  border-top: 1px solid var(--border);
-  margin: 2.5rem 0;
 }
 
 /* HOW IT WORKS */

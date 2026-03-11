@@ -12,7 +12,6 @@ const renderMarkdown = (text) => {
     .replace(/^/, '<p>').replace(/$/, '</p>')
 }
 
-
 const stripMarkdown = (text) => {
   if (!text) return ''
   return text
@@ -28,6 +27,7 @@ export default function Home() {
   const [results, setResults] = useState(null)
   const [error, setError] = useState(null)
   const [dragover, setDragover] = useState(false)
+  const [docxLoading, setDocxLoading] = useState(false)
   const fileInputRef = useRef(null)
 
   const handleFile = (file) => {
@@ -80,6 +80,7 @@ export default function Home() {
     }
   }
 
+  // TXT — stripped plain text for pasting into ATS / job portals
   const downloadTxt = (rawContent, label) => {
     const content = stripMarkdown(rawContent)
     const filename = results?.fileBaseName
@@ -94,6 +95,42 @@ export default function Home() {
     URL.revokeObjectURL(url)
   }
 
+  // DOCX — real Word doc for human readers, editable in Word / Google Docs
+  const downloadDocx = async (type) => {
+    if (!results) return
+    setDocxLoading(true)
+    try {
+      const payload = {
+        resume: type === 'resume' || type === 'both' ? results.resume : null,
+        coverLetter: type === 'cover' || type === 'both' ? results.coverLetter : null,
+        fileBaseName: results.fileBaseName
+          ? `${results.fileBaseName}_${type === 'resume' ? 'Resume' : type === 'cover' ? 'Cover_Letter' : 'Full_Package'}`
+          : type,
+      }
+
+      const response = await fetch('/api/docx', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) throw new Error('DOCX generation failed')
+
+      const blob = await response.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${payload.fileBaseName}.docx`
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch (err) {
+      setError('DOCX download failed. Try the TXT version.')
+    } finally {
+      setDocxLoading(false)
+    }
+  }
+
+  // PDF — print via browser print dialog
   const downloadPdf = (content, label) => {
     const filename = results?.fileBaseName
       ? `${results.fileBaseName}_${label}`
@@ -102,10 +139,13 @@ export default function Home() {
     win.document.write(`<!DOCTYPE html><html><head>
       <title>${filename}</title>
       <style>
-        body { font-family: Georgia, serif; font-size: 12pt; line-height: 1.6; max-width: 680px; margin: 40px auto; padding: 0 20px; color: #111; }
-        pre { white-space: pre-wrap; font-family: inherit; font-size: inherit; }
+        body { font-family: Georgia, serif; font-size: 12pt; line-height: 1.65; max-width: 680px; margin: 40px auto; padding: 0 20px; color: #111; }
+        strong { font-weight: bold; }
+        p { margin: 0 0 0.75em 0; }
+        @media print { body { margin: 0; } }
       </style>
-    </head><body><pre>${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+    </head><body>
+      <div>${renderMarkdown(content)}</div>
     <script>window.onload = () => { window.print(); }<\/script>
     </body></html>`)
     win.document.close()
@@ -241,21 +281,72 @@ export default function Home() {
                 <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.coverLetter)}} />
               </div>
 
-              <div className="download-row">
-                <div className="download-group">
-                  <div className="download-label">Resume</div>
-                  <div className="download-btns">
-                    <button className="download-btn" onClick={() => downloadTxt(results.resume, 'Resume')}>↓ TXT</button>
-                    <button className="download-btn secondary" onClick={() => downloadPdf(results.resume, 'Resume')}>↓ PDF</button>
-                  </div>
+              {/* PURPOSE-DRIVEN DOWNLOAD SECTION */}
+              <div className="download-section">
+                <div className="download-section-header">
+                  <span className="download-section-title">Download your documents</span>
+                  <span className="download-section-sub">Three formats. Each built for a different situation.</span>
                 </div>
-                <div className="download-group">
-                  <div className="download-label">Cover Letter</div>
-                  <div className="download-btns">
-                    <button className="download-btn" onClick={() => downloadTxt(results.coverLetter, 'Cover_Letter')}>↓ TXT</button>
-                    <button className="download-btn secondary" onClick={() => downloadPdf(results.coverLetter, 'Cover_Letter')}>↓ PDF</button>
+
+                {/* FORMAT CARDS */}
+                <div className="format-cards">
+
+                  {/* TXT */}
+                  <div className="format-card">
+                    <div className="format-badge txt-badge">TXT</div>
+                    <div className="format-purpose">Paste into job portals</div>
+                    <div className="format-desc">Plain text. No formatting. Exactly what ATS systems and online job applications expect.</div>
+                    <div className="format-btns">
+                      <button className="format-btn" onClick={() => downloadTxt(results.resume, 'Resume')}>
+                        Resume
+                      </button>
+                      <button className="format-btn" onClick={() => downloadTxt(results.coverLetter, 'Cover_Letter')}>
+                        Cover Letter
+                      </button>
+                    </div>
                   </div>
+
+                  {/* DOCX */}
+                  <div className="format-card format-card-featured">
+                    <div className="format-badge docx-badge">DOCX</div>
+                    <div className="format-purpose">Send to a human</div>
+                    <div className="format-desc">A real Word document. Edit in Word or Google Docs, tweak the wording, make it yours.</div>
+                    <div className="format-btns">
+                      <button
+                        className="format-btn format-btn-featured"
+                        onClick={() => downloadDocx('resume')}
+                        disabled={docxLoading}
+                      >
+                        {docxLoading ? '...' : 'Resume'}
+                      </button>
+                      <button
+                        className="format-btn format-btn-featured"
+                        onClick={() => downloadDocx('cover')}
+                        disabled={docxLoading}
+                      >
+                        {docxLoading ? '...' : 'Cover Letter'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* PDF */}
+                  <div className="format-card">
+                    <div className="format-badge pdf-badge">PDF</div>
+                    <div className="format-purpose">Print-ready version</div>
+                    <div className="format-desc">Looks exactly right on paper or screen. Nothing shifts. Nothing reformats. Just print.</div>
+                    <div className="format-btns">
+                      <button className="format-btn" onClick={() => downloadPdf(results.resume, 'Resume')}>
+                        Resume
+                      </button>
+                      <button className="format-btn" onClick={() => downloadPdf(results.coverLetter, 'Cover_Letter')}>
+                        Cover Letter
+                      </button>
+                    </div>
+                  </div>
+
                 </div>
+
+                {error && <div className="error-msg" style={{marginTop: '1rem'}}>{error}</div>}
               </div>
             </div>
 
@@ -283,7 +374,7 @@ export default function Home() {
           </div>
           <div className="how-item">
             <div className="how-num">04</div>
-            <div className="how-label">Download, refine, send. Nothing is stored. Ever.</div>
+            <div className="how-label">Download in the format that fits. Nothing is stored. Ever.</div>
           </div>
         </div>
       </div>
