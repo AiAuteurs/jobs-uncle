@@ -121,7 +121,7 @@ export default function Home() {
         <p className="hero-eyebrow">AI-Powered Resume Intelligence</p>
         <h1>Your resume, <em>tailored</em><br />to every job.</h1>
         <p className="hero-sub">
-          Upload your LinkedIn profile. Paste a job description. 
+          Upload your resume or LinkedIn profile. Paste a job description.
           Get a bespoke resume and cover letter — built for that specific role — in under 60 seconds.
         </p>
       </div>
@@ -134,9 +134,9 @@ export default function Home() {
               {/* STEP 1 */}
               <div className={`step-card ${pdfFile ? 'complete' : 'active'}`}>
                 <div className="step-number">Step 01</div>
-                <div className="step-title">Your LinkedIn PDF</div>
+                <div className="step-title">Your Resume or LinkedIn PDF</div>
                 <p className="step-desc">
-                  On LinkedIn: Me → Settings → Data Privacy → Get a copy of your data → Download profile as PDF
+                  Upload your existing resume as a PDF, or export your LinkedIn profile as a PDF. Either works.
                 </p>
                 <div
                   className={`upload-zone ${dragover ? 'dragover' : ''} ${pdfFile ? 'has-file' : ''}`}
@@ -250,7 +250,7 @@ export default function Home() {
         <div className="how-items">
           <div className="how-item">
             <div className="how-num">01</div>
-            <div className="how-label">Upload your LinkedIn PDF — your full career in one file</div>
+            <div className="how-label">Upload your resume or LinkedIn PDF — your full career in one file</div>
           </div>
           <div className="how-item">
             <div className="how-num">02</div>
