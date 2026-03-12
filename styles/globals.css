@@ -76,8 +76,9 @@ body {
 .header-tagline {
   font-family: 'Inter', sans-serif;
   font-size: 0.78rem;
-  color: var(--text-soft);
+  color: var(--ink);
   letter-spacing: 0.02em;
+  font-weight: 500;
 }
 
 /* ─── HERO ─────────────────────────────────────────────────── */
@@ -606,10 +607,10 @@ body {
 .counter-label {
   font-family: 'Inter', sans-serif;
   font-size: 0.58rem;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-soft);
+  color: var(--ink);
 }
 
 @media (max-width: 600px) {
