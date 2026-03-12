@@ -29,6 +29,8 @@ export default function Home() {
   const [dragover, setDragover] = useState(false)
   const [docxLoading, setDocxLoading] = useState(false)
   const [resumeCount, setResumeCount] = useState(null)
+  const [showPaywall, setShowPaywall] = useState(false)
+  const [isPaid, setIsPaid] = useState(false)
   const fileInputRef = useRef(null)
 
   // Fetch resume counter on mount
@@ -37,6 +39,10 @@ export default function Home() {
       .then(r => r.json())
       .then(d => setResumeCount(d.count))
       .catch(() => {})
+
+    // Check if returning paid user
+    const session = localStorage.getItem('ju_session')
+    if (session) setIsPaid(true)
   }, [])
 
   const handleFile = (file) => {
@@ -61,6 +67,16 @@ export default function Home() {
       return
     }
 
+    // Check access unless already paid
+    if (!isPaid) {
+      const accessRes = await fetch('/api/check-access', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) })
+      const accessData = await accessRes.json()
+      if (accessData.access === 'none') {
+        setShowPaywall(true)
+        return
+      }
+    }
+
     setLoading(true)
     setError(null)
     setResults(null)
@@ -82,11 +98,22 @@ export default function Home() {
       }
 
       setResults(data)
+
+      // Mark free resume as used
+      if (!isPaid) {
+        fetch('/api/mark-used', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) }).catch(() => {})
+      }
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.')
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleUpgrade = async () => {
+    const res = await fetch('/api/stripe-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) })
+    const data = await res.json()
+    if (data.url) window.location.href = data.url
   }
 
   // TXT — stripped plain text for pasting into ATS / job portals
@@ -172,6 +199,24 @@ export default function Home() {
 
   return (
     <>
+      {showPaywall && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+          <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)' }}>
+            <img src="/uncle-spin-hero.png" alt="Jobs Uncle" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
+            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Your free resume is done.</h2>
+            <p style={{ color: 'var(--text-soft)', fontSize: '0.95rem', margin: '0 0 32px', lineHeight: 1.6 }}>
+              Upgrade to Pro for unlimited resumes, every job, forever.<br />
+              <strong style={{ color: 'var(--ink)' }}>$49.99 / year.</strong> Cancel anytime.
+            </p>
+            <button onClick={handleUpgrade} style={{ width: '100%', background: 'var(--accent)', color: 'white', border: 'none', padding: '16px', borderRadius: '8px', fontSize: '1rem', fontWeight: 700, cursor: 'pointer', marginBottom: '12px', letterSpacing: '0.02em' }}>
+              Upgrade to Pro — $49.99/yr
+            </button>
+            <button onClick={() => setShowPaywall(false)} style={{ background: 'none', border: 'none', color: 'var(--text-soft)', fontSize: '0.85rem', cursor: 'pointer', padding: '8px' }}>
+              Maybe later
+            </button>
+          </div>
+        </div>
+      )}
       <Head>
         <title>Jobs Uncle — Resumes That Actually Fit</title>
         <meta name="description" content="Upload your LinkedIn PDF, paste a job description, get a bespoke resume and cover letter in under a minute." />
