@@ -616,3 +616,84 @@ body {
 @media (max-width: 600px) {
   .counter { display: none; }
 }
+
+/* ─── FEEDBACK ──────────────────────────────────────────── */
+.feedback-section {
+  margin: 2rem auto 0;
+  max-width: 640px;
+  padding: 1.5rem 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  text-align: center;
+}
+
+.feedback-question {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+
+.feedback-options {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.feedback-btn {
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.feedback-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.feedback-btn.selected {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.feedback-text {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  resize: none;
+  margin-bottom: 0.75rem;
+  background: white;
+}
+
+.feedback-text:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.feedback-submit {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.feedback-thanks {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent);
+}

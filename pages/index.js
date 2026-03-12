@@ -31,6 +31,9 @@ export default function Home() {
   const [resumeCount, setResumeCount] = useState(null)
   const [showPaywall, setShowPaywall] = useState(false)
   const [isPaid, setIsPaid] = useState(false)
+  const [feedback, setFeedback] = useState(null) // 'yes' | 'kinda' | 'no'
+  const [feedbackText, setFeedbackText] = useState('')
+  const [feedbackSent, setFeedbackSent] = useState(false)
   const fileInputRef = useRef(null)
 
   // Fetch resume counter on mount
@@ -216,10 +219,10 @@ export default function Home() {
         </div>
       )}
       <Head>
-        <title>JobsUncle.ai — Upload your resume. Paste the job. Get hired.</title>
+        <title>JobsUncle.ai — Your resume, tailored to every job.</title>
         <meta name="description" content="Upload your LinkedIn PDF, paste a job description, get a bespoke resume and cover letter in under a minute." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta property="og:title" content="JobsUncle.ai — Upload your resume. Paste the job. Get hired." />
+        <meta property="og:title" content="JobsUncle.ai — Your resume, tailored to every job." />
         <meta property="og:description" content="Upload your resume or LinkedIn PDF, paste a job description, get a tailored resume and cover letter in under a minute." />
         <meta property="og:image" content="https://www.jobsuncle.ai/og-image.png" />
         <meta property="og:image:width" content="1200" />
@@ -237,7 +240,7 @@ export default function Home() {
         <div className="logo">
           <img src="/uncle-spin-logo.png" alt="Uncle Spin" className="logo-icon" />
           <span className="logo-text">JobsUncle.ai</span>
-          <span className="logo-badge">Beta</span>
+
         </div>
         <div className="header-right">
           {resumeCount !== null && (
@@ -449,6 +452,49 @@ export default function Home() {
 
                 {error && <div className="error-msg" style={{marginTop: '1rem'}}>{error}</div>}
               </div>
+            </div>
+
+            {/* FEEDBACK */}
+            <div className="feedback-section">
+              {!feedbackSent ? (
+                <>
+                  <div className="feedback-question">Did this look like a real resume you'd actually send?</div>
+                  <div className="feedback-options">
+                    {['yes', 'kinda', 'no'].map(opt => (
+                      <button
+                        key={opt}
+                        className={`feedback-btn ${feedback === opt ? 'selected' : ''}`}
+                        onClick={() => setFeedback(opt)}
+                      >
+                        {opt === 'yes' ? '👍 Yes' : opt === 'kinda' ? '🤔 Kind of' : '👎 No'}
+                      </button>
+                    ))}
+                  </div>
+                  {feedback && (
+                    <>
+                      <textarea
+                        className="feedback-text"
+                        placeholder="Anything specific? (optional)"
+                        value={feedbackText}
+                        onChange={e => setFeedbackText(e.target.value)}
+                        rows={2}
+                      />
+                      <button className="feedback-submit" onClick={() => {
+                        fetch('/api/feedback', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ rating: feedback, comment: feedbackText })
+                        }).catch(() => {})
+                        setFeedbackSent(true)
+                      }}>
+                        Send feedback
+                      </button>
+                    </>
+                  )}
+                </>
+              ) : (
+                <div className="feedback-thanks">Thanks — that helps. 🙏</div>
+              )}
             </div>
 
             <button className="reset-btn" onClick={handleReset}>
