@@ -1,16 +1,5 @@
-import {
-  Document,
-  Packer,
-  Paragraph,
-  TextRun,
-  HeadingLevel,
-  AlignmentType,
-  LevelFormat,
-  BorderStyle,
-  PageBreak,
-} from 'docx'
+import { Document, Packer, Paragraph, TextRun, AlignmentType, BorderStyle } from 'docx'
 
-// Parse a line that may contain **bold** spans into TextRun array
 function parseInline(text) {
   const runs = []
   const parts = text.split(/(\*\*[^*]+\*\*)/)
@@ -24,117 +13,89 @@ function parseInline(text) {
   return runs
 }
 
-// Convert markdown-ish resume text into docx Paragraph array
 function parseResume(text) {
   const lines = text.split('\n')
   const paragraphs = []
-  let inBulletBlock = false
 
-  for (let i = 0; i < lines.length; i++) {
-    const raw = lines[i]
+  for (const raw of lines) {
     const line = raw.trim()
 
-    // Skip empty lines — add spacing via paragraph spacing instead
     if (!line) {
-      inBulletBlock = false
       paragraphs.push(new Paragraph({ spacing: { after: 80 } }))
       continue
     }
 
-    // H1 — candidate name (first # or all-caps short line at top)
     if (/^#\s+/.test(line)) {
       const content = line.replace(/^#\s+/, '')
-      paragraphs.push(
-        new Paragraph({
-          children: [new TextRun({ text: content, bold: true, font: 'Calibri', size: 36, color: '1A1A18' })],
-          spacing: { after: 60 },
-        })
-      )
+      paragraphs.push(new Paragraph({
+        children: [new TextRun({ text: content, bold: true, font: 'Calibri', size: 36, color: '1A1A18' })],
+        spacing: { after: 60 },
+      }))
       continue
     }
 
-    // H2 — section headers (## Experience, ## Skills, etc.)
     if (/^##\s+/.test(line)) {
       const content = line.replace(/^##\s+/, '')
-      paragraphs.push(
-        new Paragraph({
-          children: [new TextRun({ text: content.toUpperCase(), bold: true, font: 'Calibri', size: 22, color: '1A1A18' })],
-          border: { bottom: { style: BorderStyle.SINGLE, size: 4, color: 'C8973A', space: 4 } },
-          spacing: { before: 240, after: 120 },
-        })
-      )
-      inBulletBlock = false
+      paragraphs.push(new Paragraph({
+        children: [new TextRun({ text: content.toUpperCase(), bold: true, font: 'Calibri', size: 22, color: '1A1A18' })],
+        border: { bottom: { style: BorderStyle.SINGLE, size: 4, color: 'C8973A', space: 4 } },
+        spacing: { before: 240, after: 120 },
+      }))
       continue
     }
 
-    // H3 — job titles / company lines
     if (/^###\s+/.test(line)) {
       const content = line.replace(/^###\s+/, '')
-      paragraphs.push(
-        new Paragraph({
-          children: parseInline(content),
-          spacing: { before: 160, after: 40 },
-        })
-      )
-      inBulletBlock = false
+      paragraphs.push(new Paragraph({
+        children: parseInline(content),
+        spacing: { before: 160, after: 40 },
+      }))
       continue
     }
 
-    // Bullets — lines starting with - or • or *
     if (/^[-•*]\s+/.test(line)) {
       const content = line.replace(/^[-•*]\s+/, '')
-      inBulletBlock = true
-      paragraphs.push(
-        new Paragraph({
-          numbering: { reference: 'resume-bullets', level: 0 },
-          children: parseInline(content),
-          spacing: { after: 40 },
-        })
-      )
+      paragraphs.push(new Paragraph({
+        children: [
+          new TextRun({ text: '• ', font: 'Calibri', size: 22 }),
+          ...parseInline(content)
+        ],
+        indent: { left: 360 },
+        spacing: { after: 40 },
+      }))
       continue
     }
 
-    // Bold-only line (section header without ##) — e.g. **Skills** or **Education**
     if (/^\*\*[^*]+\*\*$/.test(line)) {
       const content = line.slice(2, -2)
-      paragraphs.push(
-        new Paragraph({
-          children: [new TextRun({ text: content.toUpperCase(), bold: true, font: 'Calibri', size: 22, color: '1A1A18' })],
-          border: { bottom: { style: BorderStyle.SINGLE, size: 4, color: 'C8973A', space: 4 } },
-          spacing: { before: 240, after: 120 },
-        })
-      )
-      inBulletBlock = false
+      paragraphs.push(new Paragraph({
+        children: [new TextRun({ text: content.toUpperCase(), bold: true, font: 'Calibri', size: 22, color: '1A1A18' })],
+        border: { bottom: { style: BorderStyle.SINGLE, size: 4, color: 'C8973A', space: 4 } },
+        spacing: { before: 240, after: 120 },
+      }))
       continue
     }
 
-    // Regular paragraph
-    inBulletBlock = false
-    paragraphs.push(
-      new Paragraph({
-        children: parseInline(line),
-        spacing: { after: 80 },
-      })
-    )
+    paragraphs.push(new Paragraph({
+      children: parseInline(line),
+      spacing: { after: 80 },
+    }))
   }
 
   return paragraphs
 }
 
-// Simpler parser for cover letter — just paragraphs, no special sections
 function parseCoverLetter(text) {
   const paragraphs = []
   const blocks = text.split(/\n\n+/)
   for (const block of blocks) {
     const cleaned = block.trim().replace(/\n/g, ' ')
     if (!cleaned) continue
-    paragraphs.push(
-      new Paragraph({
-        children: parseInline(cleaned),
-        spacing: { after: 240 },
-        alignment: AlignmentType.LEFT,
-      })
-    )
+    paragraphs.push(new Paragraph({
+      children: parseInline(cleaned),
+      spacing: { after: 240 },
+      alignment: AlignmentType.LEFT,
+    }))
   }
   return paragraphs
 }
@@ -162,7 +123,6 @@ export default async function handler(req, res) {
   try {
     const sections = []
 
-    // Resume section
     if (resume) {
       sections.push({
         properties: {
@@ -175,18 +135,7 @@ export default async function handler(req, res) {
       })
     }
 
-    // Cover letter section (new page)
-    if (coverLetter && resume) {
-      sections.push({
-        properties: {
-          page: {
-            size: { width: 12240, height: 15840 },
-            margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 },
-          },
-        },
-        children: parseCoverLetter(coverLetter),
-      })
-    } else if (coverLetter && !resume) {
+    if (coverLetter) {
       sections.push({
         properties: {
           page: {
@@ -199,27 +148,6 @@ export default async function handler(req, res) {
     }
 
     const doc = new Document({
-      numbering: {
-        config: [
-          {
-            reference: 'resume-bullets',
-            levels: [
-              {
-                level: 0,
-                format: LevelFormat.BULLET,
-                text: '•',
-                alignment: AlignmentType.LEFT,
-                style: {
-                  paragraph: {
-                    indent: { left: 360, hanging: 240 },
-                  },
-                  run: { font: 'Calibri', size: 22 },
-                },
-              },
-            ],
-          },
-        ],
-      },
       styles: {
         default: {
           document: {
@@ -239,6 +167,6 @@ export default async function handler(req, res) {
     return res.status(200).send(buffer)
   } catch (err) {
     console.error('DOCX generation error:', err)
-    return res.status(500).json({ error: 'DOCX generation failed' })
+    return res.status(500).json({ error: 'DOCX generation failed', detail: err.message })
   }
 }
