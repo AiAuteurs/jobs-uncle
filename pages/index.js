@@ -216,10 +216,10 @@ export default function Home() {
         </div>
       )}
       <Head>
-        <title>JobsUncle.ai — Resumes That Actually Fit</title>
+        <title>JobsUncle.ai — Upload your resume. Paste the job. Get hired.</title>
         <meta name="description" content="Upload your LinkedIn PDF, paste a job description, get a bespoke resume and cover letter in under a minute." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta property="og:title" content="JobsUncle.ai — Resumes That Actually Fit" />
+        <meta property="og:title" content="JobsUncle.ai — Upload your resume. Paste the job. Get hired." />
         <meta property="og:description" content="Upload your resume or LinkedIn PDF, paste a job description, get a tailored resume and cover letter in under a minute." />
         <meta property="og:image" content="https://www.jobsuncle.ai/og-image.png" />
         <meta property="og:image:width" content="1200" />
