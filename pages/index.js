@@ -202,7 +202,7 @@ export default function Home() {
       {showPaywall && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
           <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)' }}>
-            <img src="/uncle-spin-hero.png" alt="Jobs Uncle" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
+            <img src="/uncle-spin-hero.png" alt="JobsUncle.ai" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Your free resume is done.</h2>
             <p style={{ color: 'var(--text-soft)', fontSize: '0.95rem', margin: '0 0 32px', lineHeight: 1.6 }}>
               Upgrade to Pro for unlimited resumes, every job, forever.<br />
@@ -218,7 +218,7 @@ export default function Home() {
         </div>
       )}
       <Head>
-        <title>Jobs Uncle — Resumes That Actually Fit</title>
+        <title>JobsUncle.ai — Resumes That Actually Fit</title>
         <meta name="description" content="Upload your LinkedIn PDF, paste a job description, get a bespoke resume and cover letter in under a minute." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
@@ -229,7 +229,7 @@ export default function Home() {
       <header className="header">
         <div className="logo">
           <img src="/uncle-spin-logo.png" alt="Uncle Spin" className="logo-icon" />
-          <span className="logo-text">Jobs Uncle</span>
+          <span className="logo-text">JobsUncle.ai</span>
           <span className="logo-badge">Beta</span>
         </div>
         <div className="header-right">
@@ -285,7 +285,7 @@ export default function Home() {
                     </>
                   ) : (
                     <>
-                      <img src="/uncle-spin-logo.png" className="upload-mascot" alt="Jobs Uncle" />
+                      <img src="/uncle-spin-logo.png" className="upload-mascot" alt="JobsUncle.ai" />
                       <div className="upload-label">Drop PDF here or click to browse</div>
                     </>
                   )}
@@ -452,7 +452,7 @@ export default function Home() {
       </div>
 
       <footer className="footer">
-        <p>© 2026 Jobs Uncle · Your documents are never stored · Built with AI</p>
+        <p>© 2026 JobsUncle.ai · Your documents are never stored · Built with AI</p>
       </footer>
     </>
   )
