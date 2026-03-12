@@ -285,7 +285,7 @@ export default function Home() {
                     </>
                   ) : (
                     <>
-                      <div className="upload-icon">📄</div>
+                      <img src="/uncle-spin-logo.png" className="upload-mascot" alt="Jobs Uncle" />
                       <div className="upload-label">Drop PDF here or click to browse</div>
                     </>
                   )}
