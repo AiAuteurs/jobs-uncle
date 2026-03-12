@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400;1,9..40,700&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 /* ─── BRAND TOKENS (brand guide exact values) ──────────────── */
 :root {
@@ -52,7 +52,7 @@ body {
 }
 
 .logo-text {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 700;
   font-size: 1.6rem;
   letter-spacing: -0.02em;
@@ -136,7 +136,7 @@ body {
 
 /* Brand guide spec: Cormorant Garamond 72px, line-height .95, letter-spacing -0.04em */
 .hero h1 {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 700;
   font-size: clamp(2.8rem, 6vw, 4.5rem);
   line-height: 0.95;
@@ -203,7 +203,7 @@ body {
 .step-card.complete .step-number { color: var(--sage); }
 
 .step-title {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 1.2rem;
   font-weight: 700;
   color: var(--ink);
@@ -342,7 +342,7 @@ body {
 }
 
 .results-title {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 1.3rem;
   font-weight: 700;
   letter-spacing: -0.02em;
