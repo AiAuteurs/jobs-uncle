@@ -4,10 +4,10 @@
 :root {
   --bg:           #EEEAF8;
   --surface:      #F5F2FC;
-  --ink:          #151515;
-  --text-soft:    #8E877D;
+  --ink:          #000000;
+  --text-soft:    #333333;
   --border:       #D4CCE8;
-  --accent:       #C8973A;
+  --accent:       #6B35C2;
   --accent-soft:  #D8A86D;
   --beta-bg:      #F1E4BF;
   --beta-text:    #9A6A1D;
