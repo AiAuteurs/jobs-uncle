@@ -79,6 +79,7 @@ RESUME REQUIREMENTS:
 - Do NOT include an objective statement
 - Format cleanly with clear sections: Summary, Experience, Skills, Education
 - Keep it to one page worth of content
+- Mirror keywords and phrases from the job description naturally throughout — optimize for ATS without sounding robotic
 - Do NOT pad or embellish — be ruthlessly relevant
 
 COVER LETTER REQUIREMENTS:
