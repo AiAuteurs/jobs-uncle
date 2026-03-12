@@ -1,5 +1,9 @@
 import { Document, Packer, Paragraph, TextRun, AlignmentType, BorderStyle } from 'docx'
 
+export const config = {
+  api: { bodyParser: false },
+}
+
 function parseInline(text) {
   const runs = []
   const parts = text.split(/(\*\*[^*]+\*\*)/)
