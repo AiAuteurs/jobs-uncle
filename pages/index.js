@@ -188,11 +188,9 @@ export default function Home() {
   }
 
   const handleReset = () => {
-    setPdfFile(null)
     setJobDescription('')
     setResults(null)
     setError(null)
-    if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
   const canGenerate = pdfFile && jobDescription.trim().length > 50
