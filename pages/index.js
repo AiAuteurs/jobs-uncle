@@ -257,6 +257,28 @@ export default function Home() {
         </div>
       </div>
 
+      <div className="how-section">
+        <div className="how-title">How it works</div>
+        <div className="how-items">
+          <div className="how-item">
+            <div className="how-num">01</div>
+            <div className="how-label">Upload your resume or LinkedIn PDF — your full career in one file</div>
+          </div>
+          <div className="how-item">
+            <div className="how-num">02</div>
+            <div className="how-label">Paste the job description — any role, any industry</div>
+          </div>
+          <div className="how-item">
+            <div className="how-num">03</div>
+            <div className="how-label">Get a resume and cover letter built for that exact job</div>
+          </div>
+          <div className="how-item">
+            <div className="how-num">04</div>
+            <div className="how-label">Download in the format that fits. Nothing is stored. Ever.</div>
+          </div>
+        </div>
+      </div>
+
       <div className="app-container">
 
         {!results && (
@@ -425,28 +447,6 @@ export default function Home() {
             </button>
           </>
         )}
-      </div>
-
-      <div className="how-section">
-        <div className="how-title">How it works</div>
-        <div className="how-items">
-          <div className="how-item">
-            <div className="how-num">01</div>
-            <div className="how-label">Upload your resume or LinkedIn PDF — your full career in one file</div>
-          </div>
-          <div className="how-item">
-            <div className="how-num">02</div>
-            <div className="how-label">Paste the job description — any role, any industry</div>
-          </div>
-          <div className="how-item">
-            <div className="how-num">03</div>
-            <div className="how-label">Get a resume and cover letter built for that exact job</div>
-          </div>
-          <div className="how-item">
-            <div className="how-num">04</div>
-            <div className="how-label">Download in the format that fits. Nothing is stored. Ever.</div>
-          </div>
-        </div>
       </div>
 
       <footer className="footer">
