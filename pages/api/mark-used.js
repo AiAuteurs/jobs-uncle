@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   const KV_TOKEN = process.env.KV_REST_API_TOKEN
 
   try {
-    await fetch(`${KV_URL}/set/${key}/1`, {
+    await fetch(`${KV_URL}/incr/${key}`, {
       headers: { Authorization: `Bearer ${KV_TOKEN}` }
     })
     res.status(200).json({ ok: true })
