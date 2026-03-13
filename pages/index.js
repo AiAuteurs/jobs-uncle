@@ -422,6 +422,46 @@ export default function Home() {
 
             {error && <div className="error-msg">{error}</div>}
 
+            {/* RESTORE ACCESS */}
+            {!isPaid && (
+              <div style={{ margin: '1.5rem 0 0', padding: '1rem 1.5rem', background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-soft)' }}>Already a paying member?</div>
+                {!showRestore ? (
+                  <button
+                    onClick={() => setShowRestore(true)}
+                    style={{ background: 'none', border: '1.5px solid var(--border)', borderRadius: '20px', color: 'var(--text-soft)', fontSize: '0.8rem', fontWeight: 600, padding: '6px 16px', cursor: 'pointer' }}
+                  >
+                    Restore access
+                  </button>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <input
+                        type="email"
+                        value={restoreEmail}
+                        onChange={e => setRestoreEmail(e.target.value)}
+                        placeholder="Email you subscribed with"
+                        style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--border)', borderRadius: '6px', fontSize: '0.85rem', background: 'var(--surface)', color: 'var(--ink)' }}
+                        onKeyDown={e => e.key === 'Enter' && handleRestore()}
+                      />
+                      <button
+                        onClick={handleRestore}
+                        disabled={restoreStatus === 'loading'}
+                        style={{ padding: '8px 16px', background: 'var(--ink)', color: 'var(--bg)', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}
+                      >
+                        {restoreStatus === 'loading' ? '...' : 'Restore'}
+                      </button>
+                    </div>
+                    {restoreMsg && (
+                      <div style={{ fontSize: '0.8rem', color: restoreStatus === 'success' ? '#22c55e' : '#ef4444' }}>
+                        {restoreMsg}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* DUAL VERSION TOGGLE */}
             <div style={{ margin: '1.5rem 0 0', padding: '1.25rem 1.5rem', background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
               <div>
@@ -669,44 +709,6 @@ export default function Home() {
 
       <footer className="footer">
         <p>© 2026 JobsUncle.ai · Your documents are never stored · Built with AI</p>
-        {!isPaid && (
-          <div style={{ marginTop: '12px' }}>
-            {!showRestore ? (
-              <button
-                onClick={() => setShowRestore(true)}
-                style={{ background: 'none', border: 'none', color: 'var(--text-soft)', fontSize: '0.8rem', cursor: 'pointer', textDecoration: 'underline' }}
-              >
-                Already a member? Restore access
-              </button>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', maxWidth: '320px', margin: '0 auto' }}>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-soft)' }}>Enter the email you used to subscribe:</div>
-                <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
-                  <input
-                    type="email"
-                    value={restoreEmail}
-                    onChange={e => setRestoreEmail(e.target.value)}
-                    placeholder="your@email.com"
-                    style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--border)', borderRadius: '6px', fontSize: '0.85rem', background: 'var(--surface)', color: 'var(--ink)' }}
-                    onKeyDown={e => e.key === 'Enter' && handleRestore()}
-                  />
-                  <button
-                    onClick={handleRestore}
-                    disabled={restoreStatus === 'loading'}
-                    style={{ padding: '8px 16px', background: 'var(--ink)', color: 'var(--bg)', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}
-                  >
-                    {restoreStatus === 'loading' ? '...' : 'Restore'}
-                  </button>
-                </div>
-                {restoreMsg && (
-                  <div style={{ fontSize: '0.8rem', color: restoreStatus === 'success' ? '#22c55e' : '#ef4444' }}>
-                    {restoreMsg}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
       </footer>
     </>
   )
