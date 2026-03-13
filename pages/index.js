@@ -230,7 +230,7 @@ export default function Home() {
         <meta name="description" content="Upload your LinkedIn PDF, paste a job description, get a bespoke resume and cover letter in under a minute." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta property="og:title" content="JobsUncle.ai — Your resume, tailored to every job." />
-        <meta property="og:description" content="Upload your resume or LinkedIn PDF, paste a job description, get a tailored resume and cover letter in under a minute." />
+        <meta property="og:description" content="Upload your resume or LinkedIn PDF, paste the job description — get a tailored resume, cover letter, recruiter gap analysis, and a hiring manager DM in under a minute." />
         <meta property="og:image" content="https://www.jobsuncle.ai/og-image.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -267,7 +267,7 @@ export default function Home() {
             <h1>Your resume, <em>tailored</em><br />to every job.</h1>
             <p className="hero-sub">
               Upload your resume or LinkedIn profile. Paste a job description.
-              Get a bespoke resume and cover letter — built for that specific role — in under 60 seconds.
+              Get a tailored resume, cover letter, recruiter gap analysis, and a hiring manager DM — in under 60 seconds.
             </p>
           </div>
           <div className="hero-mascot">
@@ -289,7 +289,7 @@ export default function Home() {
           </div>
           <div className="how-item">
             <div className="how-num">03</div>
-            <div className="how-label">Get a resume and cover letter built for that exact job</div>
+            <div className="how-label">Get a tailored resume, cover letter, recruiter gap analysis, and a hiring manager DM</div>
           </div>
           <div className="how-item">
             <div className="how-num">04</div>
