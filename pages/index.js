@@ -39,6 +39,10 @@ export default function Home() {
   const [showPlusPaywall, setShowPlusPaywall] = useState(false)
   const [dualVersionEnabled, setDualVersionEnabled] = useState(false)
   const [activeResume, setActiveResume] = useState('a') // 'a' | 'b'
+  const [showRestore, setShowRestore] = useState(false)
+  const [restoreEmail, setRestoreEmail] = useState('')
+  const [restoreStatus, setRestoreStatus] = useState(null) // null | 'loading' | 'success' | 'error'
+  const [restoreMsg, setRestoreMsg] = useState('')
   const fileInputRef = useRef(null)
 
   // Fetch resume counter + check access via cookie on mount
@@ -211,6 +215,30 @@ export default function Home() {
     <script>window.onload = () => { window.print(); }<\/script>
     </body></html>`)
     win.document.close()
+  }
+
+  const handleRestore = async () => {
+    if (!restoreEmail.includes('@')) return
+    setRestoreStatus('loading')
+    try {
+      const res = await fetch('/api/restore-access', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: restoreEmail })
+      })
+      const data = await res.json()
+      if (data.ok) {
+        setRestoreStatus('success')
+        setRestoreMsg('Access restored! Reloading...')
+        setTimeout(() => location.reload(), 1500)
+      } else {
+        setRestoreStatus('error')
+        setRestoreMsg(data.error || 'No account found for that email.')
+      }
+    } catch {
+      setRestoreStatus('error')
+      setRestoreMsg('Something went wrong. Try again.')
+    }
   }
 
   const handleReset = () => {
@@ -641,6 +669,44 @@ export default function Home() {
 
       <footer className="footer">
         <p>© 2026 JobsUncle.ai · Your documents are never stored · Built with AI</p>
+        {!isPaid && (
+          <div style={{ marginTop: '12px' }}>
+            {!showRestore ? (
+              <button
+                onClick={() => setShowRestore(true)}
+                style={{ background: 'none', border: 'none', color: 'var(--text-soft)', fontSize: '0.8rem', cursor: 'pointer', textDecoration: 'underline' }}
+              >
+                Already a member? Restore access
+              </button>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', maxWidth: '320px', margin: '0 auto' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-soft)' }}>Enter the email you used to subscribe:</div>
+                <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
+                  <input
+                    type="email"
+                    value={restoreEmail}
+                    onChange={e => setRestoreEmail(e.target.value)}
+                    placeholder="your@email.com"
+                    style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--border)', borderRadius: '6px', fontSize: '0.85rem', background: 'var(--surface)', color: 'var(--ink)' }}
+                    onKeyDown={e => e.key === 'Enter' && handleRestore()}
+                  />
+                  <button
+                    onClick={handleRestore}
+                    disabled={restoreStatus === 'loading'}
+                    style={{ padding: '8px 16px', background: 'var(--ink)', color: 'var(--bg)', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}
+                  >
+                    {restoreStatus === 'loading' ? '...' : 'Restore'}
+                  </button>
+                </div>
+                {restoreMsg && (
+                  <div style={{ fontSize: '0.8rem', color: restoreStatus === 'success' ? '#22c55e' : '#ef4444' }}>
+                    {restoreMsg}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </footer>
     </>
   )
