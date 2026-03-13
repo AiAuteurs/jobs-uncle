@@ -1,4 +1,16 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/og-image.png',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=86400' },
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+        ],
+      },
+    ]
+  },
+}
 
 module.exports = nextConfig
