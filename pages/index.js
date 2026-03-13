@@ -523,6 +523,60 @@ export default function Home() {
             >
               {loading ? 'Working on it...' : dualVersionEnabled && isPlusUser ? 'Generate Dual Resume Package →' : 'Generate Resume Package →'}
             </button>
+
+            {/* RESTORE + BETA — visible below generate, not buried */}
+            {!isPaid && (
+              <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+
+                {/* RESTORE ACCESS */}
+                <div style={{ padding: '1rem 1.5rem', background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', fontWeight: 500 }}>Already a paying member?</div>
+                    {!showRestore ? (
+                      <button onClick={() => setShowRestore(true)} style={{ background: 'none', border: '1.5px solid var(--border)', borderRadius: '20px', color: 'var(--ink)', fontSize: '0.8rem', fontWeight: 600, padding: '6px 16px', cursor: 'pointer' }}>
+                        Restore access
+                      </button>
+                    ) : (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', marginTop: '8px' }}>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <input type="email" value={restoreEmail} onChange={e => setRestoreEmail(e.target.value)} placeholder="Email you subscribed with" style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--border)', borderRadius: '6px', fontSize: '0.85rem', background: 'var(--surface)', color: 'var(--ink)' }} onKeyDown={e => e.key === 'Enter' && handleRestore()} />
+                          <button onClick={handleRestore} disabled={restoreStatus === 'loading'} style={{ padding: '8px 16px', background: 'var(--ink)', color: 'var(--bg)', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}>
+                            {restoreStatus === 'loading' ? '...' : 'Restore'}
+                          </button>
+                        </div>
+                        {restoreMsg && <div style={{ fontSize: '0.8rem', color: restoreStatus === 'success' ? '#22c55e' : '#ef4444' }}>{restoreMsg}</div>}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* BETA CODE */}
+                <div style={{ padding: '1rem 1.5rem', background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', fontWeight: 500 }}>Got a beta code?</div>
+                    {!showBeta ? (
+                      <button onClick={() => setShowBeta(true)} style={{ background: 'none', border: '1.5px solid var(--border)', borderRadius: '20px', color: 'var(--ink)', fontSize: '0.8rem', fontWeight: 600, padding: '6px 16px', cursor: 'pointer' }}>
+                        Redeem
+                      </button>
+                    ) : (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', marginTop: '8px' }}>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <input type="text" value={betaCode} onChange={e => setBetaCode(e.target.value)} placeholder="UNCLE-BETA-XXXX" style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--border)', borderRadius: '6px', fontSize: '0.85rem', background: 'var(--surface)', color: 'var(--ink)', textTransform: 'uppercase', letterSpacing: '0.05em' }} />
+                        </div>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <input type="email" value={betaEmail} onChange={e => setBetaEmail(e.target.value)} placeholder="Your email (to restore access later)" style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--border)', borderRadius: '6px', fontSize: '0.85rem', background: 'var(--surface)', color: 'var(--ink)' }} onKeyDown={e => e.key === 'Enter' && handleBeta()} />
+                          <button onClick={handleBeta} disabled={betaStatus === 'loading'} style={{ padding: '8px 16px', background: 'var(--ink)', color: 'var(--bg)', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}>
+                            {betaStatus === 'loading' ? '...' : 'Redeem'}
+                          </button>
+                        </div>
+                        {betaMsg && <div style={{ fontSize: '0.8rem', color: betaStatus === 'success' ? '#22c55e' : '#ef4444' }}>{betaMsg}</div>}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+              </div>
+            )}
           </>
         )}
 
