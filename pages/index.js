@@ -45,6 +45,7 @@ export default function Home() {
   const [restoreMsg, setRestoreMsg] = useState('')
   const [showBeta, setShowBeta] = useState(false)
   const [betaCode, setBetaCode] = useState('')
+  const [betaEmail, setBetaEmail] = useState('')
   const [betaStatus, setBetaStatus] = useState(null)
   const [betaMsg, setBetaMsg] = useState('')
   const fileInputRef = useRef(null)
@@ -247,12 +248,13 @@ export default function Home() {
 
   const handleBeta = async () => {
     if (!betaCode.trim()) return
+    if (!betaEmail.includes('@')) { setBetaStatus('error'); setBetaMsg('Enter a valid email — you'll need it to restore access later.'); return }
     setBetaStatus('loading')
     try {
       const res = await fetch('/api/redeem-beta', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: betaCode.trim() })
+        body: JSON.stringify({ code: betaCode.trim(), email: betaEmail.trim() })
       })
       const data = await res.json()
       if (data.ok) {
@@ -510,6 +512,15 @@ export default function Home() {
                         onChange={e => setBetaCode(e.target.value)}
                         placeholder="UNCLE-BETA-XXXX"
                         style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--border)', borderRadius: '6px', fontSize: '0.85rem', background: 'var(--surface)', color: 'var(--ink)', textTransform: 'uppercase', letterSpacing: '0.05em' }}
+                      />
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <input
+                        type="email"
+                        value={betaEmail}
+                        onChange={e => setBetaEmail(e.target.value)}
+                        placeholder="Your email (to restore access later)"
+                        style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--border)', borderRadius: '6px', fontSize: '0.85rem', background: 'var(--surface)', color: 'var(--ink)' }}
                         onKeyDown={e => e.key === 'Enter' && handleBeta()}
                       />
                       <button

@@ -17,10 +17,12 @@ const BETA_CODES = [
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end()
 
-  const { code } = req.body
+  const { code, email } = req.body
   if (!code) return res.status(400).json({ ok: false, error: 'No code provided' })
+  if (!email || !email.includes('@')) return res.status(400).json({ ok: false, error: 'Valid email required to save your access.' })
 
   const normalized = code.trim().toUpperCase()
+  const normalizedEmail = email.trim().toLowerCase()
 
   if (!BETA_CODES.includes(normalized)) {
     return res.json({ ok: false, error: 'Invalid beta code.' })
@@ -41,8 +43,14 @@ export default async function handler(req, res) {
       return res.json({ ok: false, error: 'This beta code has already been used.' })
     }
 
-    // Mark as used
+    // Mark code as used
     await fetch(`${KV_URL}/set/${usedKey}/1`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${KV_TOKEN}`, 'Content-Type': 'application/json' }
+    })
+
+    // Store email → beta so restore-access works later
+    await fetch(`${KV_URL}/set/paid_email:${encodeURIComponent(normalizedEmail)}/${normalized}`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${KV_TOKEN}`, 'Content-Type': 'application/json' }
     })
