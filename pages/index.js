@@ -43,6 +43,10 @@ export default function Home() {
   const [restoreEmail, setRestoreEmail] = useState('')
   const [restoreStatus, setRestoreStatus] = useState(null) // null | 'loading' | 'success' | 'error'
   const [restoreMsg, setRestoreMsg] = useState('')
+  const [showBeta, setShowBeta] = useState(false)
+  const [betaCode, setBetaCode] = useState('')
+  const [betaStatus, setBetaStatus] = useState(null)
+  const [betaMsg, setBetaMsg] = useState('')
   const fileInputRef = useRef(null)
 
   // Fetch resume counter + check access via cookie on mount
@@ -238,6 +242,30 @@ export default function Home() {
     } catch {
       setRestoreStatus('error')
       setRestoreMsg('Something went wrong. Try again.')
+    }
+  }
+
+  const handleBeta = async () => {
+    if (!betaCode.trim()) return
+    setBetaStatus('loading')
+    try {
+      const res = await fetch('/api/redeem-beta', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: betaCode.trim() })
+      })
+      const data = await res.json()
+      if (data.ok) {
+        setBetaStatus('success')
+        setBetaMsg('Beta access activated! Reloading...')
+        setTimeout(() => location.reload(), 1500)
+      } else {
+        setBetaStatus('error')
+        setBetaMsg(data.error || 'Invalid code.')
+      }
+    } catch {
+      setBetaStatus('error')
+      setBetaMsg('Something went wrong. Try again.')
     }
   }
 
@@ -455,6 +483,46 @@ export default function Home() {
                     {restoreMsg && (
                       <div style={{ fontSize: '0.8rem', color: restoreStatus === 'success' ? '#22c55e' : '#ef4444' }}>
                         {restoreMsg}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* BETA CODE */}
+            {!isPaid && (
+              <div style={{ margin: '0.75rem 0 0', padding: '1rem 1.5rem', background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-soft)' }}>Got a beta code?</div>
+                {!showBeta ? (
+                  <button
+                    onClick={() => setShowBeta(true)}
+                    style={{ background: 'none', border: '1.5px solid var(--border)', borderRadius: '20px', color: 'var(--text-soft)', fontSize: '0.8rem', fontWeight: 600, padding: '6px 16px', cursor: 'pointer' }}
+                  >
+                    Redeem
+                  </button>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <input
+                        type="text"
+                        value={betaCode}
+                        onChange={e => setBetaCode(e.target.value)}
+                        placeholder="UNCLE-BETA-XXXX"
+                        style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--border)', borderRadius: '6px', fontSize: '0.85rem', background: 'var(--surface)', color: 'var(--ink)', textTransform: 'uppercase', letterSpacing: '0.05em' }}
+                        onKeyDown={e => e.key === 'Enter' && handleBeta()}
+                      />
+                      <button
+                        onClick={handleBeta}
+                        disabled={betaStatus === 'loading'}
+                        style={{ padding: '8px 16px', background: 'var(--ink)', color: 'var(--bg)', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}
+                      >
+                        {betaStatus === 'loading' ? '...' : 'Redeem'}
+                      </button>
+                    </div>
+                    {betaMsg && (
+                      <div style={{ fontSize: '0.8rem', color: betaStatus === 'success' ? '#22c55e' : '#ef4444' }}>
+                        {betaMsg}
                       </div>
                     )}
                   </div>
