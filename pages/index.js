@@ -34,6 +34,7 @@ export default function Home() {
   const [feedback, setFeedback] = useState(null) // 'yes' | 'kinda' | 'no'
   const [feedbackText, setFeedbackText] = useState('')
   const [feedbackSent, setFeedbackSent] = useState(false)
+  const [dmCopied, setDmCopied] = useState(false)
   const fileInputRef = useRef(null)
 
   // Fetch resume counter on mount
@@ -354,7 +355,7 @@ export default function Home() {
               onClick={handleGenerate}
               disabled={!canGenerate || loading}
             >
-              {loading ? 'Working on it...' : 'Generate Resume + Cover Letter →'}
+              {loading ? 'Working on it...' : 'Generate Resume Package →'}
             </button>
           </>
         )}
@@ -384,6 +385,32 @@ export default function Home() {
                 <div className="result-section-title">Cover Letter</div>
                 <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.coverLetter)}} />
               </div>
+
+              {results.recruiterNotes && (
+                <div className="result-section" style={{ borderLeft: '3px solid #f59e0b', background: 'rgba(245,158,11,0.05)' }}>
+                  <div className="result-section-title">Recruiter Reality Check</div>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '12px' }}>Honest gaps a recruiter would flag — and how to own them.</div>
+                  <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.recruiterNotes)}} />
+                </div>
+              )}
+
+              {results.hiringManagerDM && (
+                <div className="result-section" style={{ borderLeft: '3px solid #6366f1', background: 'rgba(99,102,241,0.05)' }}>
+                  <div className="result-section-title">Hiring Manager DM</div>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '12px' }}>Skip the line. Send this directly to the hiring manager on LinkedIn or email.</div>
+                  <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.hiringManagerDM)}} />
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(stripMarkdown(results.hiringManagerDM))
+                      setDmCopied(true)
+                      setTimeout(() => setDmCopied(false), 2000)
+                    }}
+                    style={{ marginTop: '12px', padding: '8px 20px', background: dmCopied ? '#22c55e' : '#6366f1', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s' }}
+                  >
+                    {dmCopied ? '✓ Copied!' : 'Copy DM'}
+                  </button>
+                </div>
+              )}
 
               {/* PURPOSE-DRIVEN DOWNLOAD SECTION */}
               <div className="download-section">
