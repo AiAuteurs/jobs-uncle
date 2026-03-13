@@ -35,6 +35,10 @@ export default function Home() {
   const [feedbackText, setFeedbackText] = useState('')
   const [feedbackSent, setFeedbackSent] = useState(false)
   const [dmCopied, setDmCopied] = useState(false)
+  const [isPlusUser, setIsPlusUser] = useState(false)
+  const [showPlusPaywall, setShowPlusPaywall] = useState(false)
+  const [dualVersionEnabled, setDualVersionEnabled] = useState(false)
+  const [activeResume, setActiveResume] = useState('a') // 'a' | 'b'
   const fileInputRef = useRef(null)
 
   // Fetch resume counter on mount
@@ -47,6 +51,8 @@ export default function Home() {
     // Check if returning paid user
     const session = localStorage.getItem('ju_session')
     if (session) setIsPaid(true)
+    const plusSession = localStorage.getItem('ju_plus_session')
+    if (plusSession) { setIsPaid(true); setIsPlusUser(true) }
   }, [])
 
   const handleFile = (file) => {
@@ -89,6 +95,7 @@ export default function Home() {
       const formData = new FormData()
       formData.append('pdf', pdfFile)
       formData.append('jobDescription', jobDescription)
+      formData.append('dualVersion', dualVersionEnabled && isPlusUser ? 'true' : 'false')
 
       const response = await fetch('/api/generate', {
         method: 'POST',
@@ -120,8 +127,8 @@ export default function Home() {
     }
   }
 
-  const handleUpgrade = async () => {
-    const res = await fetch('/api/stripe-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) })
+  const handleUpgrade = async (plan = 'pro') => {
+    const res = await fetch('/api/stripe-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan }) })
     const data = await res.json()
     if (data.url) window.location.href = data.url
   }
@@ -147,10 +154,12 @@ export default function Home() {
     setDocxLoading(true)
     try {
       const payload = {
-        resume: type === 'resume' || type === 'both' ? results.resume : null,
+        resume: type === 'resume' || type === 'both'
+          ? (results.dualVersion ? (activeResume === 'a' ? results.resumeA : results.resumeB) : results.resume)
+          : null,
         coverLetter: type === 'cover' || type === 'both' ? results.coverLetter : null,
         fileBaseName: results.fileBaseName
-          ? `${results.fileBaseName}_${type === 'resume' ? 'Resume' : type === 'cover' ? 'Cover_Letter' : 'Full_Package'}`
+          ? `${results.fileBaseName}_${type === 'resume' ? (results.dualVersion ? `Resume_${activeResume.toUpperCase()}` : 'Resume') : type === 'cover' ? 'Cover_Letter' : 'Full_Package'}`
           : type,
       }
 
@@ -216,10 +225,33 @@ export default function Home() {
               Upgrade to Pro for unlimited resumes, every job, forever.<br />
               <strong style={{ color: 'var(--ink)' }}>$49.99 / year.</strong> Cancel anytime.
             </p>
-            <button onClick={handleUpgrade} style={{ width: '100%', background: 'var(--accent)', color: 'white', border: 'none', padding: '16px', borderRadius: '8px', fontSize: '1rem', fontWeight: 700, cursor: 'pointer', marginBottom: '12px', letterSpacing: '0.02em' }}>
+            <button onClick={() => handleUpgrade('pro')} style={{ width: '100%', background: 'var(--accent)', color: 'white', border: 'none', padding: '16px', borderRadius: '8px', fontSize: '1rem', fontWeight: 700, cursor: 'pointer', marginBottom: '12px', letterSpacing: '0.02em' }}>
               Upgrade to Pro — $49.99/yr
             </button>
             <button onClick={() => setShowPaywall(false)} style={{ background: 'none', border: 'none', color: 'var(--text-soft)', fontSize: '0.85rem', cursor: 'pointer', padding: '8px' }}>
+              Maybe later
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showPlusPaywall && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+          <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '460px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)' }}>
+            <img src="/uncle-spin-hero.png" alt="JobsUncle.ai" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
+            <div style={{ display: 'inline-block', background: '#6366f1', color: 'white', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', padding: '4px 12px', borderRadius: '20px', marginBottom: '16px', textTransform: 'uppercase' }}>Pro+</div>
+            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Two resumes. One shot.</h2>
+            <p style={{ color: 'var(--text-soft)', fontSize: '0.95rem', margin: '0 0 8px', lineHeight: 1.6 }}>
+              Get a <strong style={{ color: 'var(--ink)' }}>Leadership-focused</strong> and a <strong style={{ color: 'var(--ink)' }}>Technical/Achievement-focused</strong> version — same experience, two different angles. Use whichever fits the hiring manager.
+            </p>
+            <p style={{ color: 'var(--text-soft)', fontSize: '0.85rem', margin: '0 0 32px' }}>Perfect if you're actively hunting.</p>
+            <button onClick={() => handleUpgrade('pro_plus_monthly')} style={{ width: '100%', background: '#6366f1', color: 'white', border: 'none', padding: '16px', borderRadius: '8px', fontSize: '1rem', fontWeight: 700, cursor: 'pointer', marginBottom: '10px', letterSpacing: '0.02em' }}>
+              Pro+ Monthly — $9.99/mo
+            </button>
+            <button onClick={() => handleUpgrade('pro_plus_annual')} style={{ width: '100%', background: 'var(--ink)', color: 'white', border: 'none', padding: '14px', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 600, cursor: 'pointer', marginBottom: '12px', letterSpacing: '0.02em' }}>
+              Pro+ Annual — $79.99/yr <span style={{ opacity: 0.7, fontSize: '0.8rem' }}>(save 33%)</span>
+            </button>
+            <button onClick={() => setShowPlusPaywall(false)} style={{ background: 'none', border: 'none', color: 'var(--text-soft)', fontSize: '0.85rem', cursor: 'pointer', padding: '8px' }}>
               Maybe later
             </button>
           </div>
@@ -356,12 +388,38 @@ export default function Home() {
 
             {error && <div className="error-msg">{error}</div>}
 
+            {/* DUAL VERSION TOGGLE */}
+            <div style={{ margin: '1.5rem 0 0', padding: '1.25rem 1.5rem', background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                  <span style={{ fontFamily: 'Inter', fontWeight: 700, fontSize: '0.9rem', color: 'var(--ink)' }}>Dual Resume Versions</span>
+                  <span style={{ background: '#6366f1', color: 'white', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
+                </div>
+                <p style={{ fontFamily: 'Inter', fontSize: '0.75rem', color: 'var(--text-soft)', margin: 0 }}>Get a Leadership-focused <em>and</em> a Technical/Achievement-focused version in one shot.</p>
+              </div>
+              {isPlusUser ? (
+                <button
+                  onClick={() => setDualVersionEnabled(!dualVersionEnabled)}
+                  style={{ flexShrink: 0, padding: '8px 20px', background: dualVersionEnabled ? '#6366f1' : 'transparent', color: dualVersionEnabled ? 'white' : 'var(--text-soft)', border: `1.5px solid ${dualVersionEnabled ? '#6366f1' : 'var(--border)'}`, borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' }}
+                >
+                  {dualVersionEnabled ? '✓ Enabled' : 'Enable'}
+                </button>
+              ) : (
+                <button
+                  onClick={() => setShowPlusPaywall(true)}
+                  style={{ flexShrink: 0, padding: '8px 20px', background: 'transparent', color: '#6366f1', border: '1.5px solid #6366f1', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                >
+                  Upgrade to Pro+
+                </button>
+              )}
+            </div>
+
             <button
               className={`generate-btn ${loading ? 'loading' : ''}`}
               onClick={handleGenerate}
               disabled={!canGenerate || loading}
             >
-              {loading ? 'Working on it...' : 'Generate Resume Package →'}
+              {loading ? 'Working on it...' : dualVersionEnabled && isPlusUser ? 'Generate Dual Resume Package →' : 'Generate Resume Package →'}
             </button>
           </>
         )}
@@ -384,7 +442,27 @@ export default function Home() {
 
               <div className="result-section">
                 <div className="result-section-title">Resume</div>
-                <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.resume)}} />
+                {results.dualVersion ? (
+                  <>
+                    <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                      <button
+                        onClick={() => setActiveResume('a')}
+                        style={{ padding: '6px 16px', background: activeResume === 'a' ? '#6366f1' : 'transparent', color: activeResume === 'a' ? 'white' : 'var(--text-soft)', border: `1.5px solid ${activeResume === 'a' ? '#6366f1' : 'var(--border)'}`, borderRadius: '20px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}
+                      >
+                        Version A — Leadership
+                      </button>
+                      <button
+                        onClick={() => setActiveResume('b')}
+                        style={{ padding: '6px 16px', background: activeResume === 'b' ? '#6366f1' : 'transparent', color: activeResume === 'b' ? 'white' : 'var(--text-soft)', border: `1.5px solid ${activeResume === 'b' ? '#6366f1' : 'var(--border)'}`, borderRadius: '20px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}
+                      >
+                        Version B — Technical
+                      </button>
+                    </div>
+                    <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(activeResume === 'a' ? results.resumeA : results.resumeB)}} />
+                  </>
+                ) : (
+                  <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.resume)}} />
+                )}
               </div>
 
               <div className="result-section">
@@ -529,6 +607,24 @@ export default function Home() {
                 <div className="feedback-thanks">Thanks — that helps. 🙏</div>
               )}
             </div>
+
+            {!isPlusUser && (
+              <div style={{ margin: '1.5rem 0 0', padding: '1.25rem 1.5rem', background: 'rgba(99,102,241,0.05)', border: '1.5px solid #6366f1', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                    <span style={{ fontFamily: 'Inter', fontWeight: 700, fontSize: '0.9rem', color: 'var(--ink)' }}>Want two versions?</span>
+                    <span style={{ background: '#6366f1', color: 'white', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
+                  </div>
+                  <p style={{ fontFamily: 'Inter', fontSize: '0.75rem', color: 'var(--text-soft)', margin: 0 }}>Upgrade to get a Leadership <em>and</em> Technical version — two shots at the same role.</p>
+                </div>
+                <button
+                  onClick={() => setShowPlusPaywall(true)}
+                  style={{ flexShrink: 0, padding: '8px 20px', background: '#6366f1', color: 'white', border: 'none', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                >
+                  Upgrade to Pro+
+                </button>
+              </div>
+            )}
 
             <button className="reset-btn" onClick={handleReset}>
               ← Start over with a new job

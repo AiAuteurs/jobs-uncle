@@ -14,7 +14,17 @@ export default async function handler(req, res) {
   const KV_TOKEN = process.env.KV_REST_API_TOKEN
 
   try {
-    // Check if paid subscriber
+    // Check if Pro+ subscriber
+    if (sessionId) {
+      const plusKey = `paid_plus:${sessionId}`
+      const plusRes = await fetch(`${KV_URL}/get/${plusKey}`, {
+        headers: { Authorization: `Bearer ${KV_TOKEN}` }
+      })
+      const plusData = await plusRes.json()
+      if (plusData.result) return res.json({ access: 'pro_plus', resumesLeft: 999 })
+    }
+
+    // Check if Pro subscriber
     if (sessionId) {
       const paidKey = `paid:${sessionId}`
       const paidRes = await fetch(`${KV_URL}/get/${paidKey}`, {

@@ -12,36 +12,41 @@ export default async function handler(req, res) {
   const KV_TOKEN = process.env.KV_REST_API_TOKEN
 
   try {
-    // Verify with Stripe that payment actually completed
     const session = await stripe.checkout.sessions.retrieve(sessionId)
 
     if (session.payment_status !== 'paid' && session.status !== 'complete') {
       return res.status(402).json({ ok: false, error: 'Payment not completed' })
     }
 
-    // Write paid status to KV — expires in 1 year (seconds)
+    const plan = session.metadata?.plan || 'pro'
+    const isPlus = plan === 'pro_plus_monthly' || plan === 'pro_plus_annual'
+
+    // Write paid status to KV — expires in 1 year
     const paidKey = `paid:${sessionId}`
     await fetch(`${KV_URL}/set/${paidKey}/1/ex/31536000`, {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${KV_TOKEN}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { Authorization: `Bearer ${KV_TOKEN}`, 'Content-Type': 'application/json' },
     })
 
-    // Also key by email if available for future lookup
+    // Write Pro+ status if applicable
+    if (isPlus) {
+      const plusKey = `paid_plus:${sessionId}`
+      await fetch(`${KV_URL}/set/${plusKey}/1/ex/31536000`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${KV_TOKEN}`, 'Content-Type': 'application/json' },
+      })
+    }
+
+    // Key by email if available
     if (session.customer_email) {
       const emailKey = `paid_email:${session.customer_email}`
       await fetch(`${KV_URL}/set/${emailKey}/${sessionId}/ex/31536000`, {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${KV_TOKEN}`,
-          'Content-Type': 'application/json',
-        },
+        headers: { Authorization: `Bearer ${KV_TOKEN}`, 'Content-Type': 'application/json' },
       })
     }
 
-    return res.status(200).json({ ok: true, email: session.customer_email || null })
+    return res.status(200).json({ ok: true, plan, email: session.customer_email || null })
   } catch (err) {
     console.error('verify-session error:', err)
     return res.status(500).json({ ok: false, error: err.message })

@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const form = formidable({ maxFileSize: 10 * 1024 * 1024 }) // 10MB max
+  const form = formidable({ maxFileSize: 10 * 1024 * 1024 })
 
   let fields, files
   try {
@@ -37,6 +37,7 @@ export default async function handler(req, res) {
   const jobDescription = Array.isArray(fields.jobDescription)
     ? fields.jobDescription[0]
     : fields.jobDescription
+  const dualVersion = (Array.isArray(fields.dualVersion) ? fields.dualVersion[0] : fields.dualVersion) === 'true'
 
   if (!pdfFile || !jobDescription) {
     return res.status(400).json({ error: 'Missing PDF or job description' })
@@ -46,19 +47,77 @@ export default async function handler(req, res) {
   try {
     linkedinText = await extractTextFromPDF(pdfFile.filepath)
   } catch (err) {
-    linkedinText = '[Could not extract LinkedIn PDF text automatically. Please ensure you uploaded a LinkedIn profile PDF.]'
+    linkedinText = '[Could not extract PDF text automatically.]'
   } finally {
     try { fs.unlinkSync(pdfFile.filepath) } catch (e) {}
   }
 
+  const resumeInstructions = dualVersion ? `
+RESUME VERSION A — LEADERSHIP FOCUS:
+- Lead with a summary emphasizing strategic impact, team leadership, stakeholder management, and organizational outcomes
+- Prioritize bullet points that show scale: team size, budget owned, cross-functional influence, executive visibility
+- Frame achievements in terms of business outcomes, revenue, cost savings, org transformation
+- Keywords: led, drove, spearheaded, scaled, transformed, aligned, influenced
+
+RESUME VERSION B — TECHNICAL/ACHIEVEMENT FOCUS:
+- Lead with a summary emphasizing domain expertise, measurable results, and hands-on execution
+- Prioritize bullet points with hard metrics: percentages, time saved, volume handled, tools mastered
+- Frame achievements in terms of outputs, efficiency, precision, and technical credibility
+- Keywords: built, engineered, optimized, delivered, executed, launched, reduced, increased
+
+Generate both versions. Each should be complete and standalone — same experience, different lens.
+` : `
+RESUME REQUIREMENTS:
+- Lead with a punchy 2-3 sentence professional summary that speaks directly to THIS role
+- Highlight only the experience most relevant to this specific job
+- Use strong action verbs and concrete results where possible
+- Turn bullet points into achievement-focused statements — add metrics wherever the background supports it
+- Do NOT include an objective statement
+- Format cleanly with clear sections: Summary, Experience, Skills, Education
+- Keep it to one page worth of content
+- Mirror keywords and phrases from the job description naturally throughout — optimize for ATS without sounding robotic
+- If there are employment gaps in the profile, reframe them confidently as growth, skill-building, or intentional transition
+- Do NOT pad or embellish — be ruthlessly relevant
+`
+
+  const outputFormat = dualVersion ? `
+===METADATA===
+{"candidateName":"...","candidateEmail":"...","candidatePhone":"...","companyName":"...","jobTitle":"..."}
+
+===RECRUITER_NOTES===
+[recruiter gap analysis here]
+
+===RESUME_A===
+[Leadership-focused resume here]
+
+===RESUME_B===
+[Technical/Achievement-focused resume here]
+
+===COVER_LETTER===
+[cover letter here]
+
+===HIRING_MANAGER_DM===
+[hiring manager DM here]
+` : `
+===METADATA===
+{"candidateName":"...","candidateEmail":"...","candidatePhone":"...","companyName":"...","jobTitle":"..."}
+
+===RECRUITER_NOTES===
+[recruiter gap analysis here]
+
+===RESUME===
+[resume content here]
+
+===COVER_LETTER===
+[cover letter content here]
+
+===HIRING_MANAGER_DM===
+[hiring manager DM here]
+`
+
   const prompt = `You are an expert resume writer and career coach. You write resumes that are direct, confident, and tailored — never generic, never bloated.
 
-A person has provided their LinkedIn profile data and a job description. Your job is to craft five things:
-1. A recruiter gap analysis
-2. A tailored, professional resume
-3. A sharp, specific cover letter
-4. A hiring manager DM
-5. Metadata
+A person has provided their LinkedIn profile data and a job description. Your job is to craft the following:
 
 ---
 LINKEDIN PROFILE DATA:
@@ -73,69 +132,42 @@ ${jobDescription}
 RECRUITER GAP ANALYSIS REQUIREMENTS:
 - Act like a senior recruiter in this industry reviewing this resume for this specific role
 - Identify 3-5 specific things that would stop you from reaching out — be honest and direct, not diplomatic
-- If there are employment gaps, flag them and suggest exactly how to reframe each one as growth, not failure
-- If there are no gaps, say so briefly
+- If there are employment gaps, flag them and suggest exactly how to reframe each one
 - Format as a short bulleted list — plain text, no headers
 - Keep it under 150 words total
 
-RESUME REQUIREMENTS:
-- Lead with a punchy 2-3 sentence professional summary that speaks directly to THIS role
-- Highlight only the experience most relevant to this specific job
-- Use strong action verbs and concrete results where possible
-- Turn bullet points into achievement-focused statements — add metrics wherever the background supports it
-- Do NOT include an objective statement
-- Format cleanly with clear sections: Summary, Experience, Skills, Education
-- Keep it to one page worth of content
-- Mirror keywords and phrases from the job description naturally throughout — optimize for ATS without sounding robotic
-- If there are employment gaps in the profile, reframe them confidently as growth, skill-building, or intentional transition — never hide them, own them
-- Do NOT pad or embellish — be ruthlessly relevant
+${resumeInstructions}
 
 COVER LETTER REQUIREMENTS:
 - Maximum 3 paragraphs
 - Open with something specific about the company or role — not "I am writing to apply for..."
 - Middle paragraph: the 2-3 specific things from their background that make them right for this role
-- Close with confidence, not desperation — no "I look forward to hearing from you at your earliest convenience"
+- Close with confidence, not desperation
 - Conversational but professional tone
 - Do NOT use clichés or corporate filler
-- Do NOT include a contact info header — that will be added separately
+- Do NOT include a contact info header
 
 HIRING MANAGER DM REQUIREMENTS:
-- Write a short, punchy message the candidate can DM or email directly to a hiring manager
 - 3-4 sentences max
 - Open with a specific hook — reference the role and one concrete thing from their background
-- No desperation, no groveling, no "I hope this message finds you well"
-- End with a low-pressure call to action — make it easy to say yes
+- No desperation, no groveling
+- End with a low-pressure call to action
 - Tone: confident peer, not supplicant
 
 METADATA REQUIREMENTS:
-Extract from the LinkedIn profile and job description:
-- candidateName: full name of the candidate
-- candidateEmail: email address if present, else ""
-- candidatePhone: phone number if present, else ""
-- companyName: name of the company in the job description (short form, no Inc/LLC)
-- jobTitle: the job title from the job description (2-4 words max, no special chars)
+- candidateName: full name
+- candidateEmail: email if present, else ""
+- candidatePhone: phone if present, else ""
+- companyName: company name (short form, no Inc/LLC)
+- jobTitle: job title (2-4 words max, no special chars)
 
-Respond in this exact format with these exact markers:
-
-===METADATA===
-{"candidateName":"...","candidateEmail":"...","candidatePhone":"...","companyName":"...","jobTitle":"..."}
-
-===RECRUITER_NOTES===
-[recruiter gap analysis here]
-
-===RESUME===
-[resume content here]
-
-===COVER_LETTER===
-[cover letter content here]
-
-===HIRING_MANAGER_DM===
-[hiring manager DM here]`
+Respond in this exact format:
+${outputFormat}`
 
   try {
     const message = await client.messages.create({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: 3000,
+      max_tokens: dualVersion ? 5000 : 3000,
       messages: [{ role: 'user', content: prompt }],
     })
 
@@ -148,29 +180,63 @@ Respond in this exact format with these exact markers:
       try { metadata = { ...metadata, ...JSON.parse(metaMatch[1]) } } catch (e) {}
     }
 
-    // Parse all sections
-    const recruiterNotesMatch = responseText.match(/===RECRUITER_NOTES===([\s\S]*?)===RESUME===/)
-    const resumeMatch = responseText.match(/===RESUME===([\s\S]*?)===COVER_LETTER===/)
-    const coverMatch = responseText.match(/===COVER_LETTER===([\s\S]*?)===HIRING_MANAGER_DM===/)
-    const dmMatch = responseText.match(/===HIRING_MANAGER_DM===([\s\S]*)$/)
-
+    // Parse recruiter notes
+    const recruiterNotesMatch = dualVersion
+      ? responseText.match(/===RECRUITER_NOTES===([\s\S]*?)===RESUME_A===/)
+      : responseText.match(/===RECRUITER_NOTES===([\s\S]*?)===RESUME===/)
     const recruiterNotes = recruiterNotesMatch ? recruiterNotesMatch[1].trim() : ''
-    const resume = resumeMatch ? resumeMatch[1].trim() : responseText
 
-    // Build contact header for cover letter
+    // Build contact header
     const contactParts = [metadata.candidateName, metadata.candidateEmail, metadata.candidatePhone].filter(Boolean)
     const contactHeader = contactParts.length > 0 ? contactParts.join(' · ') + '\n\n' : ''
-    const rawCoverLetter = coverMatch ? coverMatch[1].trim() : ''
-    const coverLetter = contactHeader + rawCoverLetter
 
-    const hiringManagerDM = dmMatch ? dmMatch[1].trim() : ''
-
-    // Build safe filename slug
+    // Build slug
     const slug = (str) => str.replace(/[^a-zA-Z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '')
     const fileBaseName = [slug(metadata.candidateName), slug(metadata.companyName), slug(metadata.jobTitle)]
       .filter(Boolean).join('_') || 'resume'
 
-    return res.status(200).json({ resume, coverLetter, recruiterNotes, hiringManagerDM, metadata, fileBaseName })
+    if (dualVersion) {
+      const resumeAMatch = responseText.match(/===RESUME_A===([\s\S]*?)===RESUME_B===/)
+      const resumeBMatch = responseText.match(/===RESUME_B===([\s\S]*?)===COVER_LETTER===/)
+      const coverMatch = responseText.match(/===COVER_LETTER===([\s\S]*?)===HIRING_MANAGER_DM===/)
+      const dmMatch = responseText.match(/===HIRING_MANAGER_DM===([\s\S]*)$/)
+
+      const resumeA = resumeAMatch ? resumeAMatch[1].trim() : ''
+      const resumeB = resumeBMatch ? resumeBMatch[1].trim() : ''
+      const rawCover = coverMatch ? coverMatch[1].trim() : ''
+      const coverLetter = contactHeader + rawCover
+      const hiringManagerDM = dmMatch ? dmMatch[1].trim() : ''
+
+      return res.status(200).json({
+        dualVersion: true,
+        resumeA,
+        resumeB,
+        coverLetter,
+        recruiterNotes,
+        hiringManagerDM,
+        metadata,
+        fileBaseName,
+      })
+    } else {
+      const resumeMatch = responseText.match(/===RESUME===([\s\S]*?)===COVER_LETTER===/)
+      const coverMatch = responseText.match(/===COVER_LETTER===([\s\S]*?)===HIRING_MANAGER_DM===/)
+      const dmMatch = responseText.match(/===HIRING_MANAGER_DM===([\s\S]*)$/)
+
+      const resume = resumeMatch ? resumeMatch[1].trim() : responseText
+      const rawCover = coverMatch ? coverMatch[1].trim() : ''
+      const coverLetter = contactHeader + rawCover
+      const hiringManagerDM = dmMatch ? dmMatch[1].trim() : ''
+
+      return res.status(200).json({
+        dualVersion: false,
+        resume,
+        coverLetter,
+        recruiterNotes,
+        hiringManagerDM,
+        metadata,
+        fileBaseName,
+      })
+    }
   } catch (err) {
     console.error('Claude API error:', err)
     return res.status(500).json({ error: 'Generation failed. Please try again.' })

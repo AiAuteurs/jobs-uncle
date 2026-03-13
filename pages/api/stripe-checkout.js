@@ -5,7 +5,31 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end()
 
-  const { email } = req.body
+  const { email, plan } = req.body
+
+  // plan: 'pro' | 'pro_plus_monthly' | 'pro_plus_annual'
+  const planConfig = {
+    pro: {
+      name: 'JobsUncle Pro',
+      description: 'Unlimited AI-tailored resumes, cover letters, recruiter analysis & hiring manager DMs',
+      unit_amount: 4999,
+      recurring: { interval: 'year' },
+    },
+    pro_plus_monthly: {
+      name: 'JobsUncle Pro+',
+      description: 'Everything in Pro + dual-version resumes (Leadership & Technical focus)',
+      unit_amount: 999,
+      recurring: { interval: 'month' },
+    },
+    pro_plus_annual: {
+      name: 'JobsUncle Pro+',
+      description: 'Everything in Pro + dual-version resumes (Leadership & Technical focus)',
+      unit_amount: 7999,
+      recurring: { interval: 'year' },
+    },
+  }
+
+  const selected = planConfig[plan] || planConfig.pro
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -16,19 +40,19 @@ export default async function handler(req, res) {
         price_data: {
           currency: 'usd',
           product_data: {
-            name: 'Jobs Uncle Pro',
-            description: 'Unlimited AI-tailored resumes & cover letters',
-            images: ['https://jobsuncle.ai/uncle-spin-logo.png'],
+            name: selected.name,
+            description: selected.description,
+            images: ['https://www.jobsuncle.ai/uncle-spin-logo.png'],
           },
-          unit_amount: 4999, // $49.99
-          recurring: { interval: 'year' },
+          unit_amount: selected.unit_amount,
+          recurring: selected.recurring,
         },
         quantity: 1,
       }],
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}&plan=${plan || 'pro'}`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
       allow_promotion_codes: true,
-    metadata: { source: 'jobs_uncle' },
+      metadata: { source: 'jobs_uncle', plan: plan || 'pro' },
     })
 
     res.status(200).json({ url: session.url })
