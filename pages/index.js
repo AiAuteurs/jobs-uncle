@@ -103,6 +103,9 @@ export default function Home() {
 
       setResults(data)
 
+      // Refresh counter live after each generation
+      fetch('/api/counter').then(r => r.json()).then(d => setResumeCount(d.count)).catch(() => {})
+
       // Mark free resume as used
       if (!isPaid) {
         fetch('/api/mark-used', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) }).catch(() => {})
