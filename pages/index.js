@@ -296,6 +296,51 @@ export default function Home() {
             <button onClick={() => setShowPaywall(false)} style={{ background: 'none', border: 'none', color: 'var(--text-soft)', fontSize: '0.85rem', cursor: 'pointer', padding: '8px' }}>
               Maybe later
             </button>
+
+            <div style={{ marginTop: '24px', borderTop: '1px solid var(--border)', paddingTop: '20px' }}>
+              {/* RESTORE ACCESS */}
+              <div style={{ marginBottom: '12px' }}>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-soft)', marginBottom: '6px' }}>Already a paying member?</div>
+                {!showRestore ? (
+                  <button onClick={() => setShowRestore(true)} style={{ background: 'none', border: '1.5px solid var(--border)', borderRadius: '20px', color: 'var(--text-soft)', fontSize: '0.8rem', fontWeight: 600, padding: '6px 16px', cursor: 'pointer' }}>
+                    Restore access
+                  </button>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <input type="email" value={restoreEmail} onChange={e => setRestoreEmail(e.target.value)} placeholder="Email you subscribed with" style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--border)', borderRadius: '6px', fontSize: '0.85rem', background: 'var(--surface)', color: 'var(--ink)' }} onKeyDown={e => e.key === 'Enter' && handleRestore()} />
+                      <button onClick={handleRestore} disabled={restoreStatus === 'loading'} style={{ padding: '8px 16px', background: 'var(--ink)', color: 'var(--bg)', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}>
+                        {restoreStatus === 'loading' ? '...' : 'Restore'}
+                      </button>
+                    </div>
+                    {restoreMsg && <div style={{ fontSize: '0.8rem', color: restoreStatus === 'success' ? '#22c55e' : '#ef4444' }}>{restoreMsg}</div>}
+                  </div>
+                )}
+              </div>
+
+              {/* BETA CODE */}
+              <div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-soft)', marginBottom: '6px' }}>Got a beta code?</div>
+                {!showBeta ? (
+                  <button onClick={() => setShowBeta(true)} style={{ background: 'none', border: '1.5px solid var(--border)', borderRadius: '20px', color: 'var(--text-soft)', fontSize: '0.8rem', fontWeight: 600, padding: '6px 16px', cursor: 'pointer' }}>
+                    Redeem
+                  </button>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <input type="text" value={betaCode} onChange={e => setBetaCode(e.target.value)} placeholder="UNCLE-BETA-XXXX" style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--border)', borderRadius: '6px', fontSize: '0.85rem', background: 'var(--surface)', color: 'var(--ink)', textTransform: 'uppercase', letterSpacing: '0.05em' }} />
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <input type="email" value={betaEmail} onChange={e => setBetaEmail(e.target.value)} placeholder="Your email (to restore access later)" style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--border)', borderRadius: '6px', fontSize: '0.85rem', background: 'var(--surface)', color: 'var(--ink)' }} onKeyDown={e => e.key === 'Enter' && handleBeta()} />
+                      <button onClick={handleBeta} disabled={betaStatus === 'loading'} style={{ padding: '8px 16px', background: 'var(--ink)', color: 'var(--bg)', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}>
+                        {betaStatus === 'loading' ? '...' : 'Redeem'}
+                      </button>
+                    </div>
+                    {betaMsg && <div style={{ fontSize: '0.8rem', color: betaStatus === 'success' ? '#22c55e' : '#ef4444' }}>{betaMsg}</div>}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -452,120 +497,24 @@ export default function Home() {
 
             {error && <div className="error-msg">{error}</div>}
 
-            {/* RESTORE ACCESS */}
-            {!isPaid && (
-              <div style={{ margin: '1.5rem 0 0', padding: '1rem 1.5rem', background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-soft)' }}>Already a paying member?</div>
-                {!showRestore ? (
-                  <button
-                    onClick={() => setShowRestore(true)}
-                    style={{ background: 'none', border: '1.5px solid var(--border)', borderRadius: '20px', color: 'var(--text-soft)', fontSize: '0.8rem', fontWeight: 600, padding: '6px 16px', cursor: 'pointer' }}
-                  >
-                    Restore access
-                  </button>
-                ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <input
-                        type="email"
-                        value={restoreEmail}
-                        onChange={e => setRestoreEmail(e.target.value)}
-                        placeholder="Email you subscribed with"
-                        style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--border)', borderRadius: '6px', fontSize: '0.85rem', background: 'var(--surface)', color: 'var(--ink)' }}
-                        onKeyDown={e => e.key === 'Enter' && handleRestore()}
-                      />
-                      <button
-                        onClick={handleRestore}
-                        disabled={restoreStatus === 'loading'}
-                        style={{ padding: '8px 16px', background: 'var(--ink)', color: 'var(--bg)', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}
-                      >
-                        {restoreStatus === 'loading' ? '...' : 'Restore'}
-                      </button>
-                    </div>
-                    {restoreMsg && (
-                      <div style={{ fontSize: '0.8rem', color: restoreStatus === 'success' ? '#22c55e' : '#ef4444' }}>
-                        {restoreMsg}
-                      </div>
-                    )}
+            {/* DUAL VERSION TOGGLE — Pro+ users only */}
+            {isPlusUser && (
+              <div style={{ margin: '1.5rem 0 0', padding: '1.25rem 1.5rem', background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                    <span style={{ fontFamily: 'Inter', fontWeight: 700, fontSize: '0.9rem', color: 'var(--ink)' }}>Dual Resume Versions</span>
+                    <span style={{ background: '#6366f1', color: 'white', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
                   </div>
-                )}
-              </div>
-            )}
-
-            {/* BETA CODE */}
-            {!isPaid && (
-              <div style={{ margin: '0.75rem 0 0', padding: '1rem 1.5rem', background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-soft)' }}>Got a beta code?</div>
-                {!showBeta ? (
-                  <button
-                    onClick={() => setShowBeta(true)}
-                    style={{ background: 'none', border: '1.5px solid var(--border)', borderRadius: '20px', color: 'var(--text-soft)', fontSize: '0.8rem', fontWeight: 600, padding: '6px 16px', cursor: 'pointer' }}
-                  >
-                    Redeem
-                  </button>
-                ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <input
-                        type="text"
-                        value={betaCode}
-                        onChange={e => setBetaCode(e.target.value)}
-                        placeholder="UNCLE-BETA-XXXX"
-                        style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--border)', borderRadius: '6px', fontSize: '0.85rem', background: 'var(--surface)', color: 'var(--ink)', textTransform: 'uppercase', letterSpacing: '0.05em' }}
-                      />
-                    </div>
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <input
-                        type="email"
-                        value={betaEmail}
-                        onChange={e => setBetaEmail(e.target.value)}
-                        placeholder="Your email (to restore access later)"
-                        style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--border)', borderRadius: '6px', fontSize: '0.85rem', background: 'var(--surface)', color: 'var(--ink)' }}
-                        onKeyDown={e => e.key === 'Enter' && handleBeta()}
-                      />
-                      <button
-                        onClick={handleBeta}
-                        disabled={betaStatus === 'loading'}
-                        style={{ padding: '8px 16px', background: 'var(--ink)', color: 'var(--bg)', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}
-                      >
-                        {betaStatus === 'loading' ? '...' : 'Redeem'}
-                      </button>
-                    </div>
-                    {betaMsg && (
-                      <div style={{ fontSize: '0.8rem', color: betaStatus === 'success' ? '#22c55e' : '#ef4444' }}>
-                        {betaMsg}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* DUAL VERSION TOGGLE */}
-            <div style={{ margin: '1.5rem 0 0', padding: '1.25rem 1.5rem', background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                  <span style={{ fontFamily: 'Inter', fontWeight: 700, fontSize: '0.9rem', color: 'var(--ink)' }}>Dual Resume Versions</span>
-                  <span style={{ background: '#6366f1', color: 'white', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
+                  <p style={{ fontFamily: 'Inter', fontSize: '0.75rem', color: 'var(--text-soft)', margin: 0 }}>Get a Leadership-focused <em>and</em> a Technical/Achievement-focused version in one shot.</p>
                 </div>
-                <p style={{ fontFamily: 'Inter', fontSize: '0.75rem', color: 'var(--text-soft)', margin: 0 }}>Get a Leadership-focused <em>and</em> a Technical/Achievement-focused version in one shot.</p>
-              </div>
-              {isPlusUser ? (
                 <button
                   onClick={() => setDualVersionEnabled(!dualVersionEnabled)}
                   style={{ flexShrink: 0, padding: '8px 20px', background: dualVersionEnabled ? '#6366f1' : 'transparent', color: dualVersionEnabled ? 'white' : 'var(--text-soft)', border: `1.5px solid ${dualVersionEnabled ? '#6366f1' : 'var(--border)'}`, borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' }}
                 >
                   {dualVersionEnabled ? '✓ Enabled' : 'Enable'}
                 </button>
-              ) : (
-                <button
-                  onClick={() => setShowPlusPaywall(true)}
-                  style={{ flexShrink: 0, padding: '8px 20px', background: 'transparent', color: '#6366f1', border: '1.5px solid #6366f1', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
-                >
-                  Upgrade to Pro+
-                </button>
-              )}
-            </div>
+              </div>
+            )}
 
             <button
               className={`generate-btn ${loading ? 'loading' : ''}`}
