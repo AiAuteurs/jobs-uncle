@@ -615,6 +615,9 @@ body {
 
 @media (max-width: 600px) {
   .counter { display: none; }
+  .header-tagline { display: none; }
+  .header { padding: 0 1rem; }
+  .logo-text { font-size: 1.3rem; }
 }
 
 /* ─── FEEDBACK ──────────────────────────────────────────── */
