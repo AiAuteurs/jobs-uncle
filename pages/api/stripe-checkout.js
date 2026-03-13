@@ -30,6 +30,7 @@ export default async function handler(req, res) {
   }
 
   const selected = planConfig[plan] || planConfig.pro
+  const isAnnual = plan === 'pro' || plan === 'pro_plus_annual'
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -51,7 +52,7 @@ export default async function handler(req, res) {
       }],
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}&plan=${plan || 'pro'}`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
-      allow_promotion_codes: true,
+      allow_promotion_codes: isAnnual, // promo codes annual only — prevents UNCLE10 zeroing out monthly
       metadata: { source: 'jobs_uncle', plan: plan || 'pro' },
     })
 
