@@ -231,13 +231,13 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta property="og:title" content="JobsUncle.ai — Your resume, tailored to every job." />
         <meta property="og:description" content="Upload your resume or LinkedIn PDF, paste the job description — get a tailored resume, cover letter, recruiter gap analysis, and a hiring manager DM in under a minute." />
-        <meta property="og:image" content="https://www.jobsuncle.ai/og-image.png" />
+        <meta property="og:image" content="https://res.cloudinary.com/dbyzesuya/image/upload/og-image_uqdfh0.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:url" content="https://www.jobsuncle.ai" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="https://www.jobsuncle.ai/og-image.png" />
+        <meta name="twitter:image" content="https://res.cloudinary.com/dbyzesuya/image/upload/og-image_uqdfh0.png" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤵</text></svg>" />
