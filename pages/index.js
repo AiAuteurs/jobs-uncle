@@ -41,18 +41,25 @@ export default function Home() {
   const [activeResume, setActiveResume] = useState('a') // 'a' | 'b'
   const fileInputRef = useRef(null)
 
-  // Fetch resume counter on mount
+  // Fetch resume counter + check access via cookie on mount
+  // Works in private/incognito — no localStorage dependency
   useEffect(() => {
     fetch('/api/counter')
       .then(r => r.json())
       .then(d => setResumeCount(d.count))
       .catch(() => {})
 
-    // Check if returning paid user
-    const session = localStorage.getItem('ju_session')
-    if (session) setIsPaid(true)
-    const plusSession = localStorage.getItem('ju_plus_session')
-    if (plusSession) { setIsPaid(true); setIsPlusUser(true) }
+    fetch('/api/check-access', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
+    })
+      .then(r => r.json())
+      .then(d => {
+        if (d.access === 'pro_plus') { setIsPaid(true); setIsPlusUser(true) }
+        else if (d.access === 'paid') { setIsPaid(true) }
+      })
+      .catch(() => {})
   }, [])
 
   const handleFile = (file) => {
@@ -110,7 +117,7 @@ export default function Home() {
 
       setResults(data)
 
-      // Increment counter + refresh display — browser-side so URL is always correct
+      // Increment counter + refresh display
       fetch('/api/counter', { method: 'POST' })
         .then(r => r.json())
         .then(d => setResumeCount(d.count))
@@ -279,7 +286,6 @@ export default function Home() {
         <div className="logo">
           <img src="/uncle-spin-logo.png" alt="Uncle Spin" className="logo-icon" />
           <span className="logo-text">JobsUncle.ai</span>
-
         </div>
         <div className="header-right">
           {resumeCount !== null && (

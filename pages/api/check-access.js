@@ -1,5 +1,5 @@
 // Checks if a user has paid access or free resumes remaining
-// Uses Vercel KV to track free usage by email/IP
+// Cookie-first (works in private/incognito), then KV sessionId, then free tier
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end()
@@ -14,7 +14,13 @@ export default async function handler(req, res) {
   const KV_TOKEN = process.env.KV_REST_API_TOKEN
 
   try {
-    // Check if Pro+ subscriber
+    // 1. Cookie check — works in private/incognito, set by verify-session after payment
+    const cookies = req.headers.cookie || ''
+    const cookieAccess = cookies.match(/ju_access=([^;]+)/)?.[1]
+    if (cookieAccess === 'pro_plus') return res.json({ access: 'pro_plus', resumesLeft: 999 })
+    if (cookieAccess === 'paid') return res.json({ access: 'paid', resumesLeft: 999 })
+
+    // 2. KV sessionId check — fallback for users who paid before cookie rollout
     if (sessionId) {
       const plusKey = `paid_plus:${sessionId}`
       const plusRes = await fetch(`${KV_URL}/get/${plusKey}`, {
@@ -22,10 +28,7 @@ export default async function handler(req, res) {
       })
       const plusData = await plusRes.json()
       if (plusData.result) return res.json({ access: 'pro_plus', resumesLeft: 999 })
-    }
 
-    // Check if Pro subscriber
-    if (sessionId) {
       const paidKey = `paid:${sessionId}`
       const paidRes = await fetch(`${KV_URL}/get/${paidKey}`, {
         headers: { Authorization: `Bearer ${KV_TOKEN}` }
@@ -34,7 +37,7 @@ export default async function handler(req, res) {
       if (paidData.result) return res.json({ access: 'paid', resumesLeft: 999 })
     }
 
-    // Check free usage
+    // 3. Free tier usage check
     const usageRes = await fetch(`${KV_URL}/get/${key}`, {
       headers: { Authorization: `Bearer ${KV_TOKEN}` }
     })

@@ -20,6 +20,7 @@ export default async function handler(req, res) {
 
     const plan = session.metadata?.plan || 'pro'
     const isPlus = plan === 'pro_plus_monthly' || plan === 'pro_plus_annual'
+    const accessLevel = isPlus ? 'pro_plus' : 'paid'
 
     // Write paid status to KV — expires in 1 year
     const paidKey = `paid:${sessionId}`
@@ -45,6 +46,12 @@ export default async function handler(req, res) {
         headers: { Authorization: `Bearer ${KV_TOKEN}`, 'Content-Type': 'application/json' },
       })
     }
+
+    // Set HttpOnly cookie — works in private/incognito mode, survives reloads
+    res.setHeader(
+      'Set-Cookie',
+      `ju_access=${accessLevel}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000`
+    )
 
     return res.status(200).json({ ok: true, plan, email: session.customer_email || null })
   } catch (err) {
