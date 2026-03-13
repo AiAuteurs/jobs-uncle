@@ -248,7 +248,7 @@ export default function Home() {
 
   const handleBeta = async () => {
     if (!betaCode.trim()) return
-    if (!betaEmail.includes('@')) { setBetaStatus('error'); setBetaMsg('Enter a valid email — you'll need it to restore access later.'); return }
+    if (!betaEmail.includes('@')) { setBetaStatus('error'); setBetaMsg("Enter a valid email — you'll need it to restore access later."); return }
     setBetaStatus('loading')
     try {
       const res = await fetch('/api/redeem-beta', {
