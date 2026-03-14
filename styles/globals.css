@@ -121,6 +121,7 @@ body {
   max-width: 480px;
   height: auto;
   display: block;
+  mix-blend-mode: multiply;
 }
 
 .hero-eyebrow {
