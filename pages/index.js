@@ -417,6 +417,12 @@ export default function Home() {
         </div>
       </div>
 
+      {/* TESTIMONIAL */}
+      <div style={{ background: 'var(--surface)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', padding: '1.5rem 2rem', textAlign: 'center' }}>
+        <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.15rem', fontStyle: 'italic', color: 'var(--ink)', margin: '0 0 8px' }}>"The results are solid. I like what I got back."</p>
+        <p style={{ fontSize: '0.8rem', color: 'var(--text-soft)', fontWeight: 600, margin: 0 }}>— B.C., ICF Certified Career Coach</p>
+      </div>
+
       <div className="how-section">
         <div className="how-title">How it works</div>
         <div className="how-items">
@@ -430,7 +436,7 @@ export default function Home() {
           </div>
           <div className="how-item">
             <div className="how-num">03</div>
-            <div className="how-label">Get a tailored resume, cover letter, recruiter gap analysis, and a hiring manager DM</div>
+            <div className="how-label">Get a tailored resume, cover letter, recruiter & ATS analysis, and a hiring manager DM</div>
           </div>
           <div className="how-item">
             <div className="how-num">04</div>
@@ -644,8 +650,8 @@ export default function Home() {
 
               {results.recruiterNotes && (
                 <div className="result-section" style={{ borderLeft: '3px solid #f59e0b', background: 'rgba(245,158,11,0.05)' }}>
-                  <div className="result-section-title">Recruiter Reality Check</div>
-                  <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '12px' }}>Honest gaps a recruiter would flag — and how to own them.</div>
+                  <div className="result-section-title">Recruiter & ATS Analysis</div>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '12px' }}>ATS compatibility check plus honest gaps a recruiter would flag — and how to own them.</div>
                   <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.recruiterNotes)}} />
                 </div>
               )}
@@ -807,6 +813,11 @@ export default function Home() {
 
       <footer className="footer">
         <p>© 2026 JobsUncle.ai · Your documents are never stored · Built with AI</p>
+        <p style={{ marginTop: '8px', fontSize: '0.75rem' }}>
+          <a href="/privacy" style={{ color: 'var(--text-soft)', textDecoration: 'none', marginRight: '1rem' }}>Privacy Policy</a>
+          <a href="/terms" style={{ color: 'var(--text-soft)', textDecoration: 'none', marginRight: '1rem' }}>Terms of Service</a>
+          <a href="/about" style={{ color: 'var(--text-soft)', textDecoration: 'none' }}>Our Story</a>
+        </p>
       </footer>
     </>
   )
