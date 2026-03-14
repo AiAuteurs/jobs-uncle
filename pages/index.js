@@ -405,10 +405,6 @@ export default function Home() {
         <div className="hero-inner">
           <div className="hero-copy">
             <p className="hero-eyebrow">AI Resume Intelligence</p>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.5rem' }}>
-              <img src="/uncle-spin-logo.png" alt="JobsUncle.ai" style={{ width: 36, height: 'auto' }} />
-              <span style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.5rem', fontWeight: 700, color: 'var(--ink)' }}>JobsUncle.ai</span>
-            </div>
             <h1>Your resume, <em>tailored</em><br />to every job.</h1>
             <p className="hero-sub">
               Upload your resume or LinkedIn profile. Paste a job description.
@@ -416,7 +412,13 @@ export default function Home() {
             </p>
           </div>
           <div className="hero-mascot">
-            <img src="/uncle-spin-hero.png" alt="Uncle Spin" className="mascot-img" style={{ width: '340px', maxWidth: '100%', height: 'auto' }} />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+              <img src="/uncle-spin-hero.png" alt="Uncle Spin" className="mascot-img" />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <img src="/uncle-spin-logo.png" alt="JobsUncle.ai" style={{ width: 28, height: 'auto' }} />
+                <span style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.25rem', fontWeight: 700, color: 'var(--ink)' }}>JobsUncle.ai</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
