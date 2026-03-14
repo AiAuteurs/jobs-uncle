@@ -118,10 +118,9 @@ body {
 
 .mascot-img {
   width: 100%;
-  max-width: 380px;
+  max-width: 420px;
   height: auto;
   display: block;
-  border-radius: 24px;
 }
 
 .hero-eyebrow {
