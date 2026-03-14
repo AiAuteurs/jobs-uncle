@@ -90,7 +90,7 @@ body {
 
 .hero-inner {
   display: grid;
-  grid-template-columns: 1fr 420px;
+  grid-template-columns: 1fr 480px;
   gap: 2rem;
   align-items: center;
 }
@@ -118,7 +118,7 @@ body {
 
 .mascot-img {
   width: 100%;
-  max-width: 420px;
+  max-width: 480px;
   height: auto;
   display: block;
 }
