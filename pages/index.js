@@ -412,13 +412,7 @@ export default function Home() {
             </p>
           </div>
           <div className="hero-mascot">
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-              <img src="/uncle-spin-hero.png" alt="Uncle Spin" className="mascot-img" />
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <img src="/uncle-spin-logo.png" alt="JobsUncle.ai" style={{ width: 28, height: 'auto' }} />
-                <span style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.25rem', fontWeight: 700, color: 'var(--ink)' }}>JobsUncle.ai</span>
-              </div>
-            </div>
+            <img src="/uncle-spin-hero.png" alt="Uncle Spin" className="mascot-img" />
           </div>
         </div>
       </div>
