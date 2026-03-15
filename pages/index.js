@@ -56,6 +56,10 @@ export default function Home() {
   const [betaEmail, setBetaEmail] = useState('')
   const [betaStatus, setBetaStatus] = useState(null)
   const [betaMsg, setBetaMsg] = useState('')
+  const [showEmailGate, setShowEmailGate] = useState(false)
+  const [gateEmail, setGateEmail] = useState('')
+  const [gateStatus, setGateStatus] = useState(null) // null | 'loading' | 'done' | 'error'
+  const [gateMsg, setGateMsg] = useState('')
   const fileInputRef = useRef(null)
 
   // Fetch resume counter + check access via cookie on mount
@@ -140,9 +144,17 @@ export default function Home() {
         .then(d => updateCounter(d.count))
         .catch(() => {})
 
-      // Mark free resume as used
+      // Mark free resume as used + show email gate after first use
       if (!isPaid) {
-        fetch('/api/mark-used', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) }).catch(() => {})
+        fetch('/api/mark-used', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) })
+          .then(r => r.json())
+          .then(d => {
+            // Show email gate after first free resume if not already registered
+            if (d.usedCount === 1 && typeof window !== 'undefined' && !localStorage.getItem('ju_email_gate')) {
+              setShowEmailGate(true)
+            }
+          })
+          .catch(() => {})
       }
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.')
@@ -280,6 +292,32 @@ export default function Home() {
     }
   }
 
+  const handleEmailGate = async () => {
+    if (!gateEmail || !gateEmail.includes('@')) {
+      setGateMsg('Please enter a valid email.')
+      return
+    }
+    setGateStatus('loading')
+    try {
+      const res = await fetch('/api/register-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: gateEmail })
+      })
+      if (res.ok) {
+        setGateStatus('done')
+        setShowEmailGate(false)
+        if (typeof window !== 'undefined') localStorage.setItem('ju_email_gate', '1')
+      } else {
+        setGateStatus('error')
+        setGateMsg('Something went wrong. Try again.')
+      }
+    } catch {
+      setGateStatus('error')
+      setGateMsg('Something went wrong. Try again.')
+    }
+  }
+
   const handleReset = () => {
     setJobDescription('')
     setResults(null)
@@ -356,6 +394,35 @@ export default function Home() {
           </div>
         </div>
       )}
+      {showEmailGate && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', zIndex: 1001, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+          <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.35)' }}>
+            <img src="/uncle-spin-logo.png" alt="JobsUncle.ai" style={{ width: 64, height: 'auto', marginBottom: '20px' }} />
+            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.9rem', margin: '0 0 10px', lineHeight: 1.1 }}>Your first resume is ready.</h2>
+            <p style={{ color: 'var(--text-soft)', fontSize: '0.9rem', margin: '0 0 28px', lineHeight: 1.65 }}>
+              Enter your email to unlock <strong style={{ color: 'var(--ink)' }}>2 more free resumes.</strong><br />No password. No credit card. Just your email.
+            </p>
+            <input
+              type="email"
+              value={gateEmail}
+              onChange={e => setGateEmail(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleEmailGate()}
+              placeholder="you@email.com"
+              style={{ width: '100%', padding: '12px 14px', border: '1.5px solid var(--border)', borderRadius: '8px', fontSize: '0.95rem', background: 'var(--bg)', color: 'var(--ink)', outline: 'none', boxSizing: 'border-box', marginBottom: '12px' }}
+            />
+            {gateMsg && <p style={{ color: '#ef4444', fontSize: '0.82rem', margin: '0 0 10px' }}>{gateMsg}</p>}
+            <button
+              onClick={handleEmailGate}
+              disabled={gateStatus === 'loading'}
+              style={{ width: '100%', background: 'var(--accent)', color: 'white', border: 'none', padding: '14px', borderRadius: '8px', fontSize: '0.95rem', fontWeight: 700, cursor: 'pointer', letterSpacing: '0.02em' }}
+            >
+              {gateStatus === 'loading' ? 'Saving…' : 'Unlock 2 more free resumes'}
+            </button>
+            <p style={{ marginTop: '16px', fontSize: '0.78rem', color: 'var(--text-soft)' }}>We don't spam. Ever. Unsubscribe anytime.</p>
+          </div>
+        </div>
+      )}
+
       <Head>
         <title>JobsUncle.ai &mdash; Your resume, tailored to every job.</title>
         <meta name="description" content="Upload your LinkedIn PDF, paste a job description, get a bespoke resume and cover letter in under a minute." />

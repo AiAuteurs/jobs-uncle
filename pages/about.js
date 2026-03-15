@@ -39,7 +39,7 @@ export default function About() {
 
           <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '2.5rem 0' }} />
 
-          <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.75rem', fontWeight: 700, marginBottom: '1rem' }}>Why "Jobs Uncle"?</h2>
+          <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2.5rem', fontWeight: 700, marginBottom: '1rem' }}>Why "Jobs Uncle"?</h2>
 
           <p>We wanted <strong>"Bob's Your Uncle"</strong> — a British idiom meaning "and there you have it," "it's as simple as that," <em>voilà</em>, or <em>ta-da</em>.</p>
 
@@ -59,7 +59,7 @@ export default function About() {
 
           <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '2.5rem 0' }} />
 
-          <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.75rem', fontWeight: 700, marginBottom: '1rem' }}>The product</h2>
+          <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2.5rem', fontWeight: 700, marginBottom: '1rem' }}>The product</h2>
 
           <p>Upload your resume or LinkedIn PDF. Paste the job description. Get a tailored resume, cover letter, recruiter & ATS analysis, and a hiring manager DM — in under 60 seconds.</p>
 
