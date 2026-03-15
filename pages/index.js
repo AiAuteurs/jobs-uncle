@@ -397,6 +397,7 @@ export default function Home() {
               <span className="counter-label">resumes generated</span>
             </div>
           )}
+          <a href="/about" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 600, letterSpacing: '0.02em' }}>Our Story</a>
           <span className="header-tagline">Everyone deserves an uncle in the business</span>
         </div>
       </header>
@@ -817,6 +818,7 @@ export default function Home() {
           <a href="/privacy" style={{ color: 'var(--text-soft)', textDecoration: 'none', marginRight: '1rem' }}>Privacy Policy</a>
           <a href="/terms" style={{ color: 'var(--text-soft)', textDecoration: 'none', marginRight: '1rem' }}>Terms of Service</a>
           <a href="/about" style={{ color: 'var(--text-soft)', textDecoration: 'none' }}>Our Story</a>
+          {/* Our Story also in nav */}
         </p>
       </footer>
     </>
