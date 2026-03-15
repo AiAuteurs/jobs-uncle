@@ -54,7 +54,7 @@ export default function Example() {
           <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '10px', padding: '2rem', fontSize: '0.88rem', lineHeight: 1.8, color: 'var(--ink)', position: 'relative' }}>
 
             <p style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '2px' }}>Camille Leon</p>
-            <p style={{ color: 'var(--text-soft)', fontSize: '0.8rem', marginBottom: '1.5rem' }}>camille.leon@gmail.com · 415-555-0192 · linkedin.com/in/camilleleon · San Francisco, CA</p>
+            <p style={{ color: 'var(--text-soft)', fontSize: '0.8rem', marginBottom: '1.5rem' }}>camille.leon@example.com ·  · linkedin.com/in/camille-example-only · San Francisco, CA</p>
 
             <div style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '0.4rem' }}>Professional Summary</div>
             <p style={{ color: 'var(--text-soft)', marginBottom: '1.5rem' }}>Instructional designer with 8 years developing scalable learning experiences for diverse populations. Expert in data-driven curriculum design, learner experience optimization, and cross-functional collaboration. Proven track record building frameworks adopted across large organizations and using analytics to improve learning outcomes.</p>
@@ -138,8 +138,9 @@ export default function Example() {
 
         {/* CTA */}
         <div style={{ textAlign: 'center', padding: '2.5rem', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '12px' }}>
-          <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.6rem', fontWeight: 700, marginBottom: '1.5rem', color: 'var(--ink)' }}>Get the job.</p>
-          <Link href="/#get-started" style={{ display: 'inline-block', padding: '14px 36px', background: 'var(--accent)', color: 'white', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 700, letterSpacing: '0.02em' }}>Try it free</Link>
+          <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.6rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--ink)' }}>Your uncle has seen worse resumes.</p>
+          <p style={{ color: 'var(--text-soft)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Upload yours and see what comes back — free.</p>
+          <Link href="/" style={{ display: 'inline-block', padding: '14px 36px', background: 'var(--accent)', color: 'white', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 700, letterSpacing: '0.02em' }}>Try it free</Link>
         </div>
 
         <div style={{ marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid var(--border)', display: 'flex', gap: '1.5rem', fontSize: '0.85rem' }}>
