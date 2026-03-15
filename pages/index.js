@@ -44,6 +44,7 @@ export default function Home() {
   }
   const [showPaywall, setShowPaywall] = useState(false)
   const [isPaid, setIsPaid] = useState(false)
+  const [accessLevel, setAccessLevel] = useState(null) // null | 'free' | 'paid' | 'pro_plus'
   const [feedback, setFeedback] = useState(null) // 'yes' | 'kinda' | 'no'
   const [feedbackText, setFeedbackText] = useState('')
   const [feedbackSent, setFeedbackSent] = useState(false)
@@ -78,8 +79,8 @@ export default function Home() {
     })
       .then(r => r.json())
       .then(d => {
-        if (d.access === 'pro_plus') { setIsPaid(true); setIsPlusUser(true) }
-        else if (d.access === 'paid') { setIsPaid(true) }
+        if (d.access === 'pro_plus') { setIsPaid(true); setIsPlusUser(true); setAccessLevel('pro_plus') }
+        else if (d.access === 'paid') { setIsPaid(true); setAccessLevel('paid') }
       })
       .catch(() => {})
   }, [])
@@ -403,12 +404,21 @@ export default function Home() {
         <div className="logo">
           <img src="/uncle-spin-logo.png" alt="Uncle Spin" className="logo-icon" />
           <span className="logo-text">JobsUncle.ai</span>
-          <a href="/about" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.5rem' }}>Our Story</a>
-          <a href="/example" style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.75rem', fontWeight: 700, marginLeft: '1.25rem', border: '1.5px solid var(--accent)', borderRadius: '20px', padding: '3px 10px', letterSpacing: '0.02em' }}>See an example</a>
-          <a href="/faq" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.25rem' }}>FAQ</a>
+          <a href="/about" className="header-nav-link" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.5rem' }}>Our Story</a>
+          <a href="/example" className="header-nav-link" style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.75rem', fontWeight: 700, marginLeft: '1.25rem', border: '1.5px solid var(--accent)', borderRadius: '20px', padding: '3px 10px', letterSpacing: '0.02em' }}>See an example</a>
+          <a href="/faq" className="header-nav-link" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.25rem' }}>FAQ</a>
+          {!isPaid && (
+            <a href="#restore" className="header-nav-link" onClick={e => { e.preventDefault(); setShowPaywall(true); setTimeout(() => setShowRestore(true), 50) }} style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.25rem' }}>Restore Access</a>
+          )}
         </div>
         <div className="header-right">
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-soft)' }}>1. Upload your resume &nbsp;&nbsp; 2. Paste the job description &nbsp;&nbsp; 3. <em>Voilà.</em></span>
+          {accessLevel === 'pro_plus' && (
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, background: '#6366f1', color: 'white', borderRadius: '20px', padding: '3px 10px', letterSpacing: '0.04em', marginRight: '0.75rem' }}>Pro+ Active</span>
+          )}
+          {accessLevel === 'paid' && (
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, background: 'var(--accent)', color: 'white', borderRadius: '20px', padding: '3px 10px', letterSpacing: '0.04em', marginRight: '0.75rem' }}>Pro Active</span>
+          )}
+          <span className="header-tagline-inline" style={{ fontSize: '0.8rem', color: 'var(--text-soft)' }}>Resumes for the AI age.</span>
         </div>
       </header>
 
