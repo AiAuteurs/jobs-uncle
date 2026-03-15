@@ -390,6 +390,7 @@ export default function Home() {
           <img src="/uncle-spin-logo.png" alt="Uncle Spin" className="logo-icon" />
           <span className="logo-text">JobsUncle.ai</span>
           <a href="/about" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.5rem' }}>Our Story</a>
+          <a href="#example-output" style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.25rem' }}>See an example</a>
         </div>
         <div className="header-right">
           <span className="header-tagline">Everyone deserves an uncle in the business</span>
@@ -401,8 +402,9 @@ export default function Home() {
           <div className="hero-copy">
             <p className="hero-eyebrow">AI Resume Intelligence</p>
             <h1>Your resume, <em>tailored</em><br />to every job.</h1>
+            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.4rem', fontStyle: 'italic', color: 'var(--accent)', margin: '0 0 1rem', fontWeight: 600 }}>Voilà.</p>
             <p className="hero-sub">
-              Upload your resume. Paste a job description. Voilà — a tailored resume, cover letter, recruiter analysis, and a hiring manager DM in under 60 seconds. Your uncle's got you.
+              Upload your resume. Paste a job description. Get a tailored resume, cover letter, recruiter analysis, and a hiring manager DM — in under 60 seconds. Your uncle's got you.
             </p>
           </div>
           <div className="hero-mascot">
@@ -445,23 +447,18 @@ export default function Home() {
             <div className="how-label">Download in the format that fits. Nothing is stored. Ever.</div>
           </div>
         </div>
+      </div>
 
-        {/* EXAMPLE OUTPUT TOGGLE */}
-        <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-          <details style={{ display: 'inline-block', textAlign: 'left', maxWidth: '680px', width: '100%' }}>
-            <summary style={{ cursor: 'pointer', fontFamily: 'Inter', fontWeight: 600, fontSize: '0.85rem', color: 'var(--accent)', letterSpacing: '0.04em', listStyle: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '10px 0' }}>
-              <span>See an example output</span>
-              <span style={{ fontSize: '0.7rem' }}>▼</span>
-            </summary>
-            <div style={{ marginTop: '1rem', padding: '1.5rem', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '10px', fontSize: '0.85rem', lineHeight: 1.7, color: 'var(--ink)' }}>
-              <div style={{ fontWeight: 700, fontSize: '0.7rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '0.5rem' }}>Resume excerpt</div>
-              <p style={{ margin: '0 0 0.75rem' }}><strong>Senior Editor — Matassa Agency</strong> | 2018–Present</p>
-              <p style={{ margin: '0 0 1.25rem', color: 'var(--text-soft)' }}>Directed post-production across 40+ brand campaigns for Fortune 500 clients including NVIDIA and Salesforce. Delivered $2.4M in project value on time and under budget. Led 3-person editorial team; reduced revision cycles by 35% through structured client feedback process.</p>
-              <div style={{ fontWeight: 700, fontSize: '0.7rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '0.5rem', marginTop: '1rem' }}>Hiring Manager DM excerpt</div>
-              <p style={{ margin: 0, color: 'var(--text-soft)', fontStyle: 'italic' }}>"Hi [Name] — I noticed your team is scaling content production. I've led post for NVIDIA and Salesforce campaigns and cut revision cycles by 35%. Happy to share specifics if useful."</p>
-              <div style={{ marginTop: '1.25rem', fontSize: '0.75rem', color: 'var(--text-soft)', borderTop: '1px solid var(--border)', paddingTop: '0.75rem' }}>Real output is tailored to your specific resume and job description.</div>
-            </div>
-          </details>
+      {/* EXAMPLE OUTPUT */}
+      <div id="example-output" style={{ maxWidth: '720px', margin: '0 auto', padding: '2rem 2rem 0' }}>
+        <div style={{ fontWeight: 700, fontSize: '0.7rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '1rem', textAlign: 'center' }}>Example output</div>
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.5rem', fontSize: '0.85rem', lineHeight: 1.7, color: 'var(--ink)' }}>
+          <div style={{ fontWeight: 700, fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-soft)', marginBottom: '0.5rem' }}>Resume excerpt</div>
+          <p style={{ margin: '0 0 0.5rem' }}><strong>Senior Editor — Matassa Agency</strong> · 2018–Present</p>
+          <p style={{ margin: '0 0 1.5rem', color: 'var(--text-soft)' }}>Directed post-production across 40+ brand campaigns for Fortune 500 clients including NVIDIA and Salesforce. Delivered $2.4M in project value on time and under budget. Reduced revision cycles by 35% through structured client feedback process.</p>
+          <div style={{ fontWeight: 700, fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-soft)', marginBottom: '0.5rem' }}>Hiring Manager DM excerpt</div>
+          <p style={{ margin: '0 0 1.5rem', color: 'var(--text-soft)', fontStyle: 'italic' }}>"Hi [Name] — I noticed your team is scaling content production. I've led post for NVIDIA and Salesforce campaigns and cut revision cycles by 35%. Happy to share specifics if useful."</p>
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', borderTop: '1px solid var(--border)', paddingTop: '0.75rem' }}>Real output is tailored to your specific resume and job description.</div>
         </div>
       </div>
 
