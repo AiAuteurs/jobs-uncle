@@ -337,9 +337,27 @@ export default function Home() {
             {paywallSigninMode ? (
               <>
                 <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Member sign in</h2>
-                <p style={{ color: 'var(--text-soft)', fontSize: '0.9rem', margin: '0 0 8px', lineHeight: 1.6 }}>Already a Pro member? Restore your access below.</p>
-                <div style={{ margin: '0 0 24px', padding: '12px 16px', background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '8px', fontSize: '0.85rem', color: 'var(--text-soft)' }}>
-                  New to JobsUncle? <button onClick={() => { setPaywallSigninMode(false); setShowRestore(false) }} style={{ background: 'none', border: 'none', color: 'var(--accent)', fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem', padding: 0 }}>Try it free — no card needed →</button>
+                <p style={{ color: 'var(--text-soft)', fontSize: '0.9rem', margin: '0 0 16px', lineHeight: 1.6 }}>Enter your email to restore Pro access.</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
+                  <input
+                    type="email"
+                    value={restoreEmail}
+                    onChange={e => setRestoreEmail(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && handleRestore()}
+                    placeholder="you@email.com"
+                    style={{ width: '100%', padding: '11px 14px', border: '1.5px solid var(--border)', borderRadius: '8px', fontSize: '0.9rem', background: 'var(--bg)', color: 'var(--ink)', outline: 'none', boxSizing: 'border-box' }}
+                  />
+                  <button
+                    onClick={handleRestore}
+                    disabled={restoreStatus === 'loading'}
+                    style={{ width: '100%', padding: '12px', background: 'var(--ink)', color: 'white', border: 'none', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer' }}
+                  >
+                    {restoreStatus === 'loading' ? 'Checking…' : 'Restore my access'}
+                  </button>
+                  {restoreMsg && <p style={{ fontSize: '0.82rem', color: restoreStatus === 'success' ? '#22c55e' : '#ef4444', margin: 0 }}>{restoreMsg}</p>}
+                </div>
+                <div style={{ padding: '10px 14px', background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '8px', fontSize: '0.82rem', color: 'var(--text-soft)', textAlign: 'center' }}>
+                  New to JobsUncle? <button onClick={() => { setPaywallSigninMode(false); setShowRestore(false) }} style={{ background: 'none', border: 'none', color: 'var(--accent)', fontWeight: 700, cursor: 'pointer', fontSize: '0.82rem', padding: 0 }}>Try it free — no card needed →</button>
                 </div>
               </>
             ) : (
