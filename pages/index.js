@@ -334,11 +334,23 @@ export default function Home() {
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
           <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)' }}>
             <img src="/uncle-spin-hero.png" alt="JobsUncle.ai" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
-            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>{paywallSigninMode ? 'Welcome back.' : 'Your free resume is done.'}</h2>
-            <p style={{ color: 'var(--text-soft)', fontSize: '0.95rem', margin: '0 0 32px', lineHeight: 1.6 }}>
-              {paywallSigninMode ? 'Sign in below to restore your access, or upgrade to Pro for unlimited resumes.' : <>Upgrade to Pro for unlimited resumes, every job, forever.<br /></>}
-              <strong style={{ color: 'var(--ink)' }}>$49.99 / year.</strong> Cancel anytime.
-            </p>
+            {paywallSigninMode ? (
+              <>
+                <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Member sign in</h2>
+                <p style={{ color: 'var(--text-soft)', fontSize: '0.9rem', margin: '0 0 8px', lineHeight: 1.6 }}>Already a Pro member? Restore your access below.</p>
+                <div style={{ margin: '0 0 20px', padding: '12px 16px', background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '8px', fontSize: '0.85rem', color: 'var(--text-soft)' }}>
+                  New to JobsUncle? <button onClick={() => { setPaywallSigninMode(false); setShowRestore(false) }} style={{ background: 'none', border: 'none', color: 'var(--accent)', fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem', padding: 0 }}>Try it free — no card needed →</button>
+                </div>
+              </>
+            ) : (
+              <>
+                <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Your free resume is done.</h2>
+                <p style={{ color: 'var(--text-soft)', fontSize: '0.95rem', margin: '0 0 32px', lineHeight: 1.6 }}>
+                  Upgrade to Pro for unlimited resumes, every job, forever.<br />
+                  <strong style={{ color: 'var(--ink)' }}>$49.99 / year.</strong> Cancel anytime.
+                </p>
+              </>
+            )}
             <button onClick={() => handleUpgrade('pro')} style={{ width: '100%', background: 'var(--accent)', color: 'white', border: 'none', padding: '16px', borderRadius: '8px', fontSize: '1rem', fontWeight: 700, cursor: 'pointer', marginBottom: '12px', letterSpacing: '0.02em' }}>
               Upgrade to Pro &mdash; $49.99/yr
             </button>
