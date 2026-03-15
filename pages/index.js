@@ -392,9 +392,6 @@ export default function Home() {
           <a href="/about" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.5rem' }}>Our Story</a>
           <a href="#example-output" style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.25rem' }}>See an example</a>
         </div>
-        <div className="header-right">
-          <span className="header-tagline">Everyone deserves an uncle in the business</span>
-        </div>
       </header>
 
       <div className="hero">
