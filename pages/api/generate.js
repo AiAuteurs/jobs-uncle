@@ -19,9 +19,41 @@ async function extractTextFromPDF(filePath) {
   return data.text
 }
 
+
+const RATE_LIMIT = 5        // max requests per window
+const RATE_WINDOW = 60 * 60 // 1 hour in seconds
+
+async function checkRateLimit(ip) {
+  const KV_URL = process.env.KV_REST_API_URL
+  const KV_TOKEN = process.env.KV_REST_API_TOKEN
+  const key = `ratelimit:generate:${ip}`
+  try {
+    const incrRes = await fetch(`${KV_URL}/incr/${key}`, {
+      headers: { Authorization: `Bearer ${KV_TOKEN}` }
+    })
+    const incrData = await incrRes.json()
+    const count = incrData.result
+    if (count === 1) {
+      await fetch(`${KV_URL}/expire/${key}/${RATE_WINDOW}`, {
+        headers: { Authorization: `Bearer ${KV_TOKEN}` }
+      })
+    }
+    return count <= RATE_LIMIT
+  } catch {
+    return true // fail open if KV is down
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
+  }
+
+  // IP rate limit
+  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket?.remoteAddress || 'unknown'
+  const allowed = await checkRateLimit(ip)
+  if (!allowed) {
+    return res.status(429).json({ error: 'Too many requests. Please wait an hour before trying again.' })
   }
 
   const form = formidable({ maxFileSize: 10 * 1024 * 1024 })
@@ -31,6 +63,12 @@ export default async function handler(req, res) {
     ;[fields, files] = await form.parse(req)
   } catch (err) {
     return res.status(400).json({ error: 'Failed to parse upload' })
+  }
+
+  // Honeypot — bots fill hidden fields, humans don't
+  const honeypot = Array.isArray(fields.website) ? fields.website[0] : fields.website
+  if (honeypot) {
+    return res.status(200).json({ resume: '', coverLetter: '', recruiterNotes: '', hiringManagerDM: '' }) // silent fail
   }
 
   const pdfFile = Array.isArray(files.pdf) ? files.pdf[0] : files.pdf

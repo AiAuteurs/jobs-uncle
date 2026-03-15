@@ -1,4 +1,3 @@
-import { serialize } from 'cookie'
 import crypto from 'crypto'
 
 export default async function handler(req, res) {
@@ -15,27 +14,20 @@ export default async function handler(req, res) {
   const KV_TOKEN = process.env.KV_REST_API_TOKEN
 
   try {
-    // Check if already registered
     const getRes = await fetch(`${KV_URL}/get/${kvKey}`, {
       headers: { Authorization: `Bearer ${KV_TOKEN}` }
     })
     const getData = await getRes.json()
 
     if (!getData.result) {
-      // New — store with 90 day TTL
       await fetch(`${KV_URL}/set/${kvKey}/1/ex/7776000`, {
         headers: { Authorization: `Bearer ${KV_TOKEN}` }
       })
     }
 
-    // Set cookie
-    res.setHeader('Set-Cookie', serialize('ju_email_token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 60 * 60 * 24 * 90
-    }))
+    const isProd = process.env.NODE_ENV === 'production'
+    const cookieVal = `ju_email_token=${token}; Path=/; Max-Age=${60 * 60 * 24 * 90}; SameSite=Lax${isProd ? '; Secure; HttpOnly' : ''}`
+    res.setHeader('Set-Cookie', cookieVal)
 
     res.status(200).json({ ok: true })
   } catch (err) {

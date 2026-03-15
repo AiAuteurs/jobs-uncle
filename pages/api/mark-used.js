@@ -10,11 +10,13 @@ export default async function handler(req, res) {
   const KV_TOKEN = process.env.KV_REST_API_TOKEN
 
   try {
-    await fetch(`${KV_URL}/incr/${key}`, {
+    const incrRes = await fetch(`${KV_URL}/incr/${key}`, {
       headers: { Authorization: `Bearer ${KV_TOKEN}` }
     })
-    res.status(200).json({ ok: true })
+    const incrData = await incrRes.json()
+    const usedCount = incrData.result || 1
+    res.status(200).json({ ok: true, usedCount })
   } catch (err) {
-    res.status(200).json({ ok: true }) // fail silently
+    res.status(200).json({ ok: true, usedCount: 1 }) // fail silently
   }
 }
