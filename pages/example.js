@@ -139,7 +139,7 @@ export default function Example() {
         {/* CTA */}
         <div style={{ textAlign: 'center', padding: '2.5rem', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '12px' }}>
           <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.6rem', fontWeight: 700, marginBottom: '1.5rem', color: 'var(--ink)' }}>Get the job.</p>
-          <Link href="/" style={{ display: 'inline-block', padding: '14px 36px', background: 'var(--accent)', color: 'white', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 700, letterSpacing: '0.02em' }}>Try it free</Link>
+          <Link href="/#get-started" style={{ display: 'inline-block', padding: '14px 36px', background: 'var(--accent)', color: 'white', borderRadius: '8px', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 700, letterSpacing: '0.02em' }}>Try it free</Link>
         </div>
 
         <div style={{ marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid var(--border)', display: 'flex', gap: '1.5rem', fontSize: '0.85rem' }}>

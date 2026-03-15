@@ -466,7 +466,7 @@ export default function Home() {
 
         {!results && (
           <>
-            <div className="steps">
+            <div className="steps" id="get-started">
               {/* STEP 1 */}
               <div className={`step-card ${pdfFile ? 'complete' : 'active'}`}>
                 <div className="step-number">Step 01</div>
