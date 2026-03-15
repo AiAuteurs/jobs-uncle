@@ -34,13 +34,7 @@ export default function Home() {
 
   const updateCounter = (newCount) => {
     if (newCount === null) return
-    setCounterRolling(true)
-    setMascotSpin(true)
-    setTimeout(() => {
-      setResumeCount(newCount)
-      setCounterRolling(false)
-    }, 600)
-    setTimeout(() => setMascotSpin(false), 1000)
+    setResumeCount(newCount)
   }
   const [showPaywall, setShowPaywall] = useState(false)
   const [isPaid, setIsPaid] = useState(false)
@@ -139,7 +133,6 @@ export default function Home() {
       }
 
       setResults(data)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
 
       // Increment counter + refresh display
       fetch('/api/counter', { method: 'POST' })
@@ -420,7 +413,7 @@ export default function Home() {
             <h1>Your resume, <em>tailored</em><br />to every job.</h1>
           </div>
           <div className="hero-mascot">
-            <img src="/uncle-spin-hero.png" alt="Uncle Spin" className={`mascot-img${mascotSpin ? ' mascot-spin' : ''}`} />
+            <img src="/uncle-spin-hero.png" alt="Uncle Spin" className="mascot-img" />
           </div>
         </div>
       </div>
@@ -435,9 +428,6 @@ export default function Home() {
             fontWeight: 800,
             fontSize: '2rem',
             letterSpacing: '-0.02em',
-            transition: 'transform 0.3s ease, opacity 0.3s ease',
-            transform: counterRolling ? 'translateY(-20px)' : 'translateY(0)',
-            opacity: counterRolling ? 0 : 1,
           }}>{resumeCount.toLocaleString()}</span>
           <span style={{ color: 'rgba(255,255,255,0.85)', fontFamily: 'Inter', fontWeight: 500, fontSize: '0.85rem', marginLeft: '10px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>resumes tailored and counting</span>
         </div>
