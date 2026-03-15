@@ -622,6 +622,7 @@ body {
   .header-right { display: none !important; }
   .header-nav-links { display: none !important; }
   .header-member-signin { display: none !important; }
+  .mobile-signin-bar { display: flex !important; align-items: center; justify-content: space-between; padding: 0.6rem 1.25rem; background: var(--surface); border-bottom: 1px solid var(--border); font-family: Inter, sans-serif; }
 }
 
 /* ─── FEEDBACK ──────────────────────────────────────────── */

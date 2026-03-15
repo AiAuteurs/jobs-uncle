@@ -404,6 +404,15 @@ export default function Home() {
         </div>
       </header>
 
+      {/* MOBILE-ONLY NAV BAR */}
+      {!isPaid && (
+        <div className="mobile-signin-bar" style={{ display: 'none' }}>
+          <a onClick={e => { e.preventDefault(); setShowPaywall(true); setTimeout(() => setShowRestore(true), 50) }} style={{ color: 'var(--accent)', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', textDecoration: 'none' }}>Member Sign In</a>
+          <a href="/faq" style={{ color: 'var(--text-soft)', fontWeight: 600, fontSize: '0.85rem', textDecoration: 'none' }}>FAQ</a>
+          <a href="/about" style={{ color: 'var(--text-soft)', fontWeight: 600, fontSize: '0.85rem', textDecoration: 'none' }}>Our Story</a>
+        </div>
+      )}
+
       <div className="hero">
         <div className="hero-inner">
           <div className="hero-copy">
