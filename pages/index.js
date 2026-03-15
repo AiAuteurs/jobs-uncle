@@ -810,7 +810,8 @@ export default function Home() {
         <p>© 2026 JobsUncle.ai · Your documents are never stored · Built with AI</p>
         <p style={{ marginTop: '8px', fontSize: '0.75rem' }}>
           <a href="/privacy" style={{ color: 'var(--text-soft)', textDecoration: 'none', marginRight: '1rem' }}>Privacy Policy</a>
-          <a href="/terms" style={{ color: 'var(--text-soft)', textDecoration: 'none' }}>Terms of Service</a>
+          <a href="/terms" style={{ color: 'var(--text-soft)', textDecoration: 'none', marginRight: '1rem' }}>Terms of Service</a>
+          <a href="https://jobsuncle.promotekit.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>Earn 20% — Become an Affiliate</a>
         </p>
       </footer>
     </>
