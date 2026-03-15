@@ -1,5 +1,15 @@
 import '../styles/globals.css'
+import Script from 'next/script'
 
 export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  return (
+    <>
+      <Script
+        src="https://cdn.promotekit.com/promotekit.js"
+        data-promotekit="dec051b1-31b9-48f9-b6e9-dec5a86c96f9"
+        strategy="afterInteractive"
+      />
+      <Component {...pageProps} />
+    </>
+  )
 }
