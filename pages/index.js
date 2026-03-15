@@ -338,7 +338,7 @@ export default function Home() {
               <>
                 <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Member sign in</h2>
                 <p style={{ color: 'var(--text-soft)', fontSize: '0.9rem', margin: '0 0 8px', lineHeight: 1.6 }}>Already a Pro member? Restore your access below.</p>
-                <div style={{ margin: '0 0 20px', padding: '12px 16px', background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '8px', fontSize: '0.85rem', color: 'var(--text-soft)' }}>
+                <div style={{ margin: '0 0 24px', padding: '12px 16px', background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '8px', fontSize: '0.85rem', color: 'var(--text-soft)' }}>
                   New to JobsUncle? <button onClick={() => { setPaywallSigninMode(false); setShowRestore(false) }} style={{ background: 'none', border: 'none', color: 'var(--accent)', fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem', padding: 0 }}>Try it free — no card needed →</button>
                 </div>
               </>
