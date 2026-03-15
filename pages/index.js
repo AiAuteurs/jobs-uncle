@@ -138,6 +138,7 @@ export default function Home() {
       }
 
       setResults(data)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
 
       // Increment counter + refresh display
       fetch('/api/counter', { method: 'POST' })
@@ -403,7 +404,7 @@ export default function Home() {
           <img src="/uncle-spin-logo.png" alt="Uncle Spin" className="logo-icon" />
           <span className="logo-text">JobsUncle.ai</span>
           <a href="/about" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.5rem' }}>Our Story</a>
-          <a href="/example" style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.25rem' }}>See an example</a>
+          <a href="/example" style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.75rem', fontWeight: 700, marginLeft: '1.25rem', border: '1.5px solid var(--accent)', borderRadius: '20px', padding: '3px 10px', letterSpacing: '0.02em' }}>See an example</a>
           <a href="/faq" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.25rem' }}>FAQ</a>
         </div>
         <div className="header-right">
