@@ -37,6 +37,7 @@ export default function Home() {
     setResumeCount(newCount)
   }
   const [showPaywall, setShowPaywall] = useState(false)
+  const [paywallSigninMode, setPaywallSigninMode] = useState(false)
   const [isPaid, setIsPaid] = useState(false)
   const [accessLevel, setAccessLevel] = useState(null) // null | 'free' | 'paid' | 'pro_plus'
   const [feedback, setFeedback] = useState(null) // 'yes' | 'kinda' | 'no'
@@ -110,6 +111,7 @@ export default function Home() {
       const accessRes = await fetch('/api/check-access', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) })
       const accessData = await accessRes.json()
       if (accessData.access === 'none') {
+        setPaywallSigninMode(false)
         setShowPaywall(true)
         return
       }
@@ -332,9 +334,9 @@ export default function Home() {
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
           <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)' }}>
             <img src="/uncle-spin-hero.png" alt="JobsUncle.ai" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
-            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Your free resume is done.</h2>
+            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>{paywallSigninMode ? 'Welcome back.' : 'Your free resume is done.'}</h2>
             <p style={{ color: 'var(--text-soft)', fontSize: '0.95rem', margin: '0 0 32px', lineHeight: 1.6 }}>
-              Upgrade to Pro for unlimited resumes, every job, forever.<br />
+              {paywallSigninMode ? 'Sign in below to restore your access, or upgrade to Pro for unlimited resumes.' : <>Upgrade to Pro for unlimited resumes, every job, forever.<br /></>}
               <strong style={{ color: 'var(--ink)' }}>$49.99 / year.</strong> Cancel anytime.
             </p>
             <button onClick={() => handleUpgrade('pro')} style={{ width: '100%', background: 'var(--accent)', color: 'white', border: 'none', padding: '16px', borderRadius: '8px', fontSize: '1rem', fontWeight: 700, cursor: 'pointer', marginBottom: '12px', letterSpacing: '0.02em' }}>
@@ -459,7 +461,7 @@ export default function Home() {
             <span style={{ fontSize: '0.75rem', fontWeight: 700, background: 'var(--accent)', color: 'white', borderRadius: '20px', padding: '3px 10px', letterSpacing: '0.04em', marginRight: '0.75rem' }}>Pro Active</span>
           )}
           {!isPaid && (
-            <a href="#signin" onClick={e => { e.preventDefault(); setShowPaywall(true); setTimeout(() => setShowRestore(true), 50) }} className="header-member-signin" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginRight: '1.25rem', cursor: 'pointer' }}>Member Sign In</a>
+            <a href="#signin" onClick={e => { e.preventDefault(); setPaywallSigninMode(true); setShowPaywall(true); setTimeout(() => setShowRestore(true), 50) }} className="header-member-signin" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginRight: '1.25rem', cursor: 'pointer' }}>Member Sign In</a>
           )}
           <span className="header-tagline-inline" style={{ fontSize: '0.85rem', color: 'var(--ink)', fontWeight: 700, letterSpacing: '0.02em' }}>Resumes for the AI age.</span>
         </div>
@@ -468,7 +470,7 @@ export default function Home() {
       {/* MOBILE-ONLY NAV BAR */}
       {!isPaid && (
         <div className="mobile-signin-bar" style={{ display: 'none' }}>
-          <a onClick={e => { e.preventDefault(); setShowPaywall(true); setTimeout(() => setShowRestore(true), 50) }} style={{ color: 'var(--accent)', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', textDecoration: 'none' }}>Member Sign In</a>
+          <a onClick={e => { e.preventDefault(); setPaywallSigninMode(true); setShowPaywall(true); setTimeout(() => setShowRestore(true), 50) }} style={{ color: 'var(--accent)', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', textDecoration: 'none' }}>Member Sign In</a>
           <a href="/faq" style={{ color: 'var(--text-soft)', fontWeight: 600, fontSize: '0.85rem', textDecoration: 'none' }}>FAQ</a>
           <a href="/about" style={{ color: 'var(--text-soft)', fontWeight: 600, fontSize: '0.85rem', textDecoration: 'none' }}>Our Story</a>
         </div>
