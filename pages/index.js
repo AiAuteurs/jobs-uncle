@@ -152,7 +152,8 @@ export default function Home() {
   }
 
   const handleUpgrade = async (plan = 'pro') => {
-    const res = await fetch('/api/stripe-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan }) })
+    const referral = (typeof window !== 'undefined' && window.promotekit_referral) || ''
+    const res = await fetch('/api/stripe-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan, referral }) })
     const data = await res.json()
     if (data.url) window.location.href = data.url
   }

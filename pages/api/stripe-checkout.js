@@ -5,7 +5,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end()
 
-  const { email, plan } = req.body
+  const { email, plan, referral } = req.body
 
   // plan: 'pro' | 'pro_plus_monthly' | 'pro_plus_annual'
   const planConfig = {
@@ -53,7 +53,7 @@ export default async function handler(req, res) {
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}&plan=${plan || 'pro'}`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
       allow_promotion_codes: isAnnual, // promo codes annual only — prevents UNCLE10 zeroing out monthly
-      metadata: { source: 'jobs_uncle', plan: plan || 'pro' },
+      metadata: { source: 'jobs_uncle', plan: plan || 'pro', promotekit_referral: referral || '' },
     })
 
     res.status(200).json({ url: session.url })
