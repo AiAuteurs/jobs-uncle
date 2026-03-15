@@ -64,7 +64,7 @@ export default function Home() {
   const fileInputRef = useRef(null)
 
   // Fetch resume counter + check access via cookie on mount
-  // Works in private/incognito — no localStorage dependency
+  // Works in private/incognito &mdash; no localStorage dependency
   useEffect(() => {
     fetch('/api/counter')
       .then(r => r.json())
@@ -162,7 +162,7 @@ export default function Home() {
     if (data.url) window.location.href = data.url
   }
 
-  // TXT — stripped plain text for pasting into ATS / job portals
+  // TXT &mdash; stripped plain text for pasting into ATS / job portals
   const downloadTxt = (rawContent, label) => {
     const content = stripMarkdown(rawContent)
     const filename = results?.fileBaseName
@@ -177,7 +177,7 @@ export default function Home() {
     URL.revokeObjectURL(url)
   }
 
-  // DOCX — real Word doc for human readers, editable in Word / Google Docs
+  // DOCX &mdash; real Word doc for human readers, editable in Word / Google Docs
   const downloadDocx = async (type) => {
     if (!results) return
     setDocxLoading(true)
@@ -214,7 +214,7 @@ export default function Home() {
     }
   }
 
-  // PDF — print via browser print dialog
+  // PDF &mdash; print via browser print dialog
   const downloadPdf = (content, label) => {
     const filename = results?.fileBaseName
       ? `${results.fileBaseName}_${label}`
@@ -261,7 +261,7 @@ export default function Home() {
 
   const handleBeta = async () => {
     if (!betaCode.trim()) return
-    if (!betaEmail.includes('@')) { setBetaStatus('error'); setBetaMsg("Enter a valid email — you'll need it to restore access later."); return }
+    if (!betaEmail.includes('@')) { setBetaStatus('error'); setBetaMsg("Enter a valid email &mdash; you'll need it to restore access later."); return }
     setBetaStatus('loading')
     try {
       const res = await fetch('/api/redeem-beta', {
@@ -304,7 +304,7 @@ export default function Home() {
               <strong style={{ color: 'var(--ink)' }}>$49.99 / year.</strong> Cancel anytime.
             </p>
             <button onClick={() => handleUpgrade('pro')} style={{ width: '100%', background: 'var(--accent)', color: 'white', border: 'none', padding: '16px', borderRadius: '8px', fontSize: '1rem', fontWeight: 700, cursor: 'pointer', marginBottom: '12px', letterSpacing: '0.02em' }}>
-              Upgrade to Pro — $49.99/yr
+              Upgrade to Pro &mdash; $49.99/yr
             </button>
             <button onClick={() => setShowPaywall(false)} style={{ background: 'none', border: 'none', color: 'var(--text-soft)', fontSize: '0.85rem', cursor: 'pointer', padding: '8px' }}>
               Maybe later
@@ -365,14 +365,14 @@ export default function Home() {
             <div style={{ display: 'inline-block', background: '#6366f1', color: 'white', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', padding: '4px 12px', borderRadius: '20px', marginBottom: '16px', textTransform: 'uppercase' }}>Pro+</div>
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Two resumes. One shot.</h2>
             <p style={{ color: 'var(--text-soft)', fontSize: '0.95rem', margin: '0 0 8px', lineHeight: 1.6 }}>
-              Get a <strong style={{ color: 'var(--ink)' }}>Leadership-focused</strong> and a <strong style={{ color: 'var(--ink)' }}>Technical/Achievement-focused</strong> version — same experience, two different angles. Use whichever fits the hiring manager.
+              Get a <strong style={{ color: 'var(--ink)' }}>Leadership-focused</strong> and a <strong style={{ color: 'var(--ink)' }}>Technical/Achievement-focused</strong> version &mdash; same experience, two different angles. Use whichever fits the hiring manager.
             </p>
             <p style={{ color: 'var(--text-soft)', fontSize: '0.85rem', margin: '0 0 32px' }}>Perfect if you're actively hunting.</p>
             <button onClick={() => handleUpgrade('pro_plus_monthly')} style={{ width: '100%', background: '#6366f1', color: 'white', border: 'none', padding: '16px', borderRadius: '8px', fontSize: '1rem', fontWeight: 700, cursor: 'pointer', marginBottom: '10px', letterSpacing: '0.02em' }}>
-              Pro+ Monthly — $9.99/mo
+              Pro+ Monthly &mdash; $9.99/mo
             </button>
             <button onClick={() => handleUpgrade('pro_plus_annual')} style={{ width: '100%', background: 'var(--ink)', color: 'white', border: 'none', padding: '14px', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 600, cursor: 'pointer', marginBottom: '12px', letterSpacing: '0.02em' }}>
-              Pro+ Annual — $79.99/yr <span style={{ opacity: 0.7, fontSize: '0.8rem' }}>(save 33%)</span>
+              Pro+ Annual &mdash; $79.99/yr <span style={{ opacity: 0.7, fontSize: '0.8rem' }}>(save 33%)</span>
             </button>
             <button onClick={() => setShowPlusPaywall(false)} style={{ background: 'none', border: 'none', color: 'var(--text-soft)', fontSize: '0.85rem', cursor: 'pointer', padding: '8px' }}>
               Maybe later
@@ -381,11 +381,11 @@ export default function Home() {
         </div>
       )}
       <Head>
-        <title>JobsUncle.ai — Your resume, tailored to every job.</title>
+        <title>JobsUncle.ai &mdash; Your resume, tailored to every job.</title>
         <meta name="description" content="Upload your LinkedIn PDF, paste a job description, get a bespoke resume and cover letter in under a minute." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta property="og:title" content="JobsUncle.ai — Your resume, tailored to every job." />
-        <meta property="og:description" content="Upload your resume or LinkedIn PDF, paste the job description — get a tailored resume, cover letter, recruiter gap analysis, and a hiring manager DM in under a minute." />
+        <meta property="og:title" content="JobsUncle.ai &mdash; Your resume, tailored to every job." />
+        <meta property="og:description" content="Upload your resume or LinkedIn PDF, paste the job description &mdash; get a tailored resume, cover letter, recruiter gap analysis, and a hiring manager DM in under a minute." />
         <meta property="og:image" content="https://res.cloudinary.com/dbyzesuya/image/upload/og-image_uqdfh0.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -413,7 +413,7 @@ export default function Home() {
             <p className="hero-eyebrow">AI Resume Intelligence</p>
             <h1>Your resume, <em>tailored</em><br />to every job.</h1>
             <p className="hero-sub">
-              <strong>1.</strong> Upload your resume &nbsp; <strong>2.</strong> Paste the job description &nbsp; <strong>3.</strong> Voilà — your tailored resume.
+              <strong>1.</strong> Upload your resume &nbsp; <strong>2.</strong> Paste the job description &nbsp; <strong>3.</strong> Voilà &mdash; your tailored resume.
             </p>
           </div>
           <div className="hero-mascot">
@@ -443,7 +443,7 @@ export default function Home() {
       {/* TESTIMONIAL */}
       <div style={{ background: 'var(--surface)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', padding: '1.5rem 2rem', textAlign: 'center' }}>
         <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.15rem', fontStyle: 'italic', color: 'var(--ink)', margin: '0 0 8px' }}>"The results are solid. I like what I got back."</p>
-        <p style={{ fontSize: '0.8rem', color: 'var(--text-soft)', fontWeight: 600, margin: 0 }}>— B.C., ICF Certified Career Coach</p>
+        <p style={{ fontSize: '0.8rem', color: 'var(--text-soft)', fontWeight: 600, margin: 0 }}>&mdash; B.C., ICF Certified Career Coach</p>
       </div>
 
       <div className="how-section">
@@ -451,11 +451,11 @@ export default function Home() {
         <div className="how-items">
           <div className="how-item">
             <div className="how-num">01</div>
-            <div className="how-label">Upload your resume or LinkedIn PDF — your full career in one file</div>
+            <div className="how-label">Upload your resume or LinkedIn PDF &mdash; your full career in one file</div>
           </div>
           <div className="how-item">
             <div className="how-num">02</div>
-            <div className="how-label">Paste the job description — any role, any industry</div>
+            <div className="how-label">Paste the job description &mdash; any role, any industry</div>
           </div>
           <div className="how-item">
             <div className="how-num">03</div>
@@ -473,10 +473,10 @@ export default function Home() {
         <div style={{ fontWeight: 700, fontSize: '0.7rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '1rem', textAlign: 'center' }}>Example output</div>
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.5rem', fontSize: '0.85rem', lineHeight: 1.7, color: 'var(--ink)' }}>
           <div style={{ fontWeight: 700, fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-soft)', marginBottom: '0.5rem' }}>Resume excerpt</div>
-          <p style={{ margin: '0 0 0.5rem' }}><strong>Senior Editor — Matassa Agency</strong> · 2018–Present</p>
+          <p style={{ margin: '0 0 0.5rem' }}><strong>Senior Editor &mdash; Matassa Agency</strong> · 2018–Present</p>
           <p style={{ margin: '0 0 1.5rem', color: 'var(--text-soft)' }}>Directed post-production across 40+ brand campaigns for Fortune 500 clients including NVIDIA and Salesforce. Delivered $2.4M in project value on time and under budget. Reduced revision cycles by 35% through structured client feedback process.</p>
           <div style={{ fontWeight: 700, fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-soft)', marginBottom: '0.5rem' }}>Hiring Manager DM excerpt</div>
-          <p style={{ margin: '0 0 1.5rem', color: 'var(--text-soft)', fontStyle: 'italic' }}>"Hi [Name] — I noticed your team is scaling content production. I've led post for NVIDIA and Salesforce campaigns and cut revision cycles by 35%. Happy to share specifics if useful."</p>
+          <p style={{ margin: '0 0 1.5rem', color: 'var(--text-soft)', fontStyle: 'italic' }}>"Hi [Name] &mdash; I noticed your team is scaling content production. I've led post for NVIDIA and Salesforce campaigns and cut revision cycles by 35%. Happy to share specifics if useful."</p>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', borderTop: '1px solid var(--border)', paddingTop: '0.75rem' }}>Real output is tailored to your specific resume and job description.</div>
         </div>
       </div>
@@ -491,7 +491,7 @@ export default function Home() {
           {[
             {
               q: "I don't have an old resume — can I still use this?",
-              a: "Yes. Go to your LinkedIn profile, click the "More" button, and select "Save to PDF." That's your resume. Upload it here and you're good to go."
+              a: "Yes. Go to your LinkedIn profile, click the More button, and select Save to PDF. That's your resume. Upload it here and you're good to go."
             },
             {
               q: "What formats can I download?",
@@ -503,11 +503,11 @@ export default function Home() {
             },
             {
               q: "What's the difference between Pro and Pro+?",
-              a: "Pro gives you unlimited tailored resumes — one version per job. Pro+ generates two versions of every resume: one leadership-focused, one technical/achievement-focused. Use whichever fits the hiring manager."
+              a: "Pro gives you unlimited tailored resumes &mdash; one version per job. Pro+ generates two versions of every resume: one leadership-focused, one technical/achievement-focused. Use whichever fits the hiring manager."
             },
             {
               q: "How is this different from ChatGPT?",
-              a: "ChatGPT requires you to write your own prompts, copy-paste your resume, and figure out the format. JobsUncle is purpose-built for this one job — upload, paste, done. It also gives you a cover letter, recruiter gap analysis, and a hiring manager DM in the same pass."
+              a: "ChatGPT requires you to write your own prompts, copy-paste your resume, and figure out the format. JobsUncle is purpose-built for this one job &mdash; upload, paste, done. It also gives you a cover letter, recruiter gap analysis, and a hiring manager DM in the same pass."
             },
             {
               q: "Will this work for any industry?",
@@ -612,7 +612,7 @@ export default function Home() {
                 </p>
                 <textarea
                   className="job-textarea"
-                  placeholder="Paste the complete job description here — title, responsibilities, requirements, the works..."
+                  placeholder="Paste the complete job description here &mdash; title, responsibilities, requirements, the works..."
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
                 />
@@ -621,7 +621,7 @@ export default function Home() {
 
             {error && <div className="error-msg">{error}</div>}
 
-            {/* DUAL VERSION TOGGLE — Pro+ users only */}
+            {/* DUAL VERSION TOGGLE &mdash; Pro+ users only */}
             {isPlusUser && (
               <div style={{ margin: '1.5rem 0 0', padding: '1.25rem 1.5rem', background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
                 <div>
@@ -648,11 +648,11 @@ export default function Home() {
               {loading ? 'Working on it...' : dualVersionEnabled && isPlusUser ? 'Generate Dual Resume Package →' : 'Generate Resume Package →'}
             </button>
 
-            {/* RESTORE + BETA — visible below generate, not buried */}
+            {/* RESTORE + BETA &mdash; visible below generate, not buried */}
             {!isPaid && (
               <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
-                {/* DUAL RESUME — Pro+ upsell card */}
+                {/* DUAL RESUME &mdash; Pro+ upsell card */}
                 <div style={{ padding: '1rem 1.5rem', background: 'var(--surface)', border: '1.5px solid #6366f1', borderRadius: '8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
                     <div>
@@ -660,7 +660,7 @@ export default function Home() {
                         <span style={{ fontSize: '0.85rem', color: 'var(--ink)', fontWeight: 600 }}>Dual Resume Versions</span>
                         <span style={{ background: '#6366f1', color: 'white', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
                       </div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>Leadership <em>and</em> Technical versions — two shots at the same role.</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>Leadership <em>and</em> Technical versions &mdash; two shots at the same role.</div>
                     </div>
                     <button onClick={() => setShowPlusPaywall(true)} style={{ flexShrink: 0, padding: '6px 16px', background: '#6366f1', color: 'white', border: 'none', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}>
                       Upgrade to Pro+
@@ -745,13 +745,13 @@ export default function Home() {
                         onClick={() => setActiveResume('a')}
                         style={{ padding: '6px 16px', background: activeResume === 'a' ? '#6366f1' : 'transparent', color: activeResume === 'a' ? 'white' : 'var(--text-soft)', border: `1.5px solid ${activeResume === 'a' ? '#6366f1' : 'var(--border)'}`, borderRadius: '20px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}
                       >
-                        Version A — Leadership
+                        Version A &mdash; Leadership
                       </button>
                       <button
                         onClick={() => setActiveResume('b')}
                         style={{ padding: '6px 16px', background: activeResume === 'b' ? '#6366f1' : 'transparent', color: activeResume === 'b' ? 'white' : 'var(--text-soft)', border: `1.5px solid ${activeResume === 'b' ? '#6366f1' : 'var(--border)'}`, borderRadius: '20px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}
                       >
-                        Version B — Technical
+                        Version B &mdash; Technical
                       </button>
                     </div>
                     <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(activeResume === 'a' ? results.resumeA : results.resumeB)}} />
@@ -769,7 +769,7 @@ export default function Home() {
               {results.recruiterNotes && (
                 <div className="result-section" style={{ borderLeft: '3px solid #f59e0b', background: 'rgba(245,158,11,0.05)' }}>
                   <div className="result-section-title">Recruiter & ATS Analysis</div>
-                  <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '12px' }}>ATS compatibility check plus honest gaps a recruiter would flag — and how to own them.</div>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '12px' }}>ATS compatibility check plus honest gaps a recruiter would flag &mdash; and how to own them.</div>
                   <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.recruiterNotes)}} />
                 </div>
               )}
@@ -900,7 +900,7 @@ export default function Home() {
                   )}
                 </>
               ) : (
-                <div className="feedback-thanks">Thanks — that helps. 🙏</div>
+                <div className="feedback-thanks">Thanks &mdash; that helps. 🙏</div>
               )}
             </div>
 
@@ -911,7 +911,7 @@ export default function Home() {
                     <span style={{ fontFamily: 'Inter', fontWeight: 700, fontSize: '0.9rem', color: 'var(--ink)' }}>Want two versions?</span>
                     <span style={{ background: '#6366f1', color: 'white', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
                   </div>
-                  <p style={{ fontFamily: 'Inter', fontSize: '0.75rem', color: 'var(--text-soft)', margin: 0 }}>Upgrade to get a Leadership <em>and</em> Technical version — two shots at the same role.</p>
+                  <p style={{ fontFamily: 'Inter', fontSize: '0.75rem', color: 'var(--text-soft)', margin: 0 }}>Upgrade to get a Leadership <em>and</em> Technical version &mdash; two shots at the same role.</p>
                 </div>
                 <button
                   onClick={() => setShowPlusPaywall(true)}
