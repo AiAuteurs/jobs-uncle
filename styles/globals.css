@@ -699,3 +699,15 @@ body {
   font-weight: 600;
   color: var(--accent);
 }
+
+/* Counter roll + mascot spin animations */
+@keyframes mascot-spin {
+  0%   { transform: rotate(0deg) scale(1); }
+  25%  { transform: rotate(-8deg) scale(1.05); }
+  75%  { transform: rotate(8deg) scale(1.05); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+.mascot-spin {
+  animation: mascot-spin 0.9s ease-in-out;
+}

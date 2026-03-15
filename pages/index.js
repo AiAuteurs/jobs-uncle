@@ -29,6 +29,19 @@ export default function Home() {
   const [dragover, setDragover] = useState(false)
   const [docxLoading, setDocxLoading] = useState(false)
   const [resumeCount, setResumeCount] = useState(null)
+  const [counterRolling, setCounterRolling] = useState(false)
+  const [mascotSpin, setMascotSpin] = useState(false)
+
+  const updateCounter = (newCount) => {
+    if (newCount === null) return
+    setCounterRolling(true)
+    setMascotSpin(true)
+    setTimeout(() => {
+      setResumeCount(newCount)
+      setCounterRolling(false)
+    }, 600)
+    setTimeout(() => setMascotSpin(false), 1000)
+  }
   const [showPaywall, setShowPaywall] = useState(false)
   const [isPaid, setIsPaid] = useState(false)
   const [feedback, setFeedback] = useState(null) // 'yes' | 'kinda' | 'no'
@@ -129,7 +142,7 @@ export default function Home() {
       // Increment counter + refresh display
       fetch('/api/counter', { method: 'POST' })
         .then(r => r.json())
-        .then(d => setResumeCount(d.count))
+        .then(d => updateCounter(d.count))
         .catch(() => {})
 
       // Mark free resume as used
@@ -399,21 +412,30 @@ export default function Home() {
           <div className="hero-copy">
             <p className="hero-eyebrow">AI Resume Intelligence</p>
             <h1>Your resume, <em>tailored</em><br />to every job.</h1>
-            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.4rem', fontStyle: 'italic', color: 'var(--accent)', margin: '0 0 1rem', fontWeight: 600 }}>Voilà.</p>
             <p className="hero-sub">
-              Upload your resume. Paste a job description. Get a tailored resume, cover letter, recruiter analysis, and a hiring manager DM — in under 60 seconds. Your uncle's got you.
+              <strong>1.</strong> Upload your resume &nbsp; <strong>2.</strong> Paste the job description &nbsp; <strong>3.</strong> Voilà — your tailored resume.
             </p>
           </div>
           <div className="hero-mascot">
-            <img src="/uncle-spin-hero.png" alt="Uncle Spin" className="mascot-img" />
+            <img src="/uncle-spin-hero.png" alt="Uncle Spin" className={`mascot-img${mascotSpin ? ' mascot-spin' : ''}`} />
           </div>
         </div>
       </div>
 
       {/* COUNTER BAND */}
       {resumeCount !== null && (
-        <div style={{ background: 'var(--accent)', padding: '1rem 2rem', textAlign: 'center' }}>
-          <span style={{ color: 'white', fontFamily: 'Inter', fontWeight: 800, fontSize: '1.5rem', letterSpacing: '-0.02em' }}>{resumeCount.toLocaleString()}</span>
+        <div style={{ background: 'var(--accent)', padding: '1.25rem 2rem', textAlign: 'center', overflow: 'hidden' }}>
+          <span style={{
+            display: 'inline-block',
+            color: 'white',
+            fontFamily: 'Inter',
+            fontWeight: 800,
+            fontSize: '2rem',
+            letterSpacing: '-0.02em',
+            transition: 'transform 0.3s ease, opacity 0.3s ease',
+            transform: counterRolling ? 'translateY(-20px)' : 'translateY(0)',
+            opacity: counterRolling ? 0 : 1,
+          }}>{resumeCount.toLocaleString()}</span>
           <span style={{ color: 'rgba(255,255,255,0.85)', fontFamily: 'Inter', fontWeight: 500, fontSize: '0.85rem', marginLeft: '10px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>resumes tailored and counting</span>
         </div>
       )}
@@ -456,6 +478,88 @@ export default function Home() {
           <div style={{ fontWeight: 700, fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-soft)', marginBottom: '0.5rem' }}>Hiring Manager DM excerpt</div>
           <p style={{ margin: '0 0 1.5rem', color: 'var(--text-soft)', fontStyle: 'italic' }}>"Hi [Name] — I noticed your team is scaling content production. I've led post for NVIDIA and Salesforce campaigns and cut revision cycles by 35%. Happy to share specifics if useful."</p>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', borderTop: '1px solid var(--border)', paddingTop: '0.75rem' }}>Real output is tailored to your specific resume and job description.</div>
+        </div>
+      </div>
+
+      {/* FAQ + CONTACT */}
+      <div style={{ maxWidth: '720px', margin: '3rem auto 0', padding: '0 2rem' }}>
+
+        {/* FAQ */}
+        <div style={{ marginBottom: '3rem' }}>
+          <div style={{ fontWeight: 700, fontSize: '0.7rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '1.5rem', textAlign: 'center' }}>FAQ</div>
+
+          {[
+            {
+              q: "I don't have an old resume — can I still use this?",
+              a: "Yes. Go to your LinkedIn profile, click the "More" button, and select "Save to PDF." That's your resume. Upload it here and you're good to go."
+            },
+            {
+              q: "What formats can I download?",
+              a: "Three: TXT for pasting into job portals and ATS systems, DOCX for editing in Word or Google Docs, and PDF for sending to humans who want something that looks right on screen or paper."
+            },
+            {
+              q: "Is my resume stored anywhere?",
+              a: "No. Your documents are processed in memory and discarded immediately. Nothing is saved, logged, or used for training. Ever."
+            },
+            {
+              q: "What's the difference between Pro and Pro+?",
+              a: "Pro gives you unlimited tailored resumes — one version per job. Pro+ generates two versions of every resume: one leadership-focused, one technical/achievement-focused. Use whichever fits the hiring manager."
+            },
+            {
+              q: "How is this different from ChatGPT?",
+              a: "ChatGPT requires you to write your own prompts, copy-paste your resume, and figure out the format. JobsUncle is purpose-built for this one job — upload, paste, done. It also gives you a cover letter, recruiter gap analysis, and a hiring manager DM in the same pass."
+            },
+            {
+              q: "Will this work for any industry?",
+              a: "Yes. The AI reads the specific job description and tailors your language to match. It works as well for a nurse applying to a hospital as it does for an engineer applying to a startup."
+            },
+          ].map(({ q, a }, i) => (
+            <details key={i} style={{ borderBottom: '1px solid var(--border)', padding: '1rem 0' }}>
+              <summary style={{ cursor: 'pointer', fontFamily: 'Inter', fontWeight: 600, fontSize: '0.9rem', color: 'var(--ink)', listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                {q}<span style={{ color: 'var(--accent)', fontSize: '1.1rem', marginLeft: '1rem' }}>+</span>
+              </summary>
+              <p style={{ margin: '0.75rem 0 0', fontSize: '0.85rem', color: 'var(--text-soft)', lineHeight: 1.7 }}>{a}</p>
+            </details>
+          ))}
+        </div>
+
+        {/* CONTACT */}
+        <div style={{ marginBottom: '3rem', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '10px', padding: '2rem' }}>
+          <div style={{ fontWeight: 700, fontSize: '0.7rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '0.5rem' }}>Got feedback or an issue?</div>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-soft)', margin: '0 0 1.25rem', lineHeight: 1.6 }}>Something broken? Something great? Tell your uncle.</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <input
+              type="email"
+              placeholder="Your email"
+              id="contact-email"
+              style={{ padding: '10px 14px', border: '1.5px solid var(--border)', borderRadius: '6px', fontSize: '0.85rem', background: 'var(--bg)', color: 'var(--ink)', fontFamily: 'Inter' }}
+            />
+            <textarea
+              placeholder="What's on your mind?"
+              id="contact-message"
+              rows={4}
+              style={{ padding: '10px 14px', border: '1.5px solid var(--border)', borderRadius: '6px', fontSize: '0.85rem', background: 'var(--bg)', color: 'var(--ink)', fontFamily: 'Inter', resize: 'vertical' }}
+            />
+            <button
+              onClick={() => {
+                const email = document.getElementById('contact-email').value
+                const message = document.getElementById('contact-message').value
+                if (!email || !message) return
+                fetch('/api/feedback', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ rating: 'contact', comment: `${email}: ${message}` })
+                }).then(() => {
+                  document.getElementById('contact-email').value = ''
+                  document.getElementById('contact-message').value = ''
+                  alert('Sent. Your uncle got the message.')
+                }).catch(() => alert('Something went wrong. Try again.'))
+              }}
+              style={{ alignSelf: 'flex-start', padding: '10px 24px', background: 'var(--accent)', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer', letterSpacing: '0.02em' }}
+            >
+              Send
+            </button>
+          </div>
         </div>
       </div>
 
