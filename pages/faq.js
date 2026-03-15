@@ -78,7 +78,7 @@ export default function FAQ() {
         <div style={{ marginTop: '3rem', padding: '1.5rem 2rem', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '10px' }}>
           <p style={{ fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '0.5rem' }}>Still have a question?</p>
           <p style={{ fontSize: '0.9rem', color: 'var(--text-soft)', margin: '0 0 1rem' }}>Something broken? Something great? Tell your uncle.</p>
-          <a href="mailto:michael@matassa.com" style={{ display: 'inline-block', padding: '10px 24px', background: 'var(--accent)', color: 'white', borderRadius: '6px', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 700 }}>Get in touch</a>
+          <a href="mailto:jobsuncleai@gmail.com" style={{ display: 'inline-block', padding: '10px 24px', background: 'var(--accent)', color: 'white', borderRadius: '6px', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 700 }}>Get in touch</a>
         </div>
 
         <div style={{ marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid var(--border)', display: 'flex', gap: '1.5rem', fontSize: '0.85rem' }}>
