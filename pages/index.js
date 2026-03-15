@@ -400,7 +400,7 @@ export default function Home() {
           {!isPaid && (
             <a href="#signin" onClick={e => { e.preventDefault(); setShowPaywall(true); setTimeout(() => setShowRestore(true), 50) }} className="header-member-signin" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginRight: '1.25rem', cursor: 'pointer' }}>Member Sign In</a>
           )}
-          <span className="header-tagline-inline" style={{ fontSize: '0.8rem', color: 'var(--text-soft)' }}>Resumes for the AI age.</span>
+          <span className="header-tagline-inline" style={{ fontSize: '0.85rem', color: 'var(--ink)', fontWeight: 700, letterSpacing: '0.02em' }}>Resumes for the AI age.</span>
         </div>
       </header>
 
