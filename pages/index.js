@@ -389,15 +389,9 @@ export default function Home() {
         <div className="logo">
           <img src="/uncle-spin-logo.png" alt="Uncle Spin" className="logo-icon" />
           <span className="logo-text">JobsUncle.ai</span>
+          <a href="/about" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.5rem' }}>Our Story</a>
         </div>
         <div className="header-right">
-          {resumeCount !== null && (
-            <div className="counter">
-              <span className="counter-num">{resumeCount.toLocaleString()}</span>
-              <span className="counter-label">resumes generated</span>
-            </div>
-          )}
-          <a href="/about" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 600, letterSpacing: '0.02em' }}>Our Story</a>
           <span className="header-tagline">Everyone deserves an uncle in the business</span>
         </div>
       </header>
@@ -408,8 +402,7 @@ export default function Home() {
             <p className="hero-eyebrow">AI Resume Intelligence</p>
             <h1>Your resume, <em>tailored</em><br />to every job.</h1>
             <p className="hero-sub">
-              Upload your resume or LinkedIn profile. Paste a job description.
-              Get a tailored resume, cover letter, recruiter & ATS analysis, and a hiring manager DM — in under 60 seconds.
+              Upload your resume. Paste a job description. Voilà — a tailored resume, cover letter, recruiter analysis, and a hiring manager DM in under 60 seconds. Your uncle's got you.
             </p>
           </div>
           <div className="hero-mascot">
@@ -417,6 +410,14 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* COUNTER BAND */}
+      {resumeCount !== null && (
+        <div style={{ background: 'var(--accent)', padding: '1rem 2rem', textAlign: 'center' }}>
+          <span style={{ color: 'white', fontFamily: 'Inter', fontWeight: 800, fontSize: '1.5rem', letterSpacing: '-0.02em' }}>{resumeCount.toLocaleString()}</span>
+          <span style={{ color: 'rgba(255,255,255,0.85)', fontFamily: 'Inter', fontWeight: 500, fontSize: '0.85rem', marginLeft: '10px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>resumes tailored and counting</span>
+        </div>
+      )}
 
       {/* TESTIMONIAL */}
       <div style={{ background: 'var(--surface)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', padding: '1.5rem 2rem', textAlign: 'center' }}>
@@ -443,6 +444,24 @@ export default function Home() {
             <div className="how-num">04</div>
             <div className="how-label">Download in the format that fits. Nothing is stored. Ever.</div>
           </div>
+        </div>
+
+        {/* EXAMPLE OUTPUT TOGGLE */}
+        <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+          <details style={{ display: 'inline-block', textAlign: 'left', maxWidth: '680px', width: '100%' }}>
+            <summary style={{ cursor: 'pointer', fontFamily: 'Inter', fontWeight: 600, fontSize: '0.85rem', color: 'var(--accent)', letterSpacing: '0.04em', listStyle: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '10px 0' }}>
+              <span>See an example output</span>
+              <span style={{ fontSize: '0.7rem' }}>▼</span>
+            </summary>
+            <div style={{ marginTop: '1rem', padding: '1.5rem', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '10px', fontSize: '0.85rem', lineHeight: 1.7, color: 'var(--ink)' }}>
+              <div style={{ fontWeight: 700, fontSize: '0.7rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '0.5rem' }}>Resume excerpt</div>
+              <p style={{ margin: '0 0 0.75rem' }}><strong>Senior Editor — Matassa Agency</strong> | 2018–Present</p>
+              <p style={{ margin: '0 0 1.25rem', color: 'var(--text-soft)' }}>Directed post-production across 40+ brand campaigns for Fortune 500 clients including NVIDIA and Salesforce. Delivered $2.4M in project value on time and under budget. Led 3-person editorial team; reduced revision cycles by 35% through structured client feedback process.</p>
+              <div style={{ fontWeight: 700, fontSize: '0.7rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '0.5rem', marginTop: '1rem' }}>Hiring Manager DM excerpt</div>
+              <p style={{ margin: 0, color: 'var(--text-soft)', fontStyle: 'italic' }}>"Hi [Name] — I noticed your team is scaling content production. I've led post for NVIDIA and Salesforce campaigns and cut revision cycles by 35%. Happy to share specifics if useful."</p>
+              <div style={{ marginTop: '1.25rem', fontSize: '0.75rem', color: 'var(--text-soft)', borderTop: '1px solid var(--border)', paddingTop: '0.75rem' }}>Real output is tailored to your specific resume and job description.</div>
+            </div>
+          </details>
         </div>
       </div>
 
@@ -816,9 +835,7 @@ export default function Home() {
         <p>© 2026 JobsUncle.ai · Your documents are never stored · Built with AI</p>
         <p style={{ marginTop: '8px', fontSize: '0.75rem' }}>
           <a href="/privacy" style={{ color: 'var(--text-soft)', textDecoration: 'none', marginRight: '1rem' }}>Privacy Policy</a>
-          <a href="/terms" style={{ color: 'var(--text-soft)', textDecoration: 'none', marginRight: '1rem' }}>Terms of Service</a>
-          <a href="/about" style={{ color: 'var(--text-soft)', textDecoration: 'none' }}>Our Story</a>
-          {/* Our Story also in nav */}
+          <a href="/terms" style={{ color: 'var(--text-soft)', textDecoration: 'none' }}>Terms of Service</a>
         </p>
       </footer>
     </>
