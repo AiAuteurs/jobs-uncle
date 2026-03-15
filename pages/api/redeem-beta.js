@@ -49,6 +49,12 @@ export default async function handler(req, res) {
       headers: { Authorization: `Bearer ${KV_TOKEN}`, 'Content-Type': 'application/json' }
     })
 
+    // Write paid_plus so restore-access correctly identifies Pro+ level
+    await fetch(`${KV_URL}/set/paid_plus:${normalized}/1`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${KV_TOKEN}`, 'Content-Type': 'application/json' }
+    })
+
     // Store email → beta so restore-access works later
     await fetch(`${KV_URL}/set/paid_email:${encodeURIComponent(normalizedEmail)}/${normalized}`, {
       method: 'POST',
