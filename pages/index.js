@@ -38,6 +38,10 @@ export default function Home() {
   }
   const [showPaywall, setShowPaywall] = useState(false)
   const [showSignIn, setShowSignIn] = useState(false)
+  const [showManageModal, setShowManageModal] = useState(false)
+  const [manageEmail, setManageEmail] = useState('')
+  const [manageStatus, setManageStatus] = useState(null)
+  const [manageMsg, setManageMsg] = useState('')
   const [paywallSigninMode, setPaywallSigninMode] = useState(false)
   const [isPaid, setIsPaid] = useState(false)
   const [accessLevel, setAccessLevel] = useState(null) // null | 'free' | 'paid' | 'pro_plus'
@@ -327,10 +331,64 @@ export default function Home() {
     setError(null)
   }
 
+  const handleManagePortal = async () => {
+    if (!manageEmail.includes('@')) {
+      setManageMsg('Enter a valid email.')
+      return
+    }
+    setManageStatus('loading')
+    try {
+      const res = await fetch('/api/portal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: manageEmail })
+      })
+      const data = await res.json()
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        setManageStatus('error')
+        setManageMsg(data.error || 'No subscription found for that email.')
+      }
+    } catch {
+      setManageStatus('error')
+      setManageMsg('Something went wrong. Try again.')
+    }
+  }
+
   const canGenerate = pdfFile && jobDescription.trim().length > 50
 
   return (
     <>
+      {showManageModal && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => setShowManageModal(false)}>
+          <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)', position: 'relative' }} onClick={e => e.stopPropagation()}>
+            <button onClick={() => setShowManageModal(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', fontSize: '1.2rem', color: 'var(--text-soft)', cursor: 'pointer', lineHeight: 1, padding: '4px 8px' }}>✕</button>
+            <img src="/uncle-spin-hero.png" alt="JobsUncle.ai" style={{ width: 80, height: 'auto', marginBottom: '20px' }} />
+            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.8rem', margin: '0 0 10px', lineHeight: 1.1 }}>Manage your subscription</h2>
+            <p style={{ color: 'var(--text-soft)', fontSize: '0.88rem', margin: '0 0 20px', lineHeight: 1.6 }}>Enter the email you used to sign up. We'll take you straight to your billing page.</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <input
+                type="email"
+                value={manageEmail}
+                onChange={e => setManageEmail(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleManagePortal()}
+                placeholder="you@email.com"
+                style={{ width: '100%', padding: '11px 14px', border: '1.5px solid var(--border)', borderRadius: '8px', fontSize: '0.9rem', background: 'var(--bg)', color: 'var(--ink)', outline: 'none', boxSizing: 'border-box' }}
+              />
+              {manageMsg && <p style={{ fontSize: '0.82rem', color: manageStatus === 'error' ? '#ef4444' : 'var(--text-soft)', margin: 0 }}>{manageMsg}</p>}
+              <button
+                onClick={handleManagePortal}
+                disabled={manageStatus === 'loading'}
+                style={{ width: '100%', padding: '12px', background: 'var(--ink)', color: 'white', border: 'none', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer' }}
+              >
+                {manageStatus === 'loading' ? 'Looking up your account…' : 'Go to billing →'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showSignIn && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => setShowSignIn(false)}>
           <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)', position: 'relative' }} onClick={e => e.stopPropagation()}>
@@ -500,7 +558,7 @@ export default function Home() {
             <span style={{ fontSize: '0.75rem', fontWeight: 700, background: 'var(--accent)', color: 'white', borderRadius: '20px', padding: '3px 10px', letterSpacing: '0.04em', marginRight: '0.75rem' }}>Pro Active</span>
           )}
           {isPaid && (
-            <a href="https://billing.stripe.com/p/login/4gM3cx4EJfYO61j83Lf7i00" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.78rem', fontWeight: 600, letterSpacing: '0.02em', marginRight: '1.25rem' }}>Manage Subscription</a>
+            <a onClick={() => setShowManageModal(true)} style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.78rem', fontWeight: 600, letterSpacing: '0.02em', marginRight: '1.25rem', cursor: 'pointer' }}>Manage Subscription</a>
           )}
           {!isPaid && (
             <a href="#signin" onClick={e => { e.preventDefault(); setShowSignIn(true) }} className="header-member-signin" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginRight: '1.25rem', cursor: 'pointer' }}>Member Sign In</a>

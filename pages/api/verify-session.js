@@ -45,6 +45,15 @@ export default async function handler(req, res) {
         method: 'POST',
         headers: { Authorization: `Bearer ${KV_TOKEN}`, 'Content-Type': 'application/json' },
       })
+
+      // Store Stripe customer ID for portal access
+      if (session.customer) {
+        const customerKey = `stripe_customer:${session.customer_email}`
+        await fetch(`${KV_URL}/set/${customerKey}/${session.customer}/ex/31536000`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${KV_TOKEN}`, 'Content-Type': 'application/json' },
+        })
+      }
     }
 
     // Set HttpOnly cookie — works in private/incognito mode, survives reloads

@@ -40,7 +40,7 @@ const faqs = [
   },
   {
     q: "How do I cancel my subscription?",
-    a: "Click Manage Subscription in the top right of the site. That takes you directly to your billing page where you can cancel in one click. No email required, no retention hoops. Your access continues until the end of the period you already paid for."
+    a: "Click Manage Subscription in the top right of the site, enter your email, and you'll go straight to your billing page. Cancel in one click — no retention hoops. Your access continues until the end of the period you already paid for."
   },
 ]
 
