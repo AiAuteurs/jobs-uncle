@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import Head from 'next/head'
+import Header from '../components/Header'
 
 const renderMarkdown = (text) => {
   if (!text) return ''
@@ -540,33 +541,12 @@ export default function Home() {
         <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤵</text></svg>" />
       </Head>
 
-      <header className="header">
-        <div className="logo">
-          <img src="/uncle-spin-logo.png" alt="Uncle Spin" className="logo-icon" />
-          <span className="logo-text">JobsUncle.ai</span>
-          <span className="header-nav-links">
-            <a href="/about" className="header-nav-link" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.5rem' }}>Our Story</a>
-            <a href="/example" className="header-nav-link" style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.75rem', fontWeight: 700, marginLeft: '1.25rem', border: '1.5px solid var(--accent)', borderRadius: '20px', padding: '3px 10px', letterSpacing: '0.02em' }}>See an example</a>
-            <a href="/faq" className="header-nav-link" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.25rem' }}>FAQ</a>
-            <a href="/pricing" className="header-nav-link" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.25rem' }}>Pricing</a>
-          </span>
-        </div>
-        <div className="header-right">
-          {accessLevel === 'pro_plus' && (
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, background: '#6366f1', color: 'white', borderRadius: '20px', padding: '3px 10px', letterSpacing: '0.04em', marginRight: '0.75rem' }}>Pro+ Active</span>
-          )}
-          {accessLevel === 'paid' && (
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, background: 'var(--accent)', color: 'white', borderRadius: '20px', padding: '3px 10px', letterSpacing: '0.04em', marginRight: '0.75rem' }}>Pro Active</span>
-          )}
-          {isPaid && (
-            <a onClick={() => setShowManageModal(true)} style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.78rem', fontWeight: 600, letterSpacing: '0.02em', marginRight: '1.25rem', cursor: 'pointer' }}>Manage Subscription</a>
-          )}
-          {!isPaid && (
-            <a href="#signin" onClick={e => { e.preventDefault(); setShowSignIn(true) }} className="header-member-signin" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginRight: '1.25rem', cursor: 'pointer' }}>Member Sign In</a>
-          )}
-          <span className="header-tagline-inline" style={{ fontSize: '0.85rem', color: 'var(--ink)', fontWeight: 700, letterSpacing: '0.02em' }}>Resumes for the AI age.</span>
-        </div>
-      </header>
+      <Header
+        isPaid={isPaid}
+        accessLevel={accessLevel}
+        onSignIn={() => setShowSignIn(true)}
+        onManage={() => setShowManageModal(true)}
+      />
 
       {/* MOBILE-ONLY NAV BAR */}
       {!isPaid && (

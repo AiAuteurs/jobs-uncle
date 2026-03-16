@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import Header from '../components/Header'
 
 const plans = [
   {
@@ -81,6 +82,8 @@ export default function PricingPage() {
         <title>Pricing — JobsUncle.ai</title>
         <meta name="description" content="Choose a plan that fits your job search timeline." />
       </Head>
+
+      <Header />
 
       <main className="pricing-page">
         <div className="pricing-header">
