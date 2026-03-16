@@ -83,7 +83,7 @@ export default function PricingPage() {
         <meta name="description" content="Choose a plan that fits your job search timeline." />
       </Head>
 
-      <Header />
+      <Header onSignIn={() => router.push('/?signin=true')} />
 
       <main className="pricing-page">
         <div className="pricing-header">
@@ -139,8 +139,8 @@ export default function PricingPage() {
       <style jsx>{`
         .pricing-page {
           min-height: 100vh;
-          background: #0a0a0a;
-          color: #fff;
+          background: var(--bg);
+          color: var(--ink);
           font-family: 'Inter', sans-serif;
           padding: 60px 20px 80px;
           display: flex;
@@ -158,10 +158,11 @@ export default function PricingPage() {
           font-weight: 700;
           letter-spacing: -0.02em;
           margin: 0 0 12px;
+          color: var(--ink);
         }
 
         .subtitle {
-          color: #888;
+          color: var(--text-soft);
           font-size: 16px;
           margin: 0;
         }
@@ -177,8 +178,8 @@ export default function PricingPage() {
 
         .tier-card {
           position: relative;
-          background: #161616;
-          border: 2px solid #2a2a2a;
+          background: var(--surface);
+          border: 2px solid var(--border);
           border-radius: 16px;
           padding: 28px 20px 24px;
           cursor: pointer;
@@ -191,22 +192,22 @@ export default function PricingPage() {
         }
 
         .tier-card:hover {
-          border-color: #444;
+          border-color: var(--accent);
           transform: translateY(-2px);
         }
 
         .tier-card.selected {
-          border-color: #4ade80;
-          background: #0d1f15;
+          border-color: var(--accent);
+          background: var(--warm);
         }
 
         .tier-card.highlight {
-          border-color: #f59e0b;
+          border-color: var(--accent-soft);
         }
 
         .tier-card.highlight.selected {
-          border-color: #f59e0b;
-          background: #1a140a;
+          border-color: var(--accent-soft);
+          background: #F1E4BF;
         }
 
         .badge {
@@ -214,7 +215,7 @@ export default function PricingPage() {
           top: -12px;
           left: 50%;
           transform: translateX(-50%);
-          background: #f59e0b;
+          background: var(--accent-soft);
           color: #000;
           font-size: 11px;
           font-weight: 700;
@@ -225,12 +226,14 @@ export default function PricingPage() {
         }
 
         .tier-card.selected .badge {
-          background: #4ade80;
+          background: var(--accent);
+          color: #fff;
         }
 
         .tier-card.highlight .badge,
         .tier-card.highlight.selected .badge {
-          background: #f59e0b;
+          background: var(--accent-soft);
+          color: #000;
         }
 
         .tier-label {
@@ -238,11 +241,11 @@ export default function PricingPage() {
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.08em;
-          color: #888;
+          color: var(--text-soft);
         }
 
         .tier-card.selected .tier-label {
-          color: #4ade80;
+          color: var(--accent);
         }
 
         .tier-price {
@@ -255,22 +258,22 @@ export default function PricingPage() {
           font-size: 36px;
           font-weight: 800;
           letter-spacing: -0.03em;
-          color: #fff;
+          color: var(--ink);
         }
 
         .per {
           font-size: 14px;
-          color: #666;
+          color: var(--text-soft);
         }
 
         .tier-billing {
           font-size: 12px;
-          color: #555;
+          color: var(--text-soft);
         }
 
         .tier-tagline {
           font-size: 13px;
-          color: #aaa;
+          color: var(--text-soft);
           font-style: italic;
           margin-top: 4px;
           line-height: 1.4;
@@ -285,8 +288,8 @@ export default function PricingPage() {
         }
 
         .cta-button {
-          background: #4ade80;
-          color: #000;
+          background: var(--accent);
+          color: #fff;
           font-size: 16px;
           font-weight: 700;
           padding: 16px 40px;
@@ -298,7 +301,7 @@ export default function PricingPage() {
         }
 
         .cta-button:hover:not(:disabled) {
-          background: #22c55e;
+          opacity: 0.88;
           transform: scale(1.02);
         }
 
@@ -309,7 +312,7 @@ export default function PricingPage() {
 
         .cta-sub {
           font-size: 13px;
-          color: #555;
+          color: var(--text-soft);
           margin: 0;
         }
 
@@ -323,7 +326,7 @@ export default function PricingPage() {
           font-size: 18px;
           font-weight: 600;
           margin-bottom: 20px;
-          color: #888;
+          color: var(--text-soft);
           text-transform: uppercase;
           letter-spacing: 0.06em;
         }
@@ -339,7 +342,7 @@ export default function PricingPage() {
 
         .features-list li {
           font-size: 15px;
-          color: #ccc;
+          color: var(--ink);
           text-align: left;
         }
 

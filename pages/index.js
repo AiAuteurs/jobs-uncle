@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import Head from 'next/head'
 import Header from '../components/Header'
+import { useRouter } from 'next/router'
 
 const renderMarkdown = (text) => {
   if (!text) return ''
@@ -22,6 +23,7 @@ const stripMarkdown = (text) => {
 }
 
 export default function Home() {
+  const router = useRouter()
   const [pdfFile, setPdfFile] = useState(null)
   const [jobDescription, setJobDescription] = useState('')
   const [loading, setLoading] = useState(false)
@@ -71,6 +73,13 @@ export default function Home() {
 
   // Fetch resume counter + check access via cookie on mount
   // Works in private/incognito &mdash; no localStorage dependency
+  useEffect(() => {
+    if (router.query.signin === 'true') {
+      setShowSignIn(true)
+      router.replace('/', undefined, { shallow: true })
+    }
+  }, [router.query.signin])
+
   useEffect(() => {
     fetch('/api/counter')
       .then(r => r.json())
