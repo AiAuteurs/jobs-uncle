@@ -37,6 +37,7 @@ export default function Home() {
     setResumeCount(newCount)
   }
   const [showPaywall, setShowPaywall] = useState(false)
+  const [showSignIn, setShowSignIn] = useState(false)
   const [paywallSigninMode, setPaywallSigninMode] = useState(false)
   const [isPaid, setIsPaid] = useState(false)
   const [accessLevel, setAccessLevel] = useState(null) // null | 'free' | 'paid' | 'pro_plus'
@@ -330,55 +331,59 @@ export default function Home() {
 
   return (
     <>
+      {showSignIn && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => setShowSignIn(false)}>
+          <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)', position: 'relative' }} onClick={e => e.stopPropagation()}>
+            <button onClick={() => setShowSignIn(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', fontSize: '1.2rem', color: 'var(--text-soft)', cursor: 'pointer', lineHeight: 1, padding: '4px 8px' }}>✕</button>
+            <img src="/uncle-spin-hero.png" alt="JobsUncle.ai" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
+            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Member sign in</h2>
+            <p style={{ color: 'var(--text-soft)', fontSize: '0.9rem', margin: '0 0 16px', lineHeight: 1.6 }}>Enter your email to restore Pro access.</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
+              <input
+                type="email"
+                value={restoreEmail}
+                onChange={e => setRestoreEmail(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleRestore()}
+                placeholder="you@email.com"
+                style={{ width: '100%', padding: '11px 14px', border: '1.5px solid var(--border)', borderRadius: '8px', fontSize: '0.9rem', background: 'var(--bg)', color: 'var(--ink)', outline: 'none', boxSizing: 'border-box' }}
+              />
+              <button
+                onClick={handleRestore}
+                disabled={restoreStatus === 'loading'}
+                style={{ width: '100%', padding: '12px', background: 'var(--ink)', color: 'white', border: 'none', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer' }}
+              >
+                {restoreStatus === 'loading' ? 'Checking…' : 'Restore my access'}
+              </button>
+              {restoreMsg && <p style={{ fontSize: '0.82rem', color: restoreStatus === 'success' ? '#22c55e' : '#ef4444', margin: 0 }}>{restoreMsg}</p>}
+            </div>
+            <div style={{ padding: '10px 14px', background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '8px', fontSize: '0.82rem', color: 'var(--text-soft)', textAlign: 'center' }}>
+              New to JobsUncle? <button onClick={() => { setShowSignIn(false); setShowPaywall(true) }} style={{ background: 'none', border: 'none', color: 'var(--accent)', fontWeight: 700, cursor: 'pointer', fontSize: '0.82rem', padding: 0 }}>Try it free — no card needed →</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showPaywall && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => setShowPaywall(false)}>
           <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)', position: 'relative' }} onClick={e => e.stopPropagation()}>
             <button onClick={() => setShowPaywall(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', fontSize: '1.2rem', color: 'var(--text-soft)', cursor: 'pointer', lineHeight: 1, padding: '4px 8px' }}>✕</button>
             <img src="/uncle-spin-hero.png" alt="JobsUncle.ai" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
-            {paywallSigninMode ? (
-              <>
-                <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Member sign in</h2>
-                <p style={{ color: 'var(--text-soft)', fontSize: '0.9rem', margin: '0 0 16px', lineHeight: 1.6 }}>Enter your email to restore Pro access.</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
-                  <input
-                    type="email"
-                    value={restoreEmail}
-                    onChange={e => setRestoreEmail(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && handleRestore()}
-                    placeholder="you@email.com"
-                    style={{ width: '100%', padding: '11px 14px', border: '1.5px solid var(--border)', borderRadius: '8px', fontSize: '0.9rem', background: 'var(--bg)', color: 'var(--ink)', outline: 'none', boxSizing: 'border-box' }}
-                  />
-                  <button
-                    onClick={handleRestore}
-                    disabled={restoreStatus === 'loading'}
-                    style={{ width: '100%', padding: '12px', background: 'var(--ink)', color: 'white', border: 'none', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer' }}
-                  >
-                    {restoreStatus === 'loading' ? 'Checking…' : 'Restore my access'}
-                  </button>
-                  {restoreMsg && <p style={{ fontSize: '0.82rem', color: restoreStatus === 'success' ? '#22c55e' : '#ef4444', margin: 0 }}>{restoreMsg}</p>}
-                </div>
-                <div style={{ padding: '10px 14px', background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '8px', fontSize: '0.82rem', color: 'var(--text-soft)', textAlign: 'center' }}>
-                  New to JobsUncle? <button onClick={() => { setPaywallSigninMode(false); setShowRestore(false) }} style={{ background: 'none', border: 'none', color: 'var(--accent)', fontWeight: 700, cursor: 'pointer', fontSize: '0.82rem', padding: 0 }}>Try it free — no card needed →</button>
-                </div>
-              </>
-            ) : (
-              <>
-                <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Your free resume is done.</h2>
-                <p style={{ color: 'var(--text-soft)', fontSize: '0.95rem', margin: '0 0 32px', lineHeight: 1.6 }}>
-                  Upgrade to Pro for unlimited resumes, every job, forever.<br />
-                  <strong style={{ color: 'var(--ink)' }}>$49.99 / year.</strong> Cancel anytime.
-                </p>
-              </>
-            )}
+            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Your free resume is done.</h2>
+            <p style={{ color: 'var(--text-soft)', fontSize: '0.95rem', margin: '0 0 32px', lineHeight: 1.6 }}>
+              Upgrade to Pro for unlimited resumes, every job, forever.<br />
+              <strong style={{ color: 'var(--ink)' }}>$49.99 / year.</strong> Cancel anytime.
+            </p>
             <button onClick={() => handleUpgrade('pro')} style={{ width: '100%', background: 'var(--accent)', color: 'white', border: 'none', padding: '16px', borderRadius: '8px', fontSize: '1rem', fontWeight: 700, cursor: 'pointer', marginBottom: '12px', letterSpacing: '0.02em' }}>
               Upgrade to Pro &mdash; $49.99/yr
             </button>
-            <button onClick={() => setShowPaywall(false)} style={{ background: 'none', border: 'none', color: 'var(--text-soft)', fontSize: '0.85rem', cursor: 'pointer', padding: '8px' }}>
+            <button onClick={() => { setShowPaywall(false); setShowSignIn(true) }} style={{ background: 'none', border: 'none', color: 'var(--accent)', fontSize: '0.85rem', cursor: 'pointer', padding: '8px', fontWeight: 600 }}>
+              Already a member? Sign in →
+            </button>
+            <button onClick={() => setShowPaywall(false)} style={{ display: 'block', background: 'none', border: 'none', color: 'var(--text-soft)', fontSize: '0.85rem', cursor: 'pointer', padding: '4px', margin: '0 auto' }}>
               Maybe later
             </button>
 
             <div style={{ marginTop: '24px', borderTop: '1px solid var(--border)', paddingTop: '20px' }}>
-              {/* BETA CODE */}
               <div>
                 <div style={{ fontSize: '0.8rem', color: 'var(--text-soft)', marginBottom: '6px' }}>Got a beta code?</div>
                 {!showBeta ? (
@@ -495,7 +500,7 @@ export default function Home() {
             <span style={{ fontSize: '0.75rem', fontWeight: 700, background: 'var(--accent)', color: 'white', borderRadius: '20px', padding: '3px 10px', letterSpacing: '0.04em', marginRight: '0.75rem' }}>Pro Active</span>
           )}
           {!isPaid && (
-            <a href="#signin" onClick={e => { e.preventDefault(); setPaywallSigninMode(true); setShowPaywall(true); setTimeout(() => setShowRestore(true), 50) }} className="header-member-signin" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginRight: '1.25rem', cursor: 'pointer' }}>Member Sign In</a>
+            <a href="#signin" onClick={e => { e.preventDefault(); setShowSignIn(true) }} className="header-member-signin" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginRight: '1.25rem', cursor: 'pointer' }}>Member Sign In</a>
           )}
           <span className="header-tagline-inline" style={{ fontSize: '0.85rem', color: 'var(--ink)', fontWeight: 700, letterSpacing: '0.02em' }}>Resumes for the AI age.</span>
         </div>
@@ -504,7 +509,7 @@ export default function Home() {
       {/* MOBILE-ONLY NAV BAR */}
       {!isPaid && (
         <div className="mobile-signin-bar" style={{ display: 'none' }}>
-          <a onClick={e => { e.preventDefault(); setPaywallSigninMode(true); setShowPaywall(true); setTimeout(() => setShowRestore(true), 50) }} style={{ color: 'var(--accent)', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', textDecoration: 'none' }}>Member Sign In</a>
+          <a onClick={e => { e.preventDefault(); setShowSignIn(true) }} style={{ color: 'var(--accent)', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', textDecoration: 'none' }}>Member Sign In</a>
           <a href="/faq" style={{ color: 'var(--text-soft)', fontWeight: 600, fontSize: '0.85rem', textDecoration: 'none' }}>FAQ</a>
           <a href="/about" style={{ color: 'var(--text-soft)', fontWeight: 600, fontSize: '0.85rem', textDecoration: 'none' }}>Our Story</a>
         </div>
