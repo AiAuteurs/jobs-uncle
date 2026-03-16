@@ -99,12 +99,20 @@ export default function Home() {
       .catch(() => {})
   }, [])
 
+  const ACCEPTED_TYPES = [
+    'application/pdf',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/msword',
+    'text/plain',
+  ]
+  const ACCEPTED_EXTS = ['.pdf', '.doc', '.docx', '.txt']
+
   const handleFile = (file) => {
-    if (file && file.type === 'application/pdf') {
+    if (file && (ACCEPTED_TYPES.includes(file.type) || ACCEPTED_EXTS.some(ext => file.name.toLowerCase().endsWith(ext)))) {
       setPdfFile(file)
       setError(null)
     } else {
-      setError('Please upload a PDF file. Export your LinkedIn profile as PDF and upload it here.')
+      setError('Please upload a PDF, Word document (.doc/.docx), or text file (.txt).')
     }
   }
 
@@ -138,7 +146,7 @@ export default function Home() {
 
     try {
       const formData = new FormData()
-      formData.append('pdf', pdfFile)
+      formData.append('resume', pdfFile)
       formData.append('jobDescription', jobDescription)
       formData.append('dualVersion', dualVersionEnabled && isPlusUser ? 'true' : 'false')
 
@@ -604,7 +612,7 @@ export default function Home() {
         <div className="how-items">
           <div className="how-item">
             <div className="how-num">01</div>
-            <div className="how-label">Upload your resume or LinkedIn PDF &mdash; your full career in one file</div>
+            <div className="how-label">Upload your resume — PDF, Word doc, or LinkedIn export</div>
           </div>
           <div className="how-item">
             <div className="how-num">02</div>
@@ -626,9 +634,9 @@ export default function Home() {
               {/* STEP 1 */}
               <div className={`step-card ${pdfFile ? 'complete' : 'active'}`}>
                 <div className="step-number">Step 01</div>
-                <div className="step-title">Your Resume or LinkedIn PDF</div>
+                <div className="step-title">Your Resume</div>
                 <p className="step-desc">
-                  Upload your existing resume as a PDF, or export your LinkedIn profile as a PDF. Either works.
+                  Upload your resume as a PDF, Word doc (.docx), or text file. LinkedIn PDF works too.
                 </p>
                 <div
                   className={`upload-zone ${dragover ? 'dragover' : ''} ${pdfFile ? 'has-file' : ''}`}
@@ -645,14 +653,14 @@ export default function Home() {
                   ) : (
                     <>
                       <img src="/uncle-spin-logo.png" className="upload-mascot" alt="JobsUncle.ai" />
-                      <div className="upload-label">Drop PDF here or click to browse</div>
+                      <div className="upload-label">Drop your resume here or click to browse</div>
                     </>
                   )}
                 </div>
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept=".pdf"
+                  accept=".pdf,.doc,.docx,.txt"
                   className="file-input"
                   onChange={(e) => handleFile(e.target.files[0])}
                 />

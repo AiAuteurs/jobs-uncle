@@ -12,7 +12,36 @@ const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 })
 
-async function extractTextFromPDF(filePath) {
+async function extractTextFromFile(filePath, mimeType, originalName) {
+  const ext = (originalName || '').split('.').pop().toLowerCase()
+
+  // TXT
+  if (ext === 'txt' || mimeType === 'text/plain') {
+    return fs.readFileSync(filePath, 'utf8')
+  }
+
+  // DOCX — unzip word/document.xml and strip tags
+  if (ext === 'docx' || mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+    const { execSync } = require('child_process')
+    const tmpDir = `${filePath}_extracted`
+    try {
+      execSync(`unzip -o "${filePath}" "word/document.xml" -d "${tmpDir}"`, { stdio: 'pipe' })
+      const xml = fs.readFileSync(`${tmpDir}/word/document.xml`, 'utf8')
+      const text = xml
+        .replace(/<w:p[ >]/g, '\n<w:p ')
+        .replace(/<\/w:p>/g, '\n')
+        .replace(/<[^>]+>/g, '')
+        .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ')
+        .replace(/[ \t]+/g, ' ')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim()
+      return text
+    } finally {
+      try { execSync(`rm -rf "${tmpDir}"`, { stdio: 'pipe' }) } catch (e) {}
+    }
+  }
+
+  // PDF — default
   const buffer = fs.readFileSync(filePath)
   const pdfParse = require('pdf-parse')
   const data = await pdfParse(buffer)
@@ -71,23 +100,30 @@ export default async function handler(req, res) {
     return res.status(200).json({ resume: '', coverLetter: '', recruiterNotes: '', hiringManagerDM: '' }) // silent fail
   }
 
-  const pdfFile = Array.isArray(files.pdf) ? files.pdf[0] : files.pdf
+  const resumeFile = Array.isArray(files.pdf) ? files.pdf[0] : files.pdf
   const jobDescription = Array.isArray(fields.jobDescription)
     ? fields.jobDescription[0]
     : fields.jobDescription
   const dualVersion = (Array.isArray(fields.dualVersion) ? fields.dualVersion[0] : fields.dualVersion) === 'true'
 
-  if (!pdfFile || !jobDescription) {
-    return res.status(400).json({ error: 'Missing PDF or job description' })
+  if (!resumeFile || !jobDescription) {
+    return res.status(400).json({ error: 'Missing resume file or job description' })
+  }
+
+  // Validate file type
+  const uploadExt = (resumeFile.originalFilename || '').split('.').pop().toLowerCase()
+  const allowedExts = ['pdf', 'docx', 'txt']
+  if (!allowedExts.includes(uploadExt)) {
+    return res.status(400).json({ error: 'Unsupported file type. Please upload a PDF, DOCX, or TXT file.' })
   }
 
   let linkedinText = ''
   try {
-    linkedinText = await extractTextFromPDF(pdfFile.filepath)
+    linkedinText = await extractTextFromFile(resumeFile.filepath, resumeFile.mimetype, resumeFile.originalFilename)
   } catch (err) {
-    linkedinText = '[Could not extract PDF text automatically.]'
+    linkedinText = '[Could not extract resume text automatically.]'
   } finally {
-    try { fs.unlinkSync(pdfFile.filepath) } catch (e) {}
+    try { fs.unlinkSync(resumeFile.filepath) } catch (e) {}
   }
 
   const resumeInstructions = dualVersion ? `

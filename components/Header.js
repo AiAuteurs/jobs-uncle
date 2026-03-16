@@ -23,6 +23,7 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
         {isPaid && onManage && (
           <a onClick={onManage} style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.78rem', fontWeight: 600, letterSpacing: '0.02em', marginRight: '1.25rem', cursor: 'pointer' }}>Manage Subscription</a>
         )}
+        <a href="/#get-started" style={{ background: 'var(--accent)', color: '#fff', textDecoration: 'none', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.02em', marginRight: '1.25rem', padding: '6px 16px', borderRadius: '20px', whiteSpace: 'nowrap' }}>Build Your Resume</a>
         {!isPaid && onSignIn && (
           <a href="#signin" onClick={e => { e.preventDefault(); onSignIn() }} className="header-member-signin" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginRight: '1.25rem', cursor: 'pointer' }}>Member Sign In</a>
         )}
