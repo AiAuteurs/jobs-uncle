@@ -1,4 +1,4 @@
-import { Document, Packer, Paragraph, TextRun, AlignmentType, BorderStyle } from 'docx'
+import { Document, Packer, Paragraph, TextRun, AlignmentType, BorderStyle, LevelFormat } from 'docx'
 
 export const config = {
   api: { bodyParser: false },
@@ -60,11 +60,8 @@ function parseResume(text) {
     if (/^[-•*]\s+/.test(line)) {
       const content = line.replace(/^[-•*]\s+/, '')
       paragraphs.push(new Paragraph({
-        children: [
-          new TextRun({ text: '• ', font: 'Calibri', size: 22 }),
-          ...parseInline(content)
-        ],
-        indent: { left: 360 },
+        children: parseInline(content),
+        numbering: { reference: 'bullets', level: 0 },
         spacing: { after: 40 },
       }))
       continue
@@ -152,6 +149,21 @@ export default async function handler(req, res) {
     }
 
     const doc = new Document({
+      numbering: {
+        config: [{
+          reference: 'bullets',
+          levels: [{
+            level: 0,
+            format: LevelFormat.BULLET,
+            text: '•',
+            alignment: AlignmentType.LEFT,
+            style: {
+              paragraph: { indent: { left: 360, hanging: 180 } },
+              run: { font: 'Calibri', size: 22 },
+            },
+          }],
+        }],
+      },
       styles: {
         default: {
           document: {
