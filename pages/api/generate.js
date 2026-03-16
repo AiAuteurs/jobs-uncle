@@ -20,25 +20,25 @@ async function extractTextFromFile(filePath, mimeType, originalName) {
     return fs.readFileSync(filePath, 'utf8')
   }
 
-  // DOCX — unzip word/document.xml and strip tags
-  if (ext === 'docx' || mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-    const { execSync } = require('child_process')
-    const tmpDir = `${filePath}_extracted`
-    try {
-      execSync(`unzip -o "${filePath}" "word/document.xml" -d "${tmpDir}"`, { stdio: 'pipe' })
-      const xml = fs.readFileSync(`${tmpDir}/word/document.xml`, 'utf8')
-      const text = xml
-        .replace(/<w:p[ >]/g, '\n<w:p ')
-        .replace(/<\/w:p>/g, '\n')
-        .replace(/<[^>]+>/g, '')
-        .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ')
-        .replace(/[ \t]+/g, ' ')
-        .replace(/\n{3,}/g, '\n\n')
-        .trim()
-      return text
-    } finally {
-      try { execSync(`rm -rf "${tmpDir}"`, { stdio: 'pipe' }) } catch (e) {}
-    }
+  // DOCX — use jszip (already in dependencies)
+  if (ext === 'docx' || ext === 'doc' ||
+      mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+      mimeType === 'application/msword') {
+    const JSZip = require('jszip')
+    const buffer = fs.readFileSync(filePath)
+    const zip = await JSZip.loadAsync(buffer)
+    const xmlFile = zip.file('word/document.xml')
+    if (!xmlFile) throw new Error('Could not find document.xml in DOCX')
+    const xml = await xmlFile.async('string')
+    const text = xml
+      .replace(/<w:p[ >]/g, '\n<w:p ')
+      .replace(/<\/w:p>/g, '\n')
+      .replace(/<[^>]+>/g, '')
+      .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ')
+      .replace(/[ \t]+/g, ' ')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim()
+    return text
   }
 
   // PDF — default
