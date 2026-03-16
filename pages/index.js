@@ -499,6 +499,9 @@ export default function Home() {
           {accessLevel === 'paid' && (
             <span style={{ fontSize: '0.75rem', fontWeight: 700, background: 'var(--accent)', color: 'white', borderRadius: '20px', padding: '3px 10px', letterSpacing: '0.04em', marginRight: '0.75rem' }}>Pro Active</span>
           )}
+          {isPaid && (
+            <a href="https://billing.stripe.com/p/login/4gM3cx4EJfYO61j83Lf7i00" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.78rem', fontWeight: 600, letterSpacing: '0.02em', marginRight: '1.25rem' }}>Manage Subscription</a>
+          )}
           {!isPaid && (
             <a href="#signin" onClick={e => { e.preventDefault(); setShowSignIn(true) }} className="header-member-signin" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginRight: '1.25rem', cursor: 'pointer' }}>Member Sign In</a>
           )}

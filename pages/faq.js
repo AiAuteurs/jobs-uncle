@@ -40,7 +40,7 @@ const faqs = [
   },
   {
     q: "How do I cancel my subscription?",
-    a: "Visit your billing portal at billing.stripe.com/p/login/4gM3cx4EJfYO61j83Lf7i00, find your JobsUncle subscription, and cancel anytime — no hoops, no retention flows. Your access continues until the end of the billing period you already paid for."
+    a: "Click Manage Subscription in the top right of the site. That takes you directly to your billing page where you can cancel in one click. No email required, no retention hoops. Your access continues until the end of the period you already paid for."
   },
 ]
 
