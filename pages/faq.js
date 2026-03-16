@@ -38,6 +38,10 @@ const faqs = [
     q: "Can I use it on mobile?",
     a: "Yes. The site works on any device. Upload your PDF, paste the job description, and download your documents."
   },
+  {
+    q: "How do I cancel my subscription?",
+    a: "Visit your billing portal at billing.stripe.com/p/login/4gM3cx4EJfYO61j83Lf7i00, find your JobsUncle subscription, and cancel anytime — no hoops, no retention flows. Your access continues until the end of the billing period you already paid for."
+  },
 ]
 
 export default function FAQ() {

@@ -104,6 +104,7 @@ RESUME VERSION B — TECHNICAL/ACHIEVEMENT FOCUS:
 - Keywords: built, engineered, optimized, delivered, executed, launched, reduced, increased
 
 Generate both versions. Each should be complete and standalone — same experience, different lens.
+- Write in implied first person throughout both versions — NO "I", "my", or "me" anywhere. Every bullet leads with an action verb. "Engineered solution" not "I engineered"
 ` : `
 RESUME REQUIREMENTS:
 - Lead with a punchy 2-3 sentence professional summary that speaks directly to THIS role
@@ -116,6 +117,7 @@ RESUME REQUIREMENTS:
 - Mirror keywords and phrases from the job description naturally throughout — optimize for ATS without sounding robotic
 - If there are employment gaps in the profile, reframe them confidently as growth, skill-building, or intentional transition
 - Do NOT pad or embellish — be ruthlessly relevant
+- Write in implied first person throughout — NO "I", "my", or "me" anywhere. Every bullet and sentence leads with an action verb or noun. "Led a team of 10" not "I led a team of 10"
 `
 
   const outputFormat = dualVersion ? `
