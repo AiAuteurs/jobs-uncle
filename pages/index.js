@@ -331,8 +331,9 @@ export default function Home() {
   return (
     <>
       {showPaywall && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => setShowPaywall(false)}>
+          <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)', position: 'relative' }} onClick={e => e.stopPropagation()}>
+            <button onClick={() => setShowPaywall(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', fontSize: '1.2rem', color: 'var(--text-soft)', cursor: 'pointer', lineHeight: 1, padding: '4px 8px' }}>✕</button>
             <img src="/uncle-spin-hero.png" alt="JobsUncle.ai" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
             {paywallSigninMode ? (
               <>
@@ -405,8 +406,9 @@ export default function Home() {
       )}
 
       {showPlusPaywall && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '460px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => setShowPlusPaywall(false)}>
+          <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '460px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)', position: 'relative' }} onClick={e => e.stopPropagation()}>
+            <button onClick={() => setShowPlusPaywall(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', fontSize: '1.2rem', color: 'var(--text-soft)', cursor: 'pointer', lineHeight: 1, padding: '4px 8px' }}>✕</button>
             <img src="/uncle-spin-hero.png" alt="JobsUncle.ai" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
             <div style={{ display: 'inline-block', background: '#6366f1', color: 'white', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', padding: '4px 12px', borderRadius: '20px', marginBottom: '16px', textTransform: 'uppercase' }}>Pro+</div>
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Two resumes. One shot.</h2>
@@ -414,12 +416,14 @@ export default function Home() {
               Get a <strong style={{ color: 'var(--ink)' }}>Leadership-focused</strong> and a <strong style={{ color: 'var(--ink)' }}>Technical/Achievement-focused</strong> version &mdash; same experience, two different angles. Use whichever fits the hiring manager.
             </p>
             <p style={{ color: 'var(--text-soft)', fontSize: '0.85rem', margin: '0 0 32px' }}>Perfect if you're actively hunting.</p>
-            <button onClick={() => handleUpgrade('pro_plus_monthly')} style={{ width: '100%', background: '#6366f1', color: 'white', border: 'none', padding: '16px', borderRadius: '8px', fontSize: '1rem', fontWeight: 700, cursor: 'pointer', marginBottom: '10px', letterSpacing: '0.02em' }}>
+            <button onClick={() => handleUpgrade('pro_plus_monthly')} style={{ width: '100%', background: '#6366f1', color: 'white', border: 'none', padding: '16px', borderRadius: '8px', fontSize: '1rem', fontWeight: 700, cursor: 'pointer', marginBottom: '6px', letterSpacing: '0.02em' }}>
               Pro+ Monthly &mdash; $9.99/mo
             </button>
-            <button onClick={() => handleUpgrade('pro_plus_annual')} style={{ width: '100%', background: 'var(--ink)', color: 'white', border: 'none', padding: '14px', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 600, cursor: 'pointer', marginBottom: '12px', letterSpacing: '0.02em' }}>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-soft)', margin: '0 0 14px' }}>Renews monthly. Cancel anytime from your account.</p>
+            <button onClick={() => handleUpgrade('pro_plus_annual')} style={{ width: '100%', background: 'var(--ink)', color: 'white', border: 'none', padding: '14px', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 600, cursor: 'pointer', marginBottom: '6px', letterSpacing: '0.02em' }}>
               Pro+ Annual &mdash; $79.99/yr <span style={{ opacity: 0.7, fontSize: '0.8rem' }}>(save 33%)</span>
             </button>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-soft)', margin: '0 0 12px' }}>Renews annually. Cancel anytime from your account.</p>
             <button onClick={() => setShowPlusPaywall(false)} style={{ background: 'none', border: 'none', color: 'var(--text-soft)', fontSize: '0.85rem', cursor: 'pointer', padding: '8px' }}>
               Maybe later
             </button>
@@ -552,13 +556,10 @@ export default function Home() {
           </div>
           <div className="how-item">
             <div className="how-num">03</div>
-            <div className="how-label">Get a tailored resume, cover letter, recruiter & ATS analysis, and a hiring manager DM</div>
-          </div>
-          <div className="how-item">
-            <div className="how-num">04</div>
-            <div className="how-label">Download in the format that fits. Nothing is stored. Ever.</div>
+            <div className="how-label">Download a tailored resume, cover letter, recruiter & ATS analysis, and a hiring manager DM</div>
           </div>
         </div>
+        <p style={{ textAlign: 'center', fontSize: '0.78rem', color: 'var(--text-soft)', marginTop: '1rem', letterSpacing: '0.03em' }}>Nothing is stored. Ever.</p>
       </div>
 
       <div className="app-container">
