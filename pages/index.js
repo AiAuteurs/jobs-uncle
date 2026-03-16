@@ -612,7 +612,7 @@ export default function Home() {
         <div className="how-items">
           <div className="how-item">
             <div className="how-num">01</div>
-            <div className="how-label">Upload your resume or LinkedIn PDF &mdash; your full career in one file</div>
+            <div className="how-label">Upload your resume &mdash; PDF, Word doc, or LinkedIn export</div>
           </div>
           <div className="how-item">
             <div className="how-num">02</div>
@@ -634,9 +634,9 @@ export default function Home() {
               {/* STEP 1 */}
               <div className={`step-card ${pdfFile ? 'complete' : 'active'}`}>
                 <div className="step-number">Step 01</div>
-                <div className="step-title">Your Resume or LinkedIn PDF</div>
+                <div className="step-title">Your Resume</div>
                 <p className="step-desc">
-                  Upload your existing resume as a PDF, or export your LinkedIn profile as a PDF. Either works.
+                  Upload your resume as a PDF, Word doc (.docx), or text file. LinkedIn PDF works too.
                 </p>
                 <div
                   className={`upload-zone ${dragover ? 'dragover' : ''} ${pdfFile ? 'has-file' : ''}`}
@@ -653,7 +653,7 @@ export default function Home() {
                   ) : (
                     <>
                       <img src="/uncle-spin-logo.png" className="upload-mascot" alt="JobsUncle.ai" />
-                      <div className="upload-label">Drop PDF here or click to browse</div>
+                      <div className="upload-label">Drop your resume here or click to browse</div>
                     </>
                   )}
                 </div>
