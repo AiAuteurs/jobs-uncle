@@ -99,12 +99,20 @@ export default function Home() {
       .catch(() => {})
   }, [])
 
+  const ACCEPTED_TYPES = [
+    'application/pdf',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/msword',
+    'text/plain',
+  ]
+  const ACCEPTED_EXTS = ['.pdf', '.doc', '.docx', '.txt']
+
   const handleFile = (file) => {
-    if (file && file.type === 'application/pdf') {
+    if (file && (ACCEPTED_TYPES.includes(file.type) || ACCEPTED_EXTS.some(ext => file.name.toLowerCase().endsWith(ext)))) {
       setPdfFile(file)
       setError(null)
     } else {
-      setError('Please upload a PDF file. Export your LinkedIn profile as PDF and upload it here.')
+      setError('Please upload a PDF, Word document (.doc/.docx), or text file (.txt).')
     }
   }
 
@@ -138,7 +146,7 @@ export default function Home() {
 
     try {
       const formData = new FormData()
-      formData.append('pdf', pdfFile)
+      formData.append('resume', pdfFile)
       formData.append('jobDescription', jobDescription)
       formData.append('dualVersion', dualVersionEnabled && isPlusUser ? 'true' : 'false')
 
@@ -652,7 +660,7 @@ export default function Home() {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept=".pdf"
+                  accept=".pdf,.doc,.docx,.txt"
                   className="file-input"
                   onChange={(e) => handleFile(e.target.files[0])}
                 />
