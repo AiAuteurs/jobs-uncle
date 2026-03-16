@@ -20,13 +20,25 @@ async function extractTextFromFile(filePath, mimeType, originalName) {
     return fs.readFileSync(filePath, 'utf8')
   }
 
-  // DOCX — use mammoth
-  if (ext === 'docx' || mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
-      ext === 'doc' || mimeType === 'application/msword') {
-    const mammoth = require('mammoth')
-    const buffer = fs.readFileSync(filePath)
-    const result = await mammoth.extractRawText({ buffer })
-    return result.value
+  // DOCX — unzip word/document.xml and strip tags
+  if (ext === 'docx' || mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+    const { execSync } = require('child_process')
+    const tmpDir = `${filePath}_extracted`
+    try {
+      execSync(`unzip -o "${filePath}" "word/document.xml" -d "${tmpDir}"`, { stdio: 'pipe' })
+      const xml = fs.readFileSync(`${tmpDir}/word/document.xml`, 'utf8')
+      const text = xml
+        .replace(/<w:p[ >]/g, '\n<w:p ')
+        .replace(/<\/w:p>/g, '\n')
+        .replace(/<[^>]+>/g, '')
+        .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ')
+        .replace(/[ \t]+/g, ' ')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim()
+      return text
+    } finally {
+      try { execSync(`rm -rf "${tmpDir}"`, { stdio: 'pipe' }) } catch (e) {}
+    }
   }
 
   // PDF — default
@@ -37,7 +49,7 @@ async function extractTextFromFile(filePath, mimeType, originalName) {
 }
 
 
-const RATE_LIMIT = 25       // max requests per window
+const RATE_LIMIT = 5        // max requests per window
 const RATE_WINDOW = 60 * 60 // 1 hour in seconds
 
 async function checkRateLimit(ip) {
