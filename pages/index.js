@@ -99,20 +99,12 @@ export default function Home() {
       .catch(() => {})
   }, [])
 
-  const ACCEPTED_TYPES = [
-    'application/pdf',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'application/msword',
-    'text/plain',
-  ]
-  const ACCEPTED_EXTS = ['.pdf', '.doc', '.docx', '.txt']
-
   const handleFile = (file) => {
-    if (file && (ACCEPTED_TYPES.includes(file.type) || ACCEPTED_EXTS.some(ext => file.name.toLowerCase().endsWith(ext)))) {
+    if (file && file.type === 'application/pdf') {
       setPdfFile(file)
       setError(null)
     } else {
-      setError('Please upload a PDF, Word document (.doc/.docx), or text file (.txt).')
+      setError('Please upload a PDF file. Export your LinkedIn profile as PDF and upload it here.')
     }
   }
 
@@ -146,7 +138,7 @@ export default function Home() {
 
     try {
       const formData = new FormData()
-      formData.append('resume', pdfFile)
+      formData.append('pdf', pdfFile)
       formData.append('jobDescription', jobDescription)
       formData.append('dualVersion', dualVersionEnabled && isPlusUser ? 'true' : 'false')
 
@@ -612,7 +604,7 @@ export default function Home() {
         <div className="how-items">
           <div className="how-item">
             <div className="how-num">01</div>
-            <div className="how-label">Upload your resume — PDF, Word doc, or LinkedIn export</div>
+            <div className="how-label">Upload your resume or LinkedIn PDF &mdash; your full career in one file</div>
           </div>
           <div className="how-item">
             <div className="how-num">02</div>
@@ -634,9 +626,9 @@ export default function Home() {
               {/* STEP 1 */}
               <div className={`step-card ${pdfFile ? 'complete' : 'active'}`}>
                 <div className="step-number">Step 01</div>
-                <div className="step-title">Your Resume</div>
+                <div className="step-title">Your Resume or LinkedIn PDF</div>
                 <p className="step-desc">
-                  Upload your resume as a PDF, Word doc (.docx), or text file. LinkedIn PDF works too.
+                  Upload your existing resume as a PDF, or export your LinkedIn profile as a PDF. Either works.
                 </p>
                 <div
                   className={`upload-zone ${dragover ? 'dragover' : ''} ${pdfFile ? 'has-file' : ''}`}
@@ -653,14 +645,14 @@ export default function Home() {
                   ) : (
                     <>
                       <img src="/uncle-spin-logo.png" className="upload-mascot" alt="JobsUncle.ai" />
-                      <div className="upload-label">Drop your resume here or click to browse</div>
+                      <div className="upload-label">Drop PDF here or click to browse</div>
                     </>
                   )}
                 </div>
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept=".pdf,.doc,.docx,.txt"
+                  accept=".pdf"
                   className="file-input"
                   onChange={(e) => handleFile(e.target.files[0])}
                 />
@@ -708,7 +700,7 @@ export default function Home() {
               onClick={handleGenerate}
               disabled={!canGenerate || loading}
             >
-              {loading ? 'Working on it...' : dualVersionEnabled && isPlusUser ? 'Generate Dual Resume Package →' : 'Generate Resume Package →'}
+              {loading ? 'Making you impossible to ignore...' : dualVersionEnabled && isPlusUser ? 'Generate Dual Resume Package →' : 'Generate Resume Package →'}
             </button>
 
             {/* RESTORE + BETA &mdash; visible below generate, not buried */}
@@ -764,8 +756,8 @@ export default function Home() {
         {loading && (
           <div className="loading-state">
             <div className="loading-spinner" />
-            <div className="loading-text">Your uncle is on it.</div>
-            <div className="loading-sub">Analyzing your experience, matching it to the role...</div>
+            <div className="loading-text">Making you impossible to ignore.</div>
+            <div className="loading-sub">Tailoring every word to this role. Give us a moment.</div>
           </div>
         )}
 
