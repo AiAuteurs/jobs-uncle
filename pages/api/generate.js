@@ -100,8 +100,11 @@ export default async function handler(req, res) {
     return res.status(200).json({ resume: '', coverLetter: '', recruiterNotes: '', hiringManagerDM: '' }) // silent fail
   }
 
-  const resumeFile = Array.isArray(files.resume) ? files.resume[0] : files.resume ||
-                     (Array.isArray(files.pdf) ? files.pdf[0] : files.pdf)
+  const resumeFile = (() => {
+    if (files.resume) return Array.isArray(files.resume) ? files.resume[0] : files.resume
+    if (files.pdf) return Array.isArray(files.pdf) ? files.pdf[0] : files.pdf
+    return null
+  })()
   const jobDescription = Array.isArray(fields.jobDescription)
     ? fields.jobDescription[0]
     : fields.jobDescription
