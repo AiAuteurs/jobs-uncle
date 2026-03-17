@@ -150,10 +150,24 @@ export default function Home() {
       formData.append('jobDescription', jobDescription)
       formData.append('dualVersion', dualVersionEnabled && isPlusUser ? 'true' : 'false')
 
-      const response = await fetch('/api/generate', {
-        method: 'POST',
-        body: formData,
-      })
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 55000)
+
+      let response
+      try {
+        response = await fetch('/api/generate', {
+          method: 'POST',
+          body: formData,
+          signal: controller.signal,
+        })
+      } catch (fetchErr) {
+        if (fetchErr.name === 'AbortError') {
+          throw new Error('This is taking longer than expected. Please try again on a stronger connection.')
+        }
+        throw new Error('Connection failed. Please check your internet and try again.')
+      } finally {
+        clearTimeout(timeout)
+      }
 
       const data = await response.json()
 
