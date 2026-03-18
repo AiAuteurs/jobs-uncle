@@ -51,7 +51,7 @@ async function extractTextFromFile(filePath, mimeType, originalName) {
 }
 
 
-const RATE_LIMIT = 5        // max requests per window
+const RATE_LIMIT = 50        // max requests per window
 const RATE_WINDOW = 60 * 60 // 1 hour in seconds
 
 async function checkRateLimit(ip) {
