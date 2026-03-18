@@ -983,35 +983,37 @@ export default function Home() {
                 0%, 100% { transform: translateY(0); }
                 50%       { transform: translateY(-10px); }
               }
-              @keyframes emoji-1 {
-                0%, 30%     { opacity: 1; transform: scale(1) translateY(0); }
-                33%, 99%    { opacity: 0; transform: scale(0.5) translateY(-10px); }
-                100%        { opacity: 1; }
-              }
-              @keyframes emoji-2 {
-                0%, 32%     { opacity: 0; transform: scale(0.5) translateY(-10px); }
-                33%, 63%    { opacity: 1; transform: scale(1) translateY(0); }
-                66%, 100%   { opacity: 0; transform: scale(0.5) translateY(-10px); }
-              }
-              @keyframes emoji-3 {
-                0%, 65%     { opacity: 0; transform: scale(0.5) translateY(-10px); }
-                66%, 96%    { opacity: 1; transform: scale(1) translateY(0); }
-                99%, 100%   { opacity: 0; transform: scale(0.5) translateY(-10px); }
+              @keyframes charm-fade-in {
+                0%   { opacity: 0; transform: scale(0.8); }
+                20%  { opacity: 1; transform: scale(1); }
+                80%  { opacity: 1; transform: scale(1); }
+                100% { opacity: 0; transform: scale(0.8); }
               }
             `}</style>
-            <div style={{ position: 'relative', display: 'inline-block', marginBottom: '8px' }}>
-              <img
-                src="/uncle-spin-hero.png"
-                alt="Uncle Spin is working"
-                style={{ width: 90, height: 'auto', animation: 'uncle-bounce 0.8s ease-in-out infinite', display: 'block' }}
-              />
-              {/* Cycling emoji badges */}
-              <div style={{ position: 'absolute', top: -10, right: -18, fontSize: '1.6rem', animation: 'emoji-1 3s ease-in-out infinite' }}>✋</div>
-              <div style={{ position: 'absolute', top: -10, right: -18, fontSize: '1.6rem', animation: 'emoji-2 3s ease-in-out infinite', opacity: 0 }}>👍</div>
-              <div style={{ position: 'absolute', top: -10, right: -18, fontSize: '1.6rem', animation: 'emoji-3 3s ease-in-out infinite', opacity: 0 }}>💪</div>
+            <div style={{ position: 'relative', display: 'inline-block', marginBottom: '8px', width: 110, height: 130 }}>
+              {[
+                { src: '/uncle-spin-hero.png',          delay: '0s'  },
+                { src: '/uncle-lucky-rabbitsfoot.png',  delay: '-4s' },
+                { src: '/uncle-lucky-horseshoe.png',    delay: '-3s' },
+                { src: '/uncle-lucky-clover.png',       delay: '-2s' },
+                { src: '/uncle-lucky-cat.png',          delay: '-1s' },
+              ].map((charm, i) => (
+                <img
+                  key={i}
+                  src={charm.src}
+                  alt="Uncle Spin"
+                  style={{
+                    width: 110, height: 'auto',
+                    position: 'absolute', top: 0, left: 0,
+                    animation: `uncle-bounce 0.8s ease-in-out infinite, charm-fade-in 5s ease-in-out ${charm.delay} infinite`,
+                    opacity: 0,
+                  }}
+                />
+              ))}
               <div style={{
-                width: 60, height: 10, background: 'var(--ink)', borderRadius: '50%',
-                margin: '0 auto', marginTop: '-4px', opacity: 0.15
+                width: 70, height: 10, background: 'var(--ink)', borderRadius: '50%',
+                position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)',
+                opacity: 0.12,
               }} />
             </div>
             <div className="loading-text" style={{ marginTop: '16px' }}>Making you impossible to ignore.</div>
