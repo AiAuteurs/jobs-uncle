@@ -11,6 +11,7 @@ const PRICE_IDS = {
   pro:           'price_1TBXvVPKP65OstAnCxPwIhXk',  // maps to 12mo
   pro_plus_monthly: 'price_1TBXuQPKP65OstAn63cUa3BN', // maps to 1mo
   pro_plus_annual:  'price_1TBXvVPKP65OstAnCxPwIhXk', // maps to 12mo
+  pro_monthly:      'price_1TBXuQPKP65OstAn63cUa3BN',  // maps to 1mo
 }
 
 // Plans where promo codes are allowed (annual-ish only)
