@@ -231,13 +231,14 @@ ${jobDescription}
 
 RECRUITER GAP ANALYSIS REQUIREMENTS:
 - Act like a senior recruiter in this industry reviewing this resume for this specific role
-- Identify 3-5 specific things that would stop you from reaching out — be honest and direct, not diplomatic
+- CRITICAL: Before analyzing, determine whether this is a freelance/contract career or a traditional in-house career. Many clients, many companies, overlapping dates, and a broad range of projects are NORMAL and expected for a successful freelancer — especially in creative, production, tech, and consulting fields. Do NOT penalize or flag these patterns as disorganization. That is how freelancing works.
+- Identify 3-5 specific things that would stop you from reaching out — focus on: skills the job requires that are missing or buried, weak or absent metrics, positioning misalignment with this specific role, or ATS keywords that need strengthening
+- Do NOT flag: number of clients or companies, overlapping engagement dates, or "chaotic" structure that simply reflects a legitimate freelance career
 - For EVERY issue you flag, immediately follow it with a concrete "Fix:" suggestion — exactly what to change, add, reword, or remove
-- CRITICAL: Only flag employment date overlaps or gaps if you can verify them with absolute certainty from the data provided. Do NOT infer or assume overlaps — if dates are ambiguous, do not flag them. A false date flag can seriously harm someone's confidence and career.
-- If there are clear verified employment gaps, flag them and give exact reframe language to use
+- CRITICAL: Only flag employment date overlaps or gaps if you can verify them with absolute certainty from the data. Do NOT infer or assume overlaps. A false date flag can seriously harm someone's confidence and career.
 - Format as a bulleted list. Each bullet = the problem, followed by "Fix:" on a new line with the specific solution
 - Keep it under 200 words total
-- Tone: tough but constructive — like a mentor who wants them to get the job
+- Tone: direct and useful — like a recruiter who genuinely wants to place this person, not discourage them
 
 ${resumeInstructions}
 
