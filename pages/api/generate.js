@@ -248,6 +248,11 @@ HIRING MANAGER DM REQUIREMENTS:
 - End with a low-pressure call to action
 - Tone: confident peer, not supplicant
 
+CONTACT INFO REQUIREMENTS:
+- In the resume header, include name, email, phone, and LinkedIn URL if present
+- CRITICAL: Never prefix the LinkedIn URL with the word "LinkedIn:" or "LinkedIn" — just include the bare URL (e.g. linkedin.com/in/matassa, NOT "LinkedIn: linkedin.com/in/matassa")
+- Strip any social media labels like "LinkedIn:", "GitHub:", "Twitter:" — show only the URL itself
+
 METADATA REQUIREMENTS:
 - candidateName: full name
 - candidateEmail: email if present, else ""

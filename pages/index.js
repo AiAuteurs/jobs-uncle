@@ -987,6 +987,9 @@ export default function Home() {
                     <div className="format-badge pdf-badge">PDF</div>
                     <div className="format-purpose">Print-ready version</div>
                     <div className="format-desc">Looks exactly right on paper or screen. Nothing shifts. Nothing reformats. Just print.</div>
+                    <div style={{ fontSize: '0.72rem', color: 'var(--text-soft)', marginTop: '8px', padding: '6px 10px', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '6px' }}>
+                      💡 In the print dialog, uncheck <strong>Headers and footers</strong> for a clean output.
+                    </div>
                     <div className="format-btns">
                       <button className="format-btn" onClick={() => downloadPdf(results.resume, 'Resume')}>
                         Resume
