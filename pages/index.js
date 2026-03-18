@@ -980,22 +980,23 @@ export default function Home() {
           <div className="loading-state" style={{ textAlign: 'center', padding: '3rem 1rem' }}>
             <style>{`
               @keyframes uncle-dance {
-                0%   { transform: rotate(0deg) scale(1); }
-                25%  { transform: rotate(180deg) scale(1.1); }
-                50%  { transform: rotate(360deg) scale(1); }
-                75%  { transform: rotate(540deg) scale(1.1); }
-                100% { transform: rotate(720deg) scale(1); }
+                0%   { transform: scaleX(1); }
+                25%  { transform: scaleX(0); }
+                50%  { transform: scaleX(-1); }
+                75%  { transform: scaleX(0); }
+                100% { transform: scaleX(1); }
               }
               @keyframes uncle-shadow {
                 0%, 100% { transform: scaleX(1); opacity: 0.2; }
-                50%       { transform: scaleX(1.4); opacity: 0.15; }
+                25%, 75% { transform: scaleX(0.2); opacity: 0.05; }
+                50%       { transform: scaleX(1); opacity: 0.2; }
               }
             `}</style>
             <div style={{ position: 'relative', display: 'inline-block', marginBottom: '8px' }}>
               <img
                 src="/uncle-spin-hero.png"
                 alt="Uncle Spin is working"
-                style={{ width: 90, height: 'auto', animation: 'uncle-dance 0.4s linear infinite', display: 'block' }}
+                style={{ width: 90, height: 'auto', animation: 'uncle-dance 1.4s ease-in-out infinite', display: 'block' }}
               />
               <div style={{
                 width: 60, height: 10, background: 'var(--ink)', borderRadius: '50%',
@@ -1164,7 +1165,7 @@ export default function Home() {
                         <img
                           src="/uncle-spin-hero.png"
                           alt="Applying fixes"
-                          style={{ width: 44, height: 'auto', animation: 'uncle-dance 0.4s linear infinite', flexShrink: 0 }}
+                          style={{ width: 44, height: 'auto', animation: 'uncle-dance 1.4s ease-in-out infinite', flexShrink: 0 }}
                         />
                         <div>
                           <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ink)' }}>Applying every fix from the analysis...</div>
@@ -1240,7 +1241,7 @@ export default function Home() {
                     <img
                       src="/uncle-spin-hero.png"
                       alt="Parsing"
-                      style={{ width: 44, height: 'auto', animation: 'uncle-dance 0.4s linear infinite', flexShrink: 0 }}
+                      style={{ width: 44, height: 'auto', animation: 'uncle-dance 1.4s ease-in-out infinite', flexShrink: 0 }}
                     />
                     <div>
                       <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ink)' }}>Parsing your resume into ATS fields...</div>
