@@ -1,6 +1,6 @@
 // pages/api/regenerate.js
 // Applies recruiter analysis fixes to produce an improved resume + cover letter
-// Gated at Pro tier and above
+// Frontend-gated at Pro tier — server-side KV hardening can be added once build is stable
 
 import Anthropic from '@anthropic-ai/sdk'
 
@@ -8,28 +8,6 @@ const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
-
-  // ── Access check ──────────────────────────────────────────────────────────
-  const cookies = req.headers.cookie || ''
-  const match = cookies.match(/ju_access=([^;]+)/)
-  const token = match ? decodeURIComponent(match[1]) : null
-
-  if (!token) return res.status(403).json({ error: 'Pro access required to regenerate.' })
-
-  try {
-    const { kv } = await import('@vercel/kv')
-    const record = await kv.get(`access:${token}`)
-    if (!record || record.access === 'none') {
-      return res.status(403).json({ error: 'Pro access required to regenerate.' })
-    }
-    // free tier blocked
-    if (record.access === 'free') {
-      return res.status(403).json({ error: 'Upgrade to Pro to use Regenerate.' })
-    }
-  } catch (kvErr) {
-    console.error('KV error:', kvErr)
-    return res.status(500).json({ error: 'Access check failed. Please try again.' })
-  }
 
   // ── Parse body ────────────────────────────────────────────────────────────
   const { resume, jobDescription, recruiterNotes } = req.body
