@@ -983,20 +983,21 @@ export default function Home() {
                 0%, 100% { transform: translateY(0); }
                 50%       { transform: translateY(-10px); }
               }
-              @keyframes charm-fade-in {
-                0%   { opacity: 0; transform: scale(0.8); }
-                20%  { opacity: 1; transform: scale(1); }
-                80%  { opacity: 1; transform: scale(1); }
-                100% { opacity: 0; transform: scale(0.8); }
+              @keyframes charm-show {
+                0%    { opacity: 0; }
+                5%    { opacity: 1; }
+                18%   { opacity: 1; }
+                23%   { opacity: 0; }
+                100%  { opacity: 0; }
               }
             `}</style>
             <div style={{ position: 'relative', display: 'inline-block', marginBottom: '8px', width: 110, height: 130 }}>
               {[
                 { src: '/uncle-spin-hero.png',          delay: '0s'  },
-                { src: '/uncle-lucky-rabbitsfoot.png',  delay: '-4s' },
+                { src: '/uncle-lucky-clover.png',       delay: '-4s' },
                 { src: '/uncle-lucky-horseshoe.png',    delay: '-3s' },
-                { src: '/uncle-lucky-clover.png',       delay: '-2s' },
-                { src: '/uncle-lucky-cat.png',          delay: '-1s' },
+                { src: '/uncle-lucky-cat.png',          delay: '-2s' },
+                { src: '/uncle-lucky-rabbitsfoot.png',  delay: '-1s' },
               ].map((charm, i) => (
                 <img
                   key={i}
@@ -1005,7 +1006,7 @@ export default function Home() {
                   style={{
                     width: 110, height: 'auto',
                     position: 'absolute', top: 0, left: 0,
-                    animation: `uncle-bounce 0.8s ease-in-out infinite, charm-fade-in 5s ease-in-out ${charm.delay} infinite`,
+                    animation: `uncle-bounce 0.8s ease-in-out infinite, charm-show 5s linear ${charm.delay} infinite`,
                     opacity: 0,
                   }}
                 />
