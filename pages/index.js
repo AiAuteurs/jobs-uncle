@@ -1174,11 +1174,27 @@ export default function Home() {
 
                     {regenerating && (
                       <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '12px', marginTop: '12px', padding: '12px 14px', background: 'rgba(245,158,11,0.06)', borderRadius: '8px' }}>
-                        <img
-                          src="/uncle-spin-hero.png"
-                          alt="Applying fixes"
-                          style={{ width: 44, height: 'auto', animation: 'uncle-bounce 0.8s ease-in-out infinite', flexShrink: 0 }}
-                        />
+                        <div style={{ position: 'relative', width: 44, height: 50, flexShrink: 0 }}>
+                          {[
+                            { src: '/uncle-spin-hero.png',         delay: '0s'  },
+                            { src: '/uncle-lucky-clover.png',      delay: '-4s' },
+                            { src: '/uncle-lucky-horseshoe.png',   delay: '-3s' },
+                            { src: '/uncle-lucky-cat.png',         delay: '-2s' },
+                            { src: '/uncle-lucky-rabbitsfoot.png', delay: '-1s' },
+                          ].map((charm, i) => (
+                            <img
+                              key={i}
+                              src={charm.src}
+                              alt="Uncle Spin"
+                              style={{
+                                width: 44, height: 'auto',
+                                position: 'absolute', top: 0, left: 0,
+                                animation: `uncle-bounce 0.8s ease-in-out infinite, charm-show 5s linear ${charm.delay} infinite`,
+                                opacity: 0,
+                              }}
+                            />
+                          ))}
+                        </div>
                         <div>
                           <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ink)' }}>Applying every fix from the analysis...</div>
                           <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', marginTop: '2px' }}>Rewriting your resume and cover letter. About 15 seconds.</div>
@@ -1250,11 +1266,27 @@ export default function Home() {
 
                 {atsLoading && (
                   <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', background: 'rgba(16,185,129,0.06)', borderRadius: '8px' }}>
-                    <img
-                      src="/uncle-spin-hero.png"
-                      alt="Parsing"
-                      style={{ width: 44, height: 'auto', animation: 'uncle-bounce 0.8s ease-in-out infinite', flexShrink: 0 }}
-                    />
+                    <div style={{ position: 'relative', width: 44, height: 50, flexShrink: 0 }}>
+                      {[
+                        { src: '/uncle-spin-hero.png',         delay: '0s'  },
+                        { src: '/uncle-lucky-clover.png',      delay: '-4s' },
+                        { src: '/uncle-lucky-horseshoe.png',   delay: '-3s' },
+                        { src: '/uncle-lucky-cat.png',         delay: '-2s' },
+                        { src: '/uncle-lucky-rabbitsfoot.png', delay: '-1s' },
+                      ].map((charm, i) => (
+                        <img
+                          key={i}
+                          src={charm.src}
+                          alt="Uncle Spin"
+                          style={{
+                            width: 44, height: 'auto',
+                            position: 'absolute', top: 0, left: 0,
+                            animation: `uncle-bounce 0.8s ease-in-out infinite, charm-show 5s linear ${charm.delay} infinite`,
+                            opacity: 0,
+                          }}
+                        />
+                      ))}
+                    </div>
                     <div>
                       <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ink)' }}>Parsing your resume into ATS fields...</div>
                       <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', marginTop: '2px' }}>Staging every field for one-click copy. Just a moment.</div>
