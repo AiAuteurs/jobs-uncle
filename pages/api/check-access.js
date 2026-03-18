@@ -1,5 +1,5 @@
 // Checks if a user has paid access or free resumes remaining
-// Cookie-first (works in private/incognito), then KV sessionId, then free tier
+// Priority: paid cookie → paid KV session → free cookie count → free KV count
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end()
@@ -7,42 +7,45 @@ export default async function handler(req, res) {
   const FREE_LIMIT = 3
 
   const { email, sessionId } = req.body
-  const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress
+  const ip = req.headers['x-forwarded-for']?.split(',')[0].trim() || req.socket.remoteAddress
   const key = email ? `user:${email}` : `ip:${ip}`
 
   const KV_URL = process.env.KV_REST_API_URL
   const KV_TOKEN = process.env.KV_REST_API_TOKEN
 
   try {
-    // 1. Cookie check — works in private/incognito, set by verify-session after payment
     const cookies = req.headers.cookie || ''
+
+    // 1. Paid cookie — set by verify-session after payment
     const cookieAccess = cookies.match(/ju_access=([^;]+)/)?.[1]
     if (cookieAccess === 'pro_plus') return res.json({ access: 'pro_plus', resumesLeft: 999 })
     if (cookieAccess === 'paid') return res.json({ access: 'paid', resumesLeft: 999 })
 
-    // 2. KV sessionId check — fallback for users who paid before cookie rollout
+    // 2. KV sessionId — fallback for users who paid before cookie rollout
     if (sessionId) {
-      const plusKey = `paid_plus:${sessionId}`
-      const plusRes = await fetch(`${KV_URL}/get/${plusKey}`, {
+      const plusRes = await fetch(`${KV_URL}/get/paid_plus:${sessionId}`, {
         headers: { Authorization: `Bearer ${KV_TOKEN}` }
       })
-      const plusData = await plusRes.json()
-      if (plusData.result) return res.json({ access: 'pro_plus', resumesLeft: 999 })
+      if ((await plusRes.json()).result) return res.json({ access: 'pro_plus', resumesLeft: 999 })
 
-      const paidKey = `paid:${sessionId}`
-      const paidRes = await fetch(`${KV_URL}/get/${paidKey}`, {
+      const paidRes = await fetch(`${KV_URL}/get/paid:${sessionId}`, {
         headers: { Authorization: `Bearer ${KV_TOKEN}` }
       })
-      const paidData = await paidRes.json()
-      if (paidData.result) return res.json({ access: 'paid', resumesLeft: 999 })
+      if ((await paidRes.json()).result) return res.json({ access: 'paid', resumesLeft: 999 })
     }
 
-    // 3. Free tier usage check
-    const usageRes = await fetch(`${KV_URL}/get/${key}`, {
+    // 3. Free tier — cookie count is primary, KV is server-side backup
+    // Use whichever is higher so neither can be trivially gamed
+    const cookieCountRaw = cookies.match(/ju_uses=([^;]+)/)?.[1]
+    const cookieCount = cookieCountRaw ? parseInt(cookieCountRaw, 10) : 0
+
+    const kvRes = await fetch(`${KV_URL}/get/${key}`, {
       headers: { Authorization: `Bearer ${KV_TOKEN}` }
     })
-    const usageData = await usageRes.json()
-    const used = parseInt(usageData.result || '0')
+    const kvCount = parseInt((await kvRes.json()).result || '0', 10)
+
+    // Whichever is higher wins — prevents both IP-shift and cookie-clear exploits
+    const used = Math.max(cookieCount, kvCount)
 
     if (used < FREE_LIMIT) {
       return res.json({ access: 'free', resumesLeft: FREE_LIMIT - used, used })
@@ -50,7 +53,6 @@ export default async function handler(req, res) {
       return res.json({ access: 'none', resumesLeft: 0, used })
     }
   } catch (err) {
-    // Fail open — allow the request
     return res.json({ access: 'free', resumesLeft: FREE_LIMIT, used: 0 })
   }
 }
