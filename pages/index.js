@@ -977,25 +977,22 @@ export default function Home() {
           <div className="loading-state" style={{ textAlign: 'center', padding: '3rem 1rem' }}>
             <style>{`
               @keyframes uncle-dance {
-                0%   { transform: translateY(0) rotate(0deg) scale(1); }
-                15%  { transform: translateY(-18px) rotate(-8deg) scale(1.05); }
-                30%  { transform: translateY(0) rotate(0deg) scale(1); }
-                45%  { transform: translateY(-14px) rotate(8deg) scale(1.05); }
-                60%  { transform: translateY(0) rotate(0deg) scale(1); }
-                75%  { transform: translateY(-10px) rotate(-5deg) scale(1.03); }
-                100% { transform: translateY(0) rotate(0deg) scale(1); }
+                0%   { transform: rotate(0deg) scale(1); }
+                25%  { transform: rotate(180deg) scale(1.1); }
+                50%  { transform: rotate(360deg) scale(1); }
+                75%  { transform: rotate(540deg) scale(1.1); }
+                100% { transform: rotate(720deg) scale(1); }
               }
               @keyframes uncle-shadow {
                 0%, 100% { transform: scaleX(1); opacity: 0.2; }
-                30%       { transform: scaleX(0.6); opacity: 0.1; }
-                60%       { transform: scaleX(0.7); opacity: 0.12; }
+                50%       { transform: scaleX(1.4); opacity: 0.15; }
               }
             `}</style>
             <div style={{ position: 'relative', display: 'inline-block', marginBottom: '8px' }}>
               <img
                 src="/uncle-spin-hero.png"
                 alt="Uncle Spin is working"
-                style={{ width: 90, height: 'auto', animation: 'uncle-dance 0.9s ease-in-out infinite', display: 'block' }}
+                style={{ width: 90, height: 'auto', animation: 'uncle-dance 0.4s linear infinite', display: 'block' }}
               />
               <div style={{
                 width: 60, height: 10, background: 'var(--ink)', borderRadius: '50%',
@@ -1005,18 +1002,6 @@ export default function Home() {
             </div>
             <div className="loading-text" style={{ marginTop: '16px' }}>Making you impossible to ignore.</div>
             <div className="loading-sub">Tailoring every word to this role. Give us a moment.</div>
-          </div>
-        )}
-
-        {regenerating && (
-          <div style={{ textAlign: 'center', padding: '1.5rem 1rem' }}>
-            <img
-              src="/uncle-spin-hero.png"
-              alt="Applying fixes"
-              style={{ width: 60, height: 'auto', animation: 'uncle-dance 0.9s ease-in-out infinite', display: 'block', margin: '0 auto 12px' }}
-            />
-            <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--ink)' }}>Applying every fix from the analysis...</div>
-            <div style={{ fontSize: '0.78rem', color: 'var(--text-soft)', marginTop: '4px' }}>This takes about 15 seconds.</div>
           </div>
         )}
 
@@ -1168,6 +1153,20 @@ export default function Home() {
                     {regenError && (
                       <div style={{ width: '100%', color: '#ef4444', fontSize: '0.8rem', marginTop: '4px' }}>
                         {regenError}
+                      </div>
+                    )}
+
+                    {regenerating && (
+                      <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '12px', marginTop: '12px', padding: '12px 14px', background: 'rgba(245,158,11,0.06)', borderRadius: '8px' }}>
+                        <img
+                          src="/uncle-spin-hero.png"
+                          alt="Applying fixes"
+                          style={{ width: 44, height: 'auto', animation: 'uncle-dance 0.4s linear infinite', flexShrink: 0 }}
+                        />
+                        <div>
+                          <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ink)' }}>Applying every fix from the analysis...</div>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', marginTop: '2px' }}>Rewriting your resume and cover letter. About 15 seconds.</div>
+                        </div>
                       </div>
                     )}
                   </div>
