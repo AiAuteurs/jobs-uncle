@@ -82,6 +82,13 @@ export default function Home() {
   const [activeVersion, setActiveVersion] = useState('v1') // 'v1' | 'v2'
   const [regenError, setRegenError] = useState(null)
 
+  // ATS Cheat Sheet state
+  const [atsData, setAtsData] = useState(null) // parsed structured data
+  const [atsLoading, setAtsLoading] = useState(false)
+  const [atsError, setAtsError] = useState(null)
+  const [atsCopied, setAtsCopied] = useState({}) // { [fieldKey]: true }
+  const [atsOpen, setAtsOpen] = useState(false)
+
   // Fetch resume counter + check access via cookie on mount
   // Works in private/incognito — no localStorage dependency
   useEffect(() => {
@@ -410,6 +417,36 @@ export default function Home() {
     }
   }
 
+  const handleAtsCheatSheet = async () => {
+    if (!results) return
+    setAtsLoading(true)
+    setAtsError(null)
+    setAtsOpen(true)
+    const resumeToUse = regeneratedResults && activeVersion === 'v2'
+      ? regeneratedResults.resume
+      : results.resume
+    try {
+      const res = await fetch('/api/parse-ats', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resume: resumeToUse }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Parsing failed.')
+      setAtsData(data)
+    } catch (err) {
+      setAtsError(err.message || 'Something went wrong.')
+    } finally {
+      setAtsLoading(false)
+    }
+  }
+
+  const copyAtsField = (key, value) => {
+    navigator.clipboard.writeText(value)
+    setAtsCopied(prev => ({ ...prev, [key]: true }))
+    setTimeout(() => setAtsCopied(prev => ({ ...prev, [key]: false })), 2000)
+  }
+
   const handleReset = () => {
     setJobDescription('')
     setResults(null)
@@ -417,6 +454,11 @@ export default function Home() {
     setRegeneratedResults(null)
     setActiveVersion('v1')
     setRegenError(null)
+    setAtsData(null)
+    setAtsLoading(false)
+    setAtsError(null)
+    setAtsOpen(false)
+    setAtsCopied({})
   }
 
   const handleManagePortal = async () => {
@@ -585,11 +627,11 @@ export default function Home() {
             <button onClick={() => setShowPlusPaywall(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', fontSize: '1.2rem', color: 'var(--text-soft)', cursor: 'pointer', lineHeight: 1, padding: '4px 8px' }}>✕</button>
             <img src="/uncle-spin-hero.png" alt="JobsUncle.ai" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
             <div style={{ display: 'inline-block', background: '#6366f1', color: 'white', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', padding: '4px 12px', borderRadius: '20px', marginBottom: '16px', textTransform: 'uppercase' }}>Pro+</div>
-            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Two resumes. One shot.</h2>
+            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Stop re-typing your resume into every job portal.</h2>
             <p style={{ color: 'var(--text-soft)', fontSize: '0.95rem', margin: '0 0 8px', lineHeight: 1.6 }}>
-              Get a <strong style={{ color: 'var(--ink)' }}>Leadership-focused</strong> and a <strong style={{ color: 'var(--ink)' }}>Technical/Achievement-focused</strong> version &mdash; same experience, two different angles. Use whichever fits the hiring manager.
+              <strong style={{ color: 'var(--ink)' }}>ATS Cheat Sheet</strong> — every field an ATS will ask for, pre-staged with one-click copy buttons. Plus <strong style={{ color: 'var(--ink)' }}>dual resume versions</strong> (Leadership + Technical) for the same role.
             </p>
-            <p style={{ color: 'var(--text-soft)', fontSize: '0.85rem', margin: '0 0 32px' }}>Perfect if you're actively hunting.</p>
+            <p style={{ color: 'var(--text-soft)', fontSize: '0.85rem', margin: '0 0 32px' }}>For serious job hunters who apply to multiple roles.</p>
             <a href="/pricing" style={{ display: 'block', width: '100%', background: '#6366f1', color: 'white', border: 'none', padding: '16px', borderRadius: '8px', fontSize: '1rem', fontWeight: 700, cursor: 'pointer', marginBottom: '6px', letterSpacing: '0.02em', textDecoration: 'none', textAlign: 'center', boxSizing: 'border-box' }}>
               See Plans →
             </a>
@@ -1093,6 +1135,146 @@ export default function Home() {
                 </div>
               )}
 
+              {/* ATS CHEAT SHEET */}
+              <div className="result-section" style={{ borderLeft: '3px solid #10b981', background: 'rgba(16,185,129,0.04)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                      <div className="result-section-title" style={{ margin: 0 }}>ATS Cheat Sheet</div>
+                      <span style={{ background: '#6366f1', color: 'white', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
+                    </div>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>Every field an ATS will ask for — pre-staged, one click to copy.</div>
+                  </div>
+                  {isPlusUser ? (
+                    !atsData && !atsLoading ? (
+                      <button
+                        onClick={handleAtsCheatSheet}
+                        style={{ flexShrink: 0, padding: '9px 22px', background: '#10b981', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer' }}
+                      >
+                        ✦ Generate Cheat Sheet
+                      </button>
+                    ) : null
+                  ) : (
+                    <button
+                      onClick={() => setShowPlusPaywall(true)}
+                      style={{ flexShrink: 0, padding: '9px 22px', background: '#6366f1', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer' }}
+                    >
+                      Upgrade to Pro+
+                    </button>
+                  )}
+                </div>
+
+                {atsLoading && (
+                  <div style={{ marginTop: '16px', fontSize: '0.85rem', color: 'var(--text-soft)' }}>⟳ Parsing your resume into ATS fields...</div>
+                )}
+
+                {atsError && (
+                  <div style={{ marginTop: '12px', color: '#ef4444', fontSize: '0.82rem' }}>{atsError}</div>
+                )}
+
+                {atsData && (
+                  <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+
+                    {/* HEADLINE */}
+                    {atsData.headline && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', background: 'var(--surface)', borderRadius: '6px', border: '1px solid var(--border)' }}>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: '0.7rem', color: 'var(--text-soft)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '3px' }}>Headline / Title</div>
+                          <div style={{ fontSize: '0.88rem', color: 'var(--ink)' }}>{atsData.headline}</div>
+                        </div>
+                        <button onClick={() => copyAtsField('headline', atsData.headline)} style={{ flexShrink: 0, padding: '5px 14px', background: atsCopied.headline ? '#22c55e' : 'var(--accent)', color: 'white', border: 'none', borderRadius: '5px', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s' }}>
+                          {atsCopied.headline ? '✓' : 'Copy'}
+                        </button>
+                      </div>
+                    )}
+
+                    {/* SUMMARY */}
+                    {atsData.summary && (
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '10px 14px', background: 'var(--surface)', borderRadius: '6px', border: '1px solid var(--border)' }}>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: '0.7rem', color: 'var(--text-soft)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '3px' }}>Summary</div>
+                          <div style={{ fontSize: '0.88rem', color: 'var(--ink)', lineHeight: 1.5 }}>{atsData.summary}</div>
+                        </div>
+                        <button onClick={() => copyAtsField('summary', atsData.summary)} style={{ flexShrink: 0, padding: '5px 14px', background: atsCopied.summary ? '#22c55e' : 'var(--accent)', color: 'white', border: 'none', borderRadius: '5px', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s' }}>
+                          {atsCopied.summary ? '✓' : 'Copy'}
+                        </button>
+                      </div>
+                    )}
+
+                    {/* SKILLS */}
+                    {atsData.skills && atsData.skills.length > 0 && (
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '10px 14px', background: 'var(--surface)', borderRadius: '6px', border: '1px solid var(--border)' }}>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: '0.7rem', color: 'var(--text-soft)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '6px' }}>Skills (comma-separated for ATS)</div>
+                          <div style={{ fontSize: '0.82rem', color: 'var(--ink)', lineHeight: 1.6 }}>{atsData.skills.join(', ')}</div>
+                        </div>
+                        <button onClick={() => copyAtsField('skills', atsData.skills.join(', '))} style={{ flexShrink: 0, padding: '5px 14px', background: atsCopied.skills ? '#22c55e' : 'var(--accent)', color: 'white', border: 'none', borderRadius: '5px', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s' }}>
+                          {atsCopied.skills ? '✓' : 'Copy'}
+                        </button>
+                      </div>
+                    )}
+
+                    {/* EMPLOYMENT */}
+                    {atsData.employment && atsData.employment.length > 0 && (
+                      <div>
+                        <div style={{ fontSize: '0.7rem', color: 'var(--text-soft)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>Employment History</div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          {atsData.employment.map((job, i) => (
+                            <div key={i} style={{ padding: '12px 14px', background: 'var(--surface)', borderRadius: '6px', border: '1px solid var(--border)' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
+                                <div style={{ fontWeight: 700, fontSize: '0.88rem', color: 'var(--ink)' }}>{job.employer}</div>
+                                <div style={{ fontSize: '0.78rem', color: 'var(--text-soft)' }}>
+                                  {job.startMonth} {job.startYear} — {job.current ? 'Present' : `${job.endMonth} ${job.endYear}`}
+                                </div>
+                              </div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                                <div style={{ flex: 1 }}>
+                                  <div style={{ fontSize: '0.7rem', color: 'var(--text-soft)', fontWeight: 600, marginBottom: '2px' }}>Job Title</div>
+                                  <div style={{ fontSize: '0.85rem', color: 'var(--ink)' }}>{job.title}</div>
+                                </div>
+                                <button onClick={() => copyAtsField(`title_${i}`, job.title)} style={{ flexShrink: 0, padding: '4px 12px', background: atsCopied[`title_${i}`] ? '#22c55e' : 'var(--accent)', color: 'white', border: 'none', borderRadius: '5px', fontSize: '0.72rem', fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s' }}>
+                                  {atsCopied[`title_${i}`] ? '✓' : 'Copy'}
+                                </button>
+                              </div>
+                              {job.description && (
+                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                                  <div style={{ flex: 1 }}>
+                                    <div style={{ fontSize: '0.7rem', color: 'var(--text-soft)', fontWeight: 600, marginBottom: '2px' }}>Description</div>
+                                    <div style={{ fontSize: '0.82rem', color: 'var(--ink)', lineHeight: 1.5 }}>{job.description}</div>
+                                  </div>
+                                  <button onClick={() => copyAtsField(`desc_${i}`, job.description)} style={{ flexShrink: 0, padding: '4px 12px', background: atsCopied[`desc_${i}`] ? '#22c55e' : 'var(--accent)', color: 'white', border: 'none', borderRadius: '5px', fontSize: '0.72rem', fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s' }}>
+                                    {atsCopied[`desc_${i}`] ? '✓' : 'Copy'}
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* EDUCATION */}
+                    {atsData.education && atsData.education.length > 0 && (
+                      <div>
+                        <div style={{ fontSize: '0.7rem', color: 'var(--text-soft)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>Education</div>
+                        {atsData.education.map((edu, i) => (
+                          <div key={i} style={{ padding: '12px 14px', background: 'var(--surface)', borderRadius: '6px', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
+                            <div>
+                              <div style={{ fontWeight: 700, fontSize: '0.88rem', color: 'var(--ink)', marginBottom: '2px' }}>{edu.school}</div>
+                              <div style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>{edu.degree} · {edu.field} · {edu.year}</div>
+                            </div>
+                            <button onClick={() => copyAtsField(`edu_${i}`, `${edu.school} | ${edu.degree} in ${edu.field} | ${edu.year}`)} style={{ flexShrink: 0, padding: '5px 14px', background: atsCopied[`edu_${i}`] ? '#22c55e' : 'var(--accent)', color: 'white', border: 'none', borderRadius: '5px', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s' }}>
+                              {atsCopied[`edu_${i}`] ? '✓' : 'Copy'}
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                  </div>
+                )}
+              </div>
+
               {/* PURPOSE-DRIVEN DOWNLOAD SECTION */}
               <div className="download-section">
                 <div className="download-section-header">
@@ -1213,10 +1395,10 @@ export default function Home() {
               <div style={{ margin: '1.5rem 0 0', padding: '1.25rem 1.5rem', background: 'rgba(99,102,241,0.05)', border: '1.5px solid #6366f1', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                    <span style={{ fontFamily: 'Inter', fontWeight: 700, fontSize: '0.9rem', color: 'var(--ink)' }}>Want two versions?</span>
+                    <span style={{ fontFamily: 'Inter', fontWeight: 700, fontSize: '0.9rem', color: 'var(--ink)' }}>ATS Cheat Sheet + Dual Versions</span>
                     <span style={{ background: '#6366f1', color: 'white', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
                   </div>
-                  <p style={{ fontFamily: 'Inter', fontSize: '0.75rem', color: 'var(--text-soft)', margin: 0 }}>Upgrade to get a Leadership <em>and</em> Technical version &mdash; two shots at the same role.</p>
+                  <p style={{ fontFamily: 'Inter', fontSize: '0.75rem', color: 'var(--text-soft)', margin: 0 }}>Pre-staged copy fields for every ATS form. Plus Leadership <em>and</em> Technical resume versions.</p>
                 </div>
                 <button
                   onClick={() => setShowPlusPaywall(true)}
