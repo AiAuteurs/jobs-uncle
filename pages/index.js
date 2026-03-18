@@ -1221,7 +1221,17 @@ export default function Home() {
                 </div>
 
                 {atsLoading && (
-                  <div style={{ marginTop: '16px', fontSize: '0.85rem', color: 'var(--text-soft)' }}>⟳ Parsing your resume into ATS fields...</div>
+                  <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', background: 'rgba(16,185,129,0.06)', borderRadius: '8px' }}>
+                    <img
+                      src="/uncle-spin-hero.png"
+                      alt="Parsing"
+                      style={{ width: 44, height: 'auto', animation: 'uncle-dance 0.4s linear infinite', flexShrink: 0 }}
+                    />
+                    <div>
+                      <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ink)' }}>Parsing your resume into ATS fields...</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', marginTop: '2px' }}>Staging every field for one-click copy. Just a moment.</div>
+                    </div>
+                  </div>
                 )}
 
                 {atsError && (
