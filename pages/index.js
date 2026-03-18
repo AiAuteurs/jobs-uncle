@@ -506,6 +506,18 @@ export default function Home() {
 
   return (
     <>
+      <style>{`
+        @keyframes uncle-bounce {
+          0%, 100% { transform: translateY(0); }
+          50%       { transform: translateY(-10px); }
+        }
+        @keyframes charm-show {
+          0%     { opacity: 1; }
+          19%    { opacity: 1; }
+          20%    { opacity: 0; }
+          100%   { opacity: 0; }
+        }
+      `}</style>
       {showManageModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => setShowManageModal(false)}>
           <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)', position: 'relative' }} onClick={e => e.stopPropagation()}>
@@ -978,18 +990,6 @@ export default function Home() {
 
         {loading && (
           <div className="loading-state" style={{ textAlign: 'center', padding: '3rem 1rem' }}>
-            <style>{`
-              @keyframes uncle-bounce {
-                0%, 100% { transform: translateY(0); }
-                50%       { transform: translateY(-10px); }
-              }
-              @keyframes charm-show {
-                0%     { opacity: 1; }
-                19%    { opacity: 1; }
-                20%    { opacity: 0; }
-                100%   { opacity: 0; }
-              }
-            `}</style>
             <div style={{ position: 'relative', display: 'inline-block', marginBottom: '8px', width: 110, height: 130 }}>
               {[
                 { src: '/uncle-spin-hero.png',          delay: '0s'  },
