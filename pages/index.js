@@ -984,11 +984,10 @@ export default function Home() {
                 50%       { transform: translateY(-10px); }
               }
               @keyframes charm-show {
-                0%    { opacity: 0; }
-                5%    { opacity: 1; }
-                18%   { opacity: 1; }
-                23%   { opacity: 0; }
-                100%  { opacity: 0; }
+                0%     { opacity: 1; }
+                19%    { opacity: 1; }
+                20%    { opacity: 0; }
+                100%   { opacity: 0; }
               }
             `}</style>
             <div style={{ position: 'relative', display: 'inline-block', marginBottom: '8px', width: 110, height: 130 }}>
