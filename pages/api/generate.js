@@ -107,9 +107,21 @@ export default async function handler(req, res) {
     if (files.pdf) return Array.isArray(files.pdf) ? files.pdf[0] : files.pdf
     return null
   })()
-  const jobDescription = Array.isArray(fields.jobDescription)
+
+  // Job description — either pasted text or uploaded file
+  let jobDescription = Array.isArray(fields.jobDescription)
     ? fields.jobDescription[0]
     : fields.jobDescription
+
+  if (!jobDescription && files.jobDescFile) {
+    const jdFile = Array.isArray(files.jobDescFile) ? files.jobDescFile[0] : files.jobDescFile
+    try {
+      jobDescription = await extractTextFromFile(jdFile.filepath, jdFile.mimetype, jdFile.originalFilename)
+    } catch (err) {
+      jobDescription = ''
+    }
+  }
+
   const dualVersion = (Array.isArray(fields.dualVersion) ? fields.dualVersion[0] : fields.dualVersion) === 'true'
 
   if (!resumeFile || !jobDescription) {

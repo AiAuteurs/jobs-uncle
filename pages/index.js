@@ -28,6 +28,9 @@ export default function Home() {
   const [resumeInputMode, setResumeInputMode] = useState('upload') // 'upload' | 'paste'
   const [resumeText, setResumeText] = useState('')
   const [jobDescription, setJobDescription] = useState('')
+  const [jobDescInputMode, setJobDescInputMode] = useState('paste') // 'paste' | 'upload'
+  const [jobDescFile, setJobDescFile] = useState(null)
+  const jobDescFileRef = useRef(null)
   const [loading, setLoading] = useState(false)
   const [results, setResults] = useState(null)
   const [error, setError] = useState(null)
@@ -127,8 +130,9 @@ export default function Home() {
 
   const handleGenerate = async () => {
     const hasResume = resumeInputMode === 'upload' ? !!pdfFile : resumeText.trim().length > 50
-    if (!hasResume || !jobDescription.trim()) {
-      setError(resumeInputMode === 'upload' ? 'Please upload your resume and paste the job description.' : 'Please paste your resume text and the job description.')
+    const hasJobDesc = jobDescInputMode === 'paste' ? jobDescription.trim().length > 50 : !!jobDescFile
+    if (!hasResume || !hasJobDesc) {
+      setError('Please provide your resume and job description.')
       return
     }
 
@@ -155,7 +159,11 @@ export default function Home() {
         const textBlob = new Blob([resumeText], { type: 'text/plain' })
         formData.append('resume', textBlob, 'resume.txt')
       }
-      formData.append('jobDescription', jobDescription)
+      if (jobDescInputMode === 'paste') {
+        formData.append('jobDescription', jobDescription)
+      } else {
+        formData.append('jobDescFile', jobDescFile)
+      }
       formData.append('dualVersion', dualVersionEnabled && isPlusUser ? 'true' : 'false')
 
       const controller = new AbortController()
@@ -396,7 +404,7 @@ export default function Home() {
     }
   }
 
-  const canGenerate = (resumeInputMode === 'upload' ? !!pdfFile : resumeText.trim().length > 50) && jobDescription.trim().length > 50
+  const canGenerate = (resumeInputMode === 'upload' ? !!pdfFile : resumeText.trim().length > 50) && (jobDescInputMode === 'paste' ? jobDescription.trim().length > 50 : !!jobDescFile)
 
   return (
     <>
@@ -714,18 +722,64 @@ export default function Home() {
               </div>
 
               {/* STEP 2 */}
-              <div className={`step-card ${jobDescription.trim().length > 50 ? 'complete' : pdfFile ? 'active' : ''}`}>
+              <div className={`step-card ${(jobDescInputMode === 'paste' ? jobDescription.trim().length > 50 : !!jobDescFile) ? 'complete' : (resumeInputMode === 'upload' ? pdfFile : resumeText.trim().length > 50) ? 'active' : ''}`}>
                 <div className="step-number">Step 02</div>
                 <div className="step-title">The Job Description</div>
-                <p className="step-desc">
-                  Paste the full job posting. The more detail, the sharper the match.
-                </p>
-                <textarea
-                  className="job-textarea"
-                  placeholder="Paste the complete job description here &mdash; title, responsibilities, requirements, the works..."
-                  value={jobDescription}
-                  onChange={(e) => setJobDescription(e.target.value)}
-                />
+
+                {/* TOGGLE */}
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                  <button
+                    onClick={() => setJobDescInputMode('paste')}
+                    style={{ flex: 1, padding: '8px 12px', background: jobDescInputMode === 'paste' ? 'var(--ink)' : 'transparent', color: jobDescInputMode === 'paste' ? 'white' : 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                  >
+                    Paste text
+                  </button>
+                  <button
+                    onClick={() => setJobDescInputMode('upload')}
+                    style={{ flex: 1, padding: '8px 12px', background: jobDescInputMode === 'upload' ? 'var(--ink)' : 'transparent', color: jobDescInputMode === 'upload' ? 'white' : 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                  >
+                    Upload file
+                  </button>
+                </div>
+
+                {jobDescInputMode === 'paste' ? (
+                  <>
+                    <p className="step-desc">Paste the full job posting. The more detail, the sharper the match.</p>
+                    <textarea
+                      className="job-textarea"
+                      placeholder="Paste the complete job description here — title, responsibilities, requirements, the works..."
+                      value={jobDescription}
+                      onChange={(e) => setJobDescription(e.target.value)}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <p className="step-desc">Upload the job posting as a PDF or text file.</p>
+                    <div
+                      className={`upload-zone ${jobDescFile ? 'has-file' : ''}`}
+                      onClick={() => jobDescFileRef.current?.click()}
+                    >
+                      {jobDescFile ? (
+                        <>
+                          <div className="upload-icon">✓</div>
+                          <div className="upload-filename">{jobDescFile.name}</div>
+                        </>
+                      ) : (
+                        <>
+                          <img src="/uncle-spin-logo.png" className="upload-mascot" alt="JobsUncle.ai" />
+                          <div className="upload-label">Drop job posting here or click to browse</div>
+                        </>
+                      )}
+                    </div>
+                    <input
+                      ref={jobDescFileRef}
+                      type="file"
+                      accept=".pdf,.txt"
+                      className="file-input"
+                      onChange={(e) => setJobDescFile(e.target.files[0])}
+                    />
+                  </>
+                )}
               </div>
             </div>
 
