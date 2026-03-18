@@ -76,10 +76,12 @@ export default function Home() {
   const [gateMsg, setGateMsg] = useState('')
   const fileInputRef = useRef(null)
 
+  const versionToggleRef = useRef(null)
+
   // Regenerate state
   const [regenerating, setRegenerating] = useState(false)
-  const [regeneratedResults, setRegeneratedResults] = useState(null) // { resume, coverLetter }
-  const [activeVersion, setActiveVersion] = useState('v1') // 'v1' | 'v2'
+  const [regeneratedResults, setRegeneratedResults] = useState(null)
+  const [activeVersion, setActiveVersion] = useState('v1')
   const [regenError, setRegenError] = useState(null)
 
   // ATS Cheat Sheet state
@@ -251,6 +253,9 @@ export default function Home() {
       if (!res.ok) throw new Error(data.error || 'Regeneration failed.')
       setRegeneratedResults(data)
       setActiveVersion('v2')
+      setTimeout(() => {
+        versionToggleRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 100)
     } catch (err) {
       setRegenError(err.message || 'Something went wrong. Please try again.')
     } finally {
@@ -754,7 +759,7 @@ export default function Home() {
             <div className="how-label">Download a tailored resume, cover letter, recruiter & ATS analysis, and a hiring manager DM</div>
           </div>
         </div>
-        <p style={{ textAlign: 'center', fontSize: '0.78rem', color: 'var(--text-soft)', marginTop: '1rem', letterSpacing: '0.03em' }}>Nothing is stored. Ever.</p>
+        <p style={{ textAlign: 'center', fontSize: '0.78rem', color: 'var(--text-soft)', marginTop: '1rem', letterSpacing: '0.03em' }}>Your resume and documents are never stored.</p>
       </div>
 
       <div className="app-container">
@@ -969,10 +974,49 @@ export default function Home() {
         )}
 
         {loading && (
-          <div className="loading-state">
-            <div className="loading-spinner" />
-            <div className="loading-text">Making you impossible to ignore.</div>
+          <div className="loading-state" style={{ textAlign: 'center', padding: '3rem 1rem' }}>
+            <style>{`
+              @keyframes uncle-dance {
+                0%   { transform: translateY(0) rotate(0deg) scale(1); }
+                15%  { transform: translateY(-18px) rotate(-8deg) scale(1.05); }
+                30%  { transform: translateY(0) rotate(0deg) scale(1); }
+                45%  { transform: translateY(-14px) rotate(8deg) scale(1.05); }
+                60%  { transform: translateY(0) rotate(0deg) scale(1); }
+                75%  { transform: translateY(-10px) rotate(-5deg) scale(1.03); }
+                100% { transform: translateY(0) rotate(0deg) scale(1); }
+              }
+              @keyframes uncle-shadow {
+                0%, 100% { transform: scaleX(1); opacity: 0.2; }
+                30%       { transform: scaleX(0.6); opacity: 0.1; }
+                60%       { transform: scaleX(0.7); opacity: 0.12; }
+              }
+            `}</style>
+            <div style={{ position: 'relative', display: 'inline-block', marginBottom: '8px' }}>
+              <img
+                src="/uncle-spin-hero.png"
+                alt="Uncle Spin is working"
+                style={{ width: 90, height: 'auto', animation: 'uncle-dance 0.9s ease-in-out infinite', display: 'block' }}
+              />
+              <div style={{
+                width: 60, height: 10, background: 'var(--ink)', borderRadius: '50%',
+                margin: '0 auto', marginTop: '-4px',
+                animation: 'uncle-shadow 0.9s ease-in-out infinite',
+              }} />
+            </div>
+            <div className="loading-text" style={{ marginTop: '16px' }}>Making you impossible to ignore.</div>
             <div className="loading-sub">Tailoring every word to this role. Give us a moment.</div>
+          </div>
+        )}
+
+        {regenerating && (
+          <div style={{ textAlign: 'center', padding: '1.5rem 1rem' }}>
+            <img
+              src="/uncle-spin-hero.png"
+              alt="Applying fixes"
+              style={{ width: 60, height: 'auto', animation: 'uncle-dance 0.9s ease-in-out infinite', display: 'block', margin: '0 auto 12px' }}
+            />
+            <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--ink)' }}>Applying every fix from the analysis...</div>
+            <div style={{ fontSize: '0.78rem', color: 'var(--text-soft)', marginTop: '4px' }}>This takes about 15 seconds.</div>
           </div>
         )}
 
@@ -986,25 +1030,38 @@ export default function Home() {
 
               {/* V1 / V2 VERSION TOGGLE — appears once V2 is generated */}
               {regeneratedResults && (
-                <div style={{
-                  display: 'flex', alignItems: 'center', gap: '0',
-                  marginBottom: '20px', border: '1.5px solid var(--border)',
-                  borderRadius: '8px', overflow: 'hidden', width: 'fit-content'
-                }}>
-                  {['v1', 'v2'].map(v => (
-                    <button
-                      key={v}
-                      onClick={() => setActiveVersion(v)}
-                      style={{
-                        padding: '8px 22px', border: 'none', cursor: 'pointer',
-                        fontSize: '0.82rem', fontWeight: 700, transition: 'all 0.15s',
-                        background: activeVersion === v ? 'var(--ink)' : 'var(--surface)',
-                        color: activeVersion === v ? 'white' : 'var(--text-soft)',
-                      }}
-                    >
-                      {v === 'v1' ? 'Version 1 — Original' : '✦ Version 2 — Fixed'}
-                    </button>
-                  ))}
+                <div
+                  ref={versionToggleRef}
+                  style={{
+                    display: 'flex', flexDirection: 'column', gap: '8px',
+                    marginBottom: '20px', padding: '14px 16px',
+                    background: 'rgba(16,185,129,0.06)',
+                    border: '2px solid #10b981',
+                    borderRadius: '10px',
+                  }}
+                >
+                  <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#10b981' }}>
+                    ✓ Version 2 is ready — fixes applied from the recruiter analysis
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', marginBottom: '6px' }}>
+                    You're viewing Version 2 below. Switch back to compare.
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0', border: '1.5px solid var(--border)', borderRadius: '8px', overflow: 'hidden', width: 'fit-content' }}>
+                    {['v1', 'v2'].map(v => (
+                      <button
+                        key={v}
+                        onClick={() => setActiveVersion(v)}
+                        style={{
+                          padding: '8px 22px', border: 'none', cursor: 'pointer',
+                          fontSize: '0.82rem', fontWeight: 700, transition: 'all 0.15s',
+                          background: activeVersion === v ? 'var(--ink)' : 'var(--surface)',
+                          color: activeVersion === v ? 'white' : 'var(--text-soft)',
+                        }}
+                      >
+                        {v === 'v1' ? 'Version 1 — Original' : '✦ Version 2 — Fixed'}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
 
@@ -1076,7 +1133,7 @@ export default function Home() {
                           }}
                         >
                           {regeneratedResults
-                            ? '✓ Version 2 ready — see above'
+                            ? '✓ Version 2 ready'
                             : regenerating
                             ? '⟳ Applying fixes...'
                             : '✦ Apply fixes & regenerate'}
@@ -1417,7 +1474,7 @@ export default function Home() {
       </div>
 
       <footer className="footer">
-        <p>© 2026 JobsUncle.ai · Your documents are never stored · Built with AI</p>
+        <p>© 2026 JobsUncle.ai · Your resume and documents are never stored · Built with AI</p>
         <p style={{ marginTop: '8px', fontSize: '0.75rem' }}>
           <a href="/privacy" style={{ color: 'var(--text-soft)', textDecoration: 'none', marginRight: '1rem' }}>Privacy Policy</a>
           <a href="/terms" style={{ color: 'var(--text-soft)', textDecoration: 'none', marginRight: '1rem' }}>Terms of Service</a>
