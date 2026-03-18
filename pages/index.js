@@ -76,8 +76,14 @@ export default function Home() {
   const [gateMsg, setGateMsg] = useState('')
   const fileInputRef = useRef(null)
 
+  // Regenerate state
+  const [regenerating, setRegenerating] = useState(false)
+  const [regeneratedResults, setRegeneratedResults] = useState(null) // { resume, coverLetter }
+  const [activeVersion, setActiveVersion] = useState('v1') // 'v1' | 'v2'
+  const [regenError, setRegenError] = useState(null)
+
   // Fetch resume counter + check access via cookie on mount
-  // Works in private/incognito &mdash; no localStorage dependency
+  // Works in private/incognito — no localStorage dependency
   useEffect(() => {
     if (router.query.signin === 'true') {
       setShowSignIn(true)
@@ -150,6 +156,8 @@ export default function Home() {
     setLoading(true)
     setError(null)
     setResults(null)
+    setRegeneratedResults(null)
+    setActiveVersion('v1')
 
     try {
       const formData = new FormData()
@@ -218,6 +226,31 @@ export default function Home() {
     }
   }
 
+  const handleRegenerate = async () => {
+    if (!results || !results.recruiterNotes) return
+    setRegenerating(true)
+    setRegenError(null)
+    try {
+      const res = await fetch('/api/regenerate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          resume: results.resume,
+          jobDescription: jobDescription,
+          recruiterNotes: results.recruiterNotes,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Regeneration failed.')
+      setRegeneratedResults(data)
+      setActiveVersion('v2')
+    } catch (err) {
+      setRegenError(err.message || 'Something went wrong. Please try again.')
+    } finally {
+      setRegenerating(false)
+    }
+  }
+
   const handleUpgrade = async (plan = 'pro') => {
     const referral = (typeof window !== 'undefined' && window.promotekit_referral) || ''
     const res = await fetch('/api/stripe-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan, referral }) })
@@ -225,7 +258,7 @@ export default function Home() {
     if (data.url) window.location.href = data.url
   }
 
-  // TXT &mdash; stripped plain text for pasting into ATS / job portals
+  // TXT — stripped plain text for pasting into ATS / job portals
   const downloadTxt = (rawContent, label) => {
     const content = stripMarkdown(rawContent)
     const filename = results?.fileBaseName
@@ -240,18 +273,22 @@ export default function Home() {
     URL.revokeObjectURL(url)
   }
 
-  // DOCX &mdash; real Word doc for human readers, editable in Word / Google Docs
+  // DOCX — real Word doc for human readers, editable in Word / Google Docs
   const downloadDocx = async (type) => {
     if (!results) return
     setDocxLoading(true)
+    const activeResumeContent = regeneratedResults && activeVersion === 'v2'
+      ? regeneratedResults.resume
+      : (results.dualVersion ? (activeResume === 'a' ? results.resumeA : results.resumeB) : results.resume)
+    const activeCoverContent = regeneratedResults && activeVersion === 'v2'
+      ? regeneratedResults.coverLetter
+      : results.coverLetter
     try {
       const payload = {
-        resume: type === 'resume' || type === 'both'
-          ? (results.dualVersion ? (activeResume === 'a' ? results.resumeA : results.resumeB) : results.resume)
-          : null,
-        coverLetter: type === 'cover' || type === 'both' ? results.coverLetter : null,
+        resume: type === 'resume' || type === 'both' ? activeResumeContent : null,
+        coverLetter: type === 'cover' || type === 'both' ? activeCoverContent : null,
         fileBaseName: results.fileBaseName
-          ? `${results.fileBaseName}_${type === 'resume' ? (results.dualVersion ? `Resume_${activeResume.toUpperCase()}` : 'Resume') : type === 'cover' ? 'Cover_Letter' : 'Full_Package'}`
+          ? `${results.fileBaseName}_${type === 'resume' ? (results.dualVersion ? `Resume_${activeResume.toUpperCase()}` : activeVersion === 'v2' ? 'Resume_V2' : 'Resume') : type === 'cover' ? activeVersion === 'v2' ? 'Cover_Letter_V2' : 'Cover_Letter' : 'Full_Package'}`
           : type,
       }
 
@@ -277,7 +314,7 @@ export default function Home() {
     }
   }
 
-  // PDF &mdash; print via browser print dialog
+  // PDF — print via browser print dialog
   const downloadPdf = (content, label) => {
     const filename = results?.fileBaseName
       ? `${results.fileBaseName}_${label}`
@@ -324,7 +361,7 @@ export default function Home() {
 
   const handleBeta = async () => {
     if (!betaCode.trim()) return
-    if (!betaEmail.includes('@')) { setBetaStatus('error'); setBetaMsg("Enter a valid email &mdash; you'll need it to restore access later."); return }
+    if (!betaEmail.includes('@')) { setBetaStatus('error'); setBetaMsg("Enter a valid email — you'll need it to restore access later."); return }
     setBetaStatus('loading')
     try {
       const res = await fetch('/api/redeem-beta', {
@@ -377,6 +414,9 @@ export default function Home() {
     setJobDescription('')
     setResults(null)
     setError(null)
+    setRegeneratedResults(null)
+    setActiveVersion('v1')
+    setRegenError(null)
   }
 
   const handleManagePortal = async () => {
@@ -405,6 +445,14 @@ export default function Home() {
   }
 
   const canGenerate = (resumeInputMode === 'upload' ? !!pdfFile : resumeText.trim().length > 50) && (jobDescInputMode === 'paste' ? jobDescription.trim().length > 50 : !!jobDescFile)
+
+  // Derive active resume/cover content for downloads
+  const activeResumeForDownload = regeneratedResults && activeVersion === 'v2'
+    ? regeneratedResults.resume
+    : results?.resume
+  const activeCoverForDownload = regeneratedResults && activeVersion === 'v2'
+    ? regeneratedResults.coverLetter
+    : results?.coverLetter
 
   return (
     <>
@@ -551,6 +599,7 @@ export default function Home() {
           </div>
         </div>
       )}
+
       {showEmailGate && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', zIndex: 1001, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
           <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.35)' }}>
@@ -800,7 +849,7 @@ export default function Home() {
 
             {error && <div className="error-msg">{error}</div>}
 
-            {/* DUAL VERSION TOGGLE &mdash; Pro+ users only */}
+            {/* DUAL VERSION TOGGLE — Pro+ users only */}
             {isPlusUser && (
               <div style={{ margin: '1.5rem 0 0', padding: '1.25rem 1.5rem', background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
                 <div>
@@ -827,11 +876,11 @@ export default function Home() {
               {loading ? 'Making you impossible to ignore...' : dualVersionEnabled && isPlusUser ? 'Generate Dual Resume Package →' : 'Generate Resume Package →'}
             </button>
 
-            {/* RESTORE + BETA &mdash; visible below generate, not buried */}
+            {/* RESTORE + BETA — visible below generate, not buried */}
             {!isPaid && (
               <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
-                {/* DUAL RESUME &mdash; Pro+ upsell card */}
+                {/* DUAL RESUME — Pro+ upsell card */}
                 <div style={{ padding: '1rem 1.5rem', background: 'var(--surface)', border: '1.5px solid #6366f1', borderRadius: '8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
                     <div>
@@ -893,9 +942,33 @@ export default function Home() {
                 <div className="results-badge">Ready to download</div>
               </div>
 
+              {/* V1 / V2 VERSION TOGGLE — appears once V2 is generated */}
+              {regeneratedResults && (
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: '0',
+                  marginBottom: '20px', border: '1.5px solid var(--border)',
+                  borderRadius: '8px', overflow: 'hidden', width: 'fit-content'
+                }}>
+                  {['v1', 'v2'].map(v => (
+                    <button
+                      key={v}
+                      onClick={() => setActiveVersion(v)}
+                      style={{
+                        padding: '8px 22px', border: 'none', cursor: 'pointer',
+                        fontSize: '0.82rem', fontWeight: 700, transition: 'all 0.15s',
+                        background: activeVersion === v ? 'var(--ink)' : 'var(--surface)',
+                        color: activeVersion === v ? 'white' : 'var(--text-soft)',
+                      }}
+                    >
+                      {v === 'v1' ? 'Version 1 — Original' : '✦ Version 2 — Fixed'}
+                    </button>
+                  ))}
+                </div>
+              )}
+
               <div className="result-section">
                 <div className="result-section-title">Resume</div>
-                {results.dualVersion ? (
+                {results.dualVersion && activeVersion === 'v1' ? (
                   <>
                     <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
                       <button
@@ -914,23 +987,91 @@ export default function Home() {
                     <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(activeResume === 'a' ? results.resumeA : results.resumeB)}} />
                   </>
                 ) : (
-                  <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.resume)}} />
+                  <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(
+                    activeVersion === 'v2' && regeneratedResults
+                      ? regeneratedResults.resume
+                      : results.resume
+                  )}} />
                 )}
               </div>
 
               <div className="result-section">
                 <div className="result-section-title">Cover Letter</div>
-                <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.coverLetter)}} />
+                <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(
+                  activeVersion === 'v2' && regeneratedResults
+                    ? regeneratedResults.coverLetter
+                    : results.coverLetter
+                )}} />
               </div>
 
               {results.recruiterNotes && (
                 <div className="result-section" style={{ borderLeft: '3px solid #f59e0b', background: 'rgba(245,158,11,0.05)' }}>
-                  <div className="result-section-title">Recruiter & ATS Analysis</div>
+                  <div className="result-section-title">Recruiter &amp; ATS Analysis</div>
                   <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '8px' }}>ATS compatibility check plus honest gaps a recruiter would flag &mdash; and how to own them.</div>
                   <div style={{ fontSize: '0.72rem', color: 'var(--text-soft)', marginBottom: '12px', padding: '8px 12px', background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '6px', lineHeight: 1.5 }}>
                     <strong>Important:</strong> This analysis is AI-generated and may contain errors. Always verify all dates, facts, and recommendations against your original resume before taking any action. JobsUncle.ai provides this as a general career tool only and accepts no liability for the accuracy of this analysis or any outcomes resulting from its use.
                   </div>
                   <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.recruiterNotes)}} />
+
+                  {/* REGENERATE CTA */}
+                  <div style={{
+                    marginTop: '20px', paddingTop: '16px',
+                    borderTop: '1px solid rgba(245,158,11,0.2)',
+                    display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap'
+                  }}>
+                    {isPaid ? (
+                      <>
+                        <button
+                          onClick={handleRegenerate}
+                          disabled={regenerating || !!regeneratedResults}
+                          style={{
+                            padding: '9px 22px',
+                            background: regeneratedResults ? '#22c55e' : regenerating ? '#aaa' : '#f59e0b',
+                            color: 'white', border: 'none', borderRadius: '6px',
+                            fontSize: '0.85rem', fontWeight: 700,
+                            cursor: regenerating || regeneratedResults ? 'default' : 'pointer',
+                            transition: 'background 0.2s'
+                          }}
+                        >
+                          {regeneratedResults
+                            ? '✓ Version 2 ready — see above'
+                            : regenerating
+                            ? '⟳ Applying fixes...'
+                            : '✦ Apply fixes & regenerate'}
+                        </button>
+                        {!regeneratedResults && !regenerating && (
+                          <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>
+                            Rewrites your resume applying every fix above
+                          </span>
+                        )}
+                      </>
+                    ) : (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                        <button
+                          onClick={() => { setPaywallSigninMode(false); setShowPaywall(true) }}
+                          style={{
+                            padding: '9px 22px', background: '#f59e0b', color: 'white',
+                            border: 'none', borderRadius: '6px', fontSize: '0.85rem',
+                            fontWeight: 700, cursor: 'pointer'
+                          }}
+                        >
+                          ✦ Apply fixes &amp; regenerate
+                        </button>
+                        <span style={{
+                          background: '#f59e0b', color: 'white', fontSize: '0.6rem', fontWeight: 700,
+                          letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase'
+                        }}>Pro</span>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>
+                          Upgrade to rewrite with fixes applied
+                        </span>
+                      </div>
+                    )}
+                    {regenError && (
+                      <div style={{ width: '100%', color: '#ef4444', fontSize: '0.8rem', marginTop: '4px' }}>
+                        {regenError}
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
 
@@ -956,7 +1097,11 @@ export default function Home() {
               <div className="download-section">
                 <div className="download-section-header">
                   <span className="download-section-title">Download your documents</span>
-                  <span className="download-section-sub">Three formats. Each built for a different situation.</span>
+                  <span className="download-section-sub">
+                    {regeneratedResults
+                      ? `Three formats. Downloading ${activeVersion === 'v2' ? 'Version 2 — Fixed' : 'Version 1 — Original'}.`
+                      : 'Three formats. Each built for a different situation.'}
+                  </span>
                 </div>
 
                 {/* FORMAT CARDS */}
@@ -968,10 +1113,10 @@ export default function Home() {
                     <div className="format-purpose">Paste into job portals</div>
                     <div className="format-desc">Plain text. No formatting. Exactly what ATS systems and online job applications expect.</div>
                     <div className="format-btns">
-                      <button className="format-btn" onClick={() => downloadTxt(results.resume, 'Resume')}>
+                      <button className="format-btn" onClick={() => downloadTxt(activeResumeForDownload, activeVersion === 'v2' ? 'Resume_V2' : 'Resume')}>
                         Resume
                       </button>
-                      <button className="format-btn" onClick={() => downloadTxt(results.coverLetter, 'Cover_Letter')}>
+                      <button className="format-btn" onClick={() => downloadTxt(activeCoverForDownload, activeVersion === 'v2' ? 'Cover_Letter_V2' : 'Cover_Letter')}>
                         Cover Letter
                       </button>
                     </div>
@@ -1006,10 +1151,10 @@ export default function Home() {
                     <div className="format-purpose">Print-ready version</div>
                     <div className="format-desc">Looks exactly right on paper or screen. Nothing shifts. Nothing reformats. Just print.</div>
                     <div className="format-btns">
-                      <button className="format-btn" onClick={() => downloadPdf(results.resume, 'Resume')}>
+                      <button className="format-btn" onClick={() => downloadPdf(activeResumeForDownload, activeVersion === 'v2' ? 'Resume_V2' : 'Resume')}>
                         Resume
                       </button>
-                      <button className="format-btn" onClick={() => downloadPdf(results.coverLetter, 'Cover_Letter')}>
+                      <button className="format-btn" onClick={() => downloadPdf(activeCoverForDownload, activeVersion === 'v2' ? 'Cover_Letter_V2' : 'Cover_Letter')}>
                         Cover Letter
                       </button>
                     </div>
