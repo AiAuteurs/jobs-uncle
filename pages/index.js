@@ -475,13 +475,28 @@ export default function Home() {
             <button onClick={() => setShowPaywall(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', fontSize: '1.2rem', color: 'var(--text-soft)', cursor: 'pointer', lineHeight: 1, padding: '4px 8px' }}>✕</button>
             <img src="/uncle-spin-hero.png" alt="JobsUncle.ai" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Your next job offer could be from this resume.</h2>
-            <p style={{ color: 'var(--text-soft)', fontSize: '0.95rem', margin: '0 0 32px', lineHeight: 1.6 }}>
-              Unlimited resumes. Every job. Every time.<br />
-              <strong style={{ color: 'var(--ink)' }}>$49.99 / year.</strong> Cancel anytime.
-            </p>
-            <a href="/pricing" style={{ display: 'block', width: '100%', background: 'var(--accent)', color: 'white', border: 'none', padding: '16px', borderRadius: '8px', fontSize: '1rem', fontWeight: 700, cursor: 'pointer', marginBottom: '12px', letterSpacing: '0.02em', textDecoration: 'none', textAlign: 'center', boxSizing: 'border-box' }}>
-              See Plans →
-            </a>
+            <p style={{ color: 'var(--text-soft)', fontSize: '0.95rem', margin: '0 0 20px', lineHeight: 1.6 }}>Unlimited resumes. Every job. Every time.</p>
+
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
+              <button
+                onClick={() => handleUpgrade('pro_monthly')}
+                style={{ flex: 1, padding: '14px 12px', background: 'transparent', color: 'var(--ink)', border: '1.5px solid var(--border)', borderRadius: '10px', cursor: 'pointer', textAlign: 'center' }}
+              >
+                <div style={{ fontSize: '0.7rem', color: 'var(--text-soft)', marginBottom: '4px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Monthly</div>
+                <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--ink)' }}>$9.99</div>
+                <div style={{ fontSize: '0.72rem', color: 'var(--text-soft)' }}>per month</div>
+              </button>
+              <button
+                onClick={() => handleUpgrade('pro')}
+                style={{ flex: 1, padding: '14px 12px', background: 'var(--accent)', color: 'white', border: '2px solid var(--accent)', borderRadius: '10px', cursor: 'pointer', textAlign: 'center', position: 'relative' }}
+              >
+                <div style={{ position: 'absolute', top: '-10px', left: '50%', transform: 'translateX(-50%)', background: '#f59e0b', color: 'white', fontSize: '0.6rem', fontWeight: 700, padding: '2px 10px', borderRadius: '20px', letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Best value</div>
+                <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.8)', marginBottom: '4px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Annual</div>
+                <div style={{ fontSize: '1.3rem', fontWeight: 800 }}>$49.99</div>
+                <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.8)' }}>Save 58%</div>
+              </button>
+            </div>
+
             <button onClick={() => { setShowPaywall(false); setShowSignIn(true) }} style={{ background: 'none', border: 'none', color: 'var(--accent)', fontSize: '0.85rem', cursor: 'pointer', padding: '8px', fontWeight: 600 }}>
               Already a member? Sign in →
             </button>
