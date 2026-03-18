@@ -979,29 +979,39 @@ export default function Home() {
         {loading && (
           <div className="loading-state" style={{ textAlign: 'center', padding: '3rem 1rem' }}>
             <style>{`
-              @keyframes uncle-dance {
-                0%   { transform: scaleX(1); }
-                25%  { transform: scaleX(0); }
-                50%  { transform: scaleX(-1); }
-                75%  { transform: scaleX(0); }
-                100% { transform: scaleX(1); }
+              @keyframes uncle-bounce {
+                0%, 100% { transform: translateY(0); }
+                50%       { transform: translateY(-10px); }
               }
-              @keyframes uncle-shadow {
-                0%, 100% { transform: scaleX(1); opacity: 0.2; }
-                25%, 75% { transform: scaleX(0.2); opacity: 0.05; }
-                50%       { transform: scaleX(1); opacity: 0.2; }
+              @keyframes emoji-1 {
+                0%, 30%     { opacity: 1; transform: scale(1) translateY(0); }
+                33%, 99%    { opacity: 0; transform: scale(0.5) translateY(-10px); }
+                100%        { opacity: 1; }
+              }
+              @keyframes emoji-2 {
+                0%, 32%     { opacity: 0; transform: scale(0.5) translateY(-10px); }
+                33%, 63%    { opacity: 1; transform: scale(1) translateY(0); }
+                66%, 100%   { opacity: 0; transform: scale(0.5) translateY(-10px); }
+              }
+              @keyframes emoji-3 {
+                0%, 65%     { opacity: 0; transform: scale(0.5) translateY(-10px); }
+                66%, 96%    { opacity: 1; transform: scale(1) translateY(0); }
+                99%, 100%   { opacity: 0; transform: scale(0.5) translateY(-10px); }
               }
             `}</style>
             <div style={{ position: 'relative', display: 'inline-block', marginBottom: '8px' }}>
               <img
                 src="/uncle-spin-hero.png"
                 alt="Uncle Spin is working"
-                style={{ width: 90, height: 'auto', animation: 'uncle-dance 1.4s ease-in-out infinite', display: 'block' }}
+                style={{ width: 90, height: 'auto', animation: 'uncle-bounce 0.8s ease-in-out infinite', display: 'block' }}
               />
+              {/* Cycling emoji badges */}
+              <div style={{ position: 'absolute', top: -10, right: -18, fontSize: '1.6rem', animation: 'emoji-1 3s ease-in-out infinite' }}>✋</div>
+              <div style={{ position: 'absolute', top: -10, right: -18, fontSize: '1.6rem', animation: 'emoji-2 3s ease-in-out infinite', opacity: 0 }}>👍</div>
+              <div style={{ position: 'absolute', top: -10, right: -18, fontSize: '1.6rem', animation: 'emoji-3 3s ease-in-out infinite', opacity: 0 }}>💪</div>
               <div style={{
                 width: 60, height: 10, background: 'var(--ink)', borderRadius: '50%',
-                margin: '0 auto', marginTop: '-4px',
-                animation: 'uncle-shadow 0.9s ease-in-out infinite',
+                margin: '0 auto', marginTop: '-4px', opacity: 0.15
               }} />
             </div>
             <div className="loading-text" style={{ marginTop: '16px' }}>Making you impossible to ignore.</div>
@@ -1165,7 +1175,7 @@ export default function Home() {
                         <img
                           src="/uncle-spin-hero.png"
                           alt="Applying fixes"
-                          style={{ width: 44, height: 'auto', animation: 'uncle-dance 1.4s ease-in-out infinite', flexShrink: 0 }}
+                          style={{ width: 44, height: 'auto', animation: 'uncle-bounce 0.8s ease-in-out infinite', flexShrink: 0 }}
                         />
                         <div>
                           <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ink)' }}>Applying every fix from the analysis...</div>
@@ -1241,7 +1251,7 @@ export default function Home() {
                     <img
                       src="/uncle-spin-hero.png"
                       alt="Parsing"
-                      style={{ width: 44, height: 'auto', animation: 'uncle-dance 1.4s ease-in-out infinite', flexShrink: 0 }}
+                      style={{ width: 44, height: 'auto', animation: 'uncle-bounce 0.8s ease-in-out infinite', flexShrink: 0 }}
                     />
                     <div>
                       <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ink)' }}>Parsing your resume into ATS fields...</div>
@@ -1343,9 +1353,9 @@ export default function Home() {
                           <div key={i} style={{ padding: '12px 14px', background: 'var(--surface)', borderRadius: '6px', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
                             <div>
                               <div style={{ fontWeight: 700, fontSize: '0.88rem', color: 'var(--ink)', marginBottom: '2px' }}>{edu.school}</div>
-                              <div style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>{edu.degree} · {edu.field} · {edu.year}</div>
+                              <div style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>{edu.degree}{edu.field ? ` · ${edu.field}` : ''}{edu.year ? ` · ${edu.year}` : ''}</div>
                             </div>
-                            <button onClick={() => copyAtsField(`edu_${i}`, `${edu.school} | ${edu.degree} in ${edu.field} | ${edu.year}`)} style={{ flexShrink: 0, padding: '5px 14px', background: atsCopied[`edu_${i}`] ? '#22c55e' : 'var(--accent)', color: 'white', border: 'none', borderRadius: '5px', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s' }}>
+                            <button onClick={() => copyAtsField(`edu_${i}`, `${edu.school}${edu.degree ? ` | ${edu.degree}` : ''}${edu.field ? ` in ${edu.field}` : ''}${edu.year ? ` | ${edu.year}` : ''}`)} style={{ flexShrink: 0, padding: '5px 14px', background: atsCopied[`edu_${i}`] ? '#22c55e' : 'var(--accent)', color: 'white', border: 'none', borderRadius: '5px', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s' }}>
                               {atsCopied[`edu_${i}`] ? '✓' : 'Copy'}
                             </button>
                           </div>

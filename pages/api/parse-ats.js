@@ -25,10 +25,12 @@ CRITICAL RULES:
 
 IMPORTANT: For employment history, only list companies where the person was directly employed or contracted. If a company appears as a client, project credit, or brand worked on — do NOT list them as an employer.
 
+For education: always extract the graduation year if present. If only a start year is present, use that. Never leave year empty if any year appears near the education entry.
+
 Return ONLY this exact JSON shape:
 
 {
-  "headline": "job title / professional headline",
+  "headline": "job title / professional headline — never include AI filmmaker, AI director, or any AI identity framing",
   "summary": "2-3 sentence professional summary",
   "skills": ["skill1", "skill2", "skill3"],
   "employment": [
@@ -54,7 +56,9 @@ Return ONLY this exact JSON shape:
 }
 
 RESUME:
-${resume}`
+${resume}
+
+Return ONLY the JSON. No markdown, no preamble, no trailing punctuation in field values.`
 
   try {
     const message = await client.messages.create({
