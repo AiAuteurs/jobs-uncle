@@ -12,9 +12,20 @@ export default async function handler(req, res) {
   const { resume } = req.body
   if (!resume) return res.status(400).json({ error: 'Missing resume.' })
 
-  const systemPrompt = `You are a resume parser. Extract structured data from a resume and return ONLY valid JSON with no markdown fences, no preamble, no commentary.`
+  const systemPrompt = `You are a resume parser. Extract structured data from a resume and return ONLY valid JSON with no markdown fences, no preamble, no commentary.
 
-  const userPrompt = `Parse this resume into structured ATS fields. Return ONLY this exact JSON shape:
+CRITICAL RULES:
+- Extract ONLY information explicitly stated in the resume
+- Do not infer, assume, or fabricate any data
+- Do not list a company as an employer if the resume shows them as a client or project credit
+- Do not invent metrics, dates, or titles not present in the resume
+- If a field has no data in the resume, omit it or use an empty string — never guess`
+
+  const userPrompt = `Parse this resume into structured ATS fields. Extract ONLY what is explicitly stated.
+
+IMPORTANT: For employment history, only list companies where the person was directly employed or contracted. If a company appears as a client, project credit, or brand worked on — do NOT list them as an employer.
+
+Return ONLY this exact JSON shape:
 
 {
   "headline": "job title / professional headline",
