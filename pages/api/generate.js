@@ -226,9 +226,11 @@ ${jobDescription}
 RECRUITER GAP ANALYSIS REQUIREMENTS:
 - Act like a senior recruiter in this industry reviewing this resume for this specific role
 - Identify 3-5 specific things that would stop you from reaching out — be honest and direct, not diplomatic
-- If there are employment gaps, flag them and suggest exactly how to reframe each one
-- Format as a short bulleted list — plain text, no headers
-- Keep it under 150 words total
+- For EVERY issue you flag, immediately follow it with a concrete "Fix:" suggestion — exactly what to change, add, reword, or remove
+- If there are employment gaps, flag them and give the exact reframe language to use
+- Format as a bulleted list. Each bullet = the problem, followed immediately by "Fix:" on a new line with the specific solution
+- Keep it under 200 words total
+- Tone: tough but constructive — like a mentor who wants them to get the job
 
 ${resumeInstructions}
 
