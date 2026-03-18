@@ -209,7 +209,13 @@ RESUME REQUIREMENTS:
 [hiring manager DM here]
 `
 
+  const now = new Date()
+  const currentDate = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  const currentYear = now.getFullYear()
+
   const prompt = `You are an expert resume writer and career coach. You write resumes that are direct, confident, and tailored — never generic, never bloated.
+
+IMPORTANT CONTEXT: Today's date is ${currentDate}. The current year is ${currentYear}. Any employment dates from ${currentYear} or earlier are in the past or present — never flag them as future dates.
 
 A person has provided their LinkedIn profile data and a job description. Your job is to craft the following:
 
