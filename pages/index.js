@@ -85,11 +85,12 @@ export default function Home() {
   const [regenError, setRegenError] = useState(null)
 
   // ATS Cheat Sheet state
-  const [atsData, setAtsData] = useState(null) // parsed structured data
+  const [atsData, setAtsData] = useState(null)
   const [atsLoading, setAtsLoading] = useState(false)
   const [atsError, setAtsError] = useState(null)
-  const [atsCopied, setAtsCopied] = useState({}) // { [fieldKey]: true }
+  const [atsCopied, setAtsCopied] = useState({})
   const [atsOpen, setAtsOpen] = useState(false)
+  const [atsVersion, setAtsVersion] = useState(null) // 'v1' | 'v2' — which version was parsed
 
   // Fetch resume counter + check access via cookie on mount
   // Works in private/incognito — no localStorage dependency
@@ -439,6 +440,7 @@ export default function Home() {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Parsing failed.')
       setAtsData(data)
+      setAtsVersion(activeVersion)
     } catch (err) {
       setAtsError(err.message || 'Something went wrong.')
     } finally {
@@ -464,6 +466,7 @@ export default function Home() {
     setAtsError(null)
     setAtsOpen(false)
     setAtsCopied({})
+    setAtsVersion(null)
   }
 
   const handleManagePortal = async () => {
@@ -1202,14 +1205,26 @@ export default function Home() {
                     <div style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>Every field an ATS will ask for — pre-staged, one click to copy.</div>
                   </div>
                   {isPlusUser ? (
-                    !atsData && !atsLoading ? (
-                      <button
-                        onClick={handleAtsCheatSheet}
-                        style={{ flexShrink: 0, padding: '9px 22px', background: '#10b981', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer' }}
-                      >
-                        ✦ Generate Cheat Sheet
-                      </button>
-                    ) : null
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
+                      {(!atsData || atsVersion !== activeVersion) && !atsLoading && (
+                        <button
+                          onClick={handleAtsCheatSheet}
+                          style={{ flexShrink: 0, padding: '9px 22px', background: '#10b981', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer' }}
+                        >
+                          {atsData && atsVersion !== activeVersion
+                            ? `✦ Re-parse for ${activeVersion === 'v2' ? 'Version 2' : 'Version 1'}`
+                            : '✦ Generate Cheat Sheet'}
+                        </button>
+                      )}
+                      {atsData && !atsLoading && (
+                        <div style={{ fontSize: '0.7rem', color: 'var(--text-soft)' }}>
+                          Parsed from {atsVersion === 'v2' ? '✦ Version 2 — Fixed' : 'Version 1 — Original'}
+                          {atsVersion !== activeVersion && (
+                            <span style={{ color: '#f59e0b', fontWeight: 700 }}> · Switch above to match</span>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <button
                       onClick={() => setShowPlusPaywall(true)}
