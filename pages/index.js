@@ -25,6 +25,8 @@ const stripMarkdown = (text) => {
 export default function Home() {
   const router = useRouter()
   const [pdfFile, setPdfFile] = useState(null)
+  const [resumeInputMode, setResumeInputMode] = useState('upload') // 'upload' | 'paste'
+  const [resumeText, setResumeText] = useState('')
   const [jobDescription, setJobDescription] = useState('')
   const [loading, setLoading] = useState(false)
   const [results, setResults] = useState(null)
@@ -124,8 +126,9 @@ export default function Home() {
   }, [])
 
   const handleGenerate = async () => {
-    if (!pdfFile || !jobDescription.trim()) {
-      setError('Please upload your LinkedIn PDF and paste the job description.')
+    const hasResume = resumeInputMode === 'upload' ? !!pdfFile : resumeText.trim().length > 50
+    if (!hasResume || !jobDescription.trim()) {
+      setError(resumeInputMode === 'upload' ? 'Please upload your resume and paste the job description.' : 'Please paste your resume text and the job description.')
       return
     }
 
@@ -146,7 +149,12 @@ export default function Home() {
 
     try {
       const formData = new FormData()
-      formData.append('resume', pdfFile)
+      if (resumeInputMode === 'upload') {
+        formData.append('resume', pdfFile)
+      } else {
+        const textBlob = new Blob([resumeText], { type: 'text/plain' })
+        formData.append('resume', textBlob, 'resume.txt')
+      }
       formData.append('jobDescription', jobDescription)
       formData.append('dualVersion', dualVersionEnabled && isPlusUser ? 'true' : 'false')
 
@@ -388,7 +396,7 @@ export default function Home() {
     }
   }
 
-  const canGenerate = pdfFile && jobDescription.trim().length > 50
+  const canGenerate = (resumeInputMode === 'upload' ? !!pdfFile : resumeText.trim().length > 50) && jobDescription.trim().length > 50
 
   return (
     <>
@@ -641,38 +649,68 @@ export default function Home() {
           <>
             <div className="steps" id="get-started">
               {/* STEP 1 */}
-              <div className={`step-card ${pdfFile ? 'complete' : 'active'}`}>
+              <div className={`step-card ${(resumeInputMode === 'upload' ? pdfFile : resumeText.trim().length > 50) ? 'complete' : 'active'}`}>
                 <div className="step-number">Step 01</div>
                 <div className="step-title">Your Resume</div>
-                <p className="step-desc">
-                  Upload your resume as a PDF, Word doc (.docx), or text file. LinkedIn PDF works too.
-                </p>
-                <div
-                  className={`upload-zone ${dragover ? 'dragover' : ''} ${pdfFile ? 'has-file' : ''}`}
-                  onClick={() => fileInputRef.current?.click()}
-                  onDrop={handleDrop}
-                  onDragOver={(e) => { e.preventDefault(); setDragover(true) }}
-                  onDragLeave={() => setDragover(false)}
-                >
-                  {pdfFile ? (
-                    <>
-                      <div className="upload-icon">✓</div>
-                      <div className="upload-filename">{pdfFile.name}</div>
-                    </>
-                  ) : (
-                    <>
-                      <img src="/uncle-spin-logo.png" className="upload-mascot" alt="JobsUncle.ai" />
-                      <div className="upload-label">Drop your resume here or click to browse</div>
-                    </>
-                  )}
+
+                {/* TOGGLE */}
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                  <button
+                    onClick={() => setResumeInputMode('upload')}
+                    style={{ flex: 1, padding: '8px 12px', background: resumeInputMode === 'upload' ? 'var(--ink)' : 'transparent', color: resumeInputMode === 'upload' ? 'white' : 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                  >
+                    Upload file
+                  </button>
+                  <button
+                    onClick={() => setResumeInputMode('paste')}
+                    style={{ flex: 1, padding: '8px 12px', background: resumeInputMode === 'paste' ? 'var(--ink)' : 'transparent', color: resumeInputMode === 'paste' ? 'white' : 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                  >
+                    Paste text
+                  </button>
                 </div>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".pdf,.doc,.docx,.txt"
-                  className="file-input"
-                  onChange={(e) => handleFile(e.target.files[0])}
-                />
+
+                {resumeInputMode === 'upload' ? (
+                  <>
+                    <p className="step-desc">Upload your resume as a PDF, Word doc (.docx), or text file. LinkedIn PDF works too.</p>
+                    <div
+                      className={`upload-zone ${dragover ? 'dragover' : ''} ${pdfFile ? 'has-file' : ''}`}
+                      onClick={() => fileInputRef.current?.click()}
+                      onDrop={handleDrop}
+                      onDragOver={(e) => { e.preventDefault(); setDragover(true) }}
+                      onDragLeave={() => setDragover(false)}
+                    >
+                      {pdfFile ? (
+                        <>
+                          <div className="upload-icon">✓</div>
+                          <div className="upload-filename">{pdfFile.name}</div>
+                        </>
+                      ) : (
+                        <>
+                          <img src="/uncle-spin-logo.png" className="upload-mascot" alt="JobsUncle.ai" />
+                          <div className="upload-label">Drop your resume here or click to browse</div>
+                        </>
+                      )}
+                    </div>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept=".pdf,.doc,.docx,.txt"
+                      className="file-input"
+                      onChange={(e) => handleFile(e.target.files[0])}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <p className="step-desc">Copy your resume text and paste it below. Works great on mobile.</p>
+                    <textarea
+                      className="job-textarea"
+                      placeholder="Paste your full resume here — work history, skills, education, the works..."
+                      value={resumeText}
+                      onChange={(e) => setResumeText(e.target.value)}
+                      style={{ minHeight: '200px' }}
+                    />
+                  </>
+                )}
               </div>
 
               {/* STEP 2 */}
