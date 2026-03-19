@@ -490,15 +490,22 @@ body {
 .format-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .format-btn-featured {
-  background: var(--ink);
-  color: var(--surface);
-  border-color: var(--ink);
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--border);
 }
 
 .format-btn-featured:hover:not(:disabled) {
-  background: #2a2826;
-  border-color: #2a2826;
+  border-color: var(--ink);
+  background: var(--ink);
   color: var(--surface);
+}
+
+.format-btn-active,
+.format-btn-featured.format-btn-active {
+  background: var(--ink) !important;
+  color: var(--surface) !important;
+  border-color: var(--ink) !important;
 }
 
 /* ─── RESET ────────────────────────────────────────────────── */
