@@ -294,8 +294,7 @@ export default async function handler(req, res) {
 
   // Truncate LinkedIn PDF to avoid bloated prompt — 8000 chars covers ~4 pages
   if (linkedinText.length > 8000) {
-    linkedinText = linkedinText.slice(0, 8000) + '
-[Resume truncated for brevity]'
+    linkedinText = linkedinText.slice(0, 8000) + '\n
   }
 
   // ── Gap detection — run before prompt construction ──────────────────────────
