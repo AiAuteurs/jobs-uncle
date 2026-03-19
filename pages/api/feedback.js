@@ -31,7 +31,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         from: 'Oni <oni@jobsuncle.ai>',
-        to: 'jobsuncle@gmail.com',
+        to: 'jobsuncleai@gmail.com',
         subject: `${ratingEmoji} Resume Rating: ${ratingLabel}`,
         html: `
           <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 24px;">
