@@ -27,7 +27,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`
+        'Authorization': `Bearer ${process.env.RESEND_API}`
       },
       body: JSON.stringify({
         from: 'Oni <oni@jobsuncle.ai>',
