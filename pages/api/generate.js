@@ -351,6 +351,7 @@ AFTER applying the rules above:
 - Turn bullet points into achievement-focused statements — add metrics wherever the background supports it
 - Do NOT include an objective statement
 - Format cleanly with clear sections: Summary, Experience, Skills, Education
+- Use markdown bold (**text**) for company names and section headers ONLY — so they render visually on screen. Format each job as: **Company Name** | Role Title | Dates
 - Mirror keywords and phrases from the job description naturally throughout — optimize for ATS without sounding robotic
 - For PROTECTED jobs that seem irrelevant to this role: reframe bullets around transferable skills (customer interaction, reliability, communication, process adherence) — do NOT fabricate skills not implied by the role
 - Do NOT pad or embellish — be ruthlessly relevant
