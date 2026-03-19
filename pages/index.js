@@ -186,47 +186,31 @@ export default function Home() {
       }
       formData.append('dualVersion', dualVersionEnabled && isPlusUser ? 'true' : 'false')
 
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 55000)
+
       let response
       try {
         response = await fetch('/api/generate', {
           method: 'POST',
           body: formData,
+          signal: controller.signal,
         })
       } catch (fetchErr) {
+        if (fetchErr.name === 'AbortError') {
+          throw new Error('This is taking longer than expected. Please try again on a stronger connection.')
+        }
         throw new Error('Connection failed. Please check your internet and try again.')
+      } finally {
+        clearTimeout(timeout)
       }
+
+      const data = await response.json()
 
       if (!response.ok) {
-        let errMsg = 'Generation failed'
-        try { const d = await response.json(); errMsg = d.error || errMsg } catch {}
-        throw new Error(errMsg)
+        throw new Error(data.error || 'Generation failed')
       }
 
-      // Read NDJSON stream — chunks keep connection alive, 'done' carries full result
-      const reader = response.body.getReader()
-      const decoder = new TextDecoder()
-      let buffer = ''
-      let data = null
-
-      while (true) {
-        const { done: streamDone, value } = await reader.read()
-        if (streamDone) break
-        buffer += decoder.decode(value, { stream: true })
-        const lines = buffer.split('\n')
-        buffer = lines.pop()
-        for (const line of lines) {
-          if (!line.trim()) continue
-          let msg
-          try { msg = JSON.parse(line) } catch { continue }
-          if (msg.type === 'error') throw new Error(msg.message || 'Generation failed')
-          if (msg.type === 'done') {
-            const { type: _, ...rest } = msg
-            data = rest
-          }
-        }
-      }
-
-      if (!data) throw new Error('Generation failed. Please try again.')
       setResults(data)
 
       // Increment counter + refresh display
