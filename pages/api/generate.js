@@ -292,6 +292,12 @@ export default async function handler(req, res) {
     try { fs.unlinkSync(resumeFile.filepath) } catch (e) {}
   }
 
+  // Truncate LinkedIn PDF to avoid bloated prompt — 8000 chars covers ~4 pages
+  if (linkedinText.length > 8000) {
+    linkedinText = linkedinText.slice(0, 8000) + '
+[Resume truncated for brevity]'
+  }
+
   // ── Gap detection — run before prompt construction ──────────────────────────
   const parsedJobs = parseJobsFromResume(linkedinText)
   const taggedJobs = tagProtectedJobs(parsedJobs)
@@ -352,6 +358,14 @@ AFTER applying the rules above:
 - For PROTECTED jobs that seem irrelevant to this role: reframe bullets around transferable skills (customer interaction, reliability, communication, process adherence) — do NOT fabricate skills not implied by the role
 - Do NOT pad or embellish — be ruthlessly relevant
 - Write in implied first person throughout — NO "I", "my", or "me" anywhere. Every bullet and sentence leads with an action verb or noun. "Led a team of 10" not "I led a team of 10"
+
+LENGTH AND CONSOLIDATION RULES — CRITICAL:
+- The final resume MUST fit on 1-2 pages maximum. If it would exceed 2 pages, cut aggressively.
+- For roles older than 7 years: consolidate into a single grouped entry. Example: "Matassa Agency | Freelance Senior Editor | 1998–2019 | Clients: Disney, BBDO, FCB, Yahoo, Goodby Silverstein" — one line, no bullets.
+- For the last 7 years: max 3 bullets per role. Pick only the bullets most relevant to THIS specific job.
+- Short engagements (1-2 months) from more than 3 years ago: fold into the parent company or drop entirely.
+- NEVER list every client or every project. Pick the 3-4 most impressive and name them only.
+- A tight, scannable 1-page resume beats a complete but unreadable 3-page one every time.
 `
 
   const outputFormat = dualVersion ? `
@@ -372,6 +386,16 @@ AFTER applying the rules above:
 
 ===HIRING_MANAGER_DM===
 [hiring manager DM here]
+
+===COMPANY_INTEL===
+COMPANY INTEL
+─────────────────────────────
+⚡ Power center: [1 sentence]
+🎯 Position your work as: [1 sentence]
+🤝 Who thrives here: [1 sentence]
+⚠️ Watch for: [1 sentence]
+🎙️ Interview move: [1 sentence]
+─────────────────────────────
 ` : `
 ===METADATA===
 {"candidateName":"...","candidateEmail":"...","candidatePhone":"...","companyName":"...","jobTitle":"..."}
@@ -387,6 +411,16 @@ AFTER applying the rules above:
 
 ===HIRING_MANAGER_DM===
 [hiring manager DM here]
+
+===COMPANY_INTEL===
+COMPANY INTEL
+─────────────────────────────
+⚡ Power center: [1 sentence]
+🎯 Position your work as: [1 sentence]
+🤝 Who thrives here: [1 sentence]
+⚠️ Watch for: [1 sentence]
+🎙️ Interview move: [1 sentence]
+─────────────────────────────
 `
 
   const now = new Date()
@@ -449,6 +483,12 @@ METADATA REQUIREMENTS:
 - candidatePhone: phone if present, else ""
 - companyName: company name (short form, no Inc/LLC)
 - jobTitle: job title (2-4 words max, no special chars)
+
+COMPANY INTEL REQUIREMENTS:
+After generating all other sections, analyze the job description for organizational power signals.
+Infer which function holds actual decision-making power based on language patterns, stated priorities, reporting structures, success metrics, and cultural signals — NOT what the company claims about itself.
+Return the COMPANY INTEL block exactly as specified in the output format.
+Be direct. No corporate hedging. If the JD is thin on signals, say so in one line and give your best inference. Never fabricate specifics not supported by the text.
 
 Respond in this exact format:
 ${outputFormat}`
@@ -515,6 +555,8 @@ ${outputFormat}`
       const rawCover = coverMatch ? coverMatch[1].trim() : ''
       const coverLetter = contactHeader + rawCover
       const hiringManagerDM = dmMatch ? dmMatch[1].trim() : ''
+      const intelMatch = responseText.match(/===COMPANY_INTEL===([\s\S]*)$/)
+      const companyIntel = intelMatch ? intelMatch[1].trim() : ''
 
       return res.status(200).json({
         dualVersion: false,
@@ -522,6 +564,7 @@ ${outputFormat}`
         coverLetter,
         recruiterNotes,
         hiringManagerDM,
+        companyIntel,
         metadata,
         fileBaseName,
       })
