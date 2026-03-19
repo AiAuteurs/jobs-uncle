@@ -453,14 +453,26 @@ METADATA REQUIREMENTS:
 Respond in this exact format:
 ${outputFormat}`
 
+  // Stream response — keeps connection alive, no Vercel timeout
+  res.setHeader('Content-Type', 'text/event-stream')
+  res.setHeader('Cache-Control', 'no-cache, no-transform')
+  res.setHeader('X-Accel-Buffering', 'no')
+
   try {
-    const message = await client.messages.create({
+    let responseText = ''
+
+    const stream = client.messages.stream({
       model: 'claude-sonnet-4-20250514',
       max_tokens: dualVersion ? 5000 : 3000,
       messages: [{ role: 'user', content: prompt }],
     })
 
-    const responseText = message.content[0].text
+    for await (const event of stream) {
+      if (event.type === 'content_block_delta' && event.delta?.type === 'text_delta') {
+        responseText += event.delta.text
+        res.write(JSON.stringify({ type: 'chunk', text: event.delta.text }) + '\n')
+      }
+    }
 
     // Parse metadata
     let metadata = { candidateName: '', candidateEmail: '', candidatePhone: '', companyName: '', jobTitle: '' }
@@ -496,16 +508,8 @@ ${outputFormat}`
       const coverLetter = contactHeader + rawCover
       const hiringManagerDM = dmMatch ? dmMatch[1].trim() : ''
 
-      return res.status(200).json({
-        dualVersion: true,
-        resumeA,
-        resumeB,
-        coverLetter,
-        recruiterNotes,
-        hiringManagerDM,
-        metadata,
-        fileBaseName,
-      })
+      res.write(JSON.stringify({ type: 'done', dualVersion: true, resumeA, resumeB, coverLetter, recruiterNotes, hiringManagerDM, metadata, fileBaseName }) + '\n')
+      return res.end()
     } else {
       const resumeMatch = responseText.match(/===RESUME===([\s\S]*?)===COVER_LETTER===/)
       const coverMatch = responseText.match(/===COVER_LETTER===([\s\S]*?)===HIRING_MANAGER_DM===/)
@@ -516,18 +520,12 @@ ${outputFormat}`
       const coverLetter = contactHeader + rawCover
       const hiringManagerDM = dmMatch ? dmMatch[1].trim() : ''
 
-      return res.status(200).json({
-        dualVersion: false,
-        resume,
-        coverLetter,
-        recruiterNotes,
-        hiringManagerDM,
-        metadata,
-        fileBaseName,
-      })
+      res.write(JSON.stringify({ type: 'done', dualVersion: false, resume, coverLetter, recruiterNotes, hiringManagerDM, metadata, fileBaseName }) + '\n')
+      return res.end()
     }
   } catch (err) {
     console.error('Claude API error:', err)
-    return res.status(500).json({ error: 'Generation failed. Please try again.' })
+    res.write(JSON.stringify({ type: 'error', message: 'Generation failed. Please try again.' }) + '\n')
+    return res.end()
   }
 }
