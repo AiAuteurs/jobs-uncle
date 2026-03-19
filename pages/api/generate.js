@@ -294,7 +294,8 @@ export default async function handler(req, res) {
 
   // Truncate LinkedIn PDF to avoid bloated prompt — 8000 chars covers ~4 pages
   if (linkedinText.length > 8000) {
-    linkedinText = linkedinText.slice(0, 8000) + '\n[Resume truncated for brevity]'
+    linkedinText = linkedinText.slice(0, 8000) + '
+[Resume truncated for brevity]'
   }
 
   // ── Gap detection — run before prompt construction ──────────────────────────
@@ -358,18 +359,13 @@ AFTER applying the rules above:
 - Do NOT pad or embellish — be ruthlessly relevant
 - Write in implied first person throughout — NO "I", "my", or "me" anywhere. Every bullet and sentence leads with an action verb or noun. "Led a team of 10" not "I led a team of 10"
 
-LENGTH AND CONSOLIDATION RULES — THIS IS THE MOST IMPORTANT INSTRUCTION. VIOLATING THIS RUINS THE RESUME.
-
-HARD LIMIT: The resume body (excluding header and skills) must contain NO MORE THAN 10 job entries total. If you have more than 10, you are doing it wrong. Stop and consolidate.
-
-HOW TO CONSOLIDATE:
-1. Anything older than 7 years = ONE single line. No bullets. Format: "Company | Role | Years | Notable clients: X, Y, Z"
-2. Engagements under 3 months that are more than 2 years old = DROP THEM ENTIRELY. Do not list them.
-3. Multiple engagements at the same company = MERGE into one entry with a date range.
-4. The last 7 years = max 3 bullets per role, only the most relevant to THIS job. No generic bullets.
-5. NEVER write "Cut commercial content for..." or "Delivered polished..." — these are filler. Every bullet must have a specific client name, result, or credential.
-
-TARGET OUTPUT: A clean 1-page resume with 8-10 entries max. If a recruiter can't scan it in 30 seconds, it has failed.
+LENGTH AND CONSOLIDATION RULES — CRITICAL:
+- The final resume MUST fit on 1-2 pages maximum. If it would exceed 2 pages, cut aggressively.
+- For roles older than 7 years: consolidate into a single grouped entry. Example: "Matassa Agency | Freelance Senior Editor | 1998–2019 | Clients: Disney, BBDO, FCB, Yahoo, Goodby Silverstein" — one line, no bullets.
+- For the last 7 years: max 3 bullets per role. Pick only the bullets most relevant to THIS specific job.
+- Short engagements (1-2 months) from more than 3 years ago: fold into the parent company or drop entirely.
+- NEVER list every client or every project. Pick the 3-4 most impressive and name them only.
+- A tight, scannable 1-page resume beats a complete but unreadable 3-page one every time.
 `
 
   const outputFormat = dualVersion ? `
@@ -500,7 +496,7 @@ ${outputFormat}`
   try {
     const message = await client.messages.create({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: dualVersion ? 6000 : 4000,
+      max_tokens: dualVersion ? 5000 : 3000,
       messages: [{ role: 'user', content: prompt }],
     })
 
@@ -532,7 +528,7 @@ ${outputFormat}`
       const resumeAMatch = responseText.match(/===RESUME_A===([\s\S]*?)===RESUME_B===/)
       const resumeBMatch = responseText.match(/===RESUME_B===([\s\S]*?)===COVER_LETTER===/)
       const coverMatch = responseText.match(/===COVER_LETTER===([\s\S]*?)===HIRING_MANAGER_DM===/)
-      const dmMatch = responseText.match(/===HIRING_MANAGER_DM===([\s\S]*)$/)
+      const dmMatch = responseText.match(/===HIRING_MANAGER_DM===([\s\S]*?)(?:===COMPANY_INTEL===|$)/)
 
       const resumeA = resumeAMatch ? resumeAMatch[1].trim() : ''
       const resumeB = resumeBMatch ? resumeBMatch[1].trim() : ''
@@ -553,7 +549,7 @@ ${outputFormat}`
     } else {
       const resumeMatch = responseText.match(/===RESUME===([\s\S]*?)===COVER_LETTER===/)
       const coverMatch = responseText.match(/===COVER_LETTER===([\s\S]*?)===HIRING_MANAGER_DM===/)
-      const dmMatch = responseText.match(/===HIRING_MANAGER_DM===([\s\S]*)$/)
+      const dmMatch = responseText.match(/===HIRING_MANAGER_DM===([\s\S]*?)(?:===COMPANY_INTEL===|$)/)
 
       const resume = resumeMatch ? resumeMatch[1].trim() : responseText
       const rawCover = coverMatch ? coverMatch[1].trim() : ''
