@@ -187,7 +187,7 @@ export default function Home() {
       formData.append('dualVersion', dualVersionEnabled && isPlusUser ? 'true' : 'false')
 
       const controller = new AbortController()
-      const timeout = setTimeout(() => controller.abort(), 55000)
+      const timeout = setTimeout(() => controller.abort(), 120000)
 
       let response
       try {
