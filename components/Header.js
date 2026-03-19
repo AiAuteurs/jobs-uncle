@@ -1,4 +1,4 @@
-export default function Header({ isPaid = false, accessLevel = null, onSignIn, onManage }) {
+export default function Header({ isPaid = false, accessLevel = null, onSignIn, onManage, onContact }) {
   return (
     <header className="header">
       <div className="logo">
@@ -11,6 +11,14 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
           <a href="/example" className="header-nav-link" style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.75rem', fontWeight: 700, marginLeft: '1.25rem', border: '1.5px solid var(--accent)', borderRadius: '20px', padding: '3px 10px', letterSpacing: '0.02em' }}>See an example</a>
           <a href="/faq" className="header-nav-link" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.25rem' }}>FAQ</a>
           <a href="/pricing" className="header-nav-link" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.25rem' }}>Pricing</a>
+          {onContact && (
+            <a
+              onClick={e => { e.preventDefault(); onContact() }}
+              href="#contact"
+              className="header-nav-link"
+              style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.25rem', cursor: 'pointer' }}
+            >Contact</a>
+          )}
         </span>
       </div>
       <div className="header-right">

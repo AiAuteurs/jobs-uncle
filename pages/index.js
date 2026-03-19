@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import Head from 'next/head'
 import Header from '../components/Header'
+import ContactModal from '../components/ContactModal'
 import { useRouter } from 'next/router'
 
 const renderMarkdown = (text) => {
@@ -74,6 +75,7 @@ export default function Home() {
   const [gateEmail, setGateEmail] = useState('')
   const [gateStatus, setGateStatus] = useState(null) // null | 'loading' | 'done' | 'error'
   const [gateMsg, setGateMsg] = useState('')
+  const [showContact, setShowContact] = useState(false)
   const fileInputRef = useRef(null)
 
   const versionToggleRef = useRef(null)
@@ -412,7 +414,10 @@ export default function Home() {
       if (res.ok) {
         setGateStatus('done')
         setShowEmailGate(false)
-        if (typeof window !== 'undefined') localStorage.setItem('ju_email_gate', '1')
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('ju_email_gate', '1')
+          localStorage.setItem('ju_email', gateEmail)
+        }
       } else {
         setGateStatus('error')
         setGateMsg('Something went wrong. Try again.')
@@ -518,6 +523,9 @@ export default function Home() {
           100%   { opacity: 0; }
         }
       `}</style>
+
+      {showContact && <ContactModal onClose={() => setShowContact(false)} />}
+
       {showManageModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => setShowManageModal(false)}>
           <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)', position: 'relative' }} onClick={e => e.stopPropagation()}>
@@ -714,6 +722,7 @@ export default function Home() {
         accessLevel={accessLevel}
         onSignIn={() => setShowSignIn(true)}
         onManage={() => setShowManageModal(true)}
+        onContact={() => setShowContact(true)}
       />
 
       {/* MOBILE-ONLY NAV BAR */}
@@ -1003,7 +1012,9 @@ export default function Home() {
                   src={charm.src}
                   alt="Uncle Spin"
                   style={{
-                    width: 110, height: 'auto',
+                    width: 110, height: 130,
+                    objectFit: 'contain',
+                    objectPosition: 'bottom',
                     position: 'absolute', top: 0, left: 0,
                     animation: `uncle-bounce 0.8s ease-in-out infinite, charm-show 5s linear ${charm.delay} infinite`,
                     opacity: 0,
@@ -1187,7 +1198,9 @@ export default function Home() {
                               src={charm.src}
                               alt="Uncle Spin"
                               style={{
-                                width: 44, height: 'auto',
+                                width: 44, height: 50,
+                                objectFit: 'contain',
+                                objectPosition: 'bottom',
                                 position: 'absolute', top: 0, left: 0,
                                 animation: `uncle-bounce 0.8s ease-in-out infinite, charm-show 5s linear ${charm.delay} infinite`,
                                 opacity: 0,
@@ -1279,7 +1292,9 @@ export default function Home() {
                           src={charm.src}
                           alt="Uncle Spin"
                           style={{
-                            width: 44, height: 'auto',
+                            width: 44, height: 50,
+                            objectFit: 'contain',
+                            objectPosition: 'bottom',
                             position: 'absolute', top: 0, left: 0,
                             animation: `uncle-bounce 0.8s ease-in-out infinite, charm-show 5s linear ${charm.delay} infinite`,
                             opacity: 0,
@@ -1500,10 +1515,11 @@ export default function Home() {
                         rows={2}
                       />
                       <button className="feedback-submit" onClick={() => {
+                        const storedEmail = typeof window !== 'undefined' ? localStorage.getItem('ju_email') || '' : ''
                         fetch('/api/feedback', {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ rating: feedback, comment: feedbackText })
+                          body: JSON.stringify({ rating: feedback, comment: feedbackText, email: storedEmail })
                         }).catch(() => {})
                         setFeedbackSent(true)
                       }}>
