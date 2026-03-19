@@ -20,6 +20,8 @@ async function extractTextFromFile(filePath, mimeType, originalName) {
   // TXT
   if (ext === 'txt' || mimeType === 'text/plain') {
     return fs.readFileSync(filePath, 'utf8')
+  }
+
   // DOCX — use jszip (already in dependencies)
   if (ext === 'docx' || ext === 'doc' ||
       mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
@@ -39,6 +41,8 @@ async function extractTextFromFile(filePath, mimeType, originalName) {
       .replace(/\n{3,}/g, '\n\n')
       .trim()
     return text
+  }
+
   // PDF — default
   const buffer = fs.readFileSync(filePath)
   const pdfParse = require('pdf-parse')
@@ -63,6 +67,8 @@ function parseJobsFromResume(resumeText) {
     jul:7, aug:8, sep:9, oct:10, nov:11, dec:12,
     january:1, february:2, march:3, april:4, june:6,
     july:7, august:8, september:9, october:10, november:11, december:12
+  }
+
   // Matches: "Jan 2020 - Mar 2022", "2019 - Present", "Feb 2019 - Oct 2020", "Sept. 2016 - Dec 2016"
   // NOTE: Use alternation ([-–—]+|\\bto\\b) NOT a char class — char class would consume 't','o' from month names
   const DATE_RANGE_RE = /([a-z]+\.?\s*\d{4}|\d{1,2}\/\d{4}|\d{4})\s*(?:[-–—]+|to)\s*([a-z]+\.?\s*\d{4}|\d{1,2}\/\d{4}|\d{4}|present|current|now)/gi
@@ -87,9 +93,13 @@ function parseJobsFromResume(resumeText) {
     const yr = str.match(/^(\d{4})$/)
     if (yr) return { year: parseInt(yr[1]), month: 1, isPresent: false }
     return null
+  }
+
   function toTimestamp(parsed) {
     if (!parsed) return null
     return parsed.year * 12 + (parsed.month - 1)
+  }
+
   lines.forEach((line, lineIndex) => {
     let match
     DATE_RANGE_RE.lastIndex = 0
@@ -216,11 +226,15 @@ async function checkRateLimit(ip) {
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
+  }
+
   // IP rate limit
   const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket?.remoteAddress || 'unknown'
   const allowed = await checkRateLimit(ip)
   if (!allowed) {
     return res.status(429).json({ error: 'Too many requests. Please wait an hour before trying again.' })
+  }
+
   const form = formidable({ maxFileSize: 10 * 1024 * 1024 })
 
   let fields, files
@@ -228,10 +242,14 @@ export default async function handler(req, res) {
     ;[fields, files] = await form.parse(req)
   } catch (err) {
     return res.status(400).json({ error: 'Failed to parse upload' })
+  }
+
   // Honeypot — bots fill hidden fields, humans don't
   const honeypot = Array.isArray(fields.website) ? fields.website[0] : fields.website
   if (honeypot) {
     return res.status(200).json({ resume: '', coverLetter: '', recruiterNotes: '', hiringManagerDM: '' }) // silent fail
+  }
+
   const resumeFile = (() => {
     if (files.resume) return Array.isArray(files.resume) ? files.resume[0] : files.resume
     if (files.pdf) return Array.isArray(files.pdf) ? files.pdf[0] : files.pdf
@@ -250,15 +268,21 @@ export default async function handler(req, res) {
     } catch (err) {
       jobDescription = ''
     }
+  }
+
   const dualVersion = (Array.isArray(fields.dualVersion) ? fields.dualVersion[0] : fields.dualVersion) === 'true'
 
   if (!resumeFile || !jobDescription) {
     return res.status(400).json({ error: 'Missing resume file or job description' })
+  }
+
   // Validate file type
   const uploadExt = (resumeFile.originalFilename || '').split('.').pop().toLowerCase()
   const allowedExts = ['pdf', 'docx', 'txt']
   if (!allowedExts.includes(uploadExt)) {
     return res.status(400).json({ error: 'Unsupported file type. Please upload a PDF, DOCX, or TXT file.' })
+  }
+
   let linkedinText = ''
   try {
     linkedinText = await extractTextFromFile(resumeFile.filepath, resumeFile.mimetype, resumeFile.originalFilename)
@@ -266,6 +290,8 @@ export default async function handler(req, res) {
     linkedinText = '[Could not extract resume text automatically.]'
   } finally {
     try { fs.unlinkSync(resumeFile.filepath) } catch (e) {}
+  }
+
   // ── Gap detection — run before prompt construction ──────────────────────────
   const parsedJobs = parseJobsFromResume(linkedinText)
   const taggedJobs = tagProtectedJobs(parsedJobs)
@@ -326,14 +352,6 @@ AFTER applying the rules above:
 - For PROTECTED jobs that seem irrelevant to this role: reframe bullets around transferable skills (customer interaction, reliability, communication, process adherence) — do NOT fabricate skills not implied by the role
 - Do NOT pad or embellish — be ruthlessly relevant
 - Write in implied first person throughout — NO "I", "my", or "me" anywhere. Every bullet and sentence leads with an action verb or noun. "Led a team of 10" not "I led a team of 10"
-
-LENGTH AND CONSOLIDATION RULES — CRITICAL:
-- The final resume MUST fit on 1-2 pages maximum. If it would exceed 2 pages, cut aggressively.
-- For roles older than 7 years: consolidate into a single grouped entry. Example: "Matassa Agency | Freelance Senior Editor | 1998–2019 | Clients: Disney, BBDO, FCB, Yahoo, Goodby Silverstein" — one line, no bullets.
-- For the last 7 years: max 3 bullets per role. Pick only the bullets most relevant to THIS specific job.
-- Short engagements (1-2 months) from more than 3 years ago: fold into the parent company or drop entirely.
-- NEVER list every client or every project. Pick the 3-4 most impressive and name them only.
-- A tight, scannable 1-page resume beats a complete but unreadable 3-page one every time.
 `
 
   const outputFormat = dualVersion ? `
@@ -354,16 +372,6 @@ LENGTH AND CONSOLIDATION RULES — CRITICAL:
 
 ===HIRING_MANAGER_DM===
 [hiring manager DM here]
-
-===COMPANY_INTEL===
-COMPANY INTEL
-─────────────────────────────
-⚡ Power center: [1 sentence]
-🎯 Position your work as: [1 sentence]
-🤝 Who thrives here: [1 sentence]
-⚠️ Watch for: [1 sentence]
-🎙️ Interview move: [1 sentence]
-─────────────────────────────
 ` : `
 ===METADATA===
 {"candidateName":"...","candidateEmail":"...","candidatePhone":"...","companyName":"...","jobTitle":"..."}
@@ -379,16 +387,6 @@ COMPANY INTEL
 
 ===HIRING_MANAGER_DM===
 [hiring manager DM here]
-
-===COMPANY_INTEL===
-COMPANY INTEL
-─────────────────────────────
-⚡ Power center: [1 sentence]
-🎯 Position your work as: [1 sentence]
-🤝 Who thrives here: [1 sentence]
-⚠️ Watch for: [1 sentence]
-🎙️ Interview move: [1 sentence]
-─────────────────────────────
 `
 
   const now = new Date()
@@ -452,12 +450,6 @@ METADATA REQUIREMENTS:
 - companyName: company name (short form, no Inc/LLC)
 - jobTitle: job title (2-4 words max, no special chars)
 
-COMPANY INTEL REQUIREMENTS:
-After generating all other sections, analyze the job description for organizational power signals.
-Infer which function holds actual decision-making power based on language patterns, stated priorities, reporting structures, success metrics, and cultural signals — NOT what the company claims about itself.
-Return the COMPANY INTEL block exactly as specified in the output format.
-Be direct. No corporate hedging. If the JD is thin on signals, say so in one line and give your best inference. Never fabricate specifics not supported by the text.
-
 Respond in this exact format:
 ${outputFormat}`
 
@@ -496,7 +488,7 @@ ${outputFormat}`
       const resumeAMatch = responseText.match(/===RESUME_A===([\s\S]*?)===RESUME_B===/)
       const resumeBMatch = responseText.match(/===RESUME_B===([\s\S]*?)===COVER_LETTER===/)
       const coverMatch = responseText.match(/===COVER_LETTER===([\s\S]*?)===HIRING_MANAGER_DM===/)
-      const dmMatch = responseText.match(/===HIRING_MANAGER_DM===([\s\S]*?)(?:===COMPANY_INTEL===|$)/)
+      const dmMatch = responseText.match(/===HIRING_MANAGER_DM===([\s\S]*)$/)
 
       const resumeA = resumeAMatch ? resumeAMatch[1].trim() : ''
       const resumeB = resumeBMatch ? resumeBMatch[1].trim() : ''
@@ -517,14 +509,12 @@ ${outputFormat}`
     } else {
       const resumeMatch = responseText.match(/===RESUME===([\s\S]*?)===COVER_LETTER===/)
       const coverMatch = responseText.match(/===COVER_LETTER===([\s\S]*?)===HIRING_MANAGER_DM===/)
-      const dmMatch = responseText.match(/===HIRING_MANAGER_DM===([\s\S]*?)(?:===COMPANY_INTEL===|$)/)
+      const dmMatch = responseText.match(/===HIRING_MANAGER_DM===([\s\S]*)$/)
 
       const resume = resumeMatch ? resumeMatch[1].trim() : responseText
       const rawCover = coverMatch ? coverMatch[1].trim() : ''
       const coverLetter = contactHeader + rawCover
       const hiringManagerDM = dmMatch ? dmMatch[1].trim() : ''
-      const intelMatch = responseText.match(/===COMPANY_INTEL===([\s\S]*)$/)
-      const companyIntel = intelMatch ? intelMatch[1].trim() : ''
 
       return res.status(200).json({
         dualVersion: false,
@@ -532,7 +522,6 @@ ${outputFormat}`
         coverLetter,
         recruiterNotes,
         hiringManagerDM,
-        companyIntel,
         metadata,
         fileBaseName,
       })
