@@ -175,7 +175,7 @@ body {
   margin-bottom: 2rem;
 }
 
-@media (max-width: 640px) { .steps { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .steps { grid-template-columns: 1fr; } }
 
 .step-card {
   background: var(--surface);
