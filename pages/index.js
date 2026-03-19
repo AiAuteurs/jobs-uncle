@@ -513,9 +513,16 @@ export default function Home() {
   return (
     <>
       <style>{`
+        .format-btn-featured {
+          background: transparent !important;
+          color: var(--ink) !important;
+          border: 2px solid var(--ink) !important;
+        }
+        .format-btn-featured.format-btn-active,
         .format-btn-active {
           background: var(--ink) !important;
           color: white !important;
+          border-color: var(--ink) !important;
         }
         @keyframes uncle-bounce {
           0%, 100% { transform: translateY(0); }
