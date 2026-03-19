@@ -51,6 +51,154 @@ async function extractTextFromFile(filePath, mimeType, originalName) {
 }
 
 
+// ─── JOB GAP DETECTION ────────────────────────────────────────────────────────
+
+/**
+ * Parse all jobs from raw resume text.
+ * Returns array of { employer, title, startDate, endDate, rawDateStr, lineIndex }
+ * Handles formats: Jan 2020, January 2020, 01/2020, 2020, Present/Current/Now
+ */
+function parseJobsFromResume(resumeText) {
+  const lines = resumeText.split('\n')
+  const jobs = []
+
+  const MONTH_MAP = {
+    jan:1, feb:2, mar:3, apr:4, may:5, jun:6,
+    jul:7, aug:8, sep:9, oct:10, nov:11, dec:12,
+    january:1, february:2, march:3, april:4, june:6,
+    july:7, august:8, september:9, october:10, november:11, december:12
+  }
+
+  // Matches: "Jan 2020 - Mar 2022", "2019 - Present", "Feb 2019 - Oct 2020", "Sept. 2016 - Dec 2016"
+  // NOTE: Use alternation ([-–—]+|\\bto\\b) NOT a char class — char class would consume 't','o' from month names
+  const DATE_RANGE_RE = /([a-z]+\.?\s*\d{4}|\d{1,2}\/\d{4}|\d{4})\s*(?:[-–—]+|to)\s*([a-z]+\.?\s*\d{4}|\d{1,2}\/\d{4}|\d{4}|present|current|now)/gi
+
+  function parseMonthYear(str) {
+    if (!str) return null
+    str = str.trim().toLowerCase().replace(/\.$/, '')
+    if (['present','current','now'].includes(str)) {
+      const n = new Date()
+      return { year: n.getFullYear(), month: n.getMonth() + 1, isPresent: true }
+    }
+    // "jan 2020" or "january 2020"
+    const mdy = str.match(/^([a-z]+)\.?\s+(\d{4})$/)
+    if (mdy) {
+      const month = MONTH_MAP[mdy[1].replace(/\.$/, '')] || 1
+      return { year: parseInt(mdy[2]), month, isPresent: false }
+    }
+    // "01/2020"
+    const slash = str.match(/^(\d{1,2})\/(\d{4})$/)
+    if (slash) return { year: parseInt(slash[2]), month: parseInt(slash[1]), isPresent: false }
+    // bare year "2020"
+    const yr = str.match(/^(\d{4})$/)
+    if (yr) return { year: parseInt(yr[1]), month: 1, isPresent: false }
+    return null
+  }
+
+  function toTimestamp(parsed) {
+    if (!parsed) return null
+    return parsed.year * 12 + (parsed.month - 1)
+  }
+
+  lines.forEach((line, lineIndex) => {
+    let match
+    DATE_RANGE_RE.lastIndex = 0
+    while ((match = DATE_RANGE_RE.exec(line)) !== null) {
+      const start = parseMonthYear(match[1])
+      const end = parseMonthYear(match[2])
+      if (!start) continue
+
+      // Try to grab employer from nearby lines (look back up to 3 lines)
+      let employer = ''
+      for (let i = lineIndex; i >= Math.max(0, lineIndex - 3); i--) {
+        const candidate = lines[i].trim()
+        if (candidate && !/^\s*[-•]/.test(candidate) && candidate.length > 2 && candidate.length < 100) {
+          employer = candidate
+          break
+        }
+      }
+
+      jobs.push({
+        employer,
+        rawDateStr: match[0],
+        startDate: toTimestamp(start),
+        endDate: end ? toTimestamp(end) : toTimestamp(start) + 1,
+        isCurrentRole: end?.isPresent || false,
+        startYear: start.year,
+        lineIndex,
+      })
+    }
+  })
+
+  return jobs
+}
+
+/**
+ * Tag each job as PROTECTED or DROPPABLE.
+ * PROTECTED if:
+ *   - The job is within the last 7 years, OR
+ *   - Removing it would create a gap of more than 6 months in the timeline
+ */
+function tagProtectedJobs(jobs) {
+  if (!jobs.length) return []
+
+  const currentYear = new Date().getFullYear()
+  const sevenYearsAgo = (currentYear - 7) * 12
+
+  // Sort ascending by start date
+  const sorted = [...jobs].sort((a, b) => a.startDate - b.startDate)
+
+  return sorted.map((job, i) => {
+    const withinSevenYears = job.startDate >= sevenYearsAgo
+
+    // Check if removing this job creates a gap: look at previous job's end vs next job's start
+    let createsGap = false
+    if (i > 0 && i < sorted.length - 1) {
+      const prevEnd = sorted[i - 1].endDate
+      const nextStart = sorted[i + 1].startDate
+      const gapWithout = nextStart - prevEnd // months gap if this job removed
+      if (gapWithout > 6) createsGap = true
+    } else if (i === 0 && sorted.length > 1) {
+      // First job — check if gap between it and next job is large
+      // (no prior job, so no gap created by removing it — unless it's the only bridge)
+      createsGap = false
+    } else if (i > 0 && i === sorted.length - 1) {
+      // Last job — if it's not current role, removing it doesn't create a forward gap
+      // but if there's a big gap before it started, it's already flagged by prev iteration
+      createsGap = false
+    }
+
+    return {
+      ...job,
+      protected: withinSevenYears || createsGap,
+      protectedReason: withinSevenYears ? '7-year rule' : createsGap ? 'fills employment gap' : null,
+    }
+  })
+}
+
+/**
+ * Build a human-readable manifest of protected jobs to inject into the prompt.
+ */
+function buildJobManifest(taggedJobs) {
+  if (!taggedJobs.length) return ''
+
+  const lines = ['ALL JOBS FROM RESUME (must account for every item below):']
+  taggedJobs
+    .sort((a, b) => b.startDate - a.startDate) // reverse chron for readability
+    .forEach(j => {
+      const status = j.protected ? '🔒 PROTECTED' : '○ DROPPABLE'
+      const reason = j.protectedReason ? ` (${j.protectedReason})` : ''
+      lines.push(`  ${status}${reason}: ${j.employer || '[employer]'} — ${j.rawDateStr}`)
+    })
+
+  lines.push('')
+  lines.push(`TOTAL JOB COUNT: ${taggedJobs.length}`)
+  lines.push(`PROTECTED COUNT: ${taggedJobs.filter(j => j.protected).length}`)
+  return lines.join('\n')
+}
+
+// ─── END GAP DETECTION ────────────────────────────────────────────────────────
+
 const RATE_LIMIT = 50        // max requests per window
 const RATE_WINDOW = 60 * 60 // 1 hour in seconds
 
@@ -144,7 +292,21 @@ export default async function handler(req, res) {
     try { fs.unlinkSync(resumeFile.filepath) } catch (e) {}
   }
 
+  // ── Gap detection — run before prompt construction ──────────────────────────
+  const parsedJobs = parseJobsFromResume(linkedinText)
+  const taggedJobs = tagProtectedJobs(parsedJobs)
+  const jobManifest = buildJobManifest(taggedJobs)
+  // ────────────────────────────────────────────────────────────────────────────
+
   const resumeInstructions = dualVersion ? `
+JOB INCLUSION RULES — READ BEFORE WRITING EITHER VERSION:
+${jobManifest}
+
+RULE 1 — PROTECTED JOBS (marked 🔒 above): Must appear in BOTH resume versions.
+RULE 2 — DROPPABLE JOBS (marked ○ above): May omit only if no gap is created.
+RULE 3 — 7-YEAR HARD FLOOR: Never omit any job from the last 7 years.
+RULE 4 — JOB COUNT INTEGRITY: Both versions must contain all PROTECTED jobs.
+
 RESUME VERSION A — LEADERSHIP FOCUS:
 - Lead with a summary emphasizing strategic impact, team leadership, stakeholder management, and organizational outcomes
 - Prioritize bullet points that show scale: team size, budget owned, cross-functional influence, executive visibility
@@ -161,15 +323,33 @@ Generate both versions. Each should be complete and standalone — same experien
 - Write in implied first person throughout both versions — NO "I", "my", or "me" anywhere. Every bullet leads with an action verb. "Engineered solution" not "I engineered"
 ` : `
 RESUME REQUIREMENTS:
+
+JOB INCLUSION RULES — READ BEFORE WRITING:
+${jobManifest}
+
+RULE 1 — PROTECTED JOBS (marked 🔒 above): These MUST appear in the resume.
+  Do not remove, merge, or skip them under any circumstances.
+  You MAY reframe bullet points to emphasize transferable skills relevant to this role.
+  Even if the job seems irrelevant (e.g. warehouse, retail), it fills a real gap on the timeline.
+  Removing it would create a suspicious gap that costs the applicant interviews.
+
+RULE 2 — DROPPABLE JOBS (marked ○ above): Use judgment.
+  If the job adds nothing to this application AND its removal creates no gap, you may omit it.
+  If in doubt, keep it — a full timeline is safer than a tight but gappy one.
+
+RULE 3 — 7-YEAR HARD FLOOR: Never omit any job from the last 7 years, regardless of relevance.
+
+RULE 4 — JOB COUNT INTEGRITY: Before finalizing, count the jobs in your output.
+  You must include all PROTECTED jobs. If your output has fewer jobs than the PROTECTED COUNT above, stop and add the missing ones.
+
+AFTER applying the rules above:
 - Lead with a punchy 2-3 sentence professional summary that speaks directly to THIS role
-- Highlight only the experience most relevant to this specific job
 - Use strong action verbs and concrete results where possible
 - Turn bullet points into achievement-focused statements — add metrics wherever the background supports it
 - Do NOT include an objective statement
 - Format cleanly with clear sections: Summary, Experience, Skills, Education
-- Keep it to one page worth of content
 - Mirror keywords and phrases from the job description naturally throughout — optimize for ATS without sounding robotic
-- If there are employment gaps in the profile, reframe them confidently as growth, skill-building, or intentional transition
+- For PROTECTED jobs that seem irrelevant to this role: reframe bullets around transferable skills (customer interaction, reliability, communication, process adherence) — do NOT fabricate skills not implied by the role
 - Do NOT pad or embellish — be ruthlessly relevant
 - Write in implied first person throughout — NO "I", "my", or "me" anywhere. Every bullet and sentence leads with an action verb or noun. "Led a team of 10" not "I led a team of 10"
 `
