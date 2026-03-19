@@ -20,8 +20,6 @@ async function extractTextFromFile(filePath, mimeType, originalName) {
   // TXT
   if (ext === 'txt' || mimeType === 'text/plain') {
     return fs.readFileSync(filePath, 'utf8')
-  }
-
   // DOCX — use jszip (already in dependencies)
   if (ext === 'docx' || ext === 'doc' ||
       mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
@@ -41,8 +39,6 @@ async function extractTextFromFile(filePath, mimeType, originalName) {
       .replace(/\n{3,}/g, '\n\n')
       .trim()
     return text
-  }
-
   // PDF — default
   const buffer = fs.readFileSync(filePath)
   const pdfParse = require('pdf-parse')
@@ -67,8 +63,6 @@ function parseJobsFromResume(resumeText) {
     jul:7, aug:8, sep:9, oct:10, nov:11, dec:12,
     january:1, february:2, march:3, april:4, june:6,
     july:7, august:8, september:9, october:10, november:11, december:12
-  }
-
   // Matches: "Jan 2020 - Mar 2022", "2019 - Present", "Feb 2019 - Oct 2020", "Sept. 2016 - Dec 2016"
   // NOTE: Use alternation ([-–—]+|\\bto\\b) NOT a char class — char class would consume 't','o' from month names
   const DATE_RANGE_RE = /([a-z]+\.?\s*\d{4}|\d{1,2}\/\d{4}|\d{4})\s*(?:[-–—]+|to)\s*([a-z]+\.?\s*\d{4}|\d{1,2}\/\d{4}|\d{4}|present|current|now)/gi
@@ -93,13 +87,9 @@ function parseJobsFromResume(resumeText) {
     const yr = str.match(/^(\d{4})$/)
     if (yr) return { year: parseInt(yr[1]), month: 1, isPresent: false }
     return null
-  }
-
   function toTimestamp(parsed) {
     if (!parsed) return null
     return parsed.year * 12 + (parsed.month - 1)
-  }
-
   lines.forEach((line, lineIndex) => {
     let match
     DATE_RANGE_RE.lastIndex = 0
@@ -226,15 +216,11 @@ async function checkRateLimit(ip) {
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
-  }
-
   // IP rate limit
   const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket?.remoteAddress || 'unknown'
   const allowed = await checkRateLimit(ip)
   if (!allowed) {
     return res.status(429).json({ error: 'Too many requests. Please wait an hour before trying again.' })
-  }
-
   const form = formidable({ maxFileSize: 10 * 1024 * 1024 })
 
   let fields, files
@@ -242,14 +228,10 @@ export default async function handler(req, res) {
     ;[fields, files] = await form.parse(req)
   } catch (err) {
     return res.status(400).json({ error: 'Failed to parse upload' })
-  }
-
   // Honeypot — bots fill hidden fields, humans don't
   const honeypot = Array.isArray(fields.website) ? fields.website[0] : fields.website
   if (honeypot) {
     return res.status(200).json({ resume: '', coverLetter: '', recruiterNotes: '', hiringManagerDM: '' }) // silent fail
-  }
-
   const resumeFile = (() => {
     if (files.resume) return Array.isArray(files.resume) ? files.resume[0] : files.resume
     if (files.pdf) return Array.isArray(files.pdf) ? files.pdf[0] : files.pdf
@@ -268,21 +250,15 @@ export default async function handler(req, res) {
     } catch (err) {
       jobDescription = ''
     }
-  }
-
   const dualVersion = (Array.isArray(fields.dualVersion) ? fields.dualVersion[0] : fields.dualVersion) === 'true'
 
   if (!resumeFile || !jobDescription) {
     return res.status(400).json({ error: 'Missing resume file or job description' })
-  }
-
   // Validate file type
   const uploadExt = (resumeFile.originalFilename || '').split('.').pop().toLowerCase()
   const allowedExts = ['pdf', 'docx', 'txt']
   if (!allowedExts.includes(uploadExt)) {
     return res.status(400).json({ error: 'Unsupported file type. Please upload a PDF, DOCX, or TXT file.' })
-  }
-
   let linkedinText = ''
   try {
     linkedinText = await extractTextFromFile(resumeFile.filepath, resumeFile.mimetype, resumeFile.originalFilename)
@@ -290,13 +266,6 @@ export default async function handler(req, res) {
     linkedinText = '[Could not extract resume text automatically.]'
   } finally {
     try { fs.unlinkSync(resumeFile.filepath) } catch (e) {}
-  }
-
-  // Truncate LinkedIn PDF to avoid bloated prompt — 8000 chars covers ~4 pages
-  if (linkedinText.length > 8000) {
-    linkedinText = linkedinText.slice(0, 8000) + '\n
-  }
-
   // ── Gap detection — run before prompt construction ──────────────────────────
   const parsedJobs = parseJobsFromResume(linkedinText)
   const taggedJobs = tagProtectedJobs(parsedJobs)
