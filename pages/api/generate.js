@@ -355,6 +355,10 @@ AFTER applying the rules above:
 - For PROTECTED jobs that seem irrelevant to this role: reframe bullets around transferable skills (customer interaction, reliability, communication, process adherence) — do NOT fabricate skills not implied by the role
 - Do NOT pad or embellish — be ruthlessly relevant
 - REORDER EXPERIENCE for relevance: If an older role is more relevant to this specific job than a recent one, move it higher. Lead with what matters to THIS employer, not just what's most recent. A 2019 healthcare billing role beats a 2023 veterinary receptionist role for a health insurance job.
+- SECTION HEADERS when reordering: If you reorder jobs so that older roles appear before newer ones, you MUST split the experience section into two labeled groups to avoid confusing recruiters and ATS systems:
+  Use "RELEVANT EXPERIENCE" as the header for the most relevant roles (regardless of date).
+  Use "ADDITIONAL EXPERIENCE" as the header for the remaining roles.
+  This is standard practice and signals intentional curation, not a mistake.
 - FLAG bad email addresses in recruiter notes: if the email looks unprofessional (e.g. pet names, nicknames, random numbers), flag it and suggest a professional alternative
 - Write in implied first person throughout — NO "I", "my", or "me" anywhere. Every bullet and sentence leads with an action verb or noun. "Led a team of 10" not "I led a team of 10"
 `
