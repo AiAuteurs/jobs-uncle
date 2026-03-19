@@ -375,6 +375,16 @@ AFTER applying the rules above:
 
 ===HIRING_MANAGER_DM===
 [hiring manager DM here]
+
+===COMPANY_INTEL===
+COMPANY INTEL
+─────────────────────────────
+⚡ Power center: [1 sentence]
+🎯 Position your work as: [1 sentence]
+🤝 Who thrives here: [1 sentence]
+⚠️ Watch for: [1 sentence]
+🎙️ Interview move: [1 sentence]
+─────────────────────────────
 ` : `
 ===METADATA===
 {"candidateName":"...","candidateEmail":"...","candidatePhone":"...","companyName":"...","jobTitle":"..."}
@@ -390,6 +400,16 @@ AFTER applying the rules above:
 
 ===HIRING_MANAGER_DM===
 [hiring manager DM here]
+
+===COMPANY_INTEL===
+COMPANY INTEL
+─────────────────────────────
+⚡ Power center: [1 sentence]
+🎯 Position your work as: [1 sentence]
+🤝 Who thrives here: [1 sentence]
+⚠️ Watch for: [1 sentence]
+🎙️ Interview move: [1 sentence]
+─────────────────────────────
 `
 
   const now = new Date()
@@ -436,10 +456,11 @@ COVER LETTER REQUIREMENTS:
 
 HIRING MANAGER DM REQUIREMENTS:
 - 3-4 sentences max
-- Open with a specific hook — reference the role and one concrete thing from their background
-- No desperation, no groveling
-- End with a low-pressure call to action
-- Tone: confident peer, not supplicant
+- NEVER open with "Hi there", "Hello", "Hey", or any generic greeting
+- Open immediately with a specific hook — reference the role and one concrete credential from their background
+- No desperation, no groveling, no "I'd love to", no "Would you be open to"
+- End with a single direct question or low-pressure call to action
+- Tone: confident peer reaching out, not a job seeker begging
 
 CONTACT INFO REQUIREMENTS:
 - In the resume header, include name, email, phone, and LinkedIn URL if present
@@ -452,6 +473,9 @@ METADATA REQUIREMENTS:
 - candidatePhone: phone if present, else ""
 - companyName: company name (short form, no Inc/LLC)
 - jobTitle: job title (2-4 words max, no special chars)
+
+COMPANY INTEL REQUIREMENTS:
+Analyze the job description for organizational power signals. Infer which function holds actual decision-making power based on language patterns, stated priorities, reporting structures, success metrics, and cultural signals in the JD — NOT what the company claims about itself. Be direct. No hedging. If the JD is thin on signals, say so briefly and give your best inference. Never fabricate specifics not in the text.
 
 Respond in this exact format:
 ${outputFormat}`
@@ -512,12 +536,14 @@ ${outputFormat}`
     } else {
       const resumeMatch = responseText.match(/===RESUME===([\s\S]*?)===COVER_LETTER===/)
       const coverMatch = responseText.match(/===COVER_LETTER===([\s\S]*?)===HIRING_MANAGER_DM===/)
-      const dmMatch = responseText.match(/===HIRING_MANAGER_DM===([\s\S]*)$/)
+      const dmMatch = responseText.match(/===HIRING_MANAGER_DM===([\s\S]*?)(?:===COMPANY_INTEL===|$)/)
+      const intelMatch = responseText.match(/===COMPANY_INTEL===([\s\S]*)$/)
 
       const resume = resumeMatch ? resumeMatch[1].trim() : responseText
       const rawCover = coverMatch ? coverMatch[1].trim() : ''
       const coverLetter = contactHeader + rawCover
       const hiringManagerDM = dmMatch ? dmMatch[1].trim() : ''
+      const companyIntel = intelMatch ? intelMatch[1].trim() : ''
 
       return res.status(200).json({
         dualVersion: false,
@@ -525,6 +551,7 @@ ${outputFormat}`
         coverLetter,
         recruiterNotes,
         hiringManagerDM,
+        companyIntel,
         metadata,
         fileBaseName,
       })
