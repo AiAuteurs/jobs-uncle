@@ -292,7 +292,6 @@ export default async function handler(req, res) {
     try { fs.unlinkSync(resumeFile.filepath) } catch (e) {}
   }
 
-  // Cap input to prevent Claude from listing every job
   if (linkedinText.length > 6000) linkedinText = linkedinText.slice(0, 12000)
 
   // ── Gap detection — run before prompt construction ──────────────────────────
