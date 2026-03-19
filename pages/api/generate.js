@@ -293,7 +293,7 @@ export default async function handler(req, res) {
   }
 
   // Cap input to prevent Claude from listing every job
-  if (linkedinText.length > 6000) linkedinText = linkedinText.slice(0, 6000)
+  if (linkedinText.length > 6000) linkedinText = linkedinText.slice(0, 12000)
 
   // ── Gap detection — run before prompt construction ──────────────────────────
   const parsedJobs = parseJobsFromResume(linkedinText)
