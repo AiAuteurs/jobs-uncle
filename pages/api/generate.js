@@ -7,7 +7,7 @@ export const config = {
     bodyParser: false,
     responseLimit: false,
   },
-  maxDuration: 60,
+  maxDuration: 300,
 }
 
 const client = new Anthropic({
