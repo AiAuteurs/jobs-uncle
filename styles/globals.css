@@ -169,7 +169,7 @@ body {
 .hero {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  min-height: 560px;
+  min-height: 420px;
   border-bottom: 1px solid var(--border-soft);
   max-width: 1200px;
   margin: 0 auto;
@@ -177,7 +177,7 @@ body {
 }
 
 .hero-left {
-  padding: 40px 60px 40px 0;
+  padding: 28px 60px 28px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -387,7 +387,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 32px 0 24px;
+  padding: 20px 0 16px;
   border-bottom: 1px solid var(--border-soft);
 }
 
