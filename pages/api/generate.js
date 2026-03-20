@@ -244,6 +244,29 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Failed to parse upload' })
   }
 
+  // Turnstile bot check
+  const turnstileToken = Array.isArray(fields['cf-turnstile-response']) ? fields['cf-turnstile-response'][0] : fields['cf-turnstile-response']
+  if (turnstileToken) {
+    try {
+      const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          secret: process.env.TURNSTILE_SECRET_KEY,
+          response: turnstileToken,
+          remoteip: ip
+        })
+      })
+      const verifyData = await verifyRes.json()
+      if (!verifyData.success) {
+        return res.status(403).json({ error: 'Bot check failed. Please refresh and try again.' })
+      }
+    } catch (err) {
+      // If Turnstile verification itself fails, allow through (fail open) so real users aren't blocked
+      console.error('Turnstile verify error:', err)
+    }
+  }
+
   // Honeypot — bots fill hidden fields, humans don't
   const honeypot = Array.isArray(fields.website) ? fields.website[0] : fields.website
   if (honeypot) {
@@ -508,7 +531,7 @@ ${outputFormat}`
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${process.env.RESEND_API}` },
         body: JSON.stringify({
-          from: 'Oni from JobsUncle <oni@jobsuncle.ai>',
+          from: 'JobsUncle <onboarding@resend.dev>',
           to: 'jobsuncleai@gmail.com',
           subject: `📄 New Resume: ${metadata.candidateName || 'Unknown'} → ${metadata.jobTitle || 'Unknown Role'} @ ${metadata.companyName || 'Unknown'}`,
           html: `<div style="font-family:sans-serif;max-width:480px;padding:24px">

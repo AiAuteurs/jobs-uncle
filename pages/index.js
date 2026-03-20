@@ -41,6 +41,7 @@ export default function Home() {
   const [resumeCount, setResumeCount] = useState(null)
   const [counterRolling, setCounterRolling] = useState(false)
   const [mascotSpin, setMascotSpin] = useState(false)
+  const [turnstileToken, setTurnstileToken] = useState(null)
 
   const updateCounter = (newCount) => {
     if (newCount === null) return
@@ -97,6 +98,11 @@ export default function Home() {
 
   // Fetch resume counter + check access via cookie on mount
   // Works in private/incognito — no localStorage dependency
+  useEffect(() => {
+    window.onTurnstileSuccess = (token) => setTurnstileToken(token)
+    return () => { delete window.onTurnstileSuccess }
+  }, [])
+
   useEffect(() => {
     if (router.query.signin === 'true') {
       setShowSignIn(true)
@@ -186,6 +192,7 @@ export default function Home() {
         formData.append('jobDescFile', jobDescFile)
       }
       formData.append('dualVersion', dualVersionEnabled && isPlusUser ? 'true' : 'false')
+      if (turnstileToken) formData.append('cf-turnstile-response', turnstileToken)
 
       const controller = new AbortController()
       const timeout = setTimeout(() => controller.abort(), 120000)
@@ -721,6 +728,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤵</text></svg>" />
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
       </Head>
 
       <Header
@@ -944,6 +952,14 @@ export default function Home() {
                 </button>
               </div>
             )}
+
+            <div
+              className="cf-turnstile"
+              data-sitekey="0x4AAAAAACtpawIZokWSALcm"
+              data-callback="onTurnstileSuccess"
+              data-theme="light"
+              style={{ marginBottom: '8px' }}
+            ></div>
 
             <button
               className={`generate-btn ${loading ? 'loading' : ''}`}
