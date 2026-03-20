@@ -387,18 +387,18 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 0 20px;
+  padding: 48px 0 32px;
   border-bottom: 1px solid var(--border-soft);
 }
 
 .hero-logo-banner-img {
-  height: 80px;
+  height: 160px;
   width: auto;
   display: block;
 }
 
 @media (max-width: 768px) {
-  .hero-logo-banner-img { height: 60px; }
+  .hero-logo-banner-img { height: 100px; }
 }
 
 .hero-right-inner {
