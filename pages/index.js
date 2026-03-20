@@ -29,7 +29,7 @@ export default function Home() {
   const [resumeInputMode, setResumeInputMode] = useState('upload') // 'upload' | 'paste'
   const [resumeText, setResumeText] = useState('')
   const [jobDescription, setJobDescription] = useState('')
-  const [jobDescInputMode, setJobDescInputMode] = useState('paste') // 'paste' | 'upload'
+  const [jobDescInputMode, setJobDescInputMode] = useState('upload') // 'upload' | 'paste'
   const [jobDescFile, setJobDescFile] = useState(null)
   const jobDescFileRef = useRef(null)
   const [loading, setLoading] = useState(false)
@@ -870,16 +870,16 @@ export default function Home() {
                 {/* TOGGLE */}
                 <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
                   <button
-                    onClick={() => setJobDescInputMode('paste')}
-                    style={{ flex: 1, padding: '8px 12px', background: jobDescInputMode === 'paste' ? 'var(--ink)' : 'transparent', color: jobDescInputMode === 'paste' ? 'white' : 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
-                  >
-                    Paste text
-                  </button>
-                  <button
                     onClick={() => setJobDescInputMode('upload')}
                     style={{ flex: 1, padding: '8px 12px', background: jobDescInputMode === 'upload' ? 'var(--ink)' : 'transparent', color: jobDescInputMode === 'upload' ? 'white' : 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
                   >
                     Upload file
+                  </button>
+                  <button
+                    onClick={() => setJobDescInputMode('paste')}
+                    style={{ flex: 1, padding: '8px 12px', background: jobDescInputMode === 'paste' ? 'var(--ink)' : 'transparent', color: jobDescInputMode === 'paste' ? 'white' : 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                  >
+                    Paste text
                   </button>
                 </div>
 
