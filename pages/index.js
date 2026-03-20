@@ -736,19 +736,10 @@ export default function Home() {
       )}
 
       <section className="hero">
-        <div className="hero-left">
-          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="hero-inline-logo" />
-          <div className="hero-eyebrow">
-            <div className="hero-eyebrow-dot"></div>
-            <span className="hero-eyebrow-text">AI Resume Intelligence</span>
-          </div>
-          <div className="hero-copy">
-            <h1>Your resume,<br /><em>tailored</em><br />to every job.</h1>
-            <p className="hero-sub">
-              Upload your resume. Paste the job description.
-              Get a bespoke resume, cover letter, recruiter analysis, and hiring manager DM — in under a minute.
-            </p>
-          </div>
+        <div className="hero-center">
+          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="hero-center-logo" />
+          <h1 className="hero-headline">Your resume, <em>tailored</em><br />to every job.</h1>
+          <p className="hero-sub">Upload your resume. Paste the job description. Get a tailored resume, cover letter, recruiter analysis, and hiring manager DM — in under a minute.</p>
           <div className="hero-actions">
             <a href="/#get-started" className="hero-btn-primary">Build Your Resume →</a>
             <a href="/example" className="hero-btn-ghost">See an example</a>
@@ -770,56 +761,26 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="hero-right">
-          <div className="hero-right-inner">
-
-            <div className="hero-deliverables">
-              <div className="hero-deliverables-label">Every run delivers</div>
-              <ul className="hero-deliverables-list">
-                <li><span className="hd-check">✓</span><span><strong>Tailored resume</strong> — reordered and rewritten for the role</span></li>
-                <li><span className="hd-check">✓</span><span><strong>Cover letter</strong> — specific to the company and JD</span></li>
-                <li><span className="hd-check">✓</span><span><strong>Recruiter & ATS analysis</strong> — gaps, fixes, keyword score</span></li>
-                <li><span className="hd-check">✓</span><span><strong>Hiring manager DM</strong> — skip the line, land in their inbox</span></li>
-              </ul>
-            </div>
-
-            {/* Sample resume — real content */}
-            <div className="hero-resume-sample">
-              <div className="hero-resume-sample-label">Sample output — tailored to role</div>
-              <div className="hero-resume-name">Nattaya Supawong</div>
-              <div className="hero-resume-role">Marketing Manager, Brand & Social Media — Google Thailand</div>
-              <div className="hero-resume-divider"></div>
-              <div className="hero-resume-body">
-                <div className="hero-resume-section-label">Summary</div>
-                <p className="hero-resume-text">Results-driven marketing leader with 6+ years scaling social campaigns for 1M+ audiences across SEA. Proven record in cross-functional brand strategy, influencer coordination, and Google product adoption.</p>
-                <div className="hero-resume-section-label">Experience</div>
-                <div className="hero-resume-job-title">Senior Social Media Manager · Foodpanda Thailand</div>
-                <p className="hero-resume-text">Led brand voice across 4 platforms, growing follower base 340% in 18 months. Managed $2.4M influencer budget with 4.8x avg ROI. Collaborated with regional teams on SEA-wide campaign alignment.</p>
-              </div>
-              <a href="/example" className="hero-resume-cta">See full example →</a>
-            </div>
-
-            <div className="hero-pricing-row">
-              <div className="hero-price-card">
-                <div className="hero-price-badge-wrap">
-                  <span className="hero-price-badge hero-price-badge--pro">Pro</span>
-                </div>
-                <div className="hero-price-amount">$4.17<span>/mo</span></div>
-                <div className="hero-price-annual-note">billed as $49.99/yr — best value</div>
-                <div className="hero-price-sub">Unlimited resumes. Cover letters. Recruiter & ATS analysis. Hiring manager DM.</div>
-                <a href="/pricing" className="hero-price-cta hero-price-cta--pro">Get Pro →</a>
-              </div>
-
-              <div className="hero-price-card hero-price-card--plus">
-                <div className="hero-price-badge-wrap">
-                  <span className="hero-price-badge hero-price-badge--plus">Pro+</span>
-                </div>
-                <div className="hero-price-amount">$9.99<span>/mo</span></div>
-                <div className="hero-price-annual-note" style={{color: 'rgba(255,255,255,0.55)'}}>or $79.99/yr — save 33%</div>
-                <div className="hero-price-sub">Everything in Pro — plus Dual Resume Versions, ATS Cheat Sheet, and Company Intel.</div>
-                <a href="/pricing" className="hero-price-cta hero-price-cta--plus">Get Pro+ →</a>
-              </div>
-            </div>
+        <div className="hero-cards">
+          <div className="hero-card">
+            <div className="hero-card-icon">📄</div>
+            <div className="hero-card-title">Tailored Resume</div>
+            <div className="hero-card-desc">Reordered and rewritten for the exact role</div>
+          </div>
+          <div className="hero-card">
+            <div className="hero-card-icon">✉️</div>
+            <div className="hero-card-title">Cover Letter</div>
+            <div className="hero-card-desc">Specific to the company and job description</div>
+          </div>
+          <div className="hero-card">
+            <div className="hero-card-icon">🎯</div>
+            <div className="hero-card-title">Recruiter & ATS Analysis</div>
+            <div className="hero-card-desc">Gaps, fixes, and keyword score</div>
+          </div>
+          <div className="hero-card">
+            <div className="hero-card-icon">💬</div>
+            <div className="hero-card-title">Hiring Manager DM</div>
+            <div className="hero-card-desc">Skip the line, land in their inbox</div>
           </div>
         </div>
       </section>

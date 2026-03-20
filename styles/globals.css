@@ -167,51 +167,95 @@ body {
 
 /* ─── HERO ─────────────────────────────────────────────────── */
 .hero {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 560px;
-  border-bottom: 1px solid var(--border-soft);
-  max-width: 1200px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 0 3.75rem;
+  padding: 60px 3.75rem 0;
+  text-align: center;
 }
 
-.hero-left {
-  padding: 56px 60px 56px 0;
+.hero-center {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-}
-
-.hero-right {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  position: relative;
-  min-height: 480px;
-  padding: 40px 0 40px 40px;
 }
 
-.hero-inner {
-  display: contents;
+.hero-center-logo {
+  width: 320px;
+  max-width: 80vw;
+  height: auto;
+  display: block;
+  margin-bottom: 32px;
 }
+
+.hero-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(3rem, 5vw, 4.75rem);
+  line-height: 1.07;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 20px;
+}
+
+.hero-headline em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+}
+
+.hero-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  max-width: 1200px;
+  margin: 48px auto 0;
+  padding: 0 3.75rem 60px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.hero-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 16px;
+  text-align: left;
+}
+
+.hero-card-icon {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.hero-card-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.hero-card-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+.hero-left { display: contents; }
+.hero-right { display: none; }
+.hero-inner { display: contents; }
 
 @media (max-width: 900px) {
-  .hero {
-    grid-template-columns: 1fr;
-    min-height: auto;
-    padding: 0 1.5rem;
+  .hero { padding: 40px 1.5rem 0; }
+  .hero-cards {
+    grid-template-columns: 1fr 1fr;
+    padding: 0 1.5rem 40px;
   }
-  .hero-right {
-    min-height: 320px;
-    order: -1;
-    padding: 40px 0 0;
-  }
-  .hero-left {
-    padding: 48px 0;
-    text-align: center;
-    align-items: center;
-  }
+}
+
+@media (max-width: 480px) {
+  .hero-cards { grid-template-columns: 1fr; }
 }
 
 .hero-copy {
