@@ -767,6 +767,10 @@ export default function Home() {
               <span>— B.C., ICF Certified Career Coach</span>
             </div>
           </div>
+
+          <div className="hero-left-logo">
+            <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="hero-left-logo-img" />
+          </div>
         </div>
 
         <div className="hero-right">

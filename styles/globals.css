@@ -180,7 +180,7 @@ body {
   padding: 72px 60px 72px 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .hero-right {
@@ -383,7 +383,21 @@ body {
 /* Floating cards on hero right */
 .hero-float-card { display: none; }
 
-.hero-right-inner {
+.hero-left-logo {
+  margin-top: auto;
+  padding-top: 32px;
+}
+
+.hero-left-logo-img {
+  width: 280px;
+  height: auto;
+  display: block;
+  opacity: 0.9;
+}
+
+@media (max-width: 900px) {
+  .hero-left-logo { display: none; }
+}
   display: flex;
   flex-direction: column;
   align-items: center;
