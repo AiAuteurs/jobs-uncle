@@ -735,12 +735,9 @@ export default function Home() {
         </div>
       )}
 
-      <div className="hero-logo-banner">
-        <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="hero-logo-banner-img" />
-      </div>
-
       <section className="hero">
         <div className="hero-left">
+          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="hero-inline-logo" />
           <div className="hero-eyebrow">
             <div className="hero-eyebrow-dot"></div>
             <span className="hero-eyebrow-text">AI Resume Intelligence</span>

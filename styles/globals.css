@@ -169,7 +169,7 @@ body {
 .hero {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  min-height: 420px;
+  min-height: 560px;
   border-bottom: 1px solid var(--border-soft);
   max-width: 1200px;
   margin: 0 auto;
@@ -177,7 +177,7 @@ body {
 }
 
 .hero-left {
-  padding: 28px 60px 28px 0;
+  padding: 56px 60px 56px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -383,23 +383,12 @@ body {
 /* Floating cards on hero right */
 .hero-float-card { display: none; }
 
-.hero-logo-banner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 0 16px;
-  border-bottom: 1px solid var(--border-soft);
-}
-
-.hero-logo-banner-img {
-  width: 340px;
-  max-width: 80vw;
+.hero-inline-logo {
+  width: 260px;
+  max-width: 100%;
   height: auto;
   display: block;
-}
-
-@media (max-width: 768px) {
-  .hero-logo-banner-img { width: 220px; }
+  margin-bottom: 28px;
 }
 
 .hero-right-inner {
