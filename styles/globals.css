@@ -171,23 +171,25 @@ body {
   grid-template-columns: 1fr 1fr;
   min-height: 560px;
   border-bottom: 1px solid var(--border-soft);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 3.75rem;
 }
 
 .hero-left {
-  padding: 72px 60px 72px 60px;
+  padding: 72px 60px 72px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 .hero-right {
-  background: var(--surface);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden;
   min-height: 480px;
+  padding: 40px 0 40px 40px;
 }
 
 .hero-inner {
@@ -198,13 +200,15 @@ body {
   .hero {
     grid-template-columns: 1fr;
     min-height: auto;
+    padding: 0 1.5rem;
   }
   .hero-right {
     min-height: 320px;
     order: -1;
+    padding: 40px 0 0;
   }
   .hero-left {
-    padding: 48px 2rem;
+    padding: 48px 0;
     text-align: center;
     align-items: center;
   }
@@ -514,6 +518,7 @@ body {
 
 /* ─── TICKER ───────────────────────────────────────────────── */
 .ticker {
+  border-top: 1px solid var(--border-soft);
   border-bottom: 1px solid var(--border-soft);
   padding: 18px 3.75rem;
   display: flex;
