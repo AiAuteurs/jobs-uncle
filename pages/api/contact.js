@@ -12,11 +12,11 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`
+        'Authorization': `Bearer ${process.env.RESEND_API}`
       },
       body: JSON.stringify({
-        from: 'Oni <oni@jobsuncle.ai>',
-        to: 'jobsuncle@gmail.com',
+        from: 'JobsUncle <onboarding@resend.dev>',
+        to: 'jobsuncleai@gmail.com',
         reply_to: email,
         subject: `📬 JobsUncle Contact: ${name}`,
         html: `

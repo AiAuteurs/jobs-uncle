@@ -30,9 +30,10 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${process.env.RESEND_API}`
       },
       body: JSON.stringify({
-        from: 'Oni <oni@jobsuncle.ai>',
+        from: 'JobsUncle <onboarding@resend.dev>',
         to: 'jobsuncleai@gmail.com',
-        subject: `${ratingEmoji} Resume Rating: ${ratingLabel}`,
+        reply_to: email || undefined,
+        subject: `${ratingEmoji} Resume Rating: ${ratingLabel}${email ? ' — ' + email : ''}`,
         html: `
           <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 24px;">
             <h2 style="color: #6d28d9;">New Resume Feedback</h2>

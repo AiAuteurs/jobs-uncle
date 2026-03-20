@@ -502,6 +502,26 @@ ${outputFormat}`
       try { metadata = { ...metadata, ...JSON.parse(metaMatch[1]) } } catch (e) {}
     }
 
+    // Notify you when someone generates a resume
+    try {
+      await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${process.env.RESEND_API}` },
+        body: JSON.stringify({
+          from: 'JobsUncle <onboarding@resend.dev>',
+          to: 'jobsuncleai@gmail.com',
+          subject: `📄 New Resume: ${metadata.candidateName || 'Unknown'} → ${metadata.jobTitle || 'Unknown Role'} @ ${metadata.companyName || 'Unknown'}`,
+          html: `<div style="font-family:sans-serif;max-width:480px;padding:24px">
+            <h2 style="color:#6d28d9">New Resume Generated</h2>
+            <p><strong>Candidate:</strong> ${metadata.candidateName || 'Unknown'}</p>
+            <p><strong>Email:</strong> ${metadata.candidateEmail || 'Not provided'}</p>
+            <p><strong>Role:</strong> ${metadata.jobTitle || 'Unknown'} @ ${metadata.companyName || 'Unknown'}</p>
+            <p style="color:#888;font-size:0.8rem">${new Date().toLocaleString('en-US', { timeZone: 'Asia/Bangkok' })} BKK</p>
+          </div>`
+        })
+      })
+    } catch (e) { /* fail silently */ }
+
     // Parse recruiter notes
     const recruiterNotesMatch = dualVersion
       ? responseText.match(/===RECRUITER_NOTES===([\s\S]*?)===RESUME_A===/)
