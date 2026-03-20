@@ -787,13 +787,41 @@ export default function Home() {
               </ul>
             </div>
 
-            <div className="hero-pro-card">
-              <div className="hero-pro-card-top">
-                <span className="hero-pro-badge">Pro+</span>
-                <span className="hero-pro-price">$9.99<span>/mo</span></span>
+            {/* Sample resume snippet */}
+            <div className="hero-resume-sample">
+              <div className="hero-resume-sample-label">Sample output</div>
+              <div className="hero-resume-name">Nattaya Supawong</div>
+              <div className="hero-resume-role">Marketing Manager — Google Thailand</div>
+              <div className="hero-resume-divider"></div>
+              <div className="hero-resume-line hero-resume-line--wide"></div>
+              <div className="hero-resume-line hero-resume-line--med"></div>
+              <div className="hero-resume-line hero-resume-line--full"></div>
+              <div className="hero-resume-line hero-resume-line--wide"></div>
+              <div className="hero-resume-section-label">Experience</div>
+              <div className="hero-resume-line hero-resume-line--full"></div>
+              <div className="hero-resume-line hero-resume-line--med"></div>
+              <div className="hero-resume-line hero-resume-line--wide"></div>
+              <a href="/example" className="hero-resume-cta">See full example →</a>
+            </div>
+
+            <div className="hero-pricing-row">
+              <div className="hero-price-card">
+                <div className="hero-price-card-top">
+                  <span className="hero-price-badge hero-price-badge--pro">Pro</span>
+                </div>
+                <div className="hero-price-amount">$49.99<span>/yr</span></div>
+                <div className="hero-price-sub">Unlimited resumes. Cover letters. Recruiter & ATS analysis. Hiring manager DM.</div>
+                <a href="/pricing" className="hero-price-cta hero-price-cta--pro">Get Pro →</a>
               </div>
-              <p className="hero-pro-desc">Unlimited resumes. Dual versions — Leadership <em>and</em> Technical — two shots at every role. ATS Cheat Sheet. Company Intel.</p>
-              <a href="/pricing" className="hero-pro-cta">See all plans →</a>
+
+              <div className="hero-price-card hero-price-card--plus">
+                <div className="hero-price-card-top">
+                  <span className="hero-price-badge hero-price-badge--plus">Pro+</span>
+                </div>
+                <div className="hero-price-amount">$9.99<span>/mo</span></div>
+                <div className="hero-price-sub">Everything in Pro — plus Dual Resume Versions, ATS Cheat Sheet, and Company Intel.</div>
+                <a href="/pricing" className="hero-price-cta hero-price-cta--plus">Get Pro+ →</a>
+              </div>
             </div>
           </div>
         </div>
