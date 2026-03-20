@@ -785,6 +785,46 @@ export default function Home() {
         </div>
       </section>
 
+      {/* SAMPLE OUTPUT */}
+      <div className="sample-section">
+        <div className="sample-label">Sample output — Camille Leon → Director, Learning Experience Design @ Meridian Learning Group</div>
+        <div className="sample-resume">
+          <div className="sample-resume-name">Camille Leon</div>
+          <div className="sample-resume-contact">camille.leon@gmail.com · 555-000-1234 · linkedin.com/in/camillelean · San Francisco, CA</div>
+          <div className="sample-divider"></div>
+
+          <div className="sample-section-heading">Professional Summary</div>
+          <p className="sample-body">Director-level Learning Experience Designer with 8+ years building outcome-driven curriculum for enterprise and K-12 contexts. IDEO U certified in human-centered instructional design with expertise in Articulate Storyline, learning analytics, and stakeholder engagement. Proven ability to translate complex business and scientific content into scalable learning experiences deployed across 200+ organizations nationally.</p>
+
+          <div className="sample-section-heading">Experience</div>
+
+          <div className="sample-job">
+            <span className="sample-job-company">BrightPath Learning</span>
+            <span className="sample-job-meta"> · Curriculum Developer (Contract) · 2020–2022</span>
+          </div>
+          <ul className="sample-bullets">
+            <li>Authored 14 STEM learning modules using Articulate Storyline deployed across 200+ schools nationally, scoping each module to measurable learning outcomes aligned to NGSS standards</li>
+            <li>Partnered with UX team to redesign course navigation and learner experience, reducing drop-off rate by 22% through friction-mapping and iterative design approaches</li>
+            <li>Conducted usability testing with 40 learners, synthesized behavioral data and qualitative feedback into design recommendations adopted in next product release</li>
+            <li>Developed quality standards and content review rubric used by team of 6 contract developers to ensure instructional consistency across curriculum library</li>
+          </ul>
+
+          <div className="sample-job" style={{marginTop: '16px'}}>
+            <span className="sample-job-company">Roosevelt Middle School, Oakland Unified School District</span>
+            <span className="sample-job-meta"> · 7th & 8th Grade Science Teacher · 2017–Present</span>
+          </div>
+          <ul className="sample-bullets">
+            <li>Designed and delivered curriculum for 140+ learners across 5 concurrent cohorts, achieving 34% above district average on standardized assessments through outcome-mapped instructional design</li>
+            <li>Built project-based learning framework adopted district-wide by 12 educators, reducing lesson development time by 40% through reusable modular architecture</li>
+            <li>Analyzed learner performance data weekly using dashboards and formative assessments, identified skill gaps and adjusted content, lifting at-risk learner pass rates by 28% in a single semester</li>
+            <li>Facilitated professional development workshops for 30+ educators on differentiated instruction, designing all session materials, pre/post assessments, and follow-up resources</li>
+            <li>Produced 60+ original video-based learning modules during remote instruction, achieving 84% completion rate vs. 51% district average through intentional engagement design</li>
+          </ul>
+
+          <a href="/example" className="sample-see-more">See full output including cover letter, ATS analysis & hiring manager DM →</a>
+        </div>
+      </div>
+
       {/* TICKER STRIP */}
       <div className="ticker">
         <div className="ticker-item">
