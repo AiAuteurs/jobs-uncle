@@ -536,7 +536,7 @@ export default function Home() {
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => setShowManageModal(false)}>
           <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)', position: 'relative' }} onClick={e => e.stopPropagation()}>
             <button onClick={() => setShowManageModal(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', fontSize: '1.2rem', color: 'var(--text-soft)', cursor: 'pointer', lineHeight: 1, padding: '4px 8px' }}>✕</button>
-            <img src="/uncle-spin-hero.png" alt="JobsUncle.ai" style={{ width: 80, height: 'auto', marginBottom: '20px' }} />
+            <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" style={{ width: 80, height: 'auto', marginBottom: '20px' }} />
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.8rem', margin: '0 0 10px', lineHeight: 1.1 }}>Manage your subscription</h2>
             <p style={{ color: 'var(--text-soft)', fontSize: '0.88rem', margin: '0 0 20px', lineHeight: 1.6 }}>Enter the email you used to sign up. We'll take you straight to your billing page.</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -565,7 +565,7 @@ export default function Home() {
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => setShowSignIn(false)}>
           <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)', position: 'relative' }} onClick={e => e.stopPropagation()}>
             <button onClick={() => setShowSignIn(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', fontSize: '1.2rem', color: 'var(--text-soft)', cursor: 'pointer', lineHeight: 1, padding: '4px 8px' }}>✕</button>
-            <img src="/uncle-spin-hero.png" alt="JobsUncle.ai" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
+            <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Member sign in</h2>
             <p style={{ color: 'var(--text-soft)', fontSize: '0.9rem', margin: '0 0 16px', lineHeight: 1.6 }}>Enter your email to restore Pro access.</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
@@ -597,7 +597,7 @@ export default function Home() {
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => setShowPaywall(false)}>
           <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)', position: 'relative' }} onClick={e => e.stopPropagation()}>
             <button onClick={() => setShowPaywall(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', fontSize: '1.2rem', color: 'var(--text-soft)', cursor: 'pointer', lineHeight: 1, padding: '4px 8px' }}>✕</button>
-            <img src="/uncle-spin-hero.png" alt="JobsUncle.ai" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
+            <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Your next job offer could be from this resume.</h2>
             <p style={{ color: 'var(--text-soft)', fontSize: '0.95rem', margin: '0 0 20px', lineHeight: 1.6 }}>Unlimited resumes. Every job. Every time.</p>
 
@@ -659,7 +659,7 @@ export default function Home() {
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => setShowPlusPaywall(false)}>
           <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '460px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)', position: 'relative' }} onClick={e => e.stopPropagation()}>
             <button onClick={() => setShowPlusPaywall(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', fontSize: '1.2rem', color: 'var(--text-soft)', cursor: 'pointer', lineHeight: 1, padding: '4px 8px' }}>✕</button>
-            <img src="/uncle-spin-hero.png" alt="JobsUncle.ai" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
+            <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
             <div style={{ display: 'inline-block', background: '#6366f1', color: 'white', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', padding: '4px 12px', borderRadius: '20px', marginBottom: '16px', textTransform: 'uppercase' }}>Pro+</div>
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Stop re-typing your resume into every job portal.</h2>
             <p style={{ color: 'var(--text-soft)', fontSize: '0.95rem', margin: '0 0 8px', lineHeight: 1.6 }}>
@@ -679,7 +679,7 @@ export default function Home() {
       {showEmailGate && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', zIndex: 1001, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
           <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.35)' }}>
-            <img src="/uncle-spin-logo.png" alt="JobsUncle.ai" style={{ width: 64, height: 'auto', marginBottom: '20px' }} />
+            <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" style={{ width: 64, height: 'auto', marginBottom: '20px' }} />
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.9rem', margin: '0 0 10px', lineHeight: 1.1 }}>Your first resume is ready.</h2>
             <p style={{ color: 'var(--text-soft)', fontSize: '0.9rem', margin: '0 0 28px', lineHeight: 1.65 }}>
               Enter your email to unlock <strong style={{ color: 'var(--ink)' }}>2 more free resumes.</strong><br />No password. No credit card. Just your email.
@@ -718,9 +718,8 @@ export default function Home() {
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:image" content="https://res.cloudinary.com/dbyzesuya/image/upload/og-image_uqdfh0.png" />
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤵</text></svg>" />
+        <link rel="icon" type="image/png" href="/jobsuncle-favicon.png" />
+        <link rel="apple-touch-icon" href="/jobsuncle-favicon.png" />
       </Head>
 
       <Header
@@ -775,16 +774,27 @@ export default function Home() {
         </div>
 
         <div className="hero-right">
-          <div className="hero-mascot">
-            <img src="/uncle-spin-hero.png" alt="Oni" className="mascot-img" />
-          </div>
-          <div className="hero-float-card hero-float-card--top">
-            <div className="hero-float-label">Tailored for</div>
-            <div className="hero-float-value">Marketing Manager @ Google</div>
-          </div>
-          <div className="hero-float-card hero-float-card--bottom">
-            <div className="hero-float-dot"></div>
-            <div className="hero-float-value">ATS Score: 94% match</div>
+          <div className="hero-right-inner">
+            <img src="/jobsuncle-logo.png" alt="Oni" className="hero-right-oni" />
+
+            <div className="hero-deliverables">
+              <div className="hero-deliverables-label">Every run delivers</div>
+              <ul className="hero-deliverables-list">
+                <li><span className="hd-check">✓</span><span><strong>Tailored resume</strong> — reordered and rewritten for the role</span></li>
+                <li><span className="hd-check">✓</span><span><strong>Cover letter</strong> — specific to the company and JD</span></li>
+                <li><span className="hd-check">✓</span><span><strong>Recruiter & ATS analysis</strong> — gaps, fixes, keyword score</span></li>
+                <li><span className="hd-check">✓</span><span><strong>Hiring manager DM</strong> — skip the line, land in their inbox</span></li>
+              </ul>
+            </div>
+
+            <div className="hero-pro-card">
+              <div className="hero-pro-card-top">
+                <span className="hero-pro-badge">Pro+</span>
+                <span className="hero-pro-price">$9.99<span>/mo</span></span>
+              </div>
+              <p className="hero-pro-desc">Unlimited resumes. Dual versions — Leadership <em>and</em> Technical — two shots at every role. ATS Cheat Sheet. Company Intel.</p>
+              <a href="/pricing" className="hero-pro-cta">See all plans →</a>
+            </div>
           </div>
         </div>
       </section>
@@ -874,7 +884,7 @@ export default function Home() {
                         </>
                       ) : (
                         <>
-                          <img src="/uncle-spin-logo.png" className="upload-mascot" alt="JobsUncle.ai" />
+                          <img src="/jobsuncle-logo.png" className="upload-mascot" alt="JobsUncle.ai" />
                           <div className="upload-label">Drop your resume here or click to browse</div>
                         </>
                       )}
@@ -946,7 +956,7 @@ export default function Home() {
                         </>
                       ) : (
                         <>
-                          <img src="/uncle-spin-logo.png" className="upload-mascot" alt="JobsUncle.ai" />
+                          <img src="/jobsuncle-logo.png" className="upload-mascot" alt="JobsUncle.ai" />
                           <div className="upload-label">Drop job posting here or click to browse</div>
                         </>
                       )}
@@ -1046,7 +1056,7 @@ export default function Home() {
           <div className="loading-state" style={{ textAlign: 'center', padding: '3rem 1rem' }}>
             <div style={{ position: 'relative', display: 'inline-block', marginBottom: '8px', width: 110, height: 130 }}>
               {[
-                { src: '/uncle-spin-hero.png',          delay: '0s'  },
+                { src: '/jobsuncle-logo.png',          delay: '0s'  },
                 { src: '/uncle-lucky-clover.png',       delay: '-4s' },
                 { src: '/uncle-lucky-horseshoe.png',    delay: '-3s' },
                 { src: '/uncle-lucky-cat.png',          delay: '-2s' },
@@ -1232,7 +1242,7 @@ export default function Home() {
                       <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '12px', marginTop: '12px', padding: '12px 14px', background: 'rgba(245,158,11,0.06)', borderRadius: '8px' }}>
                         <div style={{ position: 'relative', width: 44, height: 50, flexShrink: 0 }}>
                           {[
-                            { src: '/uncle-spin-hero.png',         delay: '0s'  },
+                            { src: '/jobsuncle-logo.png',         delay: '0s'  },
                             { src: '/uncle-lucky-clover.png',      delay: '-4s' },
                             { src: '/uncle-lucky-horseshoe.png',   delay: '-3s' },
                             { src: '/uncle-lucky-cat.png',         delay: '-2s' },
@@ -1326,7 +1336,7 @@ export default function Home() {
                   <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', background: 'rgba(16,185,129,0.06)', borderRadius: '8px' }}>
                     <div style={{ position: 'relative', width: 44, height: 50, flexShrink: 0 }}>
                       {[
-                        { src: '/uncle-spin-hero.png',         delay: '0s'  },
+                        { src: '/jobsuncle-logo.png',         delay: '0s'  },
                         { src: '/uncle-lucky-clover.png',      delay: '-4s' },
                         { src: '/uncle-lucky-horseshoe.png',   delay: '-3s' },
                         { src: '/uncle-lucky-cat.png',         delay: '-2s' },
