@@ -52,8 +52,13 @@ body {
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
   text-decoration: none;
+}
+
+.logo-full {
+  height: 36px;
+  width: auto;
+  display: block;
 }
 
 .logo-icon {
@@ -369,51 +374,139 @@ body {
 }
 
 /* Floating cards on hero right */
-.hero-float-card {
-  position: absolute;
+.hero-float-card { display: none; }
+
+.hero-right-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.hero-right-oni {
+  width: 140px;
+  height: auto;
+  display: block;
+}
+
+.hero-deliverables {
   background: var(--bg);
   border: 1px solid var(--border);
-  padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: 12px;
+  padding: 20px 24px;
+  width: 100%;
 }
 
-.hero-float-card--top {
-  top: 40px;
-  right: 40px;
-}
-
-.hero-float-card--bottom {
-  bottom: 40px;
-  left: 40px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.hero-float-label {
+.hero-deliverables-label {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.68rem;
   font-weight: 500;
   color: var(--text-soft);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 2px;
+  letter-spacing: 0.1em;
+  margin-bottom: 14px;
 }
 
-.hero-float-value {
+.hero-deliverables-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hero-deliverables-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 0.875rem;
   color: var(--ink);
+  line-height: 1.45;
+  font-weight: 300;
 }
 
-.hero-float-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #22C55E;
-  flex-shrink: 0;
+.hero-deliverables-list li strong {
+  font-weight: 500;
 }
+
+.hd-check {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.hero-pro-card {
+  background: var(--accent);
+  border-radius: 12px;
+  padding: 20px 24px;
+  width: 100%;
+}
+
+.hero-pro-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.hero-pro-badge {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: rgba(255,255,255,0.15);
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+.hero-pro-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.hero-pro-price span {
+  font-size: 0.85rem;
+  font-weight: 300;
+  font-family: 'DM Sans', sans-serif;
+  opacity: 0.7;
+}
+
+.hero-pro-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.84rem;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.55;
+  font-weight: 300;
+  margin-bottom: 14px;
+}
+
+.hero-pro-desc em {
+  font-style: italic;
+  color: #fff;
+}
+
+.hero-pro-cta {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.4);
+  padding-bottom: 1px;
+  transition: border-color 0.2s;
+}
+
+.hero-pro-cta:hover { border-color: #fff; }
 
 /* ─── TICKER ───────────────────────────────────────────────── */
 .ticker {

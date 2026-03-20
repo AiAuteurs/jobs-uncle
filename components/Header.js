@@ -3,9 +3,7 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
     <header className="header">
       <div className="header-left">
         <a href="/" className="logo">
-          {/* Logo placeholder — swap src when new logo is ready */}
-          <img src="/uncle-spin-logo.png" alt="JobsUncle" className="logo-icon" />
-          <span className="logo-text">JobsUncle.ai</span>
+          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="logo-full" />
         </a>
         <nav className="header-nav">
           <a href="/about" className="header-nav-link">Our Story</a>
