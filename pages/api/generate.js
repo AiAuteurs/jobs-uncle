@@ -508,7 +508,7 @@ ${outputFormat}`
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${process.env.RESEND_API}` },
         body: JSON.stringify({
-          from: 'JobsUncle <onboarding@resend.dev>',
+          from: 'Oni from JobsUncle <oni@jobsuncle.ai>',
           to: 'jobsuncleai@gmail.com',
           subject: `📄 New Resume: ${metadata.candidateName || 'Unknown'} → ${metadata.jobTitle || 'Unknown Role'} @ ${metadata.companyName || 'Unknown'}`,
           html: `<div style="font-family:sans-serif;max-width:480px;padding:24px">

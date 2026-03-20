@@ -30,7 +30,7 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${process.env.RESEND_API}`
       },
       body: JSON.stringify({
-        from: 'JobsUncle <onboarding@resend.dev>',
+        from: 'Oni from JobsUncle <oni@jobsuncle.ai>',
         to: 'jobsuncleai@gmail.com',
         reply_to: email || undefined,
         subject: `${ratingEmoji} Resume Rating: ${ratingLabel}${email ? ' — ' + email : ''}`,
