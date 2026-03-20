@@ -735,6 +735,10 @@ export default function Home() {
         </div>
       )}
 
+      <div className="hero-logo-banner">
+        <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="hero-logo-banner-img" />
+      </div>
+
       <section className="hero">
         <div className="hero-left">
           <div className="hero-eyebrow">
@@ -767,15 +771,10 @@ export default function Home() {
               <span>— B.C., ICF Certified Career Coach</span>
             </div>
           </div>
-
-          <div className="hero-left-logo">
-            <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="hero-left-logo-img" />
-          </div>
         </div>
 
         <div className="hero-right">
           <div className="hero-right-inner">
-            <img src="/jobsuncle-logo.png" alt="Oni" className="hero-right-oni" />
 
             <div className="hero-deliverables">
               <div className="hero-deliverables-label">Every run delivers</div>
