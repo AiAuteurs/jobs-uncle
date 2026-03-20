@@ -804,8 +804,8 @@ export default function Home() {
                 <div className="hero-price-badge-wrap">
                   <span className="hero-price-badge hero-price-badge--pro">Pro</span>
                 </div>
-                <div className="hero-price-amount">$49.99<span>/yr</span></div>
-                <div className="hero-price-annual-note">Best value — one payment</div>
+                <div className="hero-price-amount">$4.17<span>/mo</span></div>
+                <div className="hero-price-annual-note">billed as $49.99/yr — best value</div>
                 <div className="hero-price-sub">Unlimited resumes. Cover letters. Recruiter & ATS analysis. Hiring manager DM.</div>
                 <a href="/pricing" className="hero-price-cta hero-price-cta--pro">Get Pro →</a>
               </div>
@@ -969,7 +969,7 @@ export default function Home() {
                   </>
                 ) : (
                   <>
-                    <p className="step-desc">Upload the job posting as a PDF or .txt file. Or switch to <strong>Paste text</strong> to paste directly from any job board.</p>
+                    <p className="step-desc">Upload the job posting as a PDF, Word doc (.doc/.docx), or .txt file. Or switch to <strong>Paste text</strong> to paste directly from any job board.</p>
                     <div
                       className={`upload-zone ${jobDescFile ? 'has-file' : ''}`}
                       onClick={() => jobDescFileRef.current?.click()}
@@ -989,7 +989,7 @@ export default function Home() {
                     <input
                       ref={jobDescFileRef}
                       type="file"
-                      accept=".pdf,.txt"
+                      accept=".pdf,.doc,.docx,.txt"
                       className="file-input"
                       onChange={(e) => setJobDescFile(e.target.files[0])}
                     />
