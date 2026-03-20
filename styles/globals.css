@@ -2,24 +2,24 @@
 
 /* ─── BRAND TOKENS ──────────────────────────────────────────── */
 :root {
-  --bg:           #FFFFFF;
-  --surface:      #F7F6F3;
-  --ink:          #0A0A0A;
-  --text-soft:    #6B7280;
-  --border:       #E5E7EB;
-  --border-soft:  #F0EEE9;
-  --accent:       #5B21B6;
-  --accent-soft:  #EDE9FE;
-  --beta-bg:      #F1E4BF;
-  --beta-text:    #9A6A1D;
-  --warm:         #F7F6F3;
+  --bg:           #0D1B2A;
+  --surface:      #152236;
+  --ink:          #F0F4F8;
+  --text-soft:    #8DA4BF;
+  --border:       #1E3352;
+  --border-soft:  #172B42;
+  --accent:       #7C5CFC;
+  --accent-soft:  #2A1F5C;
+  --beta-bg:      #1C2E45;
+  --beta-text:    #8DA4BF;
+  --warm:         #152236;
   --rust:         #B85C38;
   --sage:         #5a7a5a;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-img[src*="jobsuncle-logo"] { mix-blend-mode: multiply; }
+img[src*="jobsuncle-logo"] { mix-blend-mode: normal; }
 
 html { font-size: 16px; -webkit-font-smoothing: antialiased; }
 
@@ -61,7 +61,7 @@ body {
   height: 52px;
   width: auto;
   display: block;
-  mix-blend-mode: multiply;
+  mix-blend-mode: normal;
 }
 
 .logo-icon {
@@ -135,7 +135,7 @@ body {
   font-size: 0.875rem;
   font-weight: 500;
   color: #fff;
-  background: var(--ink);
+  background: var(--accent);
   text-decoration: none;
   padding: 9px 20px;
   border-radius: 6px;
@@ -295,7 +295,7 @@ body {
   font-size: 0.95rem;
   font-weight: 500;
   color: #fff;
-  background: var(--ink);
+  background: var(--accent);
   border: none;
   padding: 13px 24px;
   border-radius: 6px;
@@ -397,7 +397,7 @@ body {
   width: 200px;
   height: auto;
   display: block;
-  mix-blend-mode: multiply;
+  mix-blend-mode: normal;
 }
 
 .hero-deliverables {
@@ -449,7 +449,7 @@ body {
 }
 
 .hero-resume-sample {
-  background: var(--bg);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 16px 20px;
@@ -476,15 +476,23 @@ body {
 
 .hero-resume-role {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   color: var(--accent);
   font-weight: 400;
   margin-bottom: 10px;
+  line-height: 1.4;
 }
 
 .hero-resume-divider {
   height: 1px;
   background: var(--border);
+  margin-bottom: 10px;
+}
+
+.hero-resume-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   margin-bottom: 10px;
 }
 
@@ -495,19 +503,27 @@ body {
   color: var(--text-soft);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin: 8px 0 6px;
+  margin-top: 8px;
+  margin-bottom: 4px;
 }
 
-.hero-resume-line {
-  height: 6px;
-  background: var(--border);
-  border-radius: 3px;
-  margin-bottom: 6px;
+.hero-resume-job-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 3px;
 }
 
-.hero-resume-line--full  { width: 100%; }
-.hero-resume-line--wide  { width: 80%; }
-.hero-resume-line--med   { width: 60%; }
+.hero-resume-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-soft);
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+.hero-resume-line { display: none; }
 
 .hero-resume-cta {
   display: inline-block;
@@ -519,6 +535,18 @@ body {
   text-decoration: none;
   border-bottom: 1px solid var(--accent);
   padding-bottom: 1px;
+}
+
+.hero-price-badge-wrap {
+  margin-bottom: 6px;
+}
+
+.hero-price-annual-note {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem;
+  color: var(--text-soft);
+  font-weight: 400;
+  margin-bottom: 6px;
 }
 
 .hero-pricing-row {
@@ -693,7 +721,7 @@ body {
 }
 
 .step-card.active   { border-color: var(--ink); }
-.step-card.complete { border-color: var(--sage); background: #f5f8f5; }
+.step-card.complete { border-color: var(--sage); background: var(--surface); }
 
 .step-number {
   font-family: 'Inter', sans-serif;
@@ -748,11 +776,11 @@ body {
 .upload-zone.has-file {
   border-color: var(--sage);
   border-style: solid;
-  background: #f5f8f5;
+  background: var(--surface);
 }
 
 .upload-icon     { font-size: 1.5rem; margin-bottom: 0.5rem; }
-.upload-mascot   { width: 80px; height: 80px; object-fit: contain; margin-bottom: 0.5rem; display: block; margin-left: auto; margin-right: auto; mix-blend-mode: multiply; }
+.upload-mascot   { width: 80px; height: 80px; object-fit: contain; margin-bottom: 0.5rem; display: block; margin-left: auto; margin-right: auto; mix-blend-mode: normal; }
 .upload-label    { font-family: 'Inter', sans-serif; font-size: 0.78rem; color: var(--text-soft); }
 .upload-filename { font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 500; color: var(--sage); }
 .file-input      { display: none; }
@@ -786,7 +814,7 @@ body {
 .generate-btn {
   width: 100%;
   padding: 1.1rem 2rem;
-  background: var(--ink);
+  background: var(--accent);
   color: var(--bg);
   border: none;
   border-radius: 4px;
@@ -799,7 +827,7 @@ body {
   margin-top: 1.5rem;
 }
 
-.generate-btn:hover:not(:disabled) { background: #2a2826; transform: translateY(-1px); }
+.generate-btn:hover:not(:disabled) { background: #4a3a8a; transform: translateY(-1px); }
 .generate-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 .generate-btn.loading  { background: var(--accent); color: var(--surface); }
 
@@ -995,7 +1023,7 @@ body {
 
 .format-btn:hover:not(:disabled) {
   border-color: var(--ink);
-  background: var(--ink);
+  background: var(--accent);
   color: var(--surface);
 }
 
@@ -1009,13 +1037,13 @@ body {
 
 .format-btn-featured:hover:not(:disabled) {
   border-color: var(--ink);
-  background: var(--ink);
+  background: var(--accent);
   color: var(--surface);
 }
 
 .format-btn-active,
 .format-btn-featured.format-btn-active {
-  background: var(--ink) !important;
+  background: var(--accent) !important;
   color: var(--surface) !important;
   border-color: var(--ink) !important;
 }
@@ -1039,7 +1067,7 @@ body {
 
 /* ─── ERROR ────────────────────────────────────────────────── */
 .error-msg {
-  background: #fef2f0;
+  background: var(--surface);
   border: 1px solid var(--rust);
   color: var(--rust);
   padding: 1rem 1.25rem;
@@ -1146,7 +1174,7 @@ body {
   padding: 8px 20px;
   border-radius: 20px;
   border: 1.5px solid var(--border);
-  background: white;
+  background: var(--surface);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -1173,7 +1201,7 @@ body {
   font-size: 0.9rem;
   resize: none;
   margin-bottom: 0.75rem;
-  background: white;
+  background: var(--surface);
 }
 
 .feedback-text:focus {

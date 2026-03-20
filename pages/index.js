@@ -787,38 +787,39 @@ export default function Home() {
               </ul>
             </div>
 
-            {/* Sample resume snippet */}
+            {/* Sample resume — real content */}
             <div className="hero-resume-sample">
-              <div className="hero-resume-sample-label">Sample output</div>
+              <div className="hero-resume-sample-label">Sample output — tailored to role</div>
               <div className="hero-resume-name">Nattaya Supawong</div>
-              <div className="hero-resume-role">Marketing Manager — Google Thailand</div>
+              <div className="hero-resume-role">Marketing Manager, Brand & Social Media — Google Thailand</div>
               <div className="hero-resume-divider"></div>
-              <div className="hero-resume-line hero-resume-line--wide"></div>
-              <div className="hero-resume-line hero-resume-line--med"></div>
-              <div className="hero-resume-line hero-resume-line--full"></div>
-              <div className="hero-resume-line hero-resume-line--wide"></div>
-              <div className="hero-resume-section-label">Experience</div>
-              <div className="hero-resume-line hero-resume-line--full"></div>
-              <div className="hero-resume-line hero-resume-line--med"></div>
-              <div className="hero-resume-line hero-resume-line--wide"></div>
+              <div className="hero-resume-body">
+                <div className="hero-resume-section-label">Summary</div>
+                <p className="hero-resume-text">Results-driven marketing leader with 6+ years scaling social campaigns for 1M+ audiences across SEA. Proven record in cross-functional brand strategy, influencer coordination, and Google product adoption.</p>
+                <div className="hero-resume-section-label">Experience</div>
+                <div className="hero-resume-job-title">Senior Social Media Manager · Foodpanda Thailand</div>
+                <p className="hero-resume-text">Led brand voice across 4 platforms, growing follower base 340% in 18 months. Managed $2.4M influencer budget with 4.8x avg ROI. Collaborated with regional teams on SEA-wide campaign alignment.</p>
+              </div>
               <a href="/example" className="hero-resume-cta">See full example →</a>
             </div>
 
             <div className="hero-pricing-row">
               <div className="hero-price-card">
-                <div className="hero-price-card-top">
+                <div className="hero-price-badge-wrap">
                   <span className="hero-price-badge hero-price-badge--pro">Pro</span>
                 </div>
                 <div className="hero-price-amount">$49.99<span>/yr</span></div>
+                <div className="hero-price-annual-note">Best value — one payment</div>
                 <div className="hero-price-sub">Unlimited resumes. Cover letters. Recruiter & ATS analysis. Hiring manager DM.</div>
                 <a href="/pricing" className="hero-price-cta hero-price-cta--pro">Get Pro →</a>
               </div>
 
               <div className="hero-price-card hero-price-card--plus">
-                <div className="hero-price-card-top">
+                <div className="hero-price-badge-wrap">
                   <span className="hero-price-badge hero-price-badge--plus">Pro+</span>
                 </div>
                 <div className="hero-price-amount">$9.99<span>/mo</span></div>
+                <div className="hero-price-annual-note" style={{color: 'rgba(255,255,255,0.55)'}}>or $79.99/yr — save 33%</div>
                 <div className="hero-price-sub">Everything in Pro — plus Dual Resume Versions, ATS Cheat Sheet, and Company Intel.</div>
                 <a href="/pricing" className="hero-price-cta hero-price-cta--plus">Get Pro+ →</a>
               </div>
