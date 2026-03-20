@@ -41,7 +41,6 @@ export default function Home() {
   const [resumeCount, setResumeCount] = useState(null)
   const [counterRolling, setCounterRolling] = useState(false)
   const [mascotSpin, setMascotSpin] = useState(false)
-  const [turnstileToken, setTurnstileToken] = useState(null)
 
   const updateCounter = (newCount) => {
     if (newCount === null) return
@@ -98,11 +97,6 @@ export default function Home() {
 
   // Fetch resume counter + check access via cookie on mount
   // Works in private/incognito — no localStorage dependency
-  useEffect(() => {
-    window.onTurnstileSuccess = (token) => setTurnstileToken(token)
-    return () => { delete window.onTurnstileSuccess }
-  }, [])
-
   useEffect(() => {
     if (router.query.signin === 'true') {
       setShowSignIn(true)
@@ -192,7 +186,6 @@ export default function Home() {
         formData.append('jobDescFile', jobDescFile)
       }
       formData.append('dualVersion', dualVersionEnabled && isPlusUser ? 'true' : 'false')
-      if (turnstileToken) formData.append('cf-turnstile-response', turnstileToken)
 
       const controller = new AbortController()
       const timeout = setTimeout(() => controller.abort(), 120000)
@@ -728,7 +721,6 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤵</text></svg>" />
-        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
       </Head>
 
       <Header
@@ -748,37 +740,76 @@ export default function Home() {
         </div>
       )}
 
-      <div className="hero">
-        <div className="hero-inner">
+      <section className="hero">
+        <div className="hero-left">
+          <div className="hero-eyebrow">
+            <div className="hero-eyebrow-dot"></div>
+            <span className="hero-eyebrow-text">AI Resume Intelligence</span>
+          </div>
           <div className="hero-copy">
-            <p className="hero-eyebrow">AI Resume Intelligence</p>
-            <h1>Your resume, <em>tailored</em><br />to every job.</h1>
+            <h1>Your resume,<br /><em>tailored</em><br />to every job.</h1>
+            <p className="hero-sub">
+              Upload your resume. Paste the job description.
+              Get a bespoke resume, cover letter, recruiter analysis, and hiring manager DM — in under a minute.
+            </p>
           </div>
+          <div className="hero-actions">
+            <a href="/#get-started" className="hero-btn-primary">Build Your Resume →</a>
+            <a href="/example" className="hero-btn-ghost">See an example</a>
+          </div>
+          <div className="hero-proof">
+            {resumeCount !== null && (
+              <>
+                <div className="proof-stat">
+                  <span className="proof-number">{resumeCount.toLocaleString()}</span>
+                  <span className="proof-label">Resumes tailored</span>
+                </div>
+                <div className="proof-divider"></div>
+              </>
+            )}
+            <div className="proof-quote">
+              <p>"The results are solid. I like what I got back."</p>
+              <span>— B.C., ICF Certified Career Coach</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="hero-right">
           <div className="hero-mascot">
-            <img src="/uncle-spin-hero.png" alt="Uncle Spin" className="mascot-img" />
+            <img src="/uncle-spin-hero.png" alt="Oni" className="mascot-img" />
+          </div>
+          <div className="hero-float-card hero-float-card--top">
+            <div className="hero-float-label">Tailored for</div>
+            <div className="hero-float-value">Marketing Manager @ Google</div>
+          </div>
+          <div className="hero-float-card hero-float-card--bottom">
+            <div className="hero-float-dot"></div>
+            <div className="hero-float-value">ATS Score: 94% match</div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* COUNTER BAND */}
-      {resumeCount !== null && (
-        <div style={{ background: 'var(--accent)', padding: '1.25rem 2rem', textAlign: 'center', overflow: 'hidden' }}>
-          <span style={{
-            display: 'inline-block',
-            color: 'white',
-            fontFamily: 'Inter',
-            fontWeight: 800,
-            fontSize: '2rem',
-            letterSpacing: '-0.02em',
-          }}>{resumeCount.toLocaleString()}</span>
-          <span style={{ color: 'rgba(255,255,255,0.85)', fontFamily: 'Inter', fontWeight: 500, fontSize: '0.85rem', marginLeft: '10px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>resumes tailored and counting</span>
+      {/* TICKER STRIP */}
+      <div className="ticker">
+        <div className="ticker-item">
+          <span className="ticker-num">&lt; 60s</span>
+          <span className="ticker-label">Generation time</span>
         </div>
-      )}
-
-      {/* TESTIMONIAL */}
-      <div style={{ background: 'var(--surface)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', padding: '1.5rem 2rem', textAlign: 'center' }}>
-        <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.15rem', fontStyle: 'italic', color: 'var(--ink)', margin: '0 0 8px' }}>"The results are solid. I like what I got back."</p>
-        <p style={{ fontSize: '0.8rem', color: 'var(--text-soft)', fontWeight: 600, margin: 0 }}>&mdash; B.C., ICF Certified Career Coach</p>
+        <span className="ticker-sep">·</span>
+        <div className="ticker-item">
+          <span className="ticker-num">4</span>
+          <span className="ticker-label">Documents per run</span>
+        </div>
+        <span className="ticker-sep">·</span>
+        <div className="ticker-item">
+          <span className="ticker-num">Any industry</span>
+          <span className="ticker-label">Works across all roles</span>
+        </div>
+        <span className="ticker-sep">·</span>
+        <div className="ticker-item">
+          <span className="ticker-num">No account</span>
+          <span className="ticker-label">3 free resumes, no login</span>
+        </div>
       </div>
 
       <div className="how-section">
@@ -952,14 +983,6 @@ export default function Home() {
                 </button>
               </div>
             )}
-
-            <div
-              className="cf-turnstile"
-              data-sitekey="0x4AAAAAACtpawIZokWSALcm"
-              data-callback="onTurnstileSuccess"
-              data-theme="light"
-              style={{ marginBottom: '8px' }}
-            ></div>
 
             <button
               className={`generate-btn ${loading ? 'loading' : ''}`}
