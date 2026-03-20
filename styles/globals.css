@@ -392,13 +392,14 @@ body {
 }
 
 .hero-logo-banner-img {
-  height: 160px;
-  width: auto;
+  width: 500px;
+  max-width: 80vw;
+  height: auto;
   display: block;
 }
 
 @media (max-width: 768px) {
-  .hero-logo-banner-img { height: 100px; }
+  .hero-logo-banner-img { width: 280px; }
 }
 
 .hero-right-inner {
