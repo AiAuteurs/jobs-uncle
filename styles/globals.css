@@ -2,12 +2,12 @@
 
 /* ─── BRAND TOKENS ──────────────────────────────────────────── */
 :root {
-  --bg:           #0D1B2A;
-  --surface:      #152236;
+  --bg:           #111827;
+  --surface:      #1A2744;
   --ink:          #F0F4F8;
   --text-soft:    #8DA4BF;
-  --border:       #1E3352;
-  --border-soft:  #172B42;
+  --border:       #253A5C;
+  --border-soft:  #1E3352;
   --accent:       #7C5CFC;
   --accent-soft:  #2A1F5C;
   --beta-bg:      #1C2E45;
@@ -19,7 +19,7 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-img[src*="jobsuncle-logo"] { mix-blend-mode: normal; }
+
 
 html { font-size: 16px; -webkit-font-smoothing: antialiased; }
 
@@ -61,7 +61,7 @@ body {
   height: 52px;
   width: auto;
   display: block;
-  mix-blend-mode: normal;
+  
 }
 
 .logo-icon {
@@ -397,7 +397,7 @@ body {
   width: 200px;
   height: auto;
   display: block;
-  mix-blend-mode: normal;
+  
 }
 
 .hero-deliverables {
@@ -780,7 +780,7 @@ body {
 }
 
 .upload-icon     { font-size: 1.5rem; margin-bottom: 0.5rem; }
-.upload-mascot   { width: 80px; height: 80px; object-fit: contain; margin-bottom: 0.5rem; display: block; margin-left: auto; margin-right: auto; mix-blend-mode: normal; }
+.upload-mascot   { width: 80px; height: 80px; object-fit: contain; margin-bottom: 0.5rem; display: block; margin-left: auto; margin-right: auto;  }
 .upload-label    { font-family: 'Inter', sans-serif; font-size: 0.78rem; color: var(--text-soft); }
 .upload-filename { font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 500; color: var(--sage); }
 .file-input      { display: none; }

@@ -518,15 +518,11 @@ export default function Home() {
           color: var(--surface) !important;
           border-color: var(--ink) !important;
         }
-        @keyframes uncle-bounce {
-          0%, 100% { transform: translateY(0); }
-          50%       { transform: translateY(-10px); }
-        }
-        @keyframes charm-show {
-          0%     { opacity: 1; }
-          19%    { opacity: 1; }
-          20%    { opacity: 0; }
-          100%   { opacity: 0; }
+        @keyframes logo-spin-pause {
+          0%   { transform: rotate(0deg); }
+          40%  { transform: rotate(360deg); }
+          60%  { transform: rotate(360deg); }
+          100% { transform: rotate(720deg); }
         }
       `}</style>
 
@@ -884,13 +880,13 @@ export default function Home() {
                 <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
                   <button
                     onClick={() => setResumeInputMode('upload')}
-                    style={{ flex: 1, padding: '8px 12px', background: resumeInputMode === 'upload' ? 'var(--ink)' : 'transparent', color: resumeInputMode === 'upload' ? 'white' : 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                    style={{ flex: 1, padding: '8px 12px', background: resumeInputMode === 'upload' ? 'var(--accent)' : 'transparent', color: resumeInputMode === 'upload' ? '#fff' : 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
                   >
                     Upload file
                   </button>
                   <button
                     onClick={() => setResumeInputMode('paste')}
-                    style={{ flex: 1, padding: '8px 12px', background: resumeInputMode === 'paste' ? 'var(--ink)' : 'transparent', color: resumeInputMode === 'paste' ? 'white' : 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                    style={{ flex: 1, padding: '8px 12px', background: resumeInputMode === 'paste' ? 'var(--accent)' : 'transparent', color: resumeInputMode === 'paste' ? '#fff' : 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
                   >
                     Paste text
                   </button>
@@ -949,13 +945,13 @@ export default function Home() {
                 <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
                   <button
                     onClick={() => setJobDescInputMode('upload')}
-                    style={{ flex: 1, padding: '8px 12px', background: jobDescInputMode === 'upload' ? 'var(--ink)' : 'transparent', color: jobDescInputMode === 'upload' ? 'white' : 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                    style={{ flex: 1, padding: '8px 12px', background: jobDescInputMode === 'upload' ? 'var(--accent)' : 'transparent', color: jobDescInputMode === 'upload' ? '#fff' : 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
                   >
                     Upload file
                   </button>
                   <button
                     onClick={() => setJobDescInputMode('paste')}
-                    style={{ flex: 1, padding: '8px 12px', background: jobDescInputMode === 'paste' ? 'var(--ink)' : 'transparent', color: jobDescInputMode === 'paste' ? 'white' : 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                    style={{ flex: 1, padding: '8px 12px', background: jobDescInputMode === 'paste' ? 'var(--accent)' : 'transparent', color: jobDescInputMode === 'paste' ? '#fff' : 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
                   >
                     Paste text
                   </button>
@@ -1083,33 +1079,18 @@ export default function Home() {
 
         {loading && (
           <div className="loading-state" style={{ textAlign: 'center', padding: '3rem 1rem' }}>
-            <div style={{ position: 'relative', display: 'inline-block', marginBottom: '8px', width: 110, height: 130 }}>
-              {[
-                { src: '/jobsuncle-logo.png',          delay: '0s'  },
-                { src: '/uncle-lucky-clover.png',       delay: '-4s' },
-                { src: '/uncle-lucky-horseshoe.png',    delay: '-3s' },
-                { src: '/uncle-lucky-cat.png',          delay: '-2s' },
-                { src: '/uncle-lucky-rabbitsfoot.png',  delay: '-1s' },
-              ].map((charm, i) => (
-                <img
-                  key={i}
-                  src={charm.src}
-                  alt="Uncle Spin"
-                  style={{
-                    width: 110, height: 130,
-                    objectFit: 'contain',
-                    objectPosition: 'bottom',
-                    position: 'absolute', top: 0, left: 0,
-                    animation: `uncle-bounce 0.8s ease-in-out infinite, charm-show 5s linear ${charm.delay} infinite`,
-                    opacity: 0,
-                  }}
-                />
-              ))}
-              <div style={{
-                width: 70, height: 10, background: 'var(--ink)', borderRadius: '50%',
-                position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)',
-                opacity: 0.12,
-              }} />
+            <div style={{ display: 'inline-block', marginBottom: '8px' }}>
+              <img
+                src="/jobsuncle-logo.png"
+                alt=""
+                style={{
+                  width: 100,
+                  height: 'auto',
+                  animation: 'logo-spin-pause 2s ease-in-out infinite',
+                  transformOrigin: 'center center',
+                  display: 'block',
+                }}
+              />
             </div>
             <div className="loading-text" style={{ marginTop: '16px' }}>Making you impossible to ignore.</div>
             <div className="loading-sub">Tailoring every word to this role. Give us a moment.</div>
@@ -1268,30 +1249,12 @@ export default function Home() {
                     )}
 
                     {regenerating && (
-                      <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '12px', marginTop: '12px', padding: '12px 14px', background: 'rgba(245,158,11,0.06)', borderRadius: '8px' }}>
-                        <div style={{ position: 'relative', width: 44, height: 50, flexShrink: 0 }}>
-                          {[
-                            { src: '/jobsuncle-logo.png',         delay: '0s'  },
-                            { src: '/uncle-lucky-clover.png',      delay: '-4s' },
-                            { src: '/uncle-lucky-horseshoe.png',   delay: '-3s' },
-                            { src: '/uncle-lucky-cat.png',         delay: '-2s' },
-                            { src: '/uncle-lucky-rabbitsfoot.png', delay: '-1s' },
-                          ].map((charm, i) => (
-                            <img
-                              key={i}
-                              src={charm.src}
-                              alt="Uncle Spin"
-                              style={{
-                                width: 44, height: 50,
-                                objectFit: 'contain',
-                                objectPosition: 'bottom',
-                                position: 'absolute', top: 0, left: 0,
-                                animation: `uncle-bounce 0.8s ease-in-out infinite, charm-show 5s linear ${charm.delay} infinite`,
-                                opacity: 0,
-                              }}
-                            />
-                          ))}
-                        </div>
+                      <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '12px', marginTop: '12px', padding: '12px 14px', background: 'rgba(124,92,252,0.08)', borderRadius: '8px' }}>
+                        <img
+                          src="/jobsuncle-logo.png"
+                          alt=""
+                          style={{ width: 44, height: 'auto', flexShrink: 0, animation: 'logo-spin-pause 2s ease-in-out infinite', transformOrigin: 'center center' }}
+                        />
                         <div>
                           <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ink)' }}>Applying every fix from the analysis...</div>
                           <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', marginTop: '2px' }}>Rewriting your resume and cover letter. About 15 seconds.</div>
@@ -1362,30 +1325,12 @@ export default function Home() {
                 </div>
 
                 {atsLoading && (
-                  <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', background: 'rgba(16,185,129,0.06)', borderRadius: '8px' }}>
-                    <div style={{ position: 'relative', width: 44, height: 50, flexShrink: 0 }}>
-                      {[
-                        { src: '/jobsuncle-logo.png',         delay: '0s'  },
-                        { src: '/uncle-lucky-clover.png',      delay: '-4s' },
-                        { src: '/uncle-lucky-horseshoe.png',   delay: '-3s' },
-                        { src: '/uncle-lucky-cat.png',         delay: '-2s' },
-                        { src: '/uncle-lucky-rabbitsfoot.png', delay: '-1s' },
-                      ].map((charm, i) => (
-                        <img
-                          key={i}
-                          src={charm.src}
-                          alt="Uncle Spin"
-                          style={{
-                            width: 44, height: 50,
-                            objectFit: 'contain',
-                            objectPosition: 'bottom',
-                            position: 'absolute', top: 0, left: 0,
-                            animation: `uncle-bounce 0.8s ease-in-out infinite, charm-show 5s linear ${charm.delay} infinite`,
-                            opacity: 0,
-                          }}
-                        />
-                      ))}
-                    </div>
+                  <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', background: 'rgba(124,92,252,0.08)', borderRadius: '8px' }}>
+                    <img
+                      src="/jobsuncle-logo.png"
+                      alt=""
+                      style={{ width: 44, height: 'auto', flexShrink: 0, animation: 'logo-spin-pause 2s ease-in-out infinite', transformOrigin: 'center center' }}
+                    />
                     <div>
                       <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ink)' }}>Parsing your resume into ATS fields...</div>
                       <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', marginTop: '2px' }}>Staging every field for one-click copy. Just a moment.</div>
