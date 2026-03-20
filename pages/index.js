@@ -820,7 +820,7 @@ export default function Home() {
 
                 {resumeInputMode === 'upload' ? (
                   <>
-                    <p className="step-desc">Upload your resume as a PDF, Word doc (.docx), or text file. LinkedIn PDF works too.</p>
+                    <p className="step-desc">Upload a PDF, Word doc (.docx), or .txt file — LinkedIn PDF works great. Or switch to <strong>Paste text</strong> to copy/paste your resume directly.</p>
                     <div
                       className={`upload-zone ${dragover ? 'dragover' : ''} ${pdfFile ? 'has-file' : ''}`}
                       onClick={() => fileInputRef.current?.click()}
@@ -885,7 +885,7 @@ export default function Home() {
 
                 {jobDescInputMode === 'paste' ? (
                   <>
-                    <p className="step-desc">Paste the full job posting. The more detail, the sharper the match.</p>
+                    <p className="step-desc">Paste the full job posting from LinkedIn, Indeed, or any job board. The more detail, the sharper the match.</p>
                     <textarea
                       className="job-textarea"
                       placeholder="Paste the complete job description here — title, responsibilities, requirements, the works..."
@@ -895,7 +895,7 @@ export default function Home() {
                   </>
                 ) : (
                   <>
-                    <p className="step-desc">Upload the job posting as a PDF or text file.</p>
+                    <p className="step-desc">Upload the job posting as a PDF or .txt file. Or switch to <strong>Paste text</strong> to paste directly from any job board.</p>
                     <div
                       className={`upload-zone ${jobDescFile ? 'has-file' : ''}`}
                       onClick={() => jobDescFileRef.current?.click()}
