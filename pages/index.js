@@ -787,41 +787,55 @@ export default function Home() {
 
       {/* SAMPLE OUTPUT */}
       <div className="sample-section">
-        <div className="sample-label">Sample output — Camille Leon → Director, Learning Experience Design @ Meridian Learning Group</div>
+        <div className="sample-label">Sample output — Camille Leon tailored to Director, Learning Experience Design @ Meridian Learning Group</div>
         <div className="sample-resume">
           <div className="sample-resume-name">Camille Leon</div>
           <div className="sample-resume-contact">camille.leon@gmail.com · 555-000-1234 · linkedin.com/in/camillelean · San Francisco, CA</div>
           <div className="sample-divider"></div>
 
           <div className="sample-section-heading">Professional Summary</div>
-          <p className="sample-body">Director-level Learning Experience Designer with 8+ years building outcome-driven curriculum for enterprise and K-12 contexts. IDEO U certified in human-centered instructional design with expertise in Articulate Storyline, learning analytics, and stakeholder engagement. Proven ability to translate complex business and scientific content into scalable learning experiences deployed across 200+ organizations nationally.</p>
+          <p className="sample-body">Director-level Learning Experience Designer with 8+ years designing outcome-driven curriculum for enterprise and educational contexts. IDEO U-certified expert in human-centered instructional design, eLearning development using Articulate Storyline, and learning analytics. Proven ability to translate complex business and scientific content into scalable learning experiences that drive measurable results across global audiences.</p>
 
-          <div className="sample-section-heading">Experience</div>
+          <div className="sample-section-heading">Relevant Experience</div>
 
           <div className="sample-job">
             <span className="sample-job-company">BrightPath Learning</span>
             <span className="sample-job-meta"> · Curriculum Developer (Contract) · 2020–2022</span>
           </div>
           <ul className="sample-bullets">
-            <li>Authored 14 STEM learning modules using Articulate Storyline deployed across 200+ schools nationally, scoping each module to measurable learning outcomes aligned to NGSS standards</li>
-            <li>Partnered with UX team to redesign course navigation and learner experience, reducing drop-off rate by 22% through friction-mapping and iterative design approaches</li>
-            <li>Conducted usability testing with 40 learners, synthesized behavioral data and qualitative feedback into design recommendations adopted in next product release</li>
+            <li>Authored 14 STEM learning modules for K–8 learners deployed across 200+ schools nationally; scoped each module to measurable learning outcomes aligned to national standards</li>
+            <li>Partnered with UX team to redesign course navigation and learner experience; reduced drop-off rate by 22% through friction-mapping and iterative design methodology</li>
+            <li>Conducted usability testing with 40+ learners; synthesized behavioral data and qualitative feedback into design recommendations adopted in next product release</li>
             <li>Developed quality standards and content review rubric used by team of 6 contract developers to ensure instructional consistency across curriculum library</li>
+            <li>Collaborated with cross-functional stakeholders to align learning objectives with organizational goals and user needs</li>
           </ul>
 
-          <div className="sample-job" style={{marginTop: '16px'}}>
+          <div className="sample-section-heading">Additional Experience</div>
+          <div className="sample-job">
             <span className="sample-job-company">Roosevelt Middle School, Oakland Unified School District</span>
             <span className="sample-job-meta"> · 7th & 8th Grade Science Teacher · 2017–Present</span>
           </div>
           <ul className="sample-bullets">
-            <li>Designed and delivered curriculum for 140+ learners across 5 concurrent cohorts, achieving 34% above district average on standardized assessments through outcome-mapped instructional design</li>
-            <li>Built project-based learning framework adopted district-wide by 12 educators, reducing lesson development time by 40% through reusable modular architecture</li>
-            <li>Analyzed learner performance data weekly using dashboards and formative assessments, identified skill gaps and adjusted content, lifting at-risk learner pass rates by 28% in a single semester</li>
-            <li>Facilitated professional development workshops for 30+ educators on differentiated instruction, designing all session materials, pre/post assessments, and follow-up resources</li>
-            <li>Produced 60+ original video-based learning modules during remote instruction, achieving 84% completion rate vs. 51% district average through intentional engagement design</li>
+            <li>Designed and delivered curriculum for 140+ learners across 5 concurrent cohorts; achieved 34% above district average through outcome-mapped instructional design</li>
+            <li>Built project-based learning framework adopted district-wide by 12 educators; reduced lesson development time by 40% through reusable modular architecture</li>
+            <li>Produced 60+ original video-based learning modules using Articulate Storyline; achieved 84% completion rate vs. 51% district average</li>
           </ul>
 
-          <a href="/example" className="sample-see-more">See full output including cover letter, ATS analysis & hiring manager DM →</a>
+          <div className="sample-match-bar">
+            <div className="sample-match-label">ATS match · Meridian LXD Director</div>
+            <div className="sample-match-tags">
+              <span className="match-tag match-tag--hit">Articulate Storyline ✓</span>
+              <span className="match-tag match-tag--hit">ADDIE ✓</span>
+              <span className="match-tag match-tag--hit">IDEO U certified ✓</span>
+              <span className="match-tag match-tag--hit">Learning analytics ✓</span>
+              <span className="match-tag match-tag--hit">STEM background ✓</span>
+              <span className="match-tag match-tag--hit">Stakeholder presentations ✓</span>
+              <span className="match-tag match-tag--hit">Cross-functional collaboration ✓</span>
+              <span className="match-tag match-tag--miss">Enterprise consulting — flag</span>
+            </div>
+          </div>
+
+          <a href="/example" className="sample-see-more">See full output — cover letter, recruiter analysis & hiring manager DM →</a>
         </div>
       </div>
 
