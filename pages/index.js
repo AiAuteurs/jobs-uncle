@@ -1452,6 +1452,25 @@ export default function Home() {
                 </div>
               )}
 
+              {/* COMPANY INTEL */}
+              {results.companyIntel && (
+                <div className="result-section" style={{ borderLeft: '3px solid var(--accent)', background: 'rgba(0,209,255,0.04)' }}>
+                  <div className="result-section-title">Company Intel</div>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '12px' }}>
+                    Power signals from the job description — who controls this hire and how to position.
+                  </div>
+                  <pre style={{
+                    margin: 0,
+                    fontFamily: 'Inter, sans-serif',
+                    whiteSpace: 'pre-wrap',
+                    fontSize: '0.88rem',
+                    lineHeight: 1.8,
+                    color: 'var(--ink)',
+                    background: 'transparent',
+                  }}>{results.companyIntel}</pre>
+                </div>
+              )}
+
               {/* ATS CHEAT SHEET */}
               <div className="result-section" style={{ borderLeft: '3px solid #10b981', background: 'rgba(16,185,129,0.04)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>

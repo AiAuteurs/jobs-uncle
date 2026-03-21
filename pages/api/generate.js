@@ -384,6 +384,7 @@ AFTER applying the rules above:
   This is standard practice and signals intentional curation, not a mistake.
 - FLAG bad email addresses in recruiter notes: if the email looks unprofessional (e.g. pet names, nicknames, random numbers), flag it and suggest a professional alternative
 - Write in implied first person throughout — NO "I", "my", or "me" anywhere. Every bullet and sentence leads with an action verb or noun. "Led a team of 10" not "I led a team of 10"
+- NAMED CLIENT/BRAND PRESERVATION — CRITICAL: Every named brand, major agency, notable studio, or recognizable client mentioned in the source resume MUST appear in the tailored output by name. These are credibility anchors. Never consolidate or genericize them. "Agency clients included Disney, NVIDIA, and Salesforce" is always correct. "Major entertainment and tech clients" is never acceptable. If the source resume names Disney, NVIDIA, Goodby Silverstein, Red Car, Salesforce, Apple, Netflix, or any other recognizable name — it stays, verbatim, in the output. This rule overrides any brevity or relevance judgment.
 `
 
   const outputFormat = dualVersion ? `
