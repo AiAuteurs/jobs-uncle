@@ -66,7 +66,7 @@ function useConfetti() {
         rot: Math.random() * 360,
         rotV: (Math.random() - 0.5) * 14,
         life: 1,
-        decay: 0.004 + Math.random() * 0.003,
+        decay: 0.003 + Math.random() * 0.002,
         shape: Math.random() > 0.4 ? 'rect' : 'circle',
       })
     }
@@ -147,7 +147,7 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
   const [burst, setBurst] = useState(false)
 
   const handleRollComplete = useCallback(() => {
-    playPop()
+    try { new Audio('/tada.mp3').play() } catch(e) {}
     fire()
     setBurst(true)
     setTimeout(() => setBurst(false), 700)
