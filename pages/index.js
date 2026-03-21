@@ -186,7 +186,7 @@ export default function Home() {
         color: COLORS[Math.floor(Math.random() * COLORS.length)],
         w: 7 + Math.random() * 7, h: 4 + Math.random() * 4,
         rot: Math.random() * 360, rotV: (Math.random() - 0.5) * 16,
-        life: 1, decay: 0.008 + Math.random() * 0.007,
+        life: 1, decay: 0.004 + Math.random() * 0.003,
         shape: Math.random() > 0.4 ? 'rect' : 'circle',
       })
     }
@@ -1028,9 +1028,22 @@ export default function Home() {
       </section>
 
       {/* ── UPLOAD SECTION ────────────────────────────────────────── */}
+      {!results && (
       <section id="upload-section" style={{
         maxWidth: '760px', margin: '0 auto', padding: '0 24px 80px',
       }}>
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '3rem 1rem', background: '#161616', border: '1px solid #2a2a2a', borderRadius: '16px' }}>
+            <img
+              src="/jobsuncle-logo.png"
+              alt=""
+              style={{ width: 100, height: 'auto', display: 'block', margin: '0 auto 16px',
+                animation: 'logo-spin-pause 2s ease-in-out infinite', transformOrigin: 'center center' }}
+            />
+            <div className="loading-text">Making you impossible to ignore.</div>
+            <div className="loading-sub">Tailoring every word to this role. Give us a moment.</div>
+          </div>
+        ) : (
         <div style={{
           background: '#161616', border: '1px solid #2a2a2a', borderRadius: '16px',
           padding: '36px 32px',
@@ -1095,12 +1108,12 @@ export default function Home() {
             disabled={!canGenerate || loading}
             style={{ marginTop: '20px' }}
           >
-            {loading ? (
-              <span className="cc-generating"><span className="cc-spinner" />Making you impossible to ignore...</span>
-            ) : canGenerate ? 'Generate My Documents →' : 'Drop resume + paste job description to unlock'}
+            {canGenerate ? 'Generate My Documents →' : 'Drop resume + paste job description to unlock'}
           </button>
         </div>
+        )} {/* end loading ternary */}
       </section>
+      )} {/* end !results */}
 
 
       <div className="app-container">
@@ -1314,25 +1327,6 @@ export default function Home() {
           </>
         )}
 
-        {loading && (
-          <div className="loading-state" style={{ textAlign: 'center', padding: '3rem 1rem' }}>
-            <div style={{ display: 'inline-block', marginBottom: '8px' }}>
-              <img
-                src="/jobsuncle-logo.png"
-                alt=""
-                style={{
-                  width: 100,
-                  height: 'auto',
-                  animation: 'logo-spin-pause 2s ease-in-out infinite',
-                  transformOrigin: 'center center',
-                  display: 'block',
-                }}
-              />
-            </div>
-            <div className="loading-text" style={{ marginTop: '16px' }}>Making you impossible to ignore.</div>
-            <div className="loading-sub">Tailoring every word to this role. Give us a moment.</div>
-          </div>
-        )}
 
         {results && (
           <>
