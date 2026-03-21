@@ -717,6 +717,59 @@ body {
   align-self: flex-start;
 }
 
+/* ─── COUNTER BAND ─────────────────────────────────────────── */
+.counter-band {
+  background: var(--accent);
+  padding: 1.25rem 2rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.counter-band-num {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.counter-band-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ─── TESTIMONIAL BAND ──────────────────────────────────────── */
+.testimonial-band {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 1.5rem 2rem;
+  text-align: center;
+}
+
+.testimonial-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  font-style: italic;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+
+.testimonial-attr {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  font-weight: 500;
+  margin: 0;
+}
+
 /* ─── SAMPLE RESUME SECTION ────────────────────────────────── */
 .sample-section {
   max-width: 860px;

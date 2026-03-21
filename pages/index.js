@@ -744,21 +744,6 @@ export default function Home() {
             <a href="/#get-started" className="hero-btn-primary">Build Your Resume →</a>
             <a href="/example" className="hero-btn-ghost">See an example</a>
           </div>
-          <div className="hero-proof">
-            {resumeCount !== null && (
-              <>
-                <div className="proof-stat">
-                  <span className="proof-number">{resumeCount.toLocaleString()}</span>
-                  <span className="proof-label">Resumes tailored</span>
-                </div>
-                <div className="proof-divider"></div>
-              </>
-            )}
-            <div className="proof-quote">
-              <p>"The results are solid. I like what I got back."</p>
-              <span>— B.C., ICF Certified Career Coach</span>
-            </div>
-          </div>
         </div>
 
         <div className="hero-cards">
@@ -784,6 +769,20 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* COUNTER BAND */}
+      {resumeCount !== null && (
+        <div className="counter-band">
+          <span className="counter-band-num">{resumeCount.toLocaleString()}</span>
+          <span className="counter-band-label">RESUMES TAILORED AND COUNTING</span>
+        </div>
+      )}
+
+      {/* TESTIMONIAL */}
+      <div className="testimonial-band">
+        <p className="testimonial-quote">"The results are solid. I like what I got back."</p>
+        <p className="testimonial-attr">— B.C., ICF Certified Career Coach</p>
+      </div>
 
       {/* SAMPLE OUTPUT */}
       <div className="sample-section">
