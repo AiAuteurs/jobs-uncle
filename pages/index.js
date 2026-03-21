@@ -859,16 +859,37 @@ export default function Home() {
         </div>
       )}
 
-      <div className="logo-banner">
-        <a href="/" className="logo-banner-link">
-          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="logo-banner-img" />
+      <div className="logo-banner" style={{ background: 'transparent', boxShadow: 'none', border: 'none' }}>
+        <a href="/" className="logo-banner-link" style={{ background: 'transparent' }}>
+          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="logo-banner-img" style={{ background: 'transparent', mixBlendMode: 'normal' }} />
         </a>
       </div>
 
-      {/* SAMPLE OUTPUT */}
-      <div className="sample-section">
-        <div className="sample-eyebrow">See what you get — real output, real candidate</div>
-        <div className="sample-output-panel">
+      {/* SAMPLE SNIPPET — compact teaser, hidden once results exist */}
+      {!results && (
+        <div style={{ maxWidth: '680px', margin: '0 auto 2rem', padding: '0 1.5rem' }}>
+          <div style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-soft)', marginBottom: '10px', textAlign: 'center' }}>
+            Example output
+          </div>
+          <div style={{ background: '#ffffff', borderRadius: '10px', padding: '20px 24px', color: '#111', fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', lineHeight: 1.7, position: 'relative', overflow: 'hidden' }}>
+            <div style={{ fontWeight: 800, fontSize: '0.95rem', marginBottom: '2px', color: '#111' }}>Camille Leon</div>
+            <div style={{ color: '#555', fontSize: '0.75rem', marginBottom: '12px' }}>camille.leon@gmail.com · linkedin.com/in/camilleleon · San Francisco, CA</div>
+            <div style={{ fontWeight: 700, fontSize: '0.7rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#888', marginBottom: '6px' }}>Professional Summary</div>
+            <p style={{ margin: '0 0 12px', color: '#333' }}>Director-level Learning Experience Designer with 8+ years building outcome-driven curriculum for enterprise clients. IDEO U-certified. Proven across Articulate Storyline, learning analytics, and global rollouts.</p>
+            <div style={{ fontWeight: 700, fontSize: '0.7rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#888', marginBottom: '6px' }}>Relevant Experience</div>
+            <div style={{ fontWeight: 700, color: '#111', marginBottom: '2px' }}>BrightPath Learning <span style={{ fontWeight: 400, color: '#555' }}>· Curriculum Developer · 2020–2022</span></div>
+            <ul style={{ margin: '4px 0 0 16px', padding: 0, color: '#333' }}>
+              <li>Authored 14 STEM modules deployed across 200+ schools; reduced learner drop-off 22%</li>
+              <li>Built content review rubric adopted by team of 6 contract developers</li>
+            </ul>
+            {/* fade out */}
+            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '60px', background: 'linear-gradient(to bottom, transparent, #ffffff)' }} />
+          </div>
+          <div style={{ textAlign: 'center', marginTop: '8px' }}>
+            <a href="/example" style={{ fontSize: '0.75rem', color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>See full example output →</a>
+          </div>
+        </div>
+      )}
           <div className="sample-output-header">
             <div className="sample-output-header-left">
               <div className="sample-output-title">Your tailored documents</div>
@@ -908,25 +929,7 @@ export default function Home() {
               <li>Produced 60+ original video-based learning modules using Articulate Storyline; achieved 84% completion rate vs. 51% district average</li>
             </ul>
 
-            <div className="sample-match-bar">
-              <div className="sample-match-label">ATS keyword match · Meridian LXD Director</div>
-              <div className="sample-match-tags">
-                <span className="match-tag match-tag--hit">Articulate Storyline ✓</span>
-                <span className="match-tag match-tag--hit">ADDIE ✓</span>
-                <span className="match-tag match-tag--hit">IDEO U certified ✓</span>
-                <span className="match-tag match-tag--hit">Learning analytics ✓</span>
-                <span className="match-tag match-tag--hit">STEM background ✓</span>
-                <span className="match-tag match-tag--hit">Executive stakeholder presentations ✓</span>
-                <span className="match-tag match-tag--miss">Enterprise consulting — gap flagged</span>
-              </div>
-            </div>
-          </div>
 
-          <div className="sample-output-footer">
-            <a href="/example" className="sample-see-more">See full output — cover letter, recruiter analysis & hiring manager DM →</a>
-          </div>
-        </div>
-      </div>
 
       <section className="command-center">
         <div className="cc-left">
