@@ -1269,14 +1269,6 @@ export default function Home() {
               </div>
             )}
 
-            <button
-              className={`generate-btn ${loading ? 'loading' : ''}`}
-              onClick={handleGenerate}
-              disabled={!canGenerate || loading}
-            >
-              {loading ? 'Making you impossible to ignore...' : dualVersionEnabled && isPlusUser ? 'Generate Dual Resume Package →' : 'Generate Resume Package →'}
-            </button>
-
             {/* RESTORE + BETA — visible below generate, not buried */}
             {!isPaid && (
               <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '12px' }}>
