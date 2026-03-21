@@ -821,6 +821,10 @@ export default function Home() {
         </div>
       )}
 
+      <div className="logo-banner">
+        <a href="/"><img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="logo-banner-img" /></a>
+      </div>
+
       <section className="command-center">
         <div className="cc-left">
           <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="cc-logo" />

@@ -36,18 +36,13 @@ function AnimatedCounter({ value }) {
 export default function Header({ isPaid = false, accessLevel = null, onSignIn, onManage, onContact, resumeCount = null }) {
   return (
     <header className="header">
-      <div className="header-left">
-        <a href="/" className="logo">
-          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="logo-full" />
-        </a>
-        <nav className="header-nav">
-          <a href="/about" className="header-nav-link">Our Story</a>
-          <a href="/example" className="header-nav-link">See an example</a>
-          <a href="/faq" className="header-nav-link">FAQ</a>
-          <a href="/pricing" className="header-nav-link">Pricing</a>
-          {onContact && <a href="#contact" className="header-nav-link" onClick={e => { e.preventDefault(); onContact() }}>Contact</a>}
-        </nav>
-      </div>
+      <nav className="header-nav">
+        <a href="/about" className="header-nav-link">Our Story</a>
+        <a href="/example" className="header-nav-link">See an example</a>
+        <a href="/faq" className="header-nav-link">FAQ</a>
+        <a href="/pricing" className="header-nav-link">Pricing</a>
+        {onContact && <a href="#contact" className="header-nav-link" onClick={e => { e.preventDefault(); onContact() }}>Contact</a>}
+      </nav>
 
       <div className="header-right">
         {resumeCount !== null && (
