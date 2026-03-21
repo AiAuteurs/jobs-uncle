@@ -1,4 +1,4 @@
-export default function Header({ isPaid = false, accessLevel = null, onSignIn, onManage, onContact }) {
+export default function Header({ isPaid = false, accessLevel = null, onSignIn, onManage, onContact, resumeCount = null }) {
   return (
     <header className="header">
       <div className="header-left">
@@ -21,6 +21,14 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
       </div>
 
       <div className="header-right">
+        {resumeCount !== null && (
+          <div className="header-live-count">
+            <span className="header-live-dot" />
+            <span className="header-live-num">{resumeCount.toLocaleString()}</span>
+            <span className="header-live-label">resumes tailored</span>
+          </div>
+        )}
+
         {accessLevel === 'pro_plus' && (
           <span className="header-badge header-badge--plus">Pro+ Active</span>
         )}
@@ -45,8 +53,6 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
         <a href="/#get-started" className="header-cta">
           Build Your Resume
         </a>
-
-        <span className="header-tagline">Stop applying. Start interviewing.</span>
       </div>
     </header>
   )

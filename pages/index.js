@@ -791,6 +791,7 @@ export default function Home() {
         onSignIn={() => setShowSignIn(true)}
         onManage={() => setShowManageModal(true)}
         onContact={() => setShowContact(true)}
+        resumeCount={resumeCount}
       />
 
       {/* MOBILE-ONLY NAV BAR */}
@@ -805,12 +806,9 @@ export default function Home() {
       <section className="command-center">
         <div className="cc-left">
           <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="cc-logo" />
-          <h1 className="cc-headline">Stop applying.<br /><em>Start interviewing.</em></h1>
-          <p className="cc-sub">Drop your resume and the job description. Get a tailored resume, cover letter, recruiter analysis, and hiring manager DM in under 60 seconds.</p>
-          <div className="cc-cta-row">
-            <a href="/#get-started" className="cc-cta-btn">Build Your Resume →</a>
-            <a href="/example" className="cc-cta-secondary">See an example</a>
-          </div>
+          <p className="cc-kicker">Stop applying. Start interviewing.</p>
+          <h1 className="cc-headline">Tailored resume to<br />job description<br />in 60 seconds.</h1>
+          <p className="cc-sub">Drop your resume and the job description on the right. Get a tailored resume, cover letter, recruiter analysis, and hiring manager DM — ready to download.</p>
           <div className="cc-delivers">
             {['Tailored resume', 'Cover letter', 'Recruiter & ATS analysis', 'Hiring manager DM'].map(item => (
               <div key={item} className="cc-deliver-item">
@@ -819,16 +817,6 @@ export default function Home() {
               </div>
             ))}
           </div>
-          {resumeCount !== null && (
-            <div className="cc-proof-row">
-              <div className="cc-proof-stat">
-                <span className="cc-proof-num">{resumeCount.toLocaleString()}</span>
-                <span className="cc-proof-label">Resumes tailored</span>
-              </div>
-              <div className="cc-proof-divider"></div>
-              <p className="cc-proof-quote">"The results are solid. I like what I got back." — B.C., ICF Certified Career Coach</p>
-            </div>
-          )}
         </div>
 
         <div className="cc-right">

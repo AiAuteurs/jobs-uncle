@@ -146,6 +146,45 @@ body {
 
 .header-cta:hover { background: #FBBF24; }
 
+.header-live-count {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: rgba(0, 209, 255, 0.08);
+  border: 1px solid rgba(0, 209, 255, 0.2);
+  border-radius: 100px;
+}
+
+.header-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #00D1FF;
+  animation: live-pulse 1.8s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,209,255,0.5); }
+  50% { opacity: 0.7; box-shadow: 0 0 0 4px rgba(0,209,255,0); }
+}
+
+.header-live-num {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #00D1FF;
+  letter-spacing: -0.01em;
+}
+
+.header-live-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #8E8E93;
+}
+
 .header-tagline {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
@@ -202,6 +241,16 @@ body {
 }
 
 .cc-logo { width: 160px; height: auto; display: block; }
+
+.cc-kicker {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #00D1FF;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0;
+}
 
 .cc-headline {
   font-family: 'Inter', sans-serif;
@@ -464,6 +513,11 @@ body {
   background: #F5A623;
   color: #121212;
   animation: pulse-cta 2.5s ease-in-out infinite;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  box-shadow: 0 8px 32px rgba(245, 166, 35, 0.45);
+  padding: 20px;
 }
 
 .cc-generate-btn--ready:hover {
@@ -2049,7 +2103,46 @@ body {
   .header { padding: 0 1rem; height: 56px; }
   .logo-text { font-size: 1rem; }
   .header-nav { display: none; }
-  .header-tagline { display: none !important; }
+  .header-live-count {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: rgba(0, 209, 255, 0.08);
+  border: 1px solid rgba(0, 209, 255, 0.2);
+  border-radius: 100px;
+}
+
+.header-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #00D1FF;
+  animation: live-pulse 1.8s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,209,255,0.5); }
+  50% { opacity: 0.7; box-shadow: 0 0 0 4px rgba(0,209,255,0); }
+}
+
+.header-live-num {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #00D1FF;
+  letter-spacing: -0.01em;
+}
+
+.header-live-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #8E8E93;
+}
+
+.header-tagline { display: none !important; }
   .header-right { gap: 0.75rem; }
   .header-link { display: none; }
   .mobile-signin-bar { display: flex !important; align-items: center; justify-content: space-between; padding: 0.6rem 1.25rem; background: var(--surface); border-bottom: 1px solid var(--border); font-family: 'DM Sans', sans-serif; }
