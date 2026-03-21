@@ -66,7 +66,7 @@ function useConfetti() {
         rot: Math.random() * 360,
         rotV: (Math.random() - 0.5) * 14,
         life: 1,
-        decay: 0.011 + Math.random() * 0.009,
+        decay: 0.004 + Math.random() * 0.003,
         shape: Math.random() > 0.4 ? 'rect' : 'circle',
       })
     }
