@@ -606,6 +606,41 @@ export default function Home() {
           color: var(--surface) !important;
           border-color: var(--ink) !important;
         }
+        .sample-output-panel {
+          background: #ffffff !important;
+          color: #111111 !important;
+        }
+        .sample-output-panel * {
+          color: #111111 !important;
+        }
+        .sample-output-header {
+          border-bottom: 1px solid #e5e7eb;
+          padding-bottom: 12px;
+          margin-bottom: 16px;
+        }
+        .sample-output-badge {
+          color: #ffffff !important;
+          background: #111111;
+          padding: 4px 12px;
+          border-radius: 20px;
+          font-size: 0.72rem;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+        .match-tag--hit {
+          color: #166534 !important;
+          background: #dcfce7;
+          border: 1px solid #86efac;
+        }
+        .match-tag--miss {
+          color: #991b1b !important;
+          background: #fee2e2;
+          border: 1px solid #fca5a5;
+        }
+        .sample-match-label {
+          color: #6b7280 !important;
+        }
         @keyframes logo-spin-pause {
           0%   { transform: rotate(0deg); }
           40%  { transform: rotate(360deg); }
@@ -1449,25 +1484,6 @@ export default function Home() {
                   >
                     {dmCopied ? '✓ Copied!' : 'Copy DM'}
                   </button>
-                </div>
-              )}
-
-              {/* COMPANY INTEL */}
-              {results.companyIntel && (
-                <div className="result-section" style={{ borderLeft: '3px solid var(--accent)', background: 'rgba(0,209,255,0.04)' }}>
-                  <div className="result-section-title">Company Intel</div>
-                  <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '12px' }}>
-                    Power signals from the job description — who controls this hire and how to position.
-                  </div>
-                  <pre style={{
-                    margin: 0,
-                    fontFamily: 'Inter, sans-serif',
-                    whiteSpace: 'pre-wrap',
-                    fontSize: '0.88rem',
-                    lineHeight: 1.8,
-                    color: 'var(--ink)',
-                    background: 'transparent',
-                  }}>{results.companyIntel}</pre>
                 </div>
               )}
 
