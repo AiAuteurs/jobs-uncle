@@ -875,7 +875,7 @@ export default function Home() {
 
         {/* LEFT — logo + headline + bullets + CTA */}
         <div>
-          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" style={{ width: '160px', marginBottom: '32px', display: 'block' }} />
+          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" style={{ width: '120px', marginBottom: '24px', display: 'block' }} />
           <h1 style={{
             fontFamily: 'Inter, sans-serif', fontWeight: 900,
             fontSize: 'clamp(2.4rem, 4vw, 3.4rem)', lineHeight: 1.08,

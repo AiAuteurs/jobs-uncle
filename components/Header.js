@@ -117,13 +117,14 @@ function useConfetti() {
 
 // ── ANIMATED COUNTER ─────────────────────────────────────────────────────────
 function AnimatedCounter({ value, onRollComplete }) {
-  const [display, setDisplay] = useState(value)
-  const prevRef = useRef(value)
+  const [display, setDisplay] = useState(null)
+  const prevRef = useRef(null)
 
   useEffect(() => {
-    if (!value || value === prevRef.current) return
-    const start = prevRef.current
+    if (!value) return
+    const prev = prevRef.current
     prevRef.current = value
+    const start = prev !== null ? prev : value - 8
     let current = start
 
     const timer = setInterval(() => {
