@@ -1140,7 +1140,7 @@ export default function Home() {
             style={{ marginTop: '20px' }}
           >
             {loading ? (
-              <span className="cc-generating"><span className="cc-spinner" />Analyzing role requirements...</span>
+              <span className="cc-generating"><span className="cc-spinner" />Making you impossible to ignore...</span>
             ) : canGenerate ? 'Generate My Documents →' : 'Drop resume + paste job description to unlock'}
           </button>
         </div>
