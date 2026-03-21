@@ -1027,50 +1027,6 @@ export default function Home() {
         )}
       </section>
 
-      {/* ── SOCIAL PROOF — right below hero ───────────────────────── */}
-      {/* COUNTER BAND */}
-      {resumeCount !== null && (
-        <div className="counter-band">
-          <AnimatedCounter value={resumeCount} />
-          <span className="counter-band-label">RESUMES TAILORED AND COUNTING</span>
-        </div>
-      )}
-
-      {/* COMPANY STRIP */}
-      <div className="company-strip">
-        <div className="company-strip-label">Users have landed interviews at</div>
-        <div className="company-strip-logos">
-          {['Google', 'Apple', 'Netflix', 'Amazon', 'Meta', 'Salesforce', 'Adobe', 'Spotify'].map(co => (
-            <span key={co} className="company-chip">{co}</span>
-          ))}
-        </div>
-      </div>
-
-      {/* TESTIMONIAL */}
-      <div className="testimonial-band">
-        <p className="testimonial-quote">"The results are solid. I like what I got back."</p>
-        <p className="testimonial-attr">— B.C., ICF Certified Career Coach</p>
-      </div>
-
-      <div className="how-section">
-        <div className="how-title">How it works</div>
-        <div className="how-items">
-          <div className="how-item">
-            <div className="how-num">01</div>
-            <div className="how-label">Upload your resume &mdash; PDF, Word doc, or LinkedIn export</div>
-          </div>
-          <div className="how-item">
-            <div className="how-num">02</div>
-            <div className="how-label">Paste the job description &mdash; any role, any industry</div>
-          </div>
-          <div className="how-item">
-            <div className="how-num">03</div>
-            <div className="how-label">Download a tailored resume, cover letter, recruiter & ATS analysis, and a hiring manager DM</div>
-          </div>
-        </div>
-        <p style={{ textAlign: 'center', fontSize: '0.78rem', color: 'var(--text-soft)', marginTop: '1rem', letterSpacing: '0.03em' }}>Your resume and documents are never stored.</p>
-      </div>
-
       {/* ── UPLOAD SECTION ────────────────────────────────────────── */}
       <section id="upload-section" style={{
         maxWidth: '760px', margin: '0 auto', padding: '0 24px 80px',
