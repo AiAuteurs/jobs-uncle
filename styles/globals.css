@@ -150,14 +150,14 @@ body {
 .header-live-count {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 14px;
-  background: rgba(0, 209, 255, 0.06);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 209, 255, 0.18);
+  gap: 7px;
+  padding: 6px 16px;
+  background: rgba(10, 10, 12, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 209, 255, 0.25);
   border-radius: 100px;
-  box-shadow: 0 2px 12px rgba(0,209,255,0.08);
+  box-shadow: 0 0 20px rgba(0,209,255,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
 }
 
 .header-live-dot {
@@ -176,17 +176,17 @@ body {
 
 .header-live-num {
   font-family: 'Inter', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #00D1FF;
-  letter-spacing: -0.01em;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
 }
 
 .header-live-label {
   font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   font-weight: 500;
-  color: #8E8E93;
+  color: #6B6B6B;
 }
 
 .header-tagline {
@@ -260,9 +260,9 @@ body {
 .cc-headline {
   font-family: 'Inter', sans-serif;
   font-weight: 900;
-  font-size: clamp(2.8rem, 4vw, 4.2rem);
-  line-height: 1.05;
-  letter-spacing: -0.04em;
+  font-size: clamp(2.6rem, 3.8vw, 4rem);
+  line-height: 1.08;
+  letter-spacing: -0.05em;
   color: #FFFFFF;
   margin: 0;
   text-align: left;
@@ -277,12 +277,13 @@ body {
 
 .cc-sub {
   font-family: 'Inter', sans-serif;
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: #8E8E93;
-  line-height: 1.6;
+  line-height: 1.55;
   font-weight: 400;
   max-width: 400px;
   margin: 0;
+  margin-top: -4px;
 }
 
 .cc-cta-row {
@@ -2113,14 +2114,14 @@ body {
   .header-live-count {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 14px;
-  background: rgba(0, 209, 255, 0.06);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 209, 255, 0.18);
+  gap: 7px;
+  padding: 6px 16px;
+  background: rgba(10, 10, 12, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 209, 255, 0.25);
   border-radius: 100px;
-  box-shadow: 0 2px 12px rgba(0,209,255,0.08);
+  box-shadow: 0 0 20px rgba(0,209,255,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
 }
 
 .header-live-dot {
@@ -2139,17 +2140,17 @@ body {
 
 .header-live-num {
   font-family: 'Inter', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #00D1FF;
-  letter-spacing: -0.01em;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
 }
 
 .header-live-label {
   font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   font-weight: 500;
-  color: #8E8E93;
+  color: #6B6B6B;
 }
 
 .header-tagline { display: none !important; }

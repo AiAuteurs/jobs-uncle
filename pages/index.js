@@ -806,7 +806,6 @@ export default function Home() {
       <section className="command-center">
         <div className="cc-left">
           <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="cc-logo" />
-          <p className="cc-kicker">Stop applying. Start interviewing.</p>
           <h1 className="cc-headline">Tailored resume to<br />job description<br />in 60 seconds.</h1>
           <p className="cc-sub">Drop your resume and the job description on the right. Get a tailored resume, cover letter, recruiter analysis, and hiring manager DM — ready to download.</p>
           <div className="cc-delivers">
