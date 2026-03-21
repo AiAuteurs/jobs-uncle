@@ -74,6 +74,16 @@ body {
   display: block;
 }
 
+.logo-wordmark {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
 .logo-icon {
   width: 32px;
   height: 32px;
@@ -162,14 +172,14 @@ body {
   align-items: center;
   gap: 7px;
   padding: 7px 28px;
-  background: #1E1E1E;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid #333333;
+  background: rgba(18,18,18,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 100px;
-  min-width: 220px;
+  min-width: 200px;
   justify-content: center;
-  box-shadow: none;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
 }
 
 .header-live-dot {
@@ -258,7 +268,7 @@ body {
   align-self: stretch;
 }
 
-.cc-logo { width: 220px; height: auto; display: block; }
+.cc-logo { height: 80px; width: auto; display: block; }
 
 .cc-kicker {
   font-family: 'Inter', sans-serif;
@@ -273,12 +283,13 @@ body {
 .cc-headline {
   font-family: 'Inter', sans-serif;
   font-weight: 900;
-  font-size: clamp(2.6rem, 3.8vw, 4.2rem);
-  line-height: 1.06;
-  letter-spacing: -0.04em;
+  font-size: clamp(2.8rem, 4.2vw, 5rem);
+  line-height: 1.04;
+  letter-spacing: -0.05em;
   color: #FFFFFF;
   margin: 0;
   text-align: left;
+  max-width: 580px;
 }
 
 .cc-headline em {
@@ -399,10 +410,14 @@ body {
   flex-direction: column;
   gap: 16px;
   background: #161616;
-  border: 1px solid #262626;
-  border-radius: 24px;
+  border: 1px solid transparent;
+  border-radius: 32px;
   padding: 28px;
+  position: relative;
   box-shadow: 0 0 80px rgba(0,209,255,0.07), 0 24px 48px rgba(0,0,0,0.4);
+  background-clip: padding-box;
+  outline: 1px solid #262626;
+  margin-left: -40px;
 }
 
 .cc-zone-block { display: flex; flex-direction: column; gap: 10px; }

@@ -37,10 +37,10 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
   return (
     <header className="header">
 
-      {/* LEFT — logo only */}
+      {/* LEFT — text wordmark only */}
       <div className="header-left">
         <a href="/" className="logo">
-          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="logo-full" />
+          <span className="logo-wordmark">JobsUncle.ai</span>
         </a>
       </div>
 
