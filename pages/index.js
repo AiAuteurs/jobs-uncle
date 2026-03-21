@@ -890,46 +890,6 @@ export default function Home() {
           </div>
         </div>
       )}
-          <div className="sample-output-header">
-            <div className="sample-output-header-left">
-              <div className="sample-output-title">Your tailored documents</div>
-              <div className="sample-output-sub">Camille Leon → Director, Learning Experience Design @ Meridian Learning Group</div>
-            </div>
-            <div className="sample-output-badge">Ready to download</div>
-          </div>
-
-          <div className="sample-resume-block">
-            <div className="sample-block-label">Resume</div>
-            <div className="sample-resume-name">Camille Leon</div>
-            <div className="sample-resume-contact">camille.leon@gmail.com · 555-000-1234 · linkedin.com/in/camillelean · San Francisco, CA</div>
-            <div className="sample-divider"></div>
-
-            <div className="sample-section-heading">Professional Summary</div>
-            <p className="sample-body">Director-level Learning Experience Designer with 8+ years designing outcome-driven curriculum for enterprise and educational contexts. IDEO U-certified expert in human-centered instructional design, eLearning development using Articulate Storyline, and learning analytics. Proven ability to translate complex business and scientific content into scalable learning experiences that drive measurable results across global audiences.</p>
-
-            <div className="sample-section-heading">Relevant Experience</div>
-            <div className="sample-job">
-              <span className="sample-job-company">BrightPath Learning</span>
-              <span className="sample-job-meta"> · Curriculum Developer (Contract) · 2020–2022</span>
-            </div>
-            <ul className="sample-bullets">
-              <li>Authored 14 STEM learning modules for K–8 learners deployed across 200+ schools nationally; scoped each module to measurable learning outcomes aligned to national standards</li>
-              <li>Partnered with UX team to redesign course navigation and learner experience; reduced drop-off rate by 22% through friction-mapping and iterative design methodology</li>
-              <li>Conducted usability testing with 40+ learners; synthesized behavioral data and qualitative feedback into design recommendations adopted in next product release</li>
-              <li>Developed quality standards and content review rubric used by team of 6 contract developers to ensure instructional consistency</li>
-            </ul>
-
-            <div className="sample-job" style={{marginTop: '12px'}}>
-              <span className="sample-job-company">Roosevelt Middle School, Oakland Unified School District</span>
-              <span className="sample-job-meta"> · 7th & 8th Grade Science Teacher · 2017–Present</span>
-            </div>
-            <ul className="sample-bullets">
-              <li>Designed and delivered curriculum for 140+ learners; achieved 34% above district average through outcome-mapped instructional design</li>
-              <li>Built project-based learning framework adopted district-wide by 12 educators; reduced lesson development time by 40%</li>
-              <li>Produced 60+ original video-based learning modules using Articulate Storyline; achieved 84% completion rate vs. 51% district average</li>
-            </ul>
-
-
 
       <section className="command-center">
         <div className="cc-left">
