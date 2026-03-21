@@ -2,12 +2,12 @@
 
 /* ─── BRAND TOKENS ──────────────────────────────────────────── */
 :root {
-  --bg:           #111827;
-  --surface:      #1A2744;
-  --ink:          #F0F4F8;
-  --text-soft:    #8DA4BF;
-  --border:       #253A5C;
-  --border-soft:  #1E3352;
+  --bg:           #0F172A;
+  --surface:      #1E293B;
+  --ink:          #F8FAFC;
+  --text-soft:    #94A3B8;
+  --border:       #334155;
+  --border-soft:  #1E293B;
   --accent:       #7C5CFC;
   --accent-soft:  #2A1F5C;
   --beta-bg:      #1C2E45;
@@ -703,25 +703,223 @@ body {
 .sample-section {
   max-width: 860px;
   margin: 0 auto;
-  padding: 48px 3.75rem;
+  padding: 56px 3.75rem;
   border-bottom: 1px solid var(--border-soft);
 }
 
-.sample-label {
+.sample-eyebrow {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.sample-output-panel {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.sample-output-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.sample-output-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.sample-output-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-soft);
+  margin-top: 3px;
+}
+
+.sample-output-badge {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--ink);
+  border: 1px solid var(--border);
+  padding: 4px 12px;
+  border-radius: 4px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.sample-resume-block {
+  padding: 28px 32px;
+  background: var(--bg);
+}
+
+.sample-block-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+
+.sample-resume-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.sample-resume-contact {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  margin-bottom: 16px;
+}
+
+.sample-divider {
+  height: 1px;
+  background: var(--border);
+  margin-bottom: 16px;
+}
+
+.sample-section-heading {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 16px 0 8px;
+}
+
+.sample-body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  color: var(--ink);
+  line-height: 1.65;
+  font-weight: 300;
+}
+
+.sample-job {
+  margin-bottom: 6px;
+}
+
+.sample-job-company {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.sample-job-meta {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  color: var(--text-soft);
+  font-weight: 300;
+}
+
+.sample-bullets {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sample-bullets li {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.84rem;
+  color: var(--ink);
+  line-height: 1.6;
+  font-weight: 300;
+  padding-left: 14px;
+  position: relative;
+}
+
+.sample-bullets li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.sample-match-bar {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.sample-match-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.68rem;
   font-weight: 500;
   color: var(--text-soft);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
-.sample-resume {
+.sample-match-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.match-tag {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+
+.match-tag--hit {
+  background: rgba(124, 92, 252, 0.15);
+  color: var(--accent);
+  border: 1px solid rgba(124, 92, 252, 0.3);
+}
+
+.match-tag--miss {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.sample-output-footer {
+  padding: 16px 28px;
+  border-top: 1px solid var(--border);
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 32px 36px;
+}
+
+.sample-see-more {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent);
+  padding-bottom: 1px;
+}
+
+@media (max-width: 768px) {
+  .sample-section { padding: 32px 1.5rem; }
+  .sample-resume-block { padding: 20px; }
+  .sample-output-header { flex-direction: column; align-items: flex-start; gap: 10px; }
 }
 
 .sample-resume-name {
