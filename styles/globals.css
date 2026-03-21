@@ -1890,6 +1890,10 @@ body {
   color: #111111;
 }
 
+.results * { color: inherit; }
+.results strong, .results b { color: #000000; }
+.results h1, .results h2, .results h3 { color: #000000; }
+
 .results-header {
   color: #111111;
   background: #ffffff;
@@ -1924,13 +1928,12 @@ body {
 .result-section:last-child { border-bottom: none; }
 
 .result-section-title {
-  color: #111111;
   font-family: 'Inter', sans-serif;
   font-size: 0.65rem;
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--text-soft);
+  color: #666666;
   margin-bottom: 1rem;
 }
 
