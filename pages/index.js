@@ -1108,7 +1108,7 @@ export default function Home() {
             disabled={!canGenerate || loading}
             style={{ marginTop: '20px' }}
           >
-            {canGenerate ? 'Generate My Documents →' : 'Drop resume + paste job description to unlock'}
+            {canGenerate ? 'Go Win! 🍀' : 'Drop resume + paste job description to unlock'}
           </button>
         </div>
         )} {/* end loading ternary */}
