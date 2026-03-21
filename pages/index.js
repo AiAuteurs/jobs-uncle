@@ -5,6 +5,23 @@ import ContactModal from '../components/ContactModal'
 import { useRouter } from 'next/router'
 
 // ─── ANIMATED COUNTER ────────────────────────────────────────
+function playTick() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)()
+    const osc = ctx.createOscillator()
+    const gain = ctx.createGain()
+    osc.connect(gain)
+    gain.connect(ctx.destination)
+    osc.type = 'sine'
+    osc.frequency.setValueAtTime(880, ctx.currentTime)
+    osc.frequency.exponentialRampToValueAtTime(1100, ctx.currentTime + 0.06)
+    gain.gain.setValueAtTime(0.08, ctx.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.18)
+    osc.start(ctx.currentTime)
+    osc.stop(ctx.currentTime + 0.18)
+  } catch(e) {}
+}
+
 function AnimatedCounter({ value }) {
   const [display, setDisplay] = useState(value)
   useEffect(() => {
@@ -14,11 +31,12 @@ function AnimatedCounter({ value }) {
     const timer = setInterval(() => {
       current += 1
       setDisplay(current)
+      playTick()
       if (current >= value) clearInterval(timer)
     }, 120)
     return () => clearInterval(timer)
   }, [value])
-  return <span className="counter-band-num">{display.toLocaleString()}</span>
+  return <span className="header-live-num">{display.toLocaleString()}</span>
 }
 
 // ─── BULLET DEMO ─────────────────────────────────────────────
