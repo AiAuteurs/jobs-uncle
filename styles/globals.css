@@ -780,7 +780,8 @@ body {
 
 .sample-resume-block {
   padding: 28px 32px;
-  background: var(--bg);
+  background: #ffffff;
+  color: #111827;
 }
 
 .sample-block-label {
@@ -804,13 +805,13 @@ body {
 .sample-resume-contact {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.78rem;
-  color: var(--text-soft);
+  color: #4B5563;
   margin-bottom: 16px;
 }
 
 .sample-divider {
   height: 1px;
-  background: var(--border);
+  background: #E5E7EB;
   margin-bottom: 16px;
 }
 
@@ -818,7 +819,7 @@ body {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.68rem;
   font-weight: 600;
-  color: var(--text-soft);
+  color: #6B7280;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin: 16px 0 8px;
@@ -827,7 +828,7 @@ body {
 .sample-body {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
-  color: var(--ink);
+  color: #111827;
   line-height: 1.65;
   font-weight: 300;
 }
@@ -840,13 +841,13 @@ body {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--ink);
+  color: #111827;
 }
 
 .sample-job-meta {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
-  color: var(--text-soft);
+  color: #6B7280;
   font-weight: 300;
 }
 
@@ -861,7 +862,7 @@ body {
 .sample-bullets li {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.84rem;
-  color: var(--ink);
+  color: #111827;
   line-height: 1.6;
   font-weight: 300;
   padding-left: 14px;
@@ -951,13 +952,13 @@ body {
 .sample-resume-contact {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.78rem;
-  color: var(--text-soft);
+  color: #4B5563;
   margin-bottom: 16px;
 }
 
 .sample-divider {
   height: 1px;
-  background: var(--border);
+  background: #E5E7EB;
   margin-bottom: 16px;
 }
 
@@ -974,7 +975,7 @@ body {
 .sample-body {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
-  color: var(--ink);
+  color: #111827;
   line-height: 1.65;
   font-weight: 300;
 }
@@ -987,13 +988,13 @@ body {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--ink);
+  color: #111827;
 }
 
 .sample-job-meta {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
-  color: var(--text-soft);
+  color: #6B7280;
   font-weight: 300;
 }
 
@@ -1008,7 +1009,7 @@ body {
 .sample-bullets li {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.84rem;
-  color: var(--ink);
+  color: #111827;
   line-height: 1.6;
   font-weight: 300;
   padding-left: 14px;
