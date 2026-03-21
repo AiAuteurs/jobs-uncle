@@ -2,13 +2,13 @@
 
 /* ─── BRAND TOKENS ──────────────────────────────────────────── */
 :root {
-  --bg:           #0F172A;
-  --surface:      #1E293B;
+  --bg:           #0A0F1E;
+  --surface:      #1A2035;
   --ink:          #F8FAFC;
   --text-soft:    #94A3B8;
   --border:       #334155;
   --border-soft:  #1E293B;
-  --accent:       #8B5CF6;
+  --accent:       #A78BFA;
   --accent-soft:  #2A1F5C;
   --beta-bg:      #1C2E45;
   --beta-text:    #8DA4BF;
@@ -134,9 +134,9 @@ body {
 .header-cta {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
-  font-weight: 500;
-  color: #fff;
-  background: var(--accent);
+  font-weight: 600;
+  color: #0A0F1E;
+  background: #F59E0B;
   text-decoration: none;
   padding: 9px 20px;
   border-radius: 6px;
@@ -145,7 +145,7 @@ body {
   white-space: nowrap;
 }
 
-.header-cta:hover { background: #222; }
+.header-cta:hover { background: #FBBF24; }
 
 .header-tagline {
   font-family: 'DM Sans', sans-serif;
@@ -297,7 +297,7 @@ body {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--accent);
+  background: #F59E0B;
   flex-shrink: 0;
 }
 
@@ -348,7 +348,7 @@ body {
   font-size: 1rem;
   font-weight: 600;
   color: #fff;
-  background: var(--accent);
+  background: #F59E0B;
   border: none;
   padding: 15px 32px;
   border-radius: 8px;
@@ -357,12 +357,12 @@ body {
   text-decoration: none;
   transition: all 0.2s;
   display: inline-block;
-  box-shadow: 0 0 24px rgba(139,92,246,0.35);
+  box-shadow: 0 0 28px rgba(245,158,11,0.4);
 }
 
 .hero-btn-primary:hover {
-  background: #9D6FFA;
-  box-shadow: 0 0 36px rgba(139,92,246,0.55);
+  background: #FBBF24;
+  box-shadow: 0 0 40px rgba(245,158,11,0.6);
   transform: translateY(-1px);
 }
 
@@ -370,18 +370,20 @@ body {
 
 .hero-btn-ghost {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 400;
-  color: var(--text-soft);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--ink);
   background: none;
-  border: 1px solid var(--border);
-  padding: 12px 20px;
-  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.25);
+  padding: 14px 28px;
+  border-radius: 8px;
   cursor: pointer;
   text-decoration: none;
   transition: border-color 0.2s, color 0.2s;
   display: inline-block;
 }
+
+.hero-btn-ghost:hover { border-color: rgba(255,255,255,0.6); color: #fff; }
 
 .hero-btn-ghost:hover { border-color: #9CA3AF; color: var(--ink); }
 
@@ -635,7 +637,7 @@ body {
 }
 
 .hero-price-card--plus {
-  background: var(--accent);
+  background: #F59E0B;
   border-color: var(--accent);
 }
 
@@ -1247,7 +1249,7 @@ body {
 .generate-btn {
   width: 100%;
   padding: 1.1rem 2rem;
-  background: var(--accent);
+  background: #F59E0B;
   color: var(--bg);
   border: none;
   border-radius: 4px;
@@ -1456,7 +1458,7 @@ body {
 
 .format-btn:hover:not(:disabled) {
   border-color: var(--ink);
-  background: var(--accent);
+  background: #F59E0B;
   color: var(--surface);
 }
 
@@ -1470,7 +1472,7 @@ body {
 
 .format-btn-featured:hover:not(:disabled) {
   border-color: var(--ink);
-  background: var(--accent);
+  background: #F59E0B;
   color: var(--surface);
 }
 
@@ -1620,7 +1622,7 @@ body {
 }
 
 .feedback-btn.selected {
-  background: var(--accent);
+  background: #F59E0B;
   border-color: var(--accent);
   color: white;
 }
@@ -1643,7 +1645,7 @@ body {
 }
 
 .feedback-submit {
-  background: var(--accent);
+  background: #F59E0B;
   color: white;
   border: none;
   padding: 10px 24px;
