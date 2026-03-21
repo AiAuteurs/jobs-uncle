@@ -46,7 +46,7 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
           Build Your Resume
         </a>
 
-        <span className="header-tagline">Resumes for the AI age.</span>
+        <span className="header-tagline">Stop applying. Start interviewing.</span>
       </div>
     </header>
   )

@@ -930,29 +930,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* TICKER STRIP */}
-      <div className="ticker">
-        <div className="ticker-item">
-          <span className="ticker-num">&lt; 60s</span>
-          <span className="ticker-label">Generation time</span>
-        </div>
-        <span className="ticker-sep">·</span>
-        <div className="ticker-item">
-          <span className="ticker-num">4</span>
-          <span className="ticker-label">Documents per run</span>
-        </div>
-        <span className="ticker-sep">·</span>
-        <div className="ticker-item">
-          <span className="ticker-num">Any industry</span>
-          <span className="ticker-label">Works across all roles</span>
-        </div>
-        <span className="ticker-sep">·</span>
-        <div className="ticker-item">
-          <span className="ticker-num">No account</span>
-          <span className="ticker-label">3 free resumes, no login</span>
-        </div>
-      </div>
-
       <div className="how-section">
         <div className="how-title">How it works</div>
         <div className="how-items">
