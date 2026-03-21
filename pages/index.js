@@ -299,6 +299,9 @@ export default function Home() {
 
       setResults(data)
 
+      // 🎉 Ta-da!
+      try { new Audio('/tada.mp3').play() } catch(e) {}
+
       // Increment counter + refresh display
       fetch('/api/counter', { method: 'POST' })
         .then(r => r.json())
