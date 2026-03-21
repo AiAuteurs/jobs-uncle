@@ -62,8 +62,8 @@ body {
 }
 
 .logo-banner-img {
-  height: 160px;
-  width: auto;
+  width: 340px;
+  height: auto;
   display: block;
 }
 
@@ -284,7 +284,7 @@ body {
   align-self: stretch;
 }
 
-.cc-logo { height: 72px; width: auto; display: block; margin-bottom: 28px; }
+.cc-logo { width: 280px; height: auto; display: block; margin-bottom: 28px; }
 
 .cc-kicker {
   font-family: 'Inter', sans-serif;
