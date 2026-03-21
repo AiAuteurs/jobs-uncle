@@ -606,11 +606,18 @@ export default function Home() {
           color: var(--surface) !important;
           border-color: var(--ink) !important;
         }
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
+          .hero-grid {
+            grid-template-columns: 1fr 1fr !important;
+            padding: 40px 20px 48px !important;
+          }
+          .hero-grid > div:first-child {
+            grid-column: 1 / -1;
+          }
+        }
+        @media (max-width: 600px) {
           .hero-grid {
             grid-template-columns: 1fr !important;
-            padding: 40px 20px 48px !important;
-            gap: 40px !important;
           }
         }
         .sample-output-panel {
@@ -868,55 +875,60 @@ export default function Home() {
 
       {/* ── HERO ─────────────────────────────────────────────────── */}
       <section style={{
-        maxWidth: '1200px', margin: '0 auto', padding: '60px 40px 80px',
-        display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '64px',
+        maxWidth: '1200px', margin: '0 auto', padding: '48px 40px 80px',
+        display: 'grid', gridTemplateColumns: '220px 1fr 420px', gap: '40px',
         alignItems: 'center',
       }} className="hero-grid">
 
-        {/* LEFT — logo + headline + bullets + CTA */}
+        {/* COL 1 — big logo */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          <img
+            src="/jobsuncle-logo.png"
+            alt="JobsUncle.ai"
+            style={{ width: '200px', display: 'block' }}
+          />
+        </div>
+
+        {/* COL 2 — headline + bullets + CTA */}
         <div>
-          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" style={{ width: '120px', marginBottom: '24px', display: 'block' }} />
           <h1 style={{
             fontFamily: 'Inter, sans-serif', fontWeight: 900,
-            fontSize: 'clamp(2.4rem, 4vw, 3.4rem)', lineHeight: 1.08,
+            fontSize: 'clamp(2.2rem, 3.5vw, 3.2rem)', lineHeight: 1.08,
             color: '#ffffff', margin: '0 0 24px', letterSpacing: '-0.02em',
           }}>
             Tailored resume<br />to job description<br />
             in <span style={{ color: '#00D1FF' }}>60 seconds.</span>
           </h1>
-          <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 36px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 32px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {['Tailored resume', 'Cover letter', 'Recruiter & ATS analysis', 'Hiring manager DM'].map(item => (
-              <li key={item} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#a0aec0', fontSize: '1rem', fontFamily: 'Inter, sans-serif' }}>
+              <li key={item} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#a0aec0', fontSize: '0.95rem', fontFamily: 'Inter, sans-serif' }}>
                 <span style={{ color: '#00D1FF', fontWeight: 700 }}>✓</span>
                 {item}
               </li>
             ))}
           </ul>
           <a
-            href="#get-started"
+            href="#upload-section"
             onClick={e => { e.preventDefault(); document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' }) }}
             style={{
               display: 'inline-block', background: '#00D1FF', color: '#000',
               fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: '1rem',
               padding: '14px 36px', borderRadius: '50px', textDecoration: 'none',
-              letterSpacing: '-0.01em', transition: 'opacity 0.2s',
+              letterSpacing: '-0.01em',
             }}
-            onMouseOver={e => e.currentTarget.style.opacity = '0.85'}
-            onMouseOut={e => e.currentTarget.style.opacity = '1'}
           >
             Get started free →
           </a>
         </div>
 
-        {/* RIGHT — example resume card */}
+        {/* COL 3 — example resume card */}
         {!results && (
           <div style={{
-            background: '#ffffff', borderRadius: '16px', padding: '32px',
+            background: '#ffffff', borderRadius: '16px', padding: '28px',
             color: '#111', fontFamily: 'Inter, sans-serif',
             boxShadow: '0 32px 64px rgba(0,0,0,0.5)',
             position: 'relative', overflow: 'hidden',
           }}>
-            {/* EXAMPLE label */}
             <div style={{
               position: 'absolute', top: '12px', right: '12px',
               background: '#f59e0b', color: '#000', fontSize: '0.6rem',
@@ -924,32 +936,31 @@ export default function Home() {
               padding: '3px 10px', borderRadius: '20px',
             }}>Example</div>
 
-            <div style={{ marginBottom: '16px' }}>
-              <div style={{ fontWeight: 800, fontSize: '1.1rem', color: '#111', marginBottom: '3px' }}>Camille Leon</div>
-              <div style={{ color: '#777', fontSize: '0.75rem' }}>camille.leon@gmail.com · linkedin.com/in/camilleleon · San Francisco, CA</div>
+            <div style={{ marginBottom: '14px' }}>
+              <div style={{ fontWeight: 800, fontSize: '1.05rem', color: '#111', marginBottom: '3px' }}>Camille Leon</div>
+              <div style={{ color: '#777', fontSize: '0.72rem' }}>camille.leon@gmail.com · linkedin.com/in/camilleleon · San Francisco, CA</div>
             </div>
 
-            <div style={{ marginBottom: '14px' }}>
-              <div style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#aaa', marginBottom: '5px' }}>Professional Summary</div>
-              <p style={{ margin: 0, fontSize: '0.82rem', lineHeight: 1.65, color: '#333' }}>
+            <div style={{ marginBottom: '12px' }}>
+              <div style={{ fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#aaa', marginBottom: '4px' }}>Professional Summary</div>
+              <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.6, color: '#333' }}>
                 Director-level Learning Experience Designer with 8+ years building outcome-driven curriculum for enterprise clients. IDEO U-certified. Proven across Articulate Storyline, learning analytics, and global rollouts.
               </p>
             </div>
 
             <div>
-              <div style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#aaa', marginBottom: '5px' }}>Relevant Experience</div>
-              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#111', marginBottom: '4px' }}>
+              <div style={{ fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#aaa', marginBottom: '4px' }}>Relevant Experience</div>
+              <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#111', marginBottom: '4px' }}>
                 BrightPath Learning <span style={{ fontWeight: 400, color: '#666' }}>— Curriculum Developer · 2020–2022</span>
               </div>
-              <ul style={{ margin: '0 0 0 16px', padding: 0, fontSize: '0.78rem', color: '#444', lineHeight: 1.7 }}>
+              <ul style={{ margin: '0 0 0 14px', padding: 0, fontSize: '0.76rem', color: '#444', lineHeight: 1.65 }}>
                 <li>Authored 14 STEM modules deployed across 200+ schools; reduced drop-off 22%</li>
                 <li>Built content review rubric adopted by team of 6 contract developers</li>
               </ul>
             </div>
 
-            {/* fade + link */}
-            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '70px', background: 'linear-gradient(to bottom, transparent, #fff)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '14px' }}>
-              <a href="/example" style={{ fontSize: '0.75rem', color: '#00a8cc', fontWeight: 700, textDecoration: 'none' }}>See full example output →</a>
+            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '64px', background: 'linear-gradient(to bottom, transparent, #fff)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '12px' }}>
+              <a href="/example" style={{ fontSize: '0.74rem', color: '#00a8cc', fontWeight: 700, textDecoration: 'none' }}>See full example output →</a>
             </div>
           </div>
         )}
