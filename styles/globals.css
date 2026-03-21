@@ -8,7 +8,7 @@
   --text-soft:    #94A3B8;
   --border:       #334155;
   --border-soft:  #1E293B;
-  --accent:       #7C5CFC;
+  --accent:       #8B5CF6;
   --accent-soft:  #2A1F5C;
   --beta-bg:      #1C2E45;
   --beta-text:    #8DA4BF;
@@ -24,7 +24,8 @@
 html { font-size: 16px; -webkit-font-smoothing: antialiased; }
 
 body {
-  background: var(--bg);
+  background: #0F172A;
+  background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(139,92,246,0.15) 0%, transparent 60%);
   color: var(--ink);
   font-family: 'DM Sans', sans-serif;
   font-weight: 300;
@@ -189,18 +190,19 @@ body {
 
 .hero-headline {
   font-family: 'Cormorant Garamond', serif;
-  font-weight: 300;
-  font-size: clamp(3rem, 5vw, 4.75rem);
-  line-height: 1.07;
-  letter-spacing: -0.02em;
+  font-weight: 600;
+  font-size: clamp(3.5rem, 7vw, 6rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
   color: var(--ink);
   margin-bottom: 20px;
 }
 
 .hero-headline em {
   font-style: italic;
-  font-weight: 400;
+  font-weight: 600;
   color: var(--accent);
+  text-shadow: 0 0 60px rgba(139,92,246,0.4);
 }
 
 .hero-cards {
@@ -216,9 +218,16 @@ body {
 .hero-card {
   background: var(--surface);
   border: 1px solid var(--border);
+  border-top: 2px solid var(--accent);
   border-radius: 12px;
   padding: 20px 16px;
   text-align: left;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.hero-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
 }
 
 .hero-card-icon {
@@ -336,18 +345,25 @@ body {
 
 .hero-btn-primary {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 600;
   color: #fff;
   background: var(--accent);
   border: none;
-  padding: 13px 24px;
-  border-radius: 6px;
+  padding: 15px 32px;
+  border-radius: 8px;
   cursor: pointer;
   letter-spacing: 0.01em;
   text-decoration: none;
-  transition: background 0.2s;
+  transition: all 0.2s;
   display: inline-block;
+  box-shadow: 0 0 24px rgba(139,92,246,0.35);
+}
+
+.hero-btn-primary:hover {
+  background: #9D6FFA;
+  box-shadow: 0 0 36px rgba(139,92,246,0.55);
+  transform: translateY(-1px);
 }
 
 .hero-btn-primary:hover { background: #222; }
