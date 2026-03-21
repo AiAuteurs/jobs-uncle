@@ -45,6 +45,10 @@ body {
   z-index: 100;
 }
 
+.header > .header-left { grid-column: 1; }
+.header > .header-center { grid-column: 2; }
+.header > .header-right { grid-column: 3; justify-content: flex-end; }
+
 .header-center {
   display: flex;
   align-items: center;
