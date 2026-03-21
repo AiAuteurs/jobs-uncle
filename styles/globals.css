@@ -257,7 +257,7 @@ body {
   gap: 24px;
 }
 
-.cc-logo { width: 250px; height: auto; display: block; margin-bottom: 8px; }
+.cc-logo { width: 300px; height: auto; display: block; margin-bottom: 8px; }
 
 .cc-kicker {
   font-family: 'Inter', sans-serif;
