@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Inter:wght@300;400;500;600;700&display=swap');
 
 /* ─── BRAND TOKENS ──────────────────────────────────────────── */
 :root {
@@ -24,7 +24,7 @@
 html { font-size: 16px; -webkit-font-smoothing: antialiased; }
 
 body {
-  background: #FFFFFF;
+  background: #0A0F1E;
   color: var(--ink);
   font-family: 'DM Sans', sans-serif;
   font-weight: 300;
@@ -230,8 +230,8 @@ body {
 }
 
 .hero-card {
-  background: #FFFFFF;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  background: #111827;
+  border: 1px solid #1E2D40;
   border: 1px solid var(--border);
   border-top: 2px solid var(--accent);
   border-radius: 12px;
@@ -342,7 +342,7 @@ body {
 }
 
 .hero-sub {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.0rem;
   color: var(--text-soft);
   max-width: 400px;
@@ -802,8 +802,8 @@ body {
 .bullet-result {
   margin-top: 12px;
   padding: 12px 14px;
-  background: rgba(107, 53, 194, 0.08);
-  border: 1px solid rgba(107, 53, 194, 0.2);
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
   border-radius: 8px;
 }
 
@@ -811,7 +811,7 @@ body {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.68rem;
   font-weight: 600;
-  color: var(--accent);
+  color: #10B981;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: 6px;
@@ -892,7 +892,7 @@ body {
 
 /* ─── TESTIMONIAL BAND ──────────────────────────────────────── */
 .testimonial-band {
-  background: #F8F7F4;
+  background: #111827;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   padding: 1.5rem 2rem;
@@ -903,7 +903,7 @@ body {
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.15rem;
   font-style: italic;
-  color: #111827;
+  color: var(--ink);
   margin: 0 0 6px;
 }
 
@@ -979,7 +979,7 @@ body {
 .sample-resume-block {
   padding: 28px 32px;
   background: #ffffff;
-  color: #111827;
+  color: var(--ink);
 }
 
 .sample-block-label {
@@ -1026,7 +1026,7 @@ body {
 .sample-body {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
-  color: #111827;
+  color: var(--ink);
   line-height: 1.65;
   font-weight: 300;
 }
@@ -1039,7 +1039,7 @@ body {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #111827;
+  color: var(--ink);
 }
 
 .sample-job-meta {
@@ -1060,7 +1060,7 @@ body {
 .sample-bullets li {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.84rem;
-  color: #111827;
+  color: var(--ink);
   line-height: 1.6;
   font-weight: 300;
   padding-left: 14px;
@@ -1173,7 +1173,7 @@ body {
 .sample-body {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
-  color: #111827;
+  color: var(--ink);
   line-height: 1.65;
   font-weight: 300;
 }
@@ -1186,7 +1186,7 @@ body {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #111827;
+  color: var(--ink);
 }
 
 .sample-job-meta {
@@ -1207,7 +1207,7 @@ body {
 .sample-bullets li {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.84rem;
-  color: #111827;
+  color: var(--ink);
   line-height: 1.6;
   font-weight: 300;
   padding-left: 14px;
@@ -1464,6 +1464,7 @@ body {
 .generate-btn:hover:not(:disabled) { background: #4a3a8a; transform: translateY(-1px); }
 .generate-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 .generate-btn.loading  { background: var(--accent); color: var(--surface); }
+.generate-btn.success  { background: #10B981; color: white; box-shadow: 0 0 20px rgba(16,185,129,0.4); }
 
 /* ─── LOADING ──────────────────────────────────────────────── */
 .loading-state {
