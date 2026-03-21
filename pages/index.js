@@ -606,6 +606,13 @@ export default function Home() {
           color: var(--surface) !important;
           border-color: var(--ink) !important;
         }
+        @media (max-width: 768px) {
+          .hero-grid {
+            grid-template-columns: 1fr !important;
+            padding: 40px 20px 48px !important;
+            gap: 40px !important;
+          }
+        }
         .sample-output-panel {
           background: #ffffff !important;
           color: #111111 !important;
@@ -859,54 +866,105 @@ export default function Home() {
         </div>
       )}
 
-      <div className="logo-banner" style={{ background: 'transparent', boxShadow: 'none', border: 'none' }}>
-        <a href="/" className="logo-banner-link" style={{ background: 'transparent' }}>
-          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="logo-banner-img" style={{ background: 'transparent', mixBlendMode: 'normal' }} />
-        </a>
-      </div>
+      {/* ── HERO ─────────────────────────────────────────────────── */}
+      <section style={{
+        maxWidth: '1200px', margin: '0 auto', padding: '60px 40px 80px',
+        display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '64px',
+        alignItems: 'center',
+      }} className="hero-grid">
 
-      {/* SAMPLE SNIPPET — compact teaser, hidden once results exist */}
-      {!results && (
-        <div style={{ maxWidth: '680px', margin: '0 auto 2rem', padding: '0 1.5rem' }}>
-          <div style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-soft)', marginBottom: '10px', textAlign: 'center' }}>
-            Example output
-          </div>
-          <div style={{ background: '#ffffff', borderRadius: '10px', padding: '20px 24px', color: '#111', fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', lineHeight: 1.7, position: 'relative', overflow: 'hidden' }}>
-            <div style={{ fontWeight: 800, fontSize: '0.95rem', marginBottom: '2px', color: '#111' }}>Camille Leon</div>
-            <div style={{ color: '#555', fontSize: '0.75rem', marginBottom: '12px' }}>camille.leon@gmail.com · linkedin.com/in/camilleleon · San Francisco, CA</div>
-            <div style={{ fontWeight: 700, fontSize: '0.7rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#888', marginBottom: '6px' }}>Professional Summary</div>
-            <p style={{ margin: '0 0 12px', color: '#333' }}>Director-level Learning Experience Designer with 8+ years building outcome-driven curriculum for enterprise clients. IDEO U-certified. Proven across Articulate Storyline, learning analytics, and global rollouts.</p>
-            <div style={{ fontWeight: 700, fontSize: '0.7rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#888', marginBottom: '6px' }}>Relevant Experience</div>
-            <div style={{ fontWeight: 700, color: '#111', marginBottom: '2px' }}>BrightPath Learning <span style={{ fontWeight: 400, color: '#555' }}>· Curriculum Developer · 2020–2022</span></div>
-            <ul style={{ margin: '4px 0 0 16px', padding: 0, color: '#333' }}>
-              <li>Authored 14 STEM modules deployed across 200+ schools; reduced learner drop-off 22%</li>
-              <li>Built content review rubric adopted by team of 6 contract developers</li>
-            </ul>
-            {/* fade out */}
-            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '60px', background: 'linear-gradient(to bottom, transparent, #ffffff)' }} />
-          </div>
-          <div style={{ textAlign: 'center', marginTop: '8px' }}>
-            <a href="/example" style={{ fontSize: '0.75rem', color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>See full example output →</a>
-          </div>
-        </div>
-      )}
-
-      <section className="command-center">
-        <div className="cc-left">
-          <h1 className="cc-headline">Tailored resume to job description<br />in <em>60 seconds.</em></h1>
-          <p className="cc-sub">Drop your resume and job description. Get a tailored application package ready to download.</p>
-          <div className="cc-delivers">
+        {/* LEFT — logo + headline + bullets + CTA */}
+        <div>
+          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" style={{ width: '160px', marginBottom: '32px', display: 'block' }} />
+          <h1 style={{
+            fontFamily: 'Inter, sans-serif', fontWeight: 900,
+            fontSize: 'clamp(2.4rem, 4vw, 3.4rem)', lineHeight: 1.08,
+            color: '#ffffff', margin: '0 0 24px', letterSpacing: '-0.02em',
+          }}>
+            Tailored resume<br />to job description<br />
+            in <span style={{ color: '#00D1FF' }}>60 seconds.</span>
+          </h1>
+          <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 36px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {['Tailored resume', 'Cover letter', 'Recruiter & ATS analysis', 'Hiring manager DM'].map(item => (
-              <div key={item} className="cc-deliver-item">
-                <span className="cc-deliver-check">✓</span>
-                <span>{item}</span>
-              </div>
+              <li key={item} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#a0aec0', fontSize: '1rem', fontFamily: 'Inter, sans-serif' }}>
+                <span style={{ color: '#00D1FF', fontWeight: 700 }}>✓</span>
+                {item}
+              </li>
             ))}
-          </div>
+          </ul>
+          <a
+            href="#get-started"
+            onClick={e => { e.preventDefault(); document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' }) }}
+            style={{
+              display: 'inline-block', background: '#00D1FF', color: '#000',
+              fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: '1rem',
+              padding: '14px 36px', borderRadius: '50px', textDecoration: 'none',
+              letterSpacing: '-0.01em', transition: 'opacity 0.2s',
+            }}
+            onMouseOver={e => e.currentTarget.style.opacity = '0.85'}
+            onMouseOut={e => e.currentTarget.style.opacity = '1'}
+          >
+            Get started free →
+          </a>
         </div>
 
-        <div className="cc-right">
-          <div className="cc-drop-zones">
+        {/* RIGHT — example resume card */}
+        {!results && (
+          <div style={{
+            background: '#ffffff', borderRadius: '16px', padding: '32px',
+            color: '#111', fontFamily: 'Inter, sans-serif',
+            boxShadow: '0 32px 64px rgba(0,0,0,0.5)',
+            position: 'relative', overflow: 'hidden',
+          }}>
+            {/* EXAMPLE label */}
+            <div style={{
+              position: 'absolute', top: '12px', right: '12px',
+              background: '#f59e0b', color: '#000', fontSize: '0.6rem',
+              fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase',
+              padding: '3px 10px', borderRadius: '20px',
+            }}>Example</div>
+
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{ fontWeight: 800, fontSize: '1.1rem', color: '#111', marginBottom: '3px' }}>Camille Leon</div>
+              <div style={{ color: '#777', fontSize: '0.75rem' }}>camille.leon@gmail.com · linkedin.com/in/camilleleon · San Francisco, CA</div>
+            </div>
+
+            <div style={{ marginBottom: '14px' }}>
+              <div style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#aaa', marginBottom: '5px' }}>Professional Summary</div>
+              <p style={{ margin: 0, fontSize: '0.82rem', lineHeight: 1.65, color: '#333' }}>
+                Director-level Learning Experience Designer with 8+ years building outcome-driven curriculum for enterprise clients. IDEO U-certified. Proven across Articulate Storyline, learning analytics, and global rollouts.
+              </p>
+            </div>
+
+            <div>
+              <div style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#aaa', marginBottom: '5px' }}>Relevant Experience</div>
+              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#111', marginBottom: '4px' }}>
+                BrightPath Learning <span style={{ fontWeight: 400, color: '#666' }}>— Curriculum Developer · 2020–2022</span>
+              </div>
+              <ul style={{ margin: '0 0 0 16px', padding: 0, fontSize: '0.78rem', color: '#444', lineHeight: 1.7 }}>
+                <li>Authored 14 STEM modules deployed across 200+ schools; reduced drop-off 22%</li>
+                <li>Built content review rubric adopted by team of 6 contract developers</li>
+              </ul>
+            </div>
+
+            {/* fade + link */}
+            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '70px', background: 'linear-gradient(to bottom, transparent, #fff)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '14px' }}>
+              <a href="/example" style={{ fontSize: '0.75rem', color: '#00a8cc', fontWeight: 700, textDecoration: 'none' }}>See full example output →</a>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* ── UPLOAD SECTION ────────────────────────────────────────── */}
+      <section id="upload-section" style={{
+        maxWidth: '760px', margin: '0 auto', padding: '0 24px 80px',
+      }}>
+        <div style={{
+          background: '#161616', border: '1px solid #2a2a2a', borderRadius: '16px',
+          padding: '36px 32px',
+        }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+
             {/* DROP ZONE A — Resume */}
             <div className="cc-zone-block">
               <div className="cc-zone-header">
@@ -930,12 +988,7 @@ export default function Home() {
                   <input ref={fileInputRef} type="file" accept=".pdf,.doc,.docx,.txt" className="file-input" onChange={(e) => handleFile(e.target.files[0])} />
                 </div>
               ) : (
-                <textarea
-                  className="cc-jd-input cc-jd-input--tall"
-                  placeholder="Paste your full resume here — work history, skills, education..."
-                  value={resumeText}
-                  onChange={(e) => setResumeText(e.target.value)}
-                />
+                <textarea className="cc-jd-input cc-jd-input--tall" placeholder="Paste your full resume here — work history, skills, education..." value={resumeText} onChange={(e) => setResumeText(e.target.value)} />
               )}
             </div>
 
@@ -951,17 +1004,9 @@ export default function Home() {
                 </div>
               </div>
               {jobDescInputMode === 'paste' ? (
-                <textarea
-                  className="cc-jd-input cc-jd-input--tall"
-                  placeholder="Paste the full job posting — title, responsibilities, requirements..."
-                  value={jobDescription}
-                  onChange={(e) => setJobDescription(e.target.value)}
-                />
+                <textarea className="cc-jd-input cc-jd-input--tall" placeholder="Paste the full job posting — title, responsibilities, requirements..." value={jobDescription} onChange={(e) => setJobDescription(e.target.value)} />
               ) : (
-                <div
-                  className={`cc-zone ${jobDescFile ? 'cc-zone--done' : 'cc-zone--active'}`}
-                  onClick={() => jobDescFileRef.current?.click()}
-                >
+                <div className={`cc-zone ${jobDescFile ? 'cc-zone--done' : 'cc-zone--active'}`} onClick={() => jobDescFileRef.current?.click()}>
                   <div className="cc-zone-icon">{jobDescFile ? '✓' : '📋'}</div>
                   <div className="cc-zone-title">{jobDescFile ? jobDescFile.name : 'Drop job posting or click to browse'}</div>
                   <div className="cc-zone-sub">PDF, DOCX, DOC, TXT</div>
@@ -969,23 +1014,18 @@ export default function Home() {
                 </div>
               )}
             </div>
+
           </div>
 
           <button
             className={`cc-generate-btn ${canGenerate ? 'cc-generate-btn--ready' : 'cc-generate-btn--disabled'}`}
             onClick={handleGenerate}
             disabled={!canGenerate || loading}
+            style={{ marginTop: '20px' }}
           >
             {loading ? (
-              <span className="cc-generating">
-                <span className="cc-spinner" />
-                Analyzing role requirements...
-              </span>
-            ) : canGenerate ? (
-              'Generate My Documents →'
-            ) : (
-              'Drop resume + paste job description to unlock'
-            )}
+              <span className="cc-generating"><span className="cc-spinner" />Analyzing role requirements...</span>
+            ) : canGenerate ? 'Generate My Documents →' : 'Drop resume + paste job description to unlock'}
           </button>
         </div>
       </section>
