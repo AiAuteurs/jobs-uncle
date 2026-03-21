@@ -1361,7 +1361,7 @@ body {
 .sample-resume-block {
   padding: 28px 32px;
   background: #ffffff;
-  color: var(--ink);
+  color: #111111;
 }
 
 .sample-block-label {
@@ -1787,7 +1787,7 @@ body {
 }
 
 .upload-zone:hover,
-.upload-zone.dragover { border-color: var(--accent); background: var(--warm); }
+.upload-zone.dragover { border-color: var(--accent); background: #F9FAFB; color: #111111; }
 
 .upload-zone.has-file {
   border-color: var(--sage);
@@ -1883,15 +1883,18 @@ body {
 /* ─── RESULTS ──────────────────────────────────────────────── */
 .results {
   margin-top: 2rem;
-  background: var(--surface);
-  border: 1.5px solid var(--ink);
+  background: #ffffff;
+  border: 1.5px solid #E5E7EB;
   border-radius: 4px;
   overflow: hidden;
+  color: #111111;
 }
 
 .results-header {
+  color: #111111;
+  background: #ffffff;
   padding: 1.5rem 1.75rem;
-  border-bottom: 1.5px solid var(--border);
+  border-bottom: 1.5px solid #E5E7EB;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1902,6 +1905,7 @@ body {
   font-size: 1.3rem;
   font-weight: 700;
   letter-spacing: -0.02em;
+  color: #111111;
 }
 
 .results-badge {
@@ -1916,10 +1920,11 @@ body {
   border-radius: 2px;
 }
 
-.result-section        { padding: 1.75rem; border-bottom: 1px solid var(--border); }
+.result-section        { padding: 1.75rem; border-bottom: 1px solid #E5E7EB; background: #ffffff; }
 .result-section:last-child { border-bottom: none; }
 
 .result-section-title {
+  color: #111111;
   font-family: 'Inter', sans-serif;
   font-size: 0.65rem;
   font-weight: 600;
@@ -1933,7 +1938,7 @@ body {
   font-family: 'Inter', sans-serif;
   font-size: 0.83rem;
   line-height: 1.8;
-  color: var(--ink);
+  color: #111111;
   font-weight: 300;
 }
 
@@ -1941,7 +1946,7 @@ body {
 .result-content p:last-child { margin-bottom: 0; }
 
 /* ─── PURPOSE-DRIVEN DOWNLOAD SECTION ─────────────────────── */
-.download-section { border-top: 1.5px solid var(--border); background: var(--warm); }
+.download-section { border-top: 1.5px solid var(--border); background: #F9FAFB; color: #111111; }
 
 .download-section-header {
   padding: 1.5rem 1.75rem 0;
