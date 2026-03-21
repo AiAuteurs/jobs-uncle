@@ -510,6 +510,7 @@ body {
 .hero-headline { display: none; }
 .hero-cards { display: none; }
 
+.hero-card {
   transition: transform 0.2s, border-color 0.2s;
 }
 
