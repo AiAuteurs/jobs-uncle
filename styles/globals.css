@@ -848,6 +848,8 @@ body {
   color: #f87171;
   border: 1px solid rgba(239, 68, 68, 0.2);
 }
+
+.sample-see-more {
   display: inline-block;
   margin-top: 20px;
   font-family: 'DM Sans', sans-serif;
