@@ -1765,6 +1765,7 @@ export default function Home() {
                         value={feedbackText}
                         onChange={e => setFeedbackText(e.target.value)}
                         rows={2}
+                        style={{ color: '#ffffff', background: 'var(--surface)', caretColor: '#00D1FF' }}
                       />
                       <button className="feedback-submit" onClick={() => {
                         const storedEmail = typeof window !== 'undefined' ? localStorage.getItem('ju_email') || '' : ''
