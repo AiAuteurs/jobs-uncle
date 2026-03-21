@@ -164,6 +164,60 @@ export default function Home() {
   const [showContact, setShowContact] = useState(false)
   const fileInputRef = useRef(null)
 
+  const confettiCanvasRef = useRef(null)
+  const confettiParticles = useRef([])
+  const confettiRaf = useRef(null)
+
+  const fireConfetti = useCallback(() => {
+    const canvas = confettiCanvasRef.current
+    if (!canvas) return
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+    const COLORS = ['#00D1FF','#ff4d4d','#ffd700','#7c3aed','#10b981','#f97316','#ec4899','#fff']
+    const cx = canvas.width / 2
+    for (let i = 0; i < 160; i++) {
+      const angle = Math.random() * Math.PI * 2
+      const speed = 5 + Math.random() * 14
+      confettiParticles.current.push({
+        x: cx + (Math.random() - 0.5) * 200,
+        y: canvas.height * 0.4,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 8,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        w: 7 + Math.random() * 7, h: 4 + Math.random() * 4,
+        rot: Math.random() * 360, rotV: (Math.random() - 0.5) * 16,
+        life: 1, decay: 0.008 + Math.random() * 0.007,
+        shape: Math.random() > 0.4 ? 'rect' : 'circle',
+      })
+    }
+    if (!confettiRaf.current) tickConfetti()
+  }, [])
+
+  function tickConfetti() {
+    const canvas = confettiCanvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    confettiParticles.current = confettiParticles.current.filter(p => p.life > 0)
+    for (const p of confettiParticles.current) {
+      p.x += p.vx; p.y += p.vy; p.vy += 0.3; p.vx *= 0.99
+      p.rot += p.rotV; p.life -= p.decay
+      ctx.save()
+      ctx.globalAlpha = Math.max(0, p.life)
+      ctx.translate(p.x, p.y)
+      ctx.rotate((p.rot * Math.PI) / 180)
+      ctx.fillStyle = p.color
+      if (p.shape === 'rect') ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h)
+      else { ctx.beginPath(); ctx.arc(0, 0, p.w/2, 0, Math.PI*2); ctx.fill() }
+      ctx.restore()
+    }
+    if (confettiParticles.current.length > 0) {
+      confettiRaf.current = requestAnimationFrame(tickConfetti)
+    } else {
+      confettiRaf.current = null
+    }
+  }
+
   const versionToggleRef = useRef(null)
 
   // Regenerate state
@@ -299,8 +353,9 @@ export default function Home() {
 
       setResults(data)
 
-      // 🎉 Ta-da!
+      // 🎉 Ta-da + confetti
       try { new Audio('/tada.mp3').play() } catch(e) {}
+      fireConfetti()
 
       // Increment counter + refresh display
       fetch('/api/counter', { method: 'POST' })
@@ -664,6 +719,12 @@ export default function Home() {
       `}</style>
 
       {showContact && <ContactModal onClose={() => setShowContact(false)} />}
+
+      {/* FULL-PAGE CONFETTI CANVAS */}
+      <canvas ref={confettiCanvasRef} style={{
+        position: 'fixed', inset: 0, width: '100vw', height: '100vh',
+        pointerEvents: 'none', zIndex: 9999,
+      }} />
 
       {showManageModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => setShowManageModal(false)}>
