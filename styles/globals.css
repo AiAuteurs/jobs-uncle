@@ -131,6 +131,7 @@ body {
 .header-link:hover { color: var(--ink); }
 
 .header-cta {
+  display: none;
   font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
@@ -150,10 +151,13 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 12px;
-  background: rgba(0, 209, 255, 0.08);
-  border: 1px solid rgba(0, 209, 255, 0.2);
+  padding: 5px 14px;
+  background: rgba(0, 209, 255, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 209, 255, 0.18);
   border-radius: 100px;
+  box-shadow: 0 2px 12px rgba(0,209,255,0.08);
 }
 
 .header-live-dot {
@@ -237,10 +241,11 @@ body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
   gap: 24px;
 }
 
-.cc-logo { width: 160px; height: auto; display: block; }
+.cc-logo { width: 136px; height: auto; display: block; margin-bottom: 8px; }
 
 .cc-kicker {
   font-family: 'Inter', sans-serif;
@@ -385,6 +390,7 @@ body {
   border: 1px solid rgba(255,255,255,0.07);
   border-radius: 20px;
   padding: 24px;
+  box-shadow: 0 0 80px rgba(0, 209, 255, 0.06), 0 0 160px rgba(0, 209, 255, 0.04);
 }
 
 .cc-zone-block { display: flex; flex-direction: column; gap: 10px; }
@@ -528,9 +534,10 @@ body {
 
 .cc-generate-btn--disabled {
   background: #1A1A1A;
-  color: #333;
+  color: rgba(255,255,255,0.45);
   cursor: not-allowed;
   border: 1px solid #2A2A2A;
+  font-size: 0.85rem;
 }
 
 .cc-hint { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: #444; text-align: center; margin: 0; }
@@ -2107,10 +2114,13 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 12px;
-  background: rgba(0, 209, 255, 0.08);
-  border: 1px solid rgba(0, 209, 255, 0.2);
+  padding: 5px 14px;
+  background: rgba(0, 209, 255, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 209, 255, 0.18);
   border-radius: 100px;
+  box-shadow: 0 2px 12px rgba(0,209,255,0.08);
 }
 
 .header-live-dot {

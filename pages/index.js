@@ -895,14 +895,12 @@ export default function Home() {
                 <span className="cc-spinner" />
                 Analyzing role requirements...
               </span>
-            ) : (
+            ) : canGenerate ? (
               'Generate My Documents →'
+            ) : (
+              'Drop resume + paste job description to unlock'
             )}
           </button>
-
-          {!canGenerate && (
-            <p className="cc-hint">Drop your resume + paste the job description to unlock</p>
-          )}
         </div>
       </section>
 
