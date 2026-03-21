@@ -823,9 +823,8 @@ export default function Home() {
 
       <section className="command-center">
         <div className="cc-left">
-          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="cc-logo" />
           <h1 className="cc-headline">Tailored resume to<br />job description<br />in <em>60 seconds.</em></h1>
-          <p className="cc-sub">Drop your resume and the job description on the right. Get a tailored resume, cover letter, recruiter analysis, and hiring manager DM — ready to download.</p>
+          <p className="cc-sub">Drop your resume and job description. Get a tailored application package ready to download.</p>
           <div className="cc-delivers">
             {['Tailored resume', 'Cover letter', 'Recruiter & ATS analysis', 'Hiring manager DM'].map(item => (
               <div key={item} className="cc-deliver-item">

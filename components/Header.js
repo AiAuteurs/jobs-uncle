@@ -37,11 +37,15 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
   return (
     <header className="header">
 
-      {/* LEFT */}
+      {/* LEFT — logo only */}
       <div className="header-left">
         <a href="/" className="logo">
           <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="logo-full" />
         </a>
+      </div>
+
+      {/* CENTER — nav links */}
+      <div className="header-center">
         <nav className="header-nav">
           <a href="/about" className="header-nav-link">Our Story</a>
           <a href="/example" className="header-nav-link header-nav-pill">See an example</a>
@@ -53,8 +57,8 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
         </nav>
       </div>
 
-      {/* CENTER */}
-      <div className="header-center">
+      {/* RIGHT — counter + badges + signin */}
+      <div className="header-right">
         {resumeCount !== null && (
           <div className="header-live-count">
             <span className="header-live-dot" />
@@ -62,10 +66,6 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
             <span className="header-live-label">resumes tailored</span>
           </div>
         )}
-      </div>
-
-      {/* RIGHT */}
-      <div className="header-right">
         {accessLevel === 'pro_plus' && (
           <span className="header-badge header-badge--plus">Pro+ Active</span>
         )}
