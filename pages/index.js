@@ -114,7 +114,7 @@ export default function Home() {
   const [resumeInputMode, setResumeInputMode] = useState('upload') // 'upload' | 'paste'
   const [resumeText, setResumeText] = useState('')
   const [jobDescription, setJobDescription] = useState('')
-  const [jobDescInputMode, setJobDescInputMode] = useState('paste') // 'upload' | 'paste'
+  const [jobDescInputMode, setJobDescInputMode] = useState('upload') // 'upload' | 'paste'
   const [jobDescFile, setJobDescFile] = useState(null)
   const jobDescFileRef = useRef(null)
   const [loading, setLoading] = useState(false)
