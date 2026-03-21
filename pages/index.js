@@ -96,7 +96,7 @@ export default function Home() {
   const [resumeInputMode, setResumeInputMode] = useState('upload') // 'upload' | 'paste'
   const [resumeText, setResumeText] = useState('')
   const [jobDescription, setJobDescription] = useState('')
-  const [jobDescInputMode, setJobDescInputMode] = useState('upload') // 'upload' | 'paste'
+  const [jobDescInputMode, setJobDescInputMode] = useState('paste') // 'upload' | 'paste'
   const [jobDescFile, setJobDescFile] = useState(null)
   const jobDescFileRef = useRef(null)
   const [loading, setLoading] = useState(false)
@@ -802,44 +802,119 @@ export default function Home() {
         </div>
       )}
 
-      <section className="hero">
-        <div className="hero-center">
-          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="hero-center-logo" />
-          <h1 className="hero-headline">Stop applying.<br /><em>Start interviewing.</em></h1>
-          <p className="hero-sub">Upload your resume. Paste the job description. Get a tailored resume, cover letter, recruiter analysis, and hiring manager DM — in under a minute.</p>
-          <div className="hero-actions">
-            <a href="/#get-started" className="hero-btn-primary">Build Your Resume →</a>
-            <a href="/example" className="hero-btn-ghost">See an example</a>
+      <section className="command-center">
+        <div className="cc-left">
+          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="cc-logo" />
+          <h1 className="cc-headline">Stop applying.<br /><em>Start interviewing.</em></h1>
+          <p className="cc-sub">Drop your resume and the job description. Get a tailored resume, cover letter, recruiter analysis, and hiring manager DM in under 60 seconds.</p>
+          <div className="cc-cta-row">
+            <a href="/#get-started" className="cc-cta-btn">Build Your Resume →</a>
+            <a href="/example" className="cc-cta-secondary">See an example</a>
           </div>
+          <div className="cc-delivers">
+            {['Tailored resume', 'Cover letter', 'Recruiter & ATS analysis', 'Hiring manager DM'].map(item => (
+              <div key={item} className="cc-deliver-item">
+                <span className="cc-deliver-check">✓</span>
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+          {resumeCount !== null && (
+            <div className="cc-proof-row">
+              <div className="cc-proof-stat">
+                <span className="cc-proof-num">{resumeCount.toLocaleString()}</span>
+                <span className="cc-proof-label">Resumes tailored</span>
+              </div>
+              <div className="cc-proof-divider"></div>
+              <p className="cc-proof-quote">"The results are solid. I like what I got back." — B.C., ICF Certified Career Coach</p>
+            </div>
+          )}
         </div>
 
-        {/* INTERACTIVE BULLET DEMO */}
-        <div className="bullet-demo">
-          <div className="bullet-demo-label">✦ Try it instantly — paste one bullet from your resume</div>
-          <BulletDemo />
-        </div>
+        <div className="cc-right">
+          <div className="cc-drop-zones">
+            {/* DROP ZONE A — Resume */}
+            <div className="cc-zone-block">
+              <div className="cc-zone-header">
+                <span className="cc-zone-heading">📄 Your Resume</span>
+                <div className="cc-toggle">
+                  <button className={`cc-toggle-btn ${resumeInputMode === 'upload' ? 'active' : ''}`} onClick={() => setResumeInputMode('upload')}>Upload</button>
+                  <button className={`cc-toggle-btn ${resumeInputMode === 'paste' ? 'active' : ''}`} onClick={() => setResumeInputMode('paste')}>Paste</button>
+                </div>
+              </div>
+              {resumeInputMode === 'upload' ? (
+                <div
+                  className={`cc-zone ${dragover ? 'cc-zone--dragover' : ''} ${pdfFile ? 'cc-zone--done' : 'cc-zone--active'}`}
+                  onClick={() => fileInputRef.current?.click()}
+                  onDrop={handleDrop}
+                  onDragOver={(e) => { e.preventDefault(); setDragover(true) }}
+                  onDragLeave={() => setDragover(false)}
+                >
+                  <div className="cc-zone-icon">{pdfFile ? '✓' : '📄'}</div>
+                  <div className="cc-zone-title">{pdfFile ? pdfFile.name : 'Drop resume or click to browse'}</div>
+                  <div className="cc-zone-sub">PDF, DOCX, DOC, TXT — LinkedIn PDF works great</div>
+                  <input ref={fileInputRef} type="file" accept=".pdf,.doc,.docx,.txt" className="file-input" onChange={(e) => handleFile(e.target.files[0])} />
+                </div>
+              ) : (
+                <textarea
+                  className="cc-jd-input cc-jd-input--tall"
+                  placeholder="Paste your full resume here — work history, skills, education..."
+                  value={resumeText}
+                  onChange={(e) => setResumeText(e.target.value)}
+                />
+              )}
+            </div>
 
-        <div className="hero-cards">
-          <div className="hero-card">
-            <div className="hero-card-icon">📄</div>
-            <div className="hero-card-title">Tailored Resume</div>
-            <div className="hero-card-desc">Reordered and rewritten for the exact role</div>
+            <div className="cc-zone-divider">+</div>
+
+            {/* DROP ZONE B — Job Description */}
+            <div className="cc-zone-block">
+              <div className="cc-zone-header">
+                <span className="cc-zone-heading">📋 Job Description</span>
+                <div className="cc-toggle">
+                  <button className={`cc-toggle-btn ${jobDescInputMode === 'upload' ? 'active' : ''}`} onClick={() => setJobDescInputMode('upload')}>Upload</button>
+                  <button className={`cc-toggle-btn ${jobDescInputMode === 'paste' ? 'active' : ''}`} onClick={() => setJobDescInputMode('paste')}>Paste</button>
+                </div>
+              </div>
+              {jobDescInputMode === 'paste' ? (
+                <textarea
+                  className="cc-jd-input cc-jd-input--tall"
+                  placeholder="Paste the full job posting — title, responsibilities, requirements..."
+                  value={jobDescription}
+                  onChange={(e) => setJobDescription(e.target.value)}
+                />
+              ) : (
+                <div
+                  className={`cc-zone ${jobDescFile ? 'cc-zone--done' : 'cc-zone--active'}`}
+                  onClick={() => jobDescFileRef.current?.click()}
+                >
+                  <div className="cc-zone-icon">{jobDescFile ? '✓' : '📋'}</div>
+                  <div className="cc-zone-title">{jobDescFile ? jobDescFile.name : 'Drop job posting or click to browse'}</div>
+                  <div className="cc-zone-sub">PDF, DOCX, DOC, TXT</div>
+                  <input ref={jobDescFileRef} type="file" accept=".pdf,.doc,.docx,.txt" className="file-input" onChange={(e) => setJobDescFile(e.target.files[0])} />
+                </div>
+              )}
+            </div>
           </div>
-          <div className="hero-card">
-            <div className="hero-card-icon">✉️</div>
-            <div className="hero-card-title">Cover Letter</div>
-            <div className="hero-card-desc">Specific to the company and job description</div>
-          </div>
-          <div className="hero-card">
-            <div className="hero-card-icon">🎯</div>
-            <div className="hero-card-title">Recruiter & ATS Analysis</div>
-            <div className="hero-card-desc">Gaps, fixes, and keyword score</div>
-          </div>
-          <div className="hero-card">
-            <div className="hero-card-icon">💬</div>
-            <div className="hero-card-title">Hiring Manager DM</div>
-            <div className="hero-card-desc">Skip the line, land in their inbox</div>
-          </div>
+
+          <button
+            className={`cc-generate-btn ${canGenerate ? 'cc-generate-btn--ready' : 'cc-generate-btn--disabled'}`}
+            onClick={handleGenerate}
+            disabled={!canGenerate || loading}
+          >
+            {loading ? (
+              <span className="cc-generating">
+                <span className="cc-spinner" />
+                Analyzing role requirements...
+              </span>
+            ) : (
+              'Generate My Documents →'
+            )}
+          </button>
+
+          {!canGenerate && (
+            <p className="cc-hint">Drop your resume + paste the job description to unlock</p>
+          )}
         </div>
       </section>
 
@@ -953,7 +1028,7 @@ export default function Home() {
 
         {!results && (
           <>
-            <div className="steps" id="get-started">
+            <div className="steps" id="get-started" style={{display: 'none'}}>
               {/* STEP 1 */}
               <div className={`step-card ${(resumeInputMode === 'upload' ? pdfFile : resumeText.trim().length > 50) ? 'complete' : 'active'}`}>
                 <div className="step-number">Step 01</div>
