@@ -4,6 +4,73 @@ import Header from '../components/Header'
 import ContactModal from '../components/ContactModal'
 import { useRouter } from 'next/router'
 
+// ─── ANIMATED COUNTER ────────────────────────────────────────
+function AnimatedCounter({ value }) {
+  const [display, setDisplay] = useState(value)
+  useEffect(() => {
+    if (!value) return
+    let start = value - 8
+    let current = start
+    const timer = setInterval(() => {
+      current += 1
+      setDisplay(current)
+      if (current >= value) clearInterval(timer)
+    }, 120)
+    return () => clearInterval(timer)
+  }, [value])
+  return <span className="counter-band-num">{display.toLocaleString()}</span>
+}
+
+// ─── BULLET DEMO ─────────────────────────────────────────────
+function BulletDemo() {
+  const [bullet, setBullet] = useState('')
+  const [result, setResult] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const placeholder = 'e.g. Managed a team of engineers and shipped features on time'
+
+  const handleTailor = async () => {
+    if (!bullet.trim()) return
+    setLoading(true)
+    setResult(null)
+    try {
+      const res = await fetch('/api/tailor-bullet', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bullet })
+      })
+      const data = await res.json()
+      setResult(data.tailored)
+    } catch {
+      setResult('Something went wrong. Try again.')
+    }
+    setLoading(false)
+  }
+
+  return (
+    <div className="bullet-demo-inner">
+      <div className="bullet-demo-row">
+        <textarea
+          className="bullet-input"
+          placeholder={placeholder}
+          value={bullet}
+          onChange={e => setBullet(e.target.value)}
+          rows={2}
+        />
+        <button className="bullet-btn" onClick={handleTailor} disabled={loading || !bullet.trim()}>
+          {loading ? '...' : 'Tailor it →'}
+        </button>
+      </div>
+      {result && (
+        <div className="bullet-result">
+          <div className="bullet-result-label">✓ Tailored</div>
+          <p>{result}</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+
 const renderMarkdown = (text) => {
   if (!text) return ''
   return text
@@ -738,12 +805,18 @@ export default function Home() {
       <section className="hero">
         <div className="hero-center">
           <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="hero-center-logo" />
-          <h1 className="hero-headline">Your resume, <em>tailored</em><br />to every job.</h1>
+          <h1 className="hero-headline">Stop applying.<br /><em>Start interviewing.</em></h1>
           <p className="hero-sub">Upload your resume. Paste the job description. Get a tailored resume, cover letter, recruiter analysis, and hiring manager DM — in under a minute.</p>
           <div className="hero-actions">
             <a href="/#get-started" className="hero-btn-primary">Build Your Resume →</a>
             <a href="/example" className="hero-btn-ghost">See an example</a>
           </div>
+        </div>
+
+        {/* INTERACTIVE BULLET DEMO */}
+        <div className="bullet-demo">
+          <div className="bullet-demo-label">✦ Try it instantly — paste one bullet from your resume</div>
+          <BulletDemo />
         </div>
 
         <div className="hero-cards">
@@ -773,10 +846,20 @@ export default function Home() {
       {/* COUNTER BAND */}
       {resumeCount !== null && (
         <div className="counter-band">
-          <span className="counter-band-num">{resumeCount.toLocaleString()}</span>
+          <AnimatedCounter value={resumeCount} />
           <span className="counter-band-label">RESUMES TAILORED AND COUNTING</span>
         </div>
       )}
+
+      {/* COMPANY STRIP */}
+      <div className="company-strip">
+        <div className="company-strip-label">Users have landed interviews at</div>
+        <div className="company-strip-logos">
+          {['Google', 'Apple', 'Netflix', 'Amazon', 'Meta', 'Salesforce', 'Adobe', 'Spotify'].map(co => (
+            <span key={co} className="company-chip">{co}</span>
+          ))}
+        </div>
+      </div>
 
       {/* TESTIMONIAL */}
       <div className="testimonial-band">
