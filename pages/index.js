@@ -822,12 +822,13 @@ export default function Home() {
       )}
 
       <div className="logo-banner">
-        <a href="/"><img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="logo-banner-img" /></a>
+        <a href="/" className="logo-banner-link">
+          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="logo-banner-img" />
+        </a>
       </div>
 
       <section className="command-center">
         <div className="cc-left">
-          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="cc-logo" />
           <h1 className="cc-headline">Tailored resume to job description<br />in <em>60 seconds.</em></h1>
           <p className="cc-sub">Drop your resume and job description. Get a tailored application package ready to download.</p>
           <div className="cc-delivers">
