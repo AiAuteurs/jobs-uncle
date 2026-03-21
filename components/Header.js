@@ -10,7 +10,7 @@ function playTick() {
     osc.type = 'sine'
     osc.frequency.setValueAtTime(880, ctx.currentTime)
     osc.frequency.exponentialRampToValueAtTime(1100, ctx.currentTime + 0.06)
-    gain.gain.setValueAtTime(0.08, ctx.currentTime)
+    gain.gain.setValueAtTime(0.07, ctx.currentTime)
     gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.18)
     osc.start(ctx.currentTime)
     osc.stop(ctx.currentTime + 0.18)
@@ -30,55 +30,41 @@ function AnimatedCounter({ value }) {
     }, 120)
     return () => clearInterval(timer)
   }, [value])
-  return <span className="header-live-num">{display.toLocaleString()}</span>
+  return <>{display.toLocaleString()}</>
 }
 
 export default function Header({ isPaid = false, accessLevel = null, onSignIn, onManage, onContact, resumeCount = null }) {
   return (
     <header className="header">
-
-      {/* LEFT — text wordmark only */}
       <div className="header-left">
         <a href="/" className="logo">
-          <span className="logo-wordmark">JobsUncle.ai</span>
+          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" className="logo-full" />
         </a>
-      </div>
-
-      {/* CENTER — nav links */}
-      <div className="header-center">
         <nav className="header-nav">
           <a href="/about" className="header-nav-link">Our Story</a>
-          <a href="/example" className="header-nav-link header-nav-pill">See an example</a>
+          <a href="/example" className="header-nav-link">See an example</a>
           <a href="/faq" className="header-nav-link">FAQ</a>
           <a href="/pricing" className="header-nav-link">Pricing</a>
-          {onContact && (
-            <a href="#contact" className="header-nav-link" onClick={e => { e.preventDefault(); onContact() }}>Contact</a>
-          )}
+          {onContact && <a href="#contact" className="header-nav-link" onClick={e => { e.preventDefault(); onContact() }}>Contact</a>}
         </nav>
       </div>
 
-      {/* RIGHT — counter + badges + signin */}
       <div className="header-right">
         {resumeCount !== null && (
           <div className="header-live-count">
             <span className="header-live-dot" />
-            <AnimatedCounter value={resumeCount} />
+            <span className="header-live-num"><AnimatedCounter value={resumeCount} /></span>
             <span className="header-live-label">resumes tailored</span>
           </div>
         )}
-        {accessLevel === 'pro_plus' && (
-          <span className="header-badge header-badge--plus">Pro+ Active</span>
-        )}
-        {accessLevel === 'paid' && (
-          <span className="header-badge header-badge--pro">Pro Active</span>
-        )}
-        {isPaid && onManage ? (
-          <a onClick={onManage} className="header-link" style={{ cursor: 'pointer' }}>Manage Subscription</a>
-        ) : !isPaid && onSignIn ? (
-          <a href="#signin" className="header-link" onClick={e => { e.preventDefault(); onSignIn() }}>Member Sign In</a>
-        ) : null}
+        {accessLevel === 'pro_plus' && <span className="header-badge header-badge--plus">Pro+ Active</span>}
+        {accessLevel === 'paid' && <span className="header-badge header-badge--pro">Pro Active</span>}
+        {isPaid && onManage
+          ? <a onClick={onManage} className="header-link" style={{cursor:'pointer'}}>Manage Subscription</a>
+          : !isPaid && onSignIn
+          ? <a href="#signin" className="header-link" onClick={e => { e.preventDefault(); onSignIn() }}>Sign In</a>
+          : null}
       </div>
-
     </header>
   )
 }
