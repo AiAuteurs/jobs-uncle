@@ -31,7 +31,6 @@ function AnimatedCounter({ value }) {
     const timer = setInterval(() => {
       current += 1
       setDisplay(current)
-      playTick()
       if (current >= value) clearInterval(timer)
     }, 120)
     return () => clearInterval(timer)

@@ -130,7 +130,6 @@ function AnimatedCounter({ value, onRollComplete }) {
     const timer = setInterval(() => {
       current += 1
       setDisplay(current)
-      playTick()
       if (current >= value) {
         clearInterval(timer)
         onRollComplete?.()
