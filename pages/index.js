@@ -969,7 +969,7 @@ export default function Home() {
           <img
             src="/jobsuncle-logo.png"
             alt="JobsUncle.ai"
-            style={{ width: '240px', display: 'block' }}
+            style={{ width: '240px', display: 'block', borderRadius: '16px' }}
           />
         </div>
 
@@ -977,18 +977,12 @@ export default function Home() {
         <div>
           <h1 style={{
             fontFamily: 'Inter, sans-serif', fontWeight: 900,
-            fontSize: 'clamp(2rem, 3.2vw, 3rem)', lineHeight: 1.1,
-            color: '#ffffff', margin: '0 0 8px', letterSpacing: '-0.02em',
+            fontSize: 'clamp(1.8rem, 2.8vw, 2.8rem)', lineHeight: 1.12,
+            color: '#ffffff', margin: '0 0 16px', letterSpacing: '-0.02em',
           }}>
-            Tailored resumes to the<br />job description
+            Tailored resumes to the job description{' '}
+            <span style={{ color: '#00D1FF' }}>in 60 seconds.</span>
           </h1>
-          <div style={{
-            fontFamily: 'Inter, sans-serif', fontWeight: 800,
-            fontSize: 'clamp(1.6rem, 2.8vw, 2.6rem)', lineHeight: 1.1,
-            color: '#00D1FF', margin: '0 0 28px', letterSpacing: '-0.02em',
-          }}>
-            in 60 seconds.
-          </div>
           <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 36px', display: 'flex', flexDirection: 'column', gap: '11px' }}>
             {['Tailored resume', 'Cover letter', 'Recruiter & ATS analysis', 'Hiring manager DM'].map(item => (
               <li key={item} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#b0bec5', fontSize: '1rem', fontFamily: 'Inter, sans-serif', fontWeight: 500 }}>
