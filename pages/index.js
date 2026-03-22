@@ -5,40 +5,26 @@ import ContactModal from '../components/ContactModal'
 import { useRouter } from 'next/router'
 
 // ─── TADA AUDIO — pre-load and unlock on first interaction ────
-let tadaAudio = null
-let tadaUnlocked = false
+let tadaBuffer = null
+let tadaCtx = null
 
-function getTada() {
-  if (typeof window === 'undefined') return null
-  if (!tadaAudio) {
-    tadaAudio = new Audio('/tada.mp3')
-    tadaAudio.preload = 'auto'
-    tadaAudio.load()
-  }
-  return tadaAudio
-}
-
-function unlockTada() {
-  if (tadaUnlocked) return
-  tadaUnlocked = true
-  const audio = getTada()
-  if (!audio) return
-  // Play at zero volume to unlock, then reset
-  audio.volume = 0
-  audio.play().then(() => {
-    audio.pause()
-    audio.currentTime = 0
-    audio.volume = 1
-  }).catch(() => {})
+async function loadTada() {
+  if (tadaBuffer) return
+  try {
+    tadaCtx = new (window.AudioContext || window.webkitAudioContext)()
+    const res = await fetch('/tada.mp3')
+    const arr = await res.arrayBuffer()
+    tadaBuffer = await tadaCtx.decodeAudioData(arr)
+  } catch(e) {}
 }
 
 function playTada() {
-  const audio = getTada()
-  if (!audio) return
   try {
-    audio.currentTime = 0
-    audio.volume = 1
-    audio.play().catch(() => {})
+    if (!tadaBuffer || !tadaCtx) { new Audio('/tada.mp3').play().catch(()=>{}) ; return }
+    const src = tadaCtx.createBufferSource()
+    src.buffer = tadaBuffer
+    src.connect(tadaCtx.destination)
+    src.start(0)
   } catch(e) {}
 }
 
@@ -298,7 +284,7 @@ export default function Home() {
   const ACCEPTED_EXTS = ['.pdf', '.doc', '.docx', '.txt']
 
   const handleFile = (file) => {
-    unlockTada()
+    loadTada()
     if (file && (ACCEPTED_TYPES.includes(file.type) || ACCEPTED_EXTS.some(ext => file.name.toLowerCase().endsWith(ext)))) {
       setPdfFile(file)
       setError(null)
@@ -315,7 +301,7 @@ export default function Home() {
   }, [])
 
   const handleGenerate = async () => {
-    unlockTada()
+    loadTada()
     const hasResume = resumeInputMode === 'upload' ? !!pdfFile : resumeText.trim().length > 50
     const hasJobDesc = jobDescInputMode === 'paste' ? jobDescription.trim().length > 50 : !!jobDescFile
     if (!hasResume || !hasJobDesc) {
@@ -1381,23 +1367,23 @@ export default function Home() {
             <div className="results">
               {/* LOOKS GREAT BANNER */}
               <div style={{
-                display: 'flex', alignItems: 'center', gap: '20px',
-                marginBottom: '24px', padding: '16px 24px',
-                background: 'linear-gradient(135deg, rgba(0,209,255,0.08) 0%, rgba(0,209,255,0.03) 100%)',
-                border: '1.5px solid rgba(0,209,255,0.25)',
-                borderRadius: '12px',
+                display: 'flex', alignItems: 'center', gap: '24px',
+                marginBottom: '28px', padding: '20px 28px',
+                background: 'linear-gradient(135deg, rgba(0,209,255,0.1) 0%, rgba(0,209,255,0.04) 100%)',
+                border: '2px solid rgba(0,209,255,0.3)',
+                borderRadius: '14px',
               }}>
                 <img
                   src="/mascot-points.png"
                   alt=""
                   onError={e => { e.target.style.display='none' }}
-                  style={{ width: '90px', flexShrink: 0, display: 'block' }}
+                  style={{ width: '110px', flexShrink: 0, display: 'block' }}
                 />
                 <div>
-                  <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: '1.2rem', color: '#111111', marginBottom: '5px', letterSpacing: '-0.01em' }}>
+                  <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 900, fontSize: '1.4rem', color: '#111111', marginBottom: '6px', letterSpacing: '-0.02em' }}>
                     Looks great. 🎉
                   </div>
-                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.85rem', color: '#555555', lineHeight: 1.5 }}>
+                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', color: '#444444', lineHeight: 1.6 }}>
                     Tailored to this role. Download below — or scroll down for your cover letter, recruiter analysis, and hiring manager DM.
                   </div>
                 </div>
