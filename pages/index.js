@@ -237,6 +237,14 @@ export default function Home() {
     }
   }
 
+  // Elapsed timer during generation
+  const [elapsedSeconds, setElapsedSeconds] = useState(0)
+  useEffect(() => {
+    if (!loading) { setElapsedSeconds(0); return }
+    const t = setInterval(() => setElapsedSeconds(s => s + 1), 1000)
+    return () => clearInterval(t)
+  }, [loading])
+
   const versionToggleRef = useRef(null)
 
   // Regenerate state
@@ -1066,6 +1074,17 @@ export default function Home() {
             />
             <div className="loading-text">Making you impossible to ignore.</div>
             <div className="loading-sub">Tailoring every word to this role. Give us a moment.</div>
+            <div style={{
+              marginTop: '16px',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '1.8rem',
+              fontWeight: 800,
+              color: '#00D1FF',
+              letterSpacing: '-0.02em',
+              fontVariantNumeric: 'tabular-nums',
+            }}>
+              {elapsedSeconds}s
+            </div>
           </div>
         ) : (
         <div style={{
