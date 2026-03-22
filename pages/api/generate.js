@@ -470,6 +470,7 @@ RECRUITER GAP ANALYSIS REQUIREMENTS:
 - Identify 3-5 specific things that would stop you from reaching out — focus on: skills the job requires that are missing or buried, weak or absent metrics, positioning misalignment with this specific role, or ATS keywords that need strengthening
 - Do NOT flag: number of clients or companies, overlapping engagement dates, or "chaotic" structure that simply reflects a legitimate freelance career
 - For EVERY issue you flag, immediately follow it with a concrete "Fix:" suggestion — exactly what to change, add, reword, or remove
+- ANTI-FABRICATION IN FIXES: When suggesting fixes, never recommend inventing experience the candidate doesn't have. If a gap is real (e.g. no enterprise LMS experience), the fix should be: reframe what they DO have, flag it as a gap to address in the interview, or suggest honest language. Never recommend adding "conducted client discovery sessions" or "managed enterprise stakeholders" if those activities aren't in the source resume.
 - CRITICAL: Only flag employment date overlaps or gaps if you can verify them with absolute certainty from the data. Do NOT infer or assume overlaps. A false date flag can seriously harm someone's confidence and career.
 - Format as a bulleted list. Each bullet = the problem, followed by "Fix:" on a new line with the specific solution
 - Keep it under 200 words total
@@ -489,7 +490,8 @@ COVER LETTER REQUIREMENTS:
 HIRING MANAGER DM REQUIREMENTS:
 - 3-4 sentences max
 - NEVER open with "Hi there", "Hello", "Hey", or any generic greeting
-- Open immediately with a specific hook — reference the role and one concrete credential from their background
+- NEVER open with "I saw your [job posting/opening/listing]" — that's the generic opener every applicant uses
+- Open immediately with a specific hook — lead with one concrete credential or result from their background, then connect it to the role
 - No desperation, no groveling, no "I'd love to", no "Would you be open to"
 - End with a single direct question or low-pressure call to action
 - Tone: confident peer reaching out, not a job seeker begging
