@@ -36,10 +36,10 @@ export default function ContactModal({ onClose }) {
       <div style={{
         background: 'var(--surface, #fff)', borderRadius: '16px',
         padding: '2rem', maxWidth: '440px', width: '100%',
-        boxShadow: '0 8px 40px rgba(109,40,217,0.15)'
+        boxShadow: '0 8px 40px rgba(0,209,255,0.15)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-          <img src="/uncle-spin-logo.png" alt="Oni" style={{ width: '36px', height: '36px', objectFit: 'contain' }} />
+          <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" style={{ width: '44px', height: '44px', objectFit: 'contain' }} />
           <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: 'var(--ink, #1a1a2e)' }}>
             Contact Us
           </h2>
@@ -48,12 +48,12 @@ export default function ContactModal({ onClose }) {
         {status === 'success' ? (
           <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
             <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>✅</div>
-            <p style={{ fontWeight: 700, color: '#6d28d9', margin: '0 0 0.5rem' }}>Message sent!</p>
+            <p style={{ fontWeight: 700, color: '#00D1FF', margin: '0 0 0.5rem' }}>Message sent!</p>
             <p style={{ color: 'var(--text-soft, #666)', fontSize: '0.9rem', margin: 0 }}>
-              Oni will pass it along. We'll get back to you soon.
+              We'll get back to you soon. We'll get back to you soon.
             </p>
             <button onClick={onClose} style={{
-              marginTop: '1.25rem', background: '#6d28d9', color: '#fff',
+              marginTop: '1.25rem', background: '#00D1FF', color: '#fff',
               border: 'none', borderRadius: '20px', padding: '8px 24px',
               fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem'
             }}>Close</button>
@@ -104,7 +104,7 @@ export default function ContactModal({ onClose }) {
                 onClick={handleSubmit}
                 disabled={status === 'sending' || !name || !email || !message}
                 style={{
-                  flex: 2, background: '#6d28d9', color: '#fff',
+                  flex: 2, background: '#00D1FF', color: '#fff',
                   border: 'none', borderRadius: '20px', padding: '8px',
                   fontWeight: 700, cursor: 'pointer', fontSize: '0.88rem',
                   opacity: (!name || !email || !message) ? 0.5 : 1
