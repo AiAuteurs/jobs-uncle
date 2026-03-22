@@ -398,10 +398,10 @@ export default function Home() {
           .catch(() => {})
       }
 
-      // Email gate — show unless user already submitted their email
+      // Email gate — show 3s after first resume so you capture before paywall kicks in
       const alreadySubmitted = typeof window !== 'undefined' && localStorage.getItem('ju_email_gate')
       if (!alreadySubmitted) {
-        setTimeout(() => setShowEmailGate(true), 1500)
+        setTimeout(() => setShowEmailGate(true), 3000)
       }
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.')
@@ -967,7 +967,7 @@ export default function Home() {
       )}
 
       {/* ── HERO — hidden once results exist ─────────────────────── */}
-      {!results && (
+      {!results && !loading && (
       <section style={{
         maxWidth: '1200px', margin: '0 auto', padding: '40px 40px 64px',
         display: 'grid', gridTemplateColumns: '260px 1fr 400px', gap: '48px',
@@ -1069,25 +1069,29 @@ export default function Home() {
         maxWidth: '760px', margin: '0 auto', padding: '0 24px 60px',
       }}>
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '3rem 1rem', background: '#161616', border: '1px solid #2a2a2a', borderRadius: '16px' }}>
+          <div style={{ textAlign: 'center', padding: '4rem 1rem', background: '#161616', border: '1px solid #2a2a2a', borderRadius: '16px' }}>
             <img
               src="/jobsuncle-logo.png"
               alt=""
-              style={{ width: 100, height: 'auto', display: 'block', margin: '0 auto 16px',
+              style={{ width: 110, height: 'auto', display: 'block', margin: '0 auto 24px',
                 animation: 'logo-spin-pause 2s ease-in-out infinite', transformOrigin: 'center center' }}
             />
-            <div className="loading-text">Making you impossible to ignore.</div>
-            <div className="loading-sub">Tailoring every word to this role. Give us a moment.</div>
+            <div className="loading-text" style={{ marginBottom: '6px' }}>Making you impossible to ignore.</div>
+            <div className="loading-sub">Tailoring every word to this role.</div>
             <div style={{
-              marginTop: '16px',
+              margin: '28px auto 0',
               fontFamily: 'Inter, sans-serif',
-              fontSize: '1.8rem',
-              fontWeight: 800,
+              fontSize: '4rem',
+              fontWeight: 900,
               color: '#00D1FF',
-              letterSpacing: '-0.02em',
+              letterSpacing: '-0.04em',
               fontVariantNumeric: 'tabular-nums',
+              lineHeight: 1,
             }}>
-              {elapsedSeconds}s
+              {elapsedSeconds}<span style={{ fontSize: '2rem', fontWeight: 600, color: '#336', marginLeft: '4px' }}>s</span>
+            </div>
+            <div style={{ marginTop: '8px', fontSize: '0.72rem', color: '#444', fontFamily: 'Inter, sans-serif', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+              elapsed
             </div>
           </div>
         ) : (
@@ -1317,7 +1321,7 @@ export default function Home() {
             )}
 
             {/* RESTORE + BETA — visible below generate, not buried */}
-            {!isPaid && (
+            {!isPaid && !loading && (
               <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
                 {/* DUAL RESUME — Pro+ upsell card */}
@@ -1370,6 +1374,29 @@ export default function Home() {
         {results && (
           <>
             <div className="results">
+              {/* LOOKS GREAT BANNER */}
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: '20px',
+                marginBottom: '24px', padding: '16px 24px',
+                background: 'linear-gradient(135deg, rgba(0,209,255,0.06) 0%, rgba(0,209,255,0.02) 100%)',
+                border: '1px solid rgba(0,209,255,0.15)',
+                borderRadius: '12px',
+              }}>
+                <img
+                  src="/mascot-points.png"
+                  alt=""
+                  style={{ width: '80px', flexShrink: 0, display: 'block' }}
+                />
+                <div>
+                  <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: '1.2rem', color: '#fff', marginBottom: '4px', letterSpacing: '-0.01em' }}>
+                    Looking good. 🎉
+                  </div>
+                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.85rem', color: '#888', lineHeight: 1.5 }}>
+                    Tailored to this role. Download below, or scroll down for your cover letter, recruiter analysis, and hiring manager DM.
+                  </div>
+                </div>
+              </div>
+
               <div className="results-header">
                 <div className="results-title">Your tailored documents</div>
                 <div className="results-badge">Ready to download</div>

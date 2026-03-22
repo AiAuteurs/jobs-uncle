@@ -192,7 +192,7 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
             src="/jobsuncle-logo.png"
             alt="JobsUncle.ai"
             onClick={onLogoClick}
-            style={{ width: '36px', height: '36px', objectFit: 'contain', cursor: 'pointer', borderRadius: '6px', marginRight: '8px', flexShrink: 0 }}
+            style={{ width: '44px', height: '44px', objectFit: 'contain', cursor: 'pointer', marginRight: '8px', flexShrink: 0 }}
           />
         )}
         <a href="/about" style={navLink}>Our Story</a>
