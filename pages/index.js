@@ -1069,28 +1069,33 @@ export default function Home() {
         maxWidth: '760px', margin: '0 auto', padding: '0 24px 60px',
       }}>
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '4rem 1rem', background: '#161616', border: '1px solid #2a2a2a', borderRadius: '16px' }}>
+          <div style={{ 
+            textAlign: 'center', 
+            minHeight: '70vh',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+            padding: '4rem 1rem', background: '#161616', border: '1px solid #2a2a2a', borderRadius: '16px' 
+          }}>
             <img
               src="/jobsuncle-logo.png"
               alt=""
-              style={{ width: 110, height: 'auto', display: 'block', margin: '0 auto 24px',
+              style={{ width: 120, height: 'auto', display: 'block', margin: '0 auto 28px',
                 animation: 'logo-spin-pause 2s ease-in-out infinite', transformOrigin: 'center center' }}
             />
-            <div className="loading-text" style={{ marginBottom: '6px' }}>Making you impossible to ignore.</div>
+            <div className="loading-text" style={{ marginBottom: '6px', fontSize: '1.3rem' }}>Making you impossible to ignore.</div>
             <div className="loading-sub">Tailoring every word to this role.</div>
             <div style={{
-              margin: '28px auto 0',
+              margin: '32px auto 0',
               fontFamily: 'Inter, sans-serif',
-              fontSize: '4rem',
+              fontSize: '5rem',
               fontWeight: 900,
               color: '#00D1FF',
               letterSpacing: '-0.04em',
               fontVariantNumeric: 'tabular-nums',
               lineHeight: 1,
             }}>
-              {elapsedSeconds}<span style={{ fontSize: '2rem', fontWeight: 600, color: '#336', marginLeft: '4px' }}>s</span>
+              {elapsedSeconds}<span style={{ fontSize: '2.2rem', fontWeight: 600, color: '#336', marginLeft: '6px' }}>s</span>
             </div>
-            <div style={{ marginTop: '8px', fontSize: '0.72rem', color: '#444', fontFamily: 'Inter, sans-serif', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+            <div style={{ marginTop: '10px', fontSize: '0.72rem', color: '#444', fontFamily: 'Inter, sans-serif', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
               elapsed
             </div>
           </div>
