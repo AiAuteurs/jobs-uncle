@@ -975,11 +975,11 @@ export default function Home() {
         <div>
           <h1 style={{
             fontFamily: 'Inter, sans-serif', fontWeight: 900,
-            fontSize: 'clamp(2.4rem, 3.8vw, 3.6rem)', lineHeight: 1.06,
-            color: '#ffffff', margin: '0 0 20px', letterSpacing: '-0.03em',
+            fontSize: 'clamp(1.9rem, 2.8vw, 2.8rem)', lineHeight: 1.1,
+            color: '#ffffff', margin: '0 0 20px', letterSpacing: '-0.02em',
           }}>
-            Tailored resumes<br />to the job description{' '}
-            <span style={{ color: '#00D1FF', display: 'block' }}>in 60 seconds.</span>
+            Tailored resumes to the job description{' '}
+            <span style={{ color: '#00D1FF' }}>in 60 seconds.</span>
           </h1>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '32px' }}>
             {['Tailored resume', 'Cover letter', 'Recruiter & ATS analysis', 'Hiring manager DM'].map(item => (
