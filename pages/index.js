@@ -389,12 +389,15 @@ export default function Home() {
         fetch('/api/mark-used', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) })
           .then(r => r.json())
           .then(d => {
-            // Show email gate after first free resume if not already registered
-            if (d.usedCount === 1 && typeof window !== 'undefined' && !localStorage.getItem('ju_email_gate')) {
+            console.log('[mark-used response]', d)
+            const count = typeof d.usedCount === 'string' ? parseInt(d.usedCount) : d.usedCount
+            const alreadyGated = typeof window !== 'undefined' && localStorage.getItem('ju_email_gate')
+            // Show on first OR second use in case first was missed
+            if (count <= 2 && !alreadyGated) {
               setShowEmailGate(true)
             }
           })
-          .catch(() => {})
+          .catch((err) => { console.log('[mark-used error]', err) })
       }
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.')
@@ -979,7 +982,7 @@ export default function Home() {
             color: '#ffffff', margin: '0 0 20px', letterSpacing: '-0.02em',
           }}>
             Tailored resumes to the job description{' '}
-            <span style={{ color: '#00D1FF' }}>in 60 seconds.</span>
+            <span style={{ color: '#00D1FF', whiteSpace: 'nowrap' }}>in 60 seconds.</span>
           </h1>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '32px' }}>
             {['Tailored resume', 'Cover letter', 'Recruiter & ATS analysis', 'Hiring manager DM'].map(item => (
@@ -1053,7 +1056,7 @@ export default function Home() {
             {/* ── UPLOAD SECTION ────────────────────────────────────────── */}
       {!results && (
       <section id="upload-section" style={{
-        maxWidth: '760px', margin: '0 auto', padding: '0 24px 80px',
+        maxWidth: '760px', margin: '0 auto', padding: '0 24px 60px',
       }}>
         {loading ? (
           <div style={{ textAlign: 'center', padding: '3rem 1rem', background: '#161616', border: '1px solid #2a2a2a', borderRadius: '16px' }}>
