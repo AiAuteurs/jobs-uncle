@@ -4,21 +4,41 @@ import Header from '../components/Header'
 import ContactModal from '../components/ContactModal'
 import { useRouter } from 'next/router'
 
-// ─── ANIMATED COUNTER ────────────────────────────────────────
-function playTick() {
+// ─── TADA AUDIO — pre-load and unlock on first interaction ────
+let tadaAudio = null
+let tadaUnlocked = false
+
+function getTada() {
+  if (typeof window === 'undefined') return null
+  if (!tadaAudio) {
+    tadaAudio = new Audio('/tada.mp3')
+    tadaAudio.preload = 'auto'
+    tadaAudio.load()
+  }
+  return tadaAudio
+}
+
+function unlockTada() {
+  if (tadaUnlocked) return
+  tadaUnlocked = true
+  const audio = getTada()
+  if (!audio) return
+  // Play at zero volume to unlock, then reset
+  audio.volume = 0
+  audio.play().then(() => {
+    audio.pause()
+    audio.currentTime = 0
+    audio.volume = 1
+  }).catch(() => {})
+}
+
+function playTada() {
+  const audio = getTada()
+  if (!audio) return
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)()
-    const osc = ctx.createOscillator()
-    const gain = ctx.createGain()
-    osc.connect(gain)
-    gain.connect(ctx.destination)
-    osc.type = 'sine'
-    osc.frequency.setValueAtTime(880, ctx.currentTime)
-    osc.frequency.exponentialRampToValueAtTime(1100, ctx.currentTime + 0.06)
-    gain.gain.setValueAtTime(0.08, ctx.currentTime)
-    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.18)
-    osc.start(ctx.currentTime)
-    osc.stop(ctx.currentTime + 0.18)
+    audio.currentTime = 0
+    audio.volume = 1
+    audio.play().catch(() => {})
   } catch(e) {}
 }
 
@@ -270,6 +290,7 @@ export default function Home() {
   const ACCEPTED_EXTS = ['.pdf', '.doc', '.docx', '.txt']
 
   const handleFile = (file) => {
+    unlockTada()
     if (file && (ACCEPTED_TYPES.includes(file.type) || ACCEPTED_EXTS.some(ext => file.name.toLowerCase().endsWith(ext)))) {
       setPdfFile(file)
       setError(null)
@@ -286,6 +307,7 @@ export default function Home() {
   }, [])
 
   const handleGenerate = async () => {
+    unlockTada()
     const hasResume = resumeInputMode === 'upload' ? !!pdfFile : resumeText.trim().length > 50
     const hasJobDesc = jobDescInputMode === 'paste' ? jobDescription.trim().length > 50 : !!jobDescFile
     if (!hasResume || !hasJobDesc) {
@@ -353,7 +375,7 @@ export default function Home() {
       setResults(data)
 
       // 🎉 Ta-da + confetti
-      try { new Audio('/tada.mp3').play() } catch(e) {}
+      playTada()
       fireConfetti()
 
       // Increment counter + refresh display
@@ -911,8 +933,10 @@ export default function Home() {
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:image" content="https://www.jobsuncle.ai/og-image.png" />
-        <link rel="icon" type="image/png" href="/jobsuncle-favicon.png" />
-        <link rel="apple-touch-icon" href="/jobsuncle-favicon.png" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/jobsuncle-favicon-32.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/jobsuncle-favicon.png" />
+        <link rel="apple-touch-icon" sizes="192x192" href="/jobsuncle-favicon.png" />
       </Head>
 
       <Header
@@ -936,7 +960,7 @@ export default function Home() {
       {/* ── HERO ─────────────────────────────────────────────────── */}
       <section style={{
         maxWidth: '1200px', margin: '0 auto', padding: '48px 40px 80px',
-        display: 'grid', gridTemplateColumns: '220px 1fr 420px', gap: '40px',
+        display: 'grid', gridTemplateColumns: '260px 1fr 400px', gap: '40px',
         alignItems: 'center',
       }} className="hero-grid">
 
@@ -945,7 +969,7 @@ export default function Home() {
           <img
             src="/jobsuncle-logo.png"
             alt="JobsUncle.ai"
-            style={{ width: '200px', display: 'block' }}
+            style={{ width: '240px', display: 'block' }}
           />
         </div>
 
@@ -953,16 +977,22 @@ export default function Home() {
         <div>
           <h1 style={{
             fontFamily: 'Inter, sans-serif', fontWeight: 900,
-            fontSize: 'clamp(2.2rem, 3.5vw, 3.2rem)', lineHeight: 1.08,
-            color: '#ffffff', margin: '0 0 24px', letterSpacing: '-0.02em',
+            fontSize: 'clamp(2rem, 3.2vw, 3rem)', lineHeight: 1.1,
+            color: '#ffffff', margin: '0 0 8px', letterSpacing: '-0.02em',
           }}>
-            Tailored resume<br />to job description<br />
-            in <span style={{ color: '#00D1FF' }}>60 seconds.</span>
+            Tailored resumes to the<br />job description
           </h1>
-          <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 32px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div style={{
+            fontFamily: 'Inter, sans-serif', fontWeight: 800,
+            fontSize: 'clamp(1.6rem, 2.8vw, 2.6rem)', lineHeight: 1.1,
+            color: '#00D1FF', margin: '0 0 28px', letterSpacing: '-0.02em',
+          }}>
+            in 60 seconds.
+          </div>
+          <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 36px', display: 'flex', flexDirection: 'column', gap: '11px' }}>
             {['Tailored resume', 'Cover letter', 'Recruiter & ATS analysis', 'Hiring manager DM'].map(item => (
-              <li key={item} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#a0aec0', fontSize: '0.95rem', fontFamily: 'Inter, sans-serif' }}>
-                <span style={{ color: '#00D1FF', fontWeight: 700 }}>✓</span>
+              <li key={item} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#b0bec5', fontSize: '1rem', fontFamily: 'Inter, sans-serif', fontWeight: 500 }}>
+                <span style={{ color: '#00D1FF', fontWeight: 800, fontSize: '1.1rem' }}>✓</span>
                 {item}
               </li>
             ))}
@@ -972,9 +1002,9 @@ export default function Home() {
             onClick={e => { e.preventDefault(); document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' }) }}
             style={{
               display: 'inline-block', background: '#00D1FF', color: '#000',
-              fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: '1rem',
-              padding: '14px 36px', borderRadius: '50px', textDecoration: 'none',
-              letterSpacing: '-0.01em',
+              fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: '1.05rem',
+              padding: '15px 40px', borderRadius: '50px', textDecoration: 'none',
+              letterSpacing: '-0.01em', boxShadow: '0 0 32px rgba(0,209,255,0.3)',
             }}
           >
             Get started free →
