@@ -958,7 +958,8 @@ export default function Home() {
         </div>
       )}
 
-      {/* ── HERO ─────────────────────────────────────────────────── */}
+      {/* ── HERO — hidden once results exist ─────────────────────── */}
+      {!results && (
       <section style={{
         maxWidth: '1200px', margin: '0 auto', padding: '40px 40px 64px',
         display: 'grid', gridTemplateColumns: '260px 1fr 400px', gap: '48px',
@@ -1052,6 +1053,7 @@ export default function Home() {
           </div>
         )}
       </section>
+      )}
 
             {/* ── UPLOAD SECTION ────────────────────────────────────────── */}
       {!results && (
