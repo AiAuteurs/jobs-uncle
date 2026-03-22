@@ -951,6 +951,10 @@ export default function Home() {
         onManage={() => setShowManageModal(true)}
         onContact={() => setShowContact(true)}
         resumeCount={resumeCount}
+        onLogoClick={results ? () => {
+          handleReset()
+          setTimeout(() => document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' }), 100)
+        } : null}
       />
 
       {/* MOBILE-ONLY NAV BAR */}

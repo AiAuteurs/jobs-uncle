@@ -142,7 +142,7 @@ function AnimatedCounter({ value, onRollComplete }) {
 }
 
 // ── HEADER ───────────────────────────────────────────────────────────────────
-export default function Header({ isPaid = false, accessLevel = null, onSignIn, onManage, onContact, resumeCount = null }) {
+export default function Header({ isPaid = false, accessLevel = null, onSignIn, onManage, onContact, resumeCount = null, onLogoClick = null }) {
   const { canvasRef, fire } = useConfetti()
   const [burst, setBurst] = useState(false)
 
@@ -185,8 +185,16 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
         pointerEvents: 'none', zIndex: 200,
       }} />
 
-      {/* LEFT — nav links */}
+      {/* LEFT — logo (when results exist) + nav */}
       <nav style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+        {onLogoClick && (
+          <img
+            src="/jobsuncle-logo.png"
+            alt="JobsUncle.ai"
+            onClick={onLogoClick}
+            style={{ width: '36px', height: '36px', objectFit: 'contain', cursor: 'pointer', borderRadius: '6px', marginRight: '8px', flexShrink: 0 }}
+          />
+        )}
         <a href="/about" style={navLink}>Our Story</a>
         <a href="/example" style={navLink}>See an example</a>
         <a href="/faq" style={navLink}>FAQ</a>
