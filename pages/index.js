@@ -957,43 +957,38 @@ export default function Home() {
 
       {/* ── HERO ─────────────────────────────────────────────────── */}
       <section style={{
-        maxWidth: '1160px', margin: '0 auto', padding: '32px 40px 72px',
-        display: 'grid', gridTemplateColumns: '1fr 420px', gap: '64px',
+        maxWidth: '1200px', margin: '0 auto', padding: '48px 40px 80px',
+        display: 'grid', gridTemplateColumns: '220px 1fr 420px', gap: '48px',
         alignItems: 'center',
       }} className="hero-grid">
 
-        {/* LEFT — logo + headline + bullets + CTA */}
-        <div>
+        {/* COL 1 — logo */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <img
             src="/jobsuncle-logo.png"
             alt="JobsUncle.ai"
-            style={{ width: '80px', display: 'block', marginBottom: '28px', borderRadius: '12px' }}
+            style={{ width: '200px', display: 'block' }}
           />
+        </div>
+
+        {/* COL 2 — headline + pills + CTA */}
+        <div>
           <h1 style={{
             fontFamily: 'Inter, sans-serif', fontWeight: 900,
-            fontSize: 'clamp(2.6rem, 4.5vw, 4rem)', lineHeight: 1.06,
-            color: '#ffffff', margin: '0 0 20px', letterSpacing: '-0.03em',
+            fontSize: 'clamp(2.2rem, 3.5vw, 3.4rem)', lineHeight: 1.08,
+            color: '#ffffff', margin: '0 0 20px', letterSpacing: '-0.02em',
           }}>
-            Tailored resumes.<br />
-            <span style={{ color: '#00D1FF' }}>60 seconds.</span>
+            Tailored resumes to the job description{' '}
+            <span style={{ color: '#00D1FF' }}>in 60 seconds.</span>
           </h1>
-          <p style={{
-            fontFamily: 'Inter, sans-serif', fontWeight: 400,
-            fontSize: '1.05rem', lineHeight: 1.6,
-            color: '#888', margin: '0 0 24px', maxWidth: '480px',
-          }}>
-            Upload your resume and a job description. Get a tailored application package built for that role — not a template.
-          </p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '36px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '32px' }}>
             {['Tailored resume', 'Cover letter', 'Recruiter & ATS analysis', 'Hiring manager DM'].map(item => (
               <span key={item} style={{
                 fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', fontWeight: 600,
                 color: '#00D1FF', background: 'rgba(0,209,255,0.08)',
                 border: '1px solid rgba(0,209,255,0.2)',
                 padding: '5px 12px', borderRadius: '999px',
-              }}>
-                ✓ {item}
-              </span>
+              }}>✓ {item}</span>
             ))}
           </div>
           <a
@@ -1008,48 +1003,48 @@ export default function Home() {
           >
             Get started free →
           </a>
-          <div style={{ marginTop: '12px', fontSize: '0.75rem', color: '#555', fontFamily: 'Inter, sans-serif' }}>
+          <div style={{ marginTop: '10px', fontSize: '0.75rem', color: '#555', fontFamily: 'Inter, sans-serif' }}>
             No account needed. Free to try.
           </div>
         </div>
 
-        {/* RIGHT — example resume card */}
+        {/* COL 3 — example resume card */}
         {!results && (
           <div style={{
-            background: '#ffffff', borderRadius: '20px', padding: '32px',
+            background: '#ffffff', borderRadius: '16px', padding: '28px',
             color: '#111', fontFamily: 'Inter, sans-serif',
-            boxShadow: '0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04)',
+            boxShadow: '0 32px 64px rgba(0,0,0,0.5)',
             position: 'relative', overflow: 'hidden',
           }}>
             <div style={{
-              position: 'absolute', top: '14px', right: '14px',
+              position: 'absolute', top: '12px', right: '12px',
               background: '#f59e0b', color: '#000', fontSize: '0.58rem',
               fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase',
               padding: '3px 10px', borderRadius: '20px',
             }}>Example output</div>
-            <div style={{ marginBottom: '16px', paddingRight: '60px' }}>
-              <div style={{ fontWeight: 800, fontSize: '1.1rem', color: '#111', marginBottom: '3px' }}>Camille Leon</div>
+            <div style={{ marginBottom: '14px', paddingRight: '60px' }}>
+              <div style={{ fontWeight: 800, fontSize: '1.05rem', color: '#111', marginBottom: '3px' }}>Camille Leon</div>
               <div style={{ color: '#888', fontSize: '0.71rem', lineHeight: 1.5 }}>camille.leon@gmail.com · linkedin.com/in/camilleleon · San Francisco, CA</div>
             </div>
-            <div style={{ width: '100%', height: '1px', background: '#eee', marginBottom: '14px' }} />
-            <div style={{ marginBottom: '14px' }}>
-              <div style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#bbb', marginBottom: '6px' }}>Professional Summary</div>
-              <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.65, color: '#333' }}>
+            <div style={{ width: '100%', height: '1px', background: '#eee', marginBottom: '12px' }} />
+            <div style={{ marginBottom: '12px' }}>
+              <div style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#bbb', marginBottom: '5px' }}>Professional Summary</div>
+              <p style={{ margin: 0, fontSize: '0.79rem', lineHeight: 1.65, color: '#333' }}>
                 Learning Experience Designer with 8+ years building outcome-driven curriculum for enterprise clients. IDEO U-certified. Proven across Articulate Storyline, learning analytics, and global rollouts.
               </p>
             </div>
             <div>
-              <div style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#bbb', marginBottom: '6px' }}>Relevant Experience</div>
-              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#111', marginBottom: '5px' }}>
+              <div style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#bbb', marginBottom: '5px' }}>Relevant Experience</div>
+              <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#111', marginBottom: '4px' }}>
                 BrightPath Learning <span style={{ fontWeight: 400, color: '#777' }}>— Curriculum Developer · 2020–2022</span>
               </div>
-              <ul style={{ margin: '0 0 0 14px', padding: 0, fontSize: '0.76rem', color: '#555', lineHeight: 1.75 }}>
+              <ul style={{ margin: '0 0 0 14px', padding: 0, fontSize: '0.75rem', color: '#555', lineHeight: 1.75 }}>
                 <li>Authored 14 STEM modules across 200+ schools; reduced drop-off 22%</li>
                 <li>Built review rubric adopted by team of 6 contract developers</li>
               </ul>
             </div>
-            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '72px', background: 'linear-gradient(to bottom, transparent, #fff)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '14px' }}>
-              <a href="/example" style={{ fontSize: '0.74rem', color: '#00a8cc', fontWeight: 700, textDecoration: 'none', letterSpacing: '-0.01em' }}>See full example output →</a>
+            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '64px', background: 'linear-gradient(to bottom, transparent, #fff)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '12px' }}>
+              <a href="/example" style={{ fontSize: '0.74rem', color: '#00a8cc', fontWeight: 700, textDecoration: 'none' }}>See full example output →</a>
             </div>
           </div>
         )}
