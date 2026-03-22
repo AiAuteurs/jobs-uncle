@@ -1383,21 +1383,22 @@ export default function Home() {
               <div style={{
                 display: 'flex', alignItems: 'center', gap: '20px',
                 marginBottom: '24px', padding: '16px 24px',
-                background: 'linear-gradient(135deg, rgba(0,209,255,0.06) 0%, rgba(0,209,255,0.02) 100%)',
-                border: '1px solid rgba(0,209,255,0.15)',
+                background: 'linear-gradient(135deg, rgba(0,209,255,0.08) 0%, rgba(0,209,255,0.03) 100%)',
+                border: '1.5px solid rgba(0,209,255,0.2)',
                 borderRadius: '12px',
               }}>
                 <img
                   src="/mascot-points.png"
                   alt=""
+                  onError={e => { e.target.style.display='none' }}
                   style={{ width: '80px', flexShrink: 0, display: 'block' }}
                 />
                 <div>
-                  <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: '1.2rem', color: '#fff', marginBottom: '4px', letterSpacing: '-0.01em' }}>
+                  <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: '1.15rem', color: 'var(--ink)', marginBottom: '5px', letterSpacing: '-0.01em' }}>
                     Looking good. 🎉
                   </div>
-                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.85rem', color: '#888', lineHeight: 1.5 }}>
-                    Tailored to this role. Download below, or scroll down for your cover letter, recruiter analysis, and hiring manager DM.
+                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.85rem', color: 'var(--text-soft)', lineHeight: 1.5 }}>
+                    Tailored to this role. Download below — or scroll down for your cover letter, recruiter analysis, and hiring manager DM.
                   </div>
                 </div>
               </div>
