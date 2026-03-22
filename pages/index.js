@@ -957,8 +957,8 @@ export default function Home() {
 
       {/* ── HERO ─────────────────────────────────────────────────── */}
       <section style={{
-        maxWidth: '1200px', margin: '0 auto', padding: '48px 40px 80px',
-        display: 'grid', gridTemplateColumns: '220px 1fr 420px', gap: '48px',
+        maxWidth: '1200px', margin: '0 auto', padding: '40px 40px 64px',
+        display: 'grid', gridTemplateColumns: '260px 1fr 400px', gap: '48px',
         alignItems: 'center',
       }} className="hero-grid">
 
@@ -967,7 +967,7 @@ export default function Home() {
           <img
             src="/jobsuncle-logo.png"
             alt="JobsUncle.ai"
-            style={{ width: '200px', display: 'block' }}
+            style={{ width: '240px', display: 'block' }}
           />
         </div>
 
@@ -975,11 +975,11 @@ export default function Home() {
         <div>
           <h1 style={{
             fontFamily: 'Inter, sans-serif', fontWeight: 900,
-            fontSize: 'clamp(2.2rem, 3.5vw, 3.4rem)', lineHeight: 1.08,
-            color: '#ffffff', margin: '0 0 20px', letterSpacing: '-0.02em',
+            fontSize: 'clamp(2.4rem, 3.8vw, 3.6rem)', lineHeight: 1.06,
+            color: '#ffffff', margin: '0 0 20px', letterSpacing: '-0.03em',
           }}>
-            Tailored resumes to the job description{' '}
-            <span style={{ color: '#00D1FF' }}>in 60 seconds.</span>
+            Tailored resumes<br />to the job description{' '}
+            <span style={{ color: '#00D1FF', display: 'block' }}>in 60 seconds.</span>
           </h1>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '32px' }}>
             {['Tailored resume', 'Cover letter', 'Recruiter & ATS analysis', 'Hiring manager DM'].map(item => (
