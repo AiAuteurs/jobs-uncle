@@ -29,15 +29,27 @@ function clientScoreATS(resumeText, jobDescription) {
   const freq = {}
   jdWords.forEach(w => { freq[w] = (freq[w] || 0) + 1 })
   const candidates = Object.entries(freq)
-    .filter(([w, c]) => c >= 1)
+    .filter(([w, c]) => c >= 2)
     .map(([w]) => w)
-    .filter(k => k.length > 3)
+    .filter(k => k.length >= 6)
     .slice(0, 60)
+  function stem(w) {
+    if (w.endsWith('ing') && w.length > 6) return w.slice(0, -3)
+    if (w.endsWith('tion') && w.length > 7) return w.slice(0, -4)
+    if (w.endsWith('ed') && w.length > 5) return w.slice(0, -2)
+    if (w.endsWith('ly') && w.length > 5) return w.slice(0, -2)
+    if (w.endsWith('s') && w.length > 5) return w.slice(0, -1)
+    return w
+  }
   const resumeLower = resumeText.toLowerCase()
+  const resumeWords = resumeLower.split(/\s+/)
   const matched = [], missing = []
   candidates.forEach(kw => {
-    const variant = kw.endsWith('s') ? kw.slice(0, -1) : kw + 's'
-    if (resumeLower.includes(kw) || resumeLower.includes(variant)) matched.push(kw)
+    const kwStem = stem(kw)
+    const found = resumeLower.includes(kw) ||
+      resumeLower.includes(kw.endsWith('s') ? kw.slice(0, -1) : kw + 's') ||
+      resumeWords.some(w => stem(w) === kwStem)
+    if (found) matched.push(kw)
     else missing.push(kw)
   })
   const score = candidates.length > 0 ? Math.round((matched.length / candidates.length) * 100) : 0

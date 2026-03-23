@@ -122,7 +122,7 @@ function scoreKeywordMatch(resumeText, jobDescription) {
 
   // Extract JD keywords with frequency — higher freq = more important
   const jdLower = jobDescription.toLowerCase().replace(/[^a-z0-9\s]/g, ' ')
-  const jdWords = jdLower.split(/\s+/).filter(w => w.length > 2 && !STOP.has(w))
+  const jdWords = jdLower.split(/\s+/).filter(w => w.length >= 5 && !STOP.has(w))
   const freq = {}
   jdWords.forEach(w => { freq[w] = (freq[w] || 0) + 1 })
 
@@ -151,7 +151,7 @@ function scoreKeywordMatch(resumeText, jobDescription) {
   ]
 
   const jdKeywords = Object.entries(freq)
-    .filter(([word, count]) => count >= 1 || TECH_SIGNALS.some(t => word.includes(t)))
+    .filter(([word, count]) => count >= 2 || TECH_SIGNALS.some(t => word.includes(t)))
     .map(([word]) => word)
 
   // Also extract 2-word phrases from JD
@@ -161,7 +161,7 @@ function scoreKeywordMatch(resumeText, jobDescription) {
 
   // Combine: single important keywords + two-word phrases
   const candidates = [...new Set([...jdKeywords, ...twoWordPhrases])]
-    .filter(k => k.length > 3)
+    .filter(k => k.length >= 6)
     .slice(0, 60) // cap at 60 candidates
 
   // Score against resume
@@ -169,17 +169,25 @@ function scoreKeywordMatch(resumeText, jobDescription) {
   const matched = []
   const missing = []
 
+  function simpleStem(w) {
+    if (w.endsWith('ing') && w.length > 6) return w.slice(0, -3)
+    if (w.endsWith('tion') && w.length > 7) return w.slice(0, -4)
+    if (w.endsWith('ed') && w.length > 5) return w.slice(0, -2)
+    if (w.endsWith('ly') && w.length > 5) return w.slice(0, -2)
+    if (w.endsWith('ment') && w.length > 7) return w.slice(0, -4)
+    if (w.endsWith('s') && w.length > 5) return w.slice(0, -1)
+    return w
+  }
+  const resumeWords = resumeLower.split(/\s+/)
   candidates.forEach(kw => {
-    if (resumeLower.includes(kw)) {
+    const kwStem = simpleStem(kw)
+    const found = resumeLower.includes(kw) ||
+      resumeLower.includes(kw.endsWith('s') ? kw.slice(0, -1) : kw + 's') ||
+      resumeWords.some(w => simpleStem(w) === kwStem)
+    if (found) {
       matched.push(kw)
     } else {
-      // Check singular/plural variants
-      const variant = kw.endsWith('s') ? kw.slice(0, -1) : kw + 's'
-      if (resumeLower.includes(variant)) {
-        matched.push(kw)
-      } else {
-        missing.push(kw)
-      }
+      missing.push(kw)
     }
   })
 
