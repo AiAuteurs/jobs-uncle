@@ -1526,7 +1526,7 @@ export default function Home() {
                       : results.resume
                   )}} />
                 )}
-              </div>
+              </div>}
 
               {activeResultTab === 'cover' && <div className="result-section">
                 <div className="result-section-title">Cover Letter</div>
