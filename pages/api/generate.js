@@ -541,6 +541,9 @@ TYPE C — ROUGH NOTES / MIXED INPUT: Messy, informal, or partial information. F
 
 REGARDLESS OF INPUT TYPE — your output must:
 - Pass ATS for this specific job description
+- Include the exact job title from the JD in the header or first summary line
+- Include a location (city/country or "Remote") in the contact header
+- Use exact section labels: "Summary", "Experience" or "Employment History", "Skills", "Education"
 - Read like a human wrote it, not a template
 - Make the candidate look like the best hire in the room
 - Never fabricate, never pad, never genericize named credentials
@@ -590,8 +593,22 @@ HIRING MANAGER DM REQUIREMENTS:
 
 CONTACT INFO REQUIREMENTS:
 - In the resume header, include name, email, phone, and LinkedIn URL if present
+- ALWAYS include a location — city and country or "Remote" if no location found in source. ATS systems use location to validate candidate matches. If no location in source, use "Remote" as default.
 - CRITICAL: Never prefix the LinkedIn URL with the word "LinkedIn:" or "LinkedIn" — just include the bare URL (e.g. linkedin.com/in/matassa, NOT "LinkedIn: linkedin.com/in/matassa")
 - Strip any social media labels like "LinkedIn:", "GitHub:", "Twitter:" — show only the URL itself
+
+JOB TITLE ATS MATCH — CRITICAL:
+- Extract the exact job title from the job description (e.g. "Senior Video Editor", "Midweight / Senior Video Editor")
+- Include this exact title as a line directly under the candidate's name in the header, OR work it naturally into the first line of the summary
+- ATS systems search by job title — if the title from the JD doesn't appear in the resume, the match rate drops significantly
+- This is not fabrication — it's positioning. The candidate is applying for this role.
+
+SECTION HEADINGS — ATS CRITICAL:
+- Education section MUST be labeled exactly "Education" — no variations, no styling, no alternative labels
+- Experience section MUST be labeled "Experience" or "Employment History" — ATS must find these exact headings
+- Summary section MUST be labeled "Summary" or "Professional Summary"
+- Skills section MUST be labeled "Skills"
+- These exact labels are non-negotiable for ATS parsing
 
 METADATA REQUIREMENTS:
 - candidateName: full name
