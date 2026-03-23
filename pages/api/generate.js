@@ -82,7 +82,11 @@ function scoreKeywordMatch(resumeText, jobDescription) {
     'year','years','global','local','group','firm','serving','located','new',
     'please','apply','must','will','able','across','within','including','ensure',
     'responsible','opportunity','ideal','candidate','qualified','preferred',
-    'meridian','york','stake','stakes','measure','location','workforce',
+    'meridian','york','stake','stakes','location','workforce',
+    'what','three','fortune','world','include','apos','two','four','five',
+    'six','seven','eight','nine','ten','like','just','make','know','want',
+    'good','great','best','first','last','next','said','says','per','via',
+    'clients','countries','ecosystems','academies','companies','apos',
   ])
 
   // Extract candidate phrases — 1 and 2 word sequences

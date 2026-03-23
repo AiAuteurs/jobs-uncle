@@ -421,7 +421,7 @@ export default function Home() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          resume: results.resume,
+          resume: results.resume || (activeResume === 'b' ? results.resumeB : results.resumeA) || '',
           jobDescription: jobDescription,
           recruiterNotes: results.recruiterNotes,
         }),
