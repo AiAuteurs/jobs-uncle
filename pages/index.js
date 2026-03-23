@@ -152,7 +152,8 @@ export default function Home() {
   const [isPlusUser, setIsPlusUser] = useState(false)
   const [showPlusPaywall, setShowPlusPaywall] = useState(false)
   const [dualVersionEnabled, setDualVersionEnabled] = useState(false)
-  const [activeResultTab, setActiveResultTab] = useState('resume') // 'resume' | 'cover' | 'recruiter' | 'dm'
+  const [activeResultTab, setActiveResultTab] = useState('resume')
+  const [careerType, setCareerType] = useState('freelance') // 'freelance' | 'fulltime'
   const [activeResume, setActiveResume] = useState('a') // 'a' | 'b'
   const [showRestore, setShowRestore] = useState(false)
   const [restoreEmail, setRestoreEmail] = useState('')
@@ -341,6 +342,7 @@ export default function Home() {
         formData.append('jobDescFile', jobDescFile)
       }
       formData.append('dualVersion', dualVersionEnabled && isPlusUser ? 'true' : 'false')
+      formData.append('careerType', careerType)
 
       const controller = new AbortController()
       const timeout = setTimeout(() => controller.abort(), 120000)
@@ -1119,6 +1121,46 @@ export default function Home() {
               ) : (
                 <textarea className="cc-jd-input cc-jd-input--tall" placeholder="Paste your full resume here — work history, skills, education..." value={resumeText} onChange={(e) => setResumeText(e.target.value)} />
               )}
+            </div>
+
+            {/* CAREER TYPE TOGGLE */}
+            <div style={{ padding: '16px 20px', background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: '10px' }}>
+              <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#555', marginBottom: '10px', fontFamily: 'Inter, sans-serif' }}>
+                Career type
+              </div>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  onClick={() => setCareerType('freelance')}
+                  style={{
+                    flex: 1, padding: '10px 12px',
+                    background: careerType === 'freelance' ? '#00D1FF' : 'transparent',
+                    color: careerType === 'freelance' ? '#000' : '#888',
+                    border: careerType === 'freelance' ? '1.5px solid #00D1FF' : '1.5px solid #333',
+                    borderRadius: '8px', fontSize: '0.85rem', fontWeight: 700,
+                    cursor: 'pointer', fontFamily: 'Inter, sans-serif', transition: 'all 0.15s',
+                  }}
+                >
+                  🎯 Freelance / Contract
+                </button>
+                <button
+                  onClick={() => setCareerType('fulltime')}
+                  style={{
+                    flex: 1, padding: '10px 12px',
+                    background: careerType === 'fulltime' ? '#00D1FF' : 'transparent',
+                    color: careerType === 'fulltime' ? '#000' : '#888',
+                    border: careerType === 'fulltime' ? '1.5px solid #00D1FF' : '1.5px solid #333',
+                    borderRadius: '8px', fontSize: '0.85rem', fontWeight: 700,
+                    cursor: 'pointer', fontFamily: 'Inter, sans-serif', transition: 'all 0.15s',
+                  }}
+                >
+                  🏢 Full-time / In-house
+                </button>
+              </div>
+              <div style={{ marginTop: '8px', fontSize: '0.72rem', color: '#444', fontFamily: 'Inter, sans-serif', lineHeight: 1.5 }}>
+                {careerType === 'freelance'
+                  ? 'Consolidates your engagements into a career narrative. Client names as proof, not a job list.'
+                  : 'Traditional chronological format. Emphasizes tenure, scope, growth, and internal impact.'}
+              </div>
             </div>
 
             <div className="cc-zone-divider">+</div>
