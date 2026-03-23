@@ -1478,13 +1478,13 @@ export default function Home() {
                     ✓ Version 2 is ready — fixes applied from the recruiter analysis
                   </div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', marginBottom: '6px' }}>
-                    Affects the Resume tab. Switch to compare.
+                    Click to switch versions — opens Resume tab to compare.
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0', border: '1.5px solid var(--border)', borderRadius: '8px', overflow: 'hidden', width: 'fit-content' }}>
                     {['v1', 'v2'].map(v => (
                       <button
                         key={v}
-                        onClick={() => setActiveVersion(v)}
+                        onClick={() => { setActiveVersion(v); setActiveResultTab('resume'); }}
                         style={{
                           padding: '8px 22px', border: 'none', cursor: 'pointer',
                           fontSize: '0.82rem', fontWeight: 700, transition: 'all 0.15s',
@@ -1951,53 +1951,35 @@ export default function Home() {
                 </div>
 
                 {error && <div className="error-msg" style={{marginTop: '1rem'}}>{error}</div>}
+
+                {/* CONTACT STRIP — after downloads */}
+                <div style={{
+                  marginTop: '20px', padding: '14px 20px',
+                  background: 'rgba(0,209,255,0.04)',
+                  border: '1px solid rgba(0,209,255,0.15)',
+                  borderRadius: '8px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  flexWrap: 'wrap', gap: '10px',
+                }}>
+                  <div style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>
+                    Got feedback? Questions? Something look off?
+                  </div>
+                  <button
+                    onClick={() => setShowContact(true)}
+                    style={{
+                      background: 'none', border: '1.5px solid rgba(0,209,255,0.4)',
+                      borderRadius: '20px', padding: '6px 18px',
+                      color: 'var(--accent)', fontSize: '0.8rem', fontWeight: 600,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Contact us →
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* FEEDBACK */}
-            <div className="feedback-section">
-              {!feedbackSent ? (
-                <>
-                  <div className="feedback-question">Did this look like a real resume you'd actually send?</div>
-                  <div className="feedback-options">
-                    {['yes', 'kinda', 'no'].map(opt => (
-                      <button
-                        key={opt}
-                        className={`feedback-btn ${feedback === opt ? 'selected' : ''}`}
-                        onClick={() => setFeedback(opt)}
-                      >
-                        {opt === 'yes' ? '👍 Yes' : opt === 'kinda' ? '🤔 Kind of' : '👎 No'}
-                      </button>
-                    ))}
-                  </div>
-                  {feedback && (
-                    <>
-                      <textarea
-                        className="feedback-text"
-                        placeholder="Anything specific? (optional)"
-                        value={feedbackText}
-                        onChange={e => setFeedbackText(e.target.value)}
-                        rows={2}
-                        style={{ color: '#ffffff', background: 'var(--surface)', caretColor: '#00D1FF' }}
-                      />
-                      <button className="feedback-submit" onClick={() => {
-                        const storedEmail = typeof window !== 'undefined' ? localStorage.getItem('ju_email') || '' : ''
-                        fetch('/api/feedback', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ rating: feedback, comment: feedbackText, email: storedEmail })
-                        }).catch(() => {})
-                        setFeedbackSent(true)
-                      }}>
-                        Send feedback
-                      </button>
-                    </>
-                  )}
-                </>
-              ) : (
-                <div className="feedback-thanks">Thanks &mdash; that helps. 🙏</div>
-              )}
-            </div>
+
 
             {!isPlusUser && (
               <div style={{ margin: '1.5rem 0 0', padding: '1.25rem 1.5rem', background: 'rgba(99,102,241,0.05)', border: '1.5px solid #6366f1', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
@@ -2016,6 +1998,17 @@ export default function Home() {
                 </button>
               </div>
             )}
+
+            {/* CONTACT CTA */}
+            <div style={{ margin: '1.5rem 0 0', textAlign: 'center', padding: '1.25rem', borderTop: '1px solid var(--border)' }}>
+              <span style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>Questions or feedback? </span>
+              <button
+                onClick={() => setShowContact(true)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.82rem', color: 'var(--accent)', fontWeight: 600, textDecoration: 'underline', padding: 0 }}
+              >
+                Contact us
+              </button>
+            </div>
 
             <button className="reset-btn" onClick={handleReset}>
               ← Start over with a new job
