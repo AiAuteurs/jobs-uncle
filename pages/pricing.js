@@ -20,9 +20,10 @@ const plans = [
     price: '$7.99',
     per: '/mo',
     billing: 'Billed $23.97 every 3 months',
-    tagline: 'In the middle of a search.',
-    badge: 'Save 20%',
+    tagline: 'Most job searches take 3 months.',
+    badge: '⚡ Most Popular',
     savings: '20%',
+    highlight: true,
   },
   {
     id: 'pro_plus_6mo',
@@ -43,7 +44,6 @@ const plans = [
     tagline: 'Freelancer. Always on the market.',
     badge: 'Best Value — Save 58%',
     savings: '58%',
-    highlight: true,
   },
 ]
 
@@ -87,8 +87,8 @@ export default function PricingPage() {
 
       <main className="pricing-page">
         <div className="pricing-header">
-          <h1>How long is your search?</h1>
-          <p className="subtitle">Pick a plan that matches where you are. Cancel anytime.</p>
+          <h1>Stop getting ignored. Start getting interviews.</h1>
+          <p className="subtitle">Unlimited AI-tailored resumes. Cancel anytime.</p>
         </div>
 
         <div className="tier-cards">
@@ -202,12 +202,13 @@ export default function PricingPage() {
         }
 
         .tier-card.highlight {
-          border-color: var(--accent-soft);
+          border-color: var(--accent);
+          box-shadow: 0 0 0 2px var(--accent);
         }
 
         .tier-card.highlight.selected {
-          border-color: var(--accent-soft);
-          background: #F1E4BF;
+          border-color: var(--accent);
+          background: var(--warm);
         }
 
         .badge {

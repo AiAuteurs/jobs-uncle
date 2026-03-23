@@ -1851,47 +1851,103 @@ export default function Home() {
             </div>
 
             {/* FEEDBACK */}
-            <div className="feedback-section">
-              {!feedbackSent ? (
-                <>
-                  <div className="feedback-question">Did this look like a real resume you'd actually send?</div>
-                  <div className="feedback-options">
-                    {['yes', 'kinda', 'no'].map(opt => (
-                      <button
-                        key={opt}
-                        className={`feedback-btn ${feedback === opt ? 'selected' : ''}`}
-                        onClick={() => setFeedback(opt)}
-                      >
-                        {opt === 'yes' ? '👍 Yes' : opt === 'kinda' ? '🤔 Kind of' : '👎 No'}
-                      </button>
-                    ))}
-                  </div>
-                  {feedback && (
-                    <>
-                      <textarea
-                        className="feedback-text"
-                        placeholder="Anything specific? (optional)"
-                        value={feedbackText}
-                        onChange={e => setFeedbackText(e.target.value)}
-                        rows={2}
-                        style={{ color: '#ffffff', background: 'var(--surface)', caretColor: '#00D1FF' }}
-                      />
-                      <button className="feedback-submit" onClick={() => {
-                        const storedEmail = typeof window !== 'undefined' ? localStorage.getItem('ju_email') || '' : ''
-                        fetch('/api/feedback', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ rating: feedback, comment: feedbackText, email: storedEmail })
-                        }).catch(() => {})
-                        setFeedbackSent(true)
-                      }}>
-                        Send feedback
-                      </button>
-                    </>
-                  )}
-                </>
+            {/* MAKE ANOTHER RESUME — prominent, no scroll needed */}
+            <div style={{
+              margin: '2rem 0 0',
+              padding: '28px 32px',
+              background: 'linear-gradient(135deg, rgba(0,209,255,0.08) 0%, rgba(0,209,255,0.03) 100%)',
+              border: '2px solid rgba(0,209,255,0.25)',
+              borderRadius: '16px',
+              textAlign: 'center',
+            }}>
+              <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: '1rem', color: 'var(--ink)', marginBottom: '6px' }}>
+                Apply to another job?
+              </div>
+              <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', color: 'var(--text-soft)', marginBottom: '20px' }}>
+                Every application deserves its own tailored resume.
+              </div>
+              <button
+                onClick={handleReset}
+                style={{
+                  display: 'inline-block',
+                  background: '#00D1FF',
+                  color: '#000',
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: 800,
+                  fontSize: '1rem',
+                  padding: '14px 40px',
+                  borderRadius: '50px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  letterSpacing: '-0.01em',
+                  boxShadow: '0 0 30px rgba(0,209,255,0.2)',
+                  transition: 'all 0.2s',
+                }}
+              >
+                🍀 Make Another Resume
+              </button>
+            </div>
+
+            {/* CONTACT FORM */}
+            <div style={{
+              margin: '1.5rem 0 0',
+              padding: '24px 28px',
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
+              borderRadius: '12px',
+            }}>
+              <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: '0.88rem', color: 'var(--ink)', marginBottom: '4px' }}>
+                Questions or feedback?
+              </div>
+              <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', color: 'var(--text-soft)', marginBottom: '16px' }}>
+                We read every message.
+              </div>
+              {!showContact ? (
+                <button
+                  onClick={() => setShowContact(true)}
+                  style={{ padding: '8px 20px', background: 'transparent', color: 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}
+                >
+                  Get in touch →
+                </button>
               ) : (
-                <div className="feedback-thanks">Thanks &mdash; that helps. 🙏</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <input
+                    type="text"
+                    placeholder="Your name"
+                    id="contact-name"
+                    style={{ width: '100%', padding: '10px 14px', border: '1.5px solid var(--border)', borderRadius: '8px', fontSize: '0.88rem', background: 'var(--bg)', color: 'var(--ink)', outline: 'none', boxSizing: 'border-box', fontFamily: 'Inter, sans-serif' }}
+                  />
+                  <input
+                    type="email"
+                    placeholder="Your email"
+                    id="contact-email"
+                    style={{ width: '100%', padding: '10px 14px', border: '1.5px solid var(--border)', borderRadius: '8px', fontSize: '0.88rem', background: 'var(--bg)', color: 'var(--ink)', outline: 'none', boxSizing: 'border-box', fontFamily: 'Inter, sans-serif' }}
+                  />
+                  <textarea
+                    placeholder="What's on your mind?"
+                    id="contact-msg"
+                    rows={3}
+                    style={{ width: '100%', padding: '10px 14px', border: '1.5px solid var(--border)', borderRadius: '8px', fontSize: '0.88rem', background: 'var(--bg)', color: 'var(--ink)', outline: 'none', boxSizing: 'border-box', fontFamily: 'Inter, sans-serif', resize: 'vertical' }}
+                  />
+                  <button
+                    onClick={() => {
+                      const name = document.getElementById('contact-name')?.value || ''
+                      const email = document.getElementById('contact-email')?.value || ''
+                      const msg = document.getElementById('contact-msg')?.value || ''
+                      if (!msg.trim()) return
+                      fetch('/api/feedback', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ rating: 'contact', comment: `${name} (${email}): ${msg}` })
+                      }).catch(() => {})
+                      setShowContact(false)
+                      alert('Got it — thanks for reaching out!')
+                    }}
+                    style={{ alignSelf: 'flex-start', padding: '9px 22px', background: 'var(--ink)', color: 'white', border: 'none', borderRadius: '8px', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}
+                  >
+                    Send →
+                  </button>
+                </div>
               )}
             </div>
 
@@ -1912,10 +1968,6 @@ export default function Home() {
                 </button>
               </div>
             )}
-
-            <button className="reset-btn" onClick={handleReset}>
-              ← Start over with a new job
-            </button>
           </>
         )}
       </div>
