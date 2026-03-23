@@ -1537,7 +1537,6 @@ export default function Home() {
                 )}} />
               </div>}
 
-              }
               {/* ATS KEYWORD MATCH SCORE */}
               {activeResultTab === 'ats' && results.atsMatch && (
                 <div id="result-ats" className="result-section" style={{ borderLeft: '3px solid #00D1FF', background: 'rgba(0,209,255,0.04)' }}>
