@@ -4,6 +4,47 @@ import Header from '../components/Header'
 import ContactModal from '../components/ContactModal'
 import { useRouter } from 'next/router'
 
+
+// ─── CLIENT-SIDE ATS SCORER (mirrors server scoreKeywordMatch) ────────────────
+function clientScoreATS(resumeText, jobDescription) {
+  if (!resumeText || !jobDescription) return null
+  const STOP = new Set([
+    'the','and','or','of','to','a','an','in','for','with','on','at','by','from',
+    'is','are','was','were','be','been','have','has','had','do','does','did',
+    'will','would','could','should','may','might','this','that','these','those',
+    'we','you','your','our','their','its','it','as','if','so','but','not','no',
+    'use','using','used','work','working','experience','ability','strong','proven',
+    'role','position','team','company','business','project','process','based',
+    'well','also','very','highly','quickly','effectively','efficiently',
+    'them','kind','respectful','offer','improve','variety','satisfaction','members',
+    'obsessed','trust','address','connections','doctors','providers','employers',
+    'plans','options','resolve','empathy','benefits','benefit','resources',
+    'seeking','passionate','excited','driven','dedicated','motivated','committed',
+    'looking','hybrid','onsite','remote','days','week','global','group','firm',
+    'what','three','fortune','world','include','two','four','five','six',
+    'like','just','make','know','want','good','great','best','first','last',
+  ])
+  const jdLower = jobDescription.toLowerCase().replace(/[^a-z0-9\s]/g, ' ')
+  const jdWords = jdLower.split(/\s+/).filter(w => w.length > 3 && !STOP.has(w))
+  const freq = {}
+  jdWords.forEach(w => { freq[w] = (freq[w] || 0) + 1 })
+  const candidates = Object.entries(freq)
+    .filter(([w, c]) => c >= 1)
+    .map(([w]) => w)
+    .filter(k => k.length > 3)
+    .slice(0, 60)
+  const resumeLower = resumeText.toLowerCase()
+  const matched = [], missing = []
+  candidates.forEach(kw => {
+    const variant = kw.endsWith('s') ? kw.slice(0, -1) : kw + 's'
+    if (resumeLower.includes(kw) || resumeLower.includes(variant)) matched.push(kw)
+    else missing.push(kw)
+  })
+  const score = candidates.length > 0 ? Math.round((matched.length / candidates.length) * 100) : 0
+  return { score, matched: matched.slice(0, 30), missing: missing.slice(0, 15), total: candidates.length }
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 // ─── TADA AUDIO — pre-load and unlock on first interaction ────
 let tadaBuffer = null
 let tadaCtx = null
@@ -1543,32 +1584,37 @@ export default function Home() {
               </div>}
               {/* ATS KEYWORD MATCH SCORE */}
               {activeResultTab === 'ats' && (
-                !results.atsMatch ? (
-                  <div className="result-section" style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-soft)' }}>
-                    <div style={{ fontSize: '2rem', marginBottom: '12px' }}>🎯</div>
-                    <div style={{ fontWeight: 700, marginBottom: '8px' }}>ATS Score not available</div>
-                    <div style={{ fontSize: '0.85rem' }}>Run a new generation to see your keyword match score.</div>
-                  </div>
-                ) :
-                <div id="result-ats" className="result-section" style={{ borderLeft: '3px solid #00D1FF', background: 'rgba(0,209,255,0.04)' }}>
+                (() => {
+                  const activeAts = (activeVersion === 'v2' && regeneratedResults)
+                    ? clientScoreATS(regeneratedResults.resume, jobDescription)
+                    : results.atsMatch
+                  if (!activeAts) return (
+                    <div className="result-section" style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-soft)' }}>
+                      <div style={{ fontSize: '2rem', marginBottom: '12px' }}>🎯</div>
+                      <div style={{ fontWeight: 700, marginBottom: '8px' }}>ATS Score not available</div>
+                      <div style={{ fontSize: '0.85rem' }}>Run a new generation to see your keyword match score.</div>
+                    </div>
+                  )
+                  const atsMatch = activeAts
+                  return <div id="result-ats" className="result-section" style={{ borderLeft: '3px solid #00D1FF', background: 'rgba(0,209,255,0.04)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
                     <div>
-                      <div className="result-section-title" style={{ margin: 0, marginBottom: '4px' }}>ATS Keyword Match</div>
-                      <div style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>How well your resume matches the job description keywords — no Jobscan needed.</div>
+                      <div className="result-section-title" style={{ margin: 0, marginBottom: '4px' }}>ATS Keyword Match {activeVersion === 'v2' && regeneratedResults ? <span style={{ fontSize: '0.65rem', background: '#10b981', color: 'white', padding: '2px 7px', borderRadius: '10px', marginLeft: '6px', fontWeight: 600 }}>v2 score</span> : null}</div>
+                      <div style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>{activeVersion === 'v2' && regeneratedResults ? 'Scored against your fixed Version 2 resume.' : 'How well your resume matches the job description keywords — no Jobscan needed.'}</div>
                     </div>
                     <div style={{ textAlign: 'center' }}>
                       <div style={{
                         width: '72px', height: '72px', borderRadius: '50%',
-                        background: `conic-gradient(${results.atsMatch.score >= 75 ? '#10b981' : results.atsMatch.score >= 55 ? '#f59e0b' : '#ef4444'} ${results.atsMatch.score * 3.6}deg, #2a2a2a 0deg)`,
+                        background: `conic-gradient(${atsMatch.score >= 75 ? '#10b981' : atsMatch.score >= 55 ? '#f59e0b' : '#ef4444'} ${atsMatch.score * 3.6}deg, #2a2a2a 0deg)`,
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         position: 'relative',
                       }}>
                         <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'var(--surface)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-                          <span style={{ fontFamily: 'Inter', fontWeight: 900, fontSize: '1.1rem', color: results.atsMatch.score >= 75 ? '#10b981' : results.atsMatch.score >= 55 ? '#f59e0b' : '#ef4444', lineHeight: 1 }}>{results.atsMatch.score}%</span>
+                          <span style={{ fontFamily: 'Inter', fontWeight: 900, fontSize: '1.1rem', color: atsMatch.score >= 75 ? '#10b981' : atsMatch.score >= 55 ? '#f59e0b' : '#ef4444', lineHeight: 1 }}>{atsMatch.score}%</span>
                         </div>
                       </div>
                       <div style={{ fontSize: '0.65rem', color: 'var(--text-soft)', marginTop: '4px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                        {results.atsMatch.score >= 75 ? 'Strong' : results.atsMatch.score >= 55 ? 'Good' : 'Needs work'}
+                        {atsMatch.score >= 75 ? 'Strong' : atsMatch.score >= 55 ? 'Good' : 'Needs work'}
                       </div>
                     </div>
                   </div>
@@ -1578,11 +1624,11 @@ export default function Home() {
                     <div style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-soft)', marginBottom: '10px' }}>Score guide</div>
                     <div style={{ display: 'flex', gap: '6px' }}>
                       {[
-                        { label: 'Poor', range: '0–40', color: '#ef4444', bg: 'rgba(239,68,68,0.08)', active: results.atsMatch.score <= 40 },
-                        { label: 'Needs Work', range: '41–54', color: '#f97316', bg: 'rgba(249,115,22,0.08)', active: results.atsMatch.score >= 41 && results.atsMatch.score <= 54 },
-                        { label: 'Good', range: '55–74', color: '#f59e0b', bg: 'rgba(245,158,11,0.08)', active: results.atsMatch.score >= 55 && results.atsMatch.score <= 74 },
-                        { label: 'Strong', range: '75–89', color: '#10b981', bg: 'rgba(16,185,129,0.08)', active: results.atsMatch.score >= 75 && results.atsMatch.score <= 89 },
-                        { label: 'Excellent', range: '90+', color: '#00D1FF', bg: 'rgba(0,209,255,0.08)', active: results.atsMatch.score >= 90 },
+                        { label: 'Poor', range: '0–40', color: '#ef4444', bg: 'rgba(239,68,68,0.08)', active: atsMatch.score <= 40 },
+                        { label: 'Needs Work', range: '41–54', color: '#f97316', bg: 'rgba(249,115,22,0.08)', active: atsMatch.score >= 41 && atsMatch.score <= 54 },
+                        { label: 'Good', range: '55–74', color: '#f59e0b', bg: 'rgba(245,158,11,0.08)', active: atsMatch.score >= 55 && atsMatch.score <= 74 },
+                        { label: 'Strong', range: '75–89', color: '#10b981', bg: 'rgba(16,185,129,0.08)', active: atsMatch.score >= 75 && atsMatch.score <= 89 },
+                        { label: 'Excellent', range: '90+', color: '#00D1FF', bg: 'rgba(0,209,255,0.08)', active: atsMatch.score >= 90 },
                       ].map(({ label, range, color, bg, active }) => (
                         <div key={label} style={{
                           flex: 1, textAlign: 'center', padding: '6px 4px',
@@ -1597,28 +1643,29 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {results.atsMatch.missing && results.atsMatch.missing.length > 0 && (
+                  {atsMatch.missing && atsMatch.missing.length > 0 && (
                     <div style={{ marginBottom: '12px' }}>
-                      <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#ef4444', marginBottom: '8px' }}>Missing keywords ({results.atsMatch.missing.length})</div>
+                      <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#ef4444', marginBottom: '8px' }}>Missing keywords ({atsMatch.missing.length})</div>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                        {results.atsMatch.missing.map(kw => (
+                        {atsMatch.missing.map(kw => (
                           <span key={kw} style={{ padding: '3px 10px', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: '999px', fontSize: '0.75rem', color: '#ef4444', fontFamily: 'Inter' }}>{kw}</span>
                         ))}
                       </div>
                     </div>
                   )}
 
-                  {results.atsMatch.matched && results.atsMatch.matched.length > 0 && (
+                  {atsMatch.matched && atsMatch.matched.length > 0 && (
                     <div>
-                      <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#10b981', marginBottom: '8px' }}>Matched keywords ({results.atsMatch.matched.length})</div>
+                      <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#10b981', marginBottom: '8px' }}>Matched keywords ({atsMatch.matched.length})</div>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                        {results.atsMatch.matched.slice(0, 20).map(kw => (
+                        {atsMatch.matched.slice(0, 20).map(kw => (
                           <span key={kw} style={{ padding: '3px 10px', background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: '999px', fontSize: '0.75rem', color: '#10b981', fontFamily: 'Inter' }}>✓ {kw}</span>
                         ))}
                       </div>
                     </div>
                   )}
                 </div>
+                })()
               )}
 
               {activeResultTab === 'recruiter' && results.recruiterNotes && (
