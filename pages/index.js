@@ -23,9 +23,13 @@ function clientScoreATS(resumeText, jobDescription) {
     'looking','hybrid','onsite','remote','days','week','global','group','firm',
     'what','three','fortune','world','include','two','four','five','six',
     'like','just','make','know','want','good','great','best','first','last',
+    'salary','compensation','depending','factors','competitive','financial',
+    'dental','vision','insurance','matching','holidays','access','workplace',
+    'category','programs','coaching','mentoring','orientation','ranging',
+    'qualifications','comprehensive','preferred','required','eligible','typical',
   ])
   const jdLower = jobDescription.toLowerCase().replace(/[^a-z0-9\s]/g, ' ')
-  const jdWords = jdLower.split(/\s+/).filter(w => w.length > 3 && !STOP.has(w))
+  const jdWords = jdLower.split(/\s+/).filter(w => w.length >= 6 && !STOP.has(w))
   const freq = {}
   jdWords.forEach(w => { freq[w] = (freq[w] || 0) + 1 })
   const candidates = Object.entries(freq)
