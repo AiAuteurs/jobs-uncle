@@ -350,40 +350,70 @@ Generate both versions. Each should be complete and standalone — same experien
 ` : careerType === 'freelance' ? `
 RESUME REQUIREMENTS — FREELANCE / CONTRACT CAREER:
 
-YOUR JOB: Act as a master resume writer, not a transcriptionist. Read what you're given, extract what matters for THIS role, and build the strongest possible case for this candidate — in one tight, compelling document.
+YOUR JOB: Act as a master resume writer, not a transcriptionist. Read what you're given, extract what matters for THIS role, and build the strongest possible case in a hybrid format that reads beautifully for humans and passes ATS.
 
-STEP 1 — READ THE INPUT AND IDENTIFY WHAT YOU HAVE:
-- LONG LINKEDIN HISTORY or CLIENT DUMP (20+ engagements, lots of short gigs): You have hours of footage. Cut a tight film. Read everything. Pick the 6-8 most impressive and relevant engagements for this specific job. Group and consolidate. Use client names as proof woven into prose. The rest informs your writing — it doesn't go in the resume.
-- CLEAN RESUME (already formatted, clear sections): Tailor it. Tighten the language. Consolidate redundant entries. Optimize for the job description.
-- MIXED OR ROUGH INPUT: Extract what's there, build the best shape possible, flag real gaps in recruiter notes.
+STEP 1 — READ THE INPUT:
+- LONG LINKEDIN HISTORY / CLIENT DUMP: You have hours of footage. Cut a tight film. Read everything. Pick the most impressive and relevant work for this specific role. Everything else informs your writing — it doesn't go in the resume.
+- CLEAN RESUME: Tailor it. Apply the hybrid format below.
+- ROUGH / MIXED INPUT: Extract what's there, build the best shape, flag gaps in recruiter notes.
 
-STEP 2 — APPLY THESE RULES:
+STEP 2 — USE THE HYBRID FORMAT (mandatory for freelance):
+
+Pure skills resumes fail ATS. Pure job lists bury the story. The hybrid solves both.
+
+--- PART 1: COMPETENCY BLOCKS (top half — for humans) ---
+3-4 blocks grouped by skill area or content type that maps directly to THIS job description's key requirements.
+Each block:
+- Bold header that mirrors a key requirement from the JD
+- 3-5 bullet points, each = specific work + the client/employer who received it
+- NO dates in this section — the work speaks, not the timeline
+- Read as proof of capability, not job descriptions
+
+Example for a narrative editor role:
+**Narrative & Long-Form Editorial**
+• Rebuilt Super Bowl spot script and storytelling for Samsara — Made Studios x NASCAR champion Jesse Love
+• Multi-episode TV series editor, Tastemade's Beyond The Block — large footage volumes, character-driven construction
+• Mini-doc series, Golden State Warriors — interview-heavy, archive integration, broadcast delivery
+• Long-form and documentary editorial for Blue Chalk Media, UPS, Bonfire Labs
+
+Example for AI credentials:
+**AI-Native Filmmaking & Emerging Workflows**
+• Two-time finalist, Alibaba WAN AI Film Competition and Runway GEN-48
+• Founding Member, Wonder Studios — elite AI-native creative studio backed by LocalGlobe, OpenAI, DeepMind investors
+• Creative Partner, Runway ML — Bangkok Runway Meetups, generative tools integrated into professional workflows
+• ByteDance Creative Partner (Dreamina) — early access before public release
+
+--- PART 2: SKILLS ---
+Tools, platforms, software. Clean categories, one line each.
+
+--- PART 3: EMPLOYMENT HISTORY (bottom — for ATS only) ---
+Bare chronological strip. Company, title, dates. NO descriptions — the work was told in Part 1.
+Label: **Employment History**
+Format: **Company** | Title | Dates
+One line per entry. All PROTECTED jobs from the manifest must appear here.
+This section's only job is to give ATS systems parseable dates and titles.
+
+FULL STRUCTURE:
+1. Contact header
+2. Summary (2-3 sentences — best credential for THIS role + the differentiator + never years of experience)
+3. Competency Blocks
+4. Skills
+5. Employment History
+6. Education
 
 JOB INCLUSION RULES:
 ${jobManifest}
+All PROTECTED jobs must appear in the Employment History strip.
 
-RULE 1 — PROTECTED JOBS (marked 🔒): Must be represented — consolidated into narrative prose is fine if it tells the same story.
-RULE 2 — DROPPABLE JOBS (marked ○): Omit if redundant AND no gap is created.
-RULE 3 — 7-YEAR HARD FLOOR: All work from the last 7 years must appear, even if consolidated.
-RULE 4 — NAMED CREDENTIAL PRESERVATION: Every recognizable brand, agency, client, award, or festival selection in the source that is relevant to THIS role must appear by name. Goodby Silverstein, Michael Bay, Disney, NVIDIA, Cannes, Alibaba WAN — credibility anchors. Never genericize them. Never invent ones that aren't there.
+NAMED CREDENTIAL PRESERVATION: Every recognizable brand, agency, award, or festival in the source relevant to THIS role must appear by name in the competency blocks. Goodby Silverstein, Michael Bay, Disney, NVIDIA, Alibaba WAN, Wonder Studios — never genericize them.
 
-VOICE:
-Write like a human, not a template. Short declarative sentences. Name the actual thing. Let credentials speak.
-BANNED: "Proven expertise", "Leveraged X to drive Y", "Delivered premium anything", "Maintained brand voice", "Demonstrated technical proficiency", "Results-driven", "Strong track record", any phrase that works on any resume for any person.
+VOICE: Write like a human. Short declarative sentences. Name the actual thing.
+BANNED: "Proven expertise", "Leveraged X to drive Y", "Delivered premium anything", "Maintained brand voice", "Demonstrated technical proficiency", "Results-driven", "Strong track record"
 
-CONSOLIDATION RULE — CRITICAL:
-Never one entry per client. Group by era, type, or agency relationship.
-Example of right: "Cut campaigns for Xfinity, Doritos, and HP at Goodby Silverstein & Partners. National TV for SharkNinja. Mini-docs for Golden State Warriors. Sizzle reels for NVIDIA, Oracle, and ServiceNow." — that's one narrative block covering a decade of work.
-Example of wrong: 10 separate job entries for the same type of work.
-
-SUMMARY — 2-3 sentences max:
-Lead with the single most impressive specific credential for THIS role. Establish range. Name the differentiator nobody else has — AI tools, coding ability, festival selections, legendary directors. Never generic. Never years of experience.
-
-FORMAT: Summary, Experience (consolidated), Skills, Education
-Bold (**text**) for section headers and employer group names only.
-Implied first person — NO "I", "my", "me". Every line leads with verb or the work.
-Mirror job description keywords naturally for ATS — never at the expense of voice.
-ANTI-FABRICATION: Every claim must exist in the source. Reframing is allowed. Inventing is not.
+Bold (**text**) for section headers and competency block titles only.
+Implied first person — NO "I", "my", "me".
+Mirror job description keywords naturally in competency blocks for ATS.
+ANTI-FABRICATION: Every claim must exist in the source. Reframing allowed. Inventing is not.
 TITLE INTEGRITY: Never assign a title the candidate hasn't held.
 ` : `
 RESUME REQUIREMENTS — FULL-TIME / IN-HOUSE CAREER:
