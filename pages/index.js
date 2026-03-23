@@ -152,6 +152,7 @@ export default function Home() {
   const [isPlusUser, setIsPlusUser] = useState(false)
   const [showPlusPaywall, setShowPlusPaywall] = useState(false)
   const [dualVersionEnabled, setDualVersionEnabled] = useState(false)
+  const [activeResultTab, setActiveResultTab] = useState('resume') // 'resume' | 'cover' | 'recruiter' | 'dm'
   const [activeResume, setActiveResume] = useState('a') // 'a' | 'b'
   const [showRestore, setShowRestore] = useState(false)
   const [restoreEmail, setRestoreEmail] = useState('')
@@ -367,6 +368,7 @@ export default function Home() {
       }
 
       setResults(data)
+      setActiveResultTab('resume')
 
       // 🎉 Ta-da + confetti
       playTada()
@@ -1384,7 +1386,7 @@ export default function Home() {
                     Looks great. 🎉
                   </div>
                   <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', color: '#444444', lineHeight: 1.6 }}>
-                    Tailored to this role. Download below — or scroll down for your cover letter, recruiter analysis, and hiring manager DM.
+                    Tailored to this role. Switch tabs for your cover letter, recruiter analysis, and hiring manager DM.
                   </div>
                 </div>
               </div>
@@ -1431,146 +1433,145 @@ export default function Home() {
                 </div>
               )}
 
-              <div className="result-section">
-                <div className="result-section-title">Resume</div>
-                {results.dualVersion && activeVersion === 'v1' ? (
+              {/* RESULT TABS */}
+              {(() => {
+                const tabs = [
+                  { id: 'resume', label: '📄 Resume' },
+                  { id: 'cover', label: '✉️ Cover Letter' },
+                  { id: 'recruiter', label: '🔍 Recruiter Analysis' },
+                  { id: 'dm', label: '💬 Hiring Manager DM' },
+                ]
+                const activeResumeContent = activeVersion === 'v2' && regeneratedResults ? regeneratedResults.resume : results.resume
+                const activeCoverContent = activeVersion === 'v2' && regeneratedResults ? regeneratedResults.coverLetter : results.coverLetter
+
+                return (
                   <>
-                    <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
-                      <button
-                        onClick={() => setActiveResume('a')}
-                        style={{ padding: '6px 16px', background: activeResume === 'a' ? '#6366f1' : 'transparent', color: activeResume === 'a' ? 'white' : 'var(--text-soft)', border: `1.5px solid ${activeResume === 'a' ? '#6366f1' : 'var(--border)'}`, borderRadius: '20px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}
-                      >
-                        Version A &mdash; Leadership
-                      </button>
-                      <button
-                        onClick={() => setActiveResume('b')}
-                        style={{ padding: '6px 16px', background: activeResume === 'b' ? '#6366f1' : 'transparent', color: activeResume === 'b' ? 'white' : 'var(--text-soft)', border: `1.5px solid ${activeResume === 'b' ? '#6366f1' : 'var(--border)'}`, borderRadius: '20px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}
-                      >
-                        Version B &mdash; Technical
-                      </button>
+                    {/* TAB BAR */}
+                    <div style={{
+                      display: 'flex', gap: '4px', marginBottom: '0',
+                      borderBottom: '1px solid #2a2a2a',
+                      overflowX: 'auto', paddingBottom: '0',
+                    }}>
+                      {tabs.map(tab => (
+                        <button
+                          key={tab.id}
+                          onClick={() => setActiveResultTab(tab.id)}
+                          style={{
+                            padding: '10px 18px',
+                            background: 'none', border: 'none',
+                            borderBottom: activeResultTab === tab.id ? '2px solid #00D1FF' : '2px solid transparent',
+                            color: activeResultTab === tab.id ? '#00D1FF' : '#666',
+                            fontSize: '0.82rem', fontWeight: activeResultTab === tab.id ? 700 : 500,
+                            cursor: 'pointer', fontFamily: 'Inter, sans-serif',
+                            whiteSpace: 'nowrap', transition: 'all 0.15s',
+                            marginBottom: '-1px',
+                          }}
+                        >
+                          {tab.label}
+                        </button>
+                      ))}
                     </div>
-                    <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(activeResume === 'a' ? results.resumeA : results.resumeB)}} />
-                  </>
-                ) : (
-                  <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(
-                    activeVersion === 'v2' && regeneratedResults
-                      ? regeneratedResults.resume
-                      : results.resume
-                  )}} />
-                )}
-              </div>
 
-              <div className="result-section">
-                <div className="result-section-title">Cover Letter</div>
-                <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(
-                  activeVersion === 'v2' && regeneratedResults
-                    ? regeneratedResults.coverLetter
-                    : results.coverLetter
-                )}} />
-              </div>
+                    {/* TAB PANELS */}
+                    <div style={{ paddingTop: '24px' }}>
 
-              {results.recruiterNotes && (
-                <div className="result-section" style={{ borderLeft: '3px solid #f59e0b', background: 'rgba(245,158,11,0.05)' }}>
-                  <div className="result-section-title">Recruiter &amp; ATS Analysis</div>
-                  <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '8px' }}>ATS compatibility check plus honest gaps a recruiter would flag &mdash; and how to own them.</div>
-                  <div style={{ fontSize: '0.72rem', color: 'var(--text-soft)', marginBottom: '12px', padding: '8px 12px', background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '6px', lineHeight: 1.5 }}>
-                    <strong>Important:</strong> This analysis is AI-generated and may contain errors. Always verify all dates, facts, and recommendations against your original resume before taking any action. JobsUncle.ai provides this as a general career tool only and accepts no liability for the accuracy of this analysis or any outcomes resulting from its use.
-                  </div>
-                  <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.recruiterNotes)}} />
-
-                  {/* REGENERATE CTA */}
-                  <div style={{
-                    marginTop: '20px', paddingTop: '16px',
-                    borderTop: '1px solid rgba(245,158,11,0.2)',
-                    display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap'
-                  }}>
-                    {isPaid ? (
-                      <>
-                        <button
-                          onClick={handleRegenerate}
-                          disabled={regenerating || !!regeneratedResults}
-                          style={{
-                            padding: '9px 22px',
-                            background: regeneratedResults ? '#22c55e' : regenerating ? '#aaa' : '#f59e0b',
-                            color: 'white', border: 'none', borderRadius: '6px',
-                            fontSize: '0.85rem', fontWeight: 700,
-                            cursor: regenerating || regeneratedResults ? 'default' : 'pointer',
-                            transition: 'background 0.2s'
-                          }}
-                        >
-                          {regeneratedResults
-                            ? '✓ Version 2 ready'
-                            : regenerating
-                            ? '⟳ Applying fixes...'
-                            : '✦ Apply fixes & regenerate'}
-                        </button>
-                        {!regeneratedResults && !regenerating && (
-                          <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>
-                            Rewrites your resume applying every fix above
-                          </span>
-                        )}
-                      </>
-                    ) : (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                        <button
-                          onClick={() => { setPaywallSigninMode(false); setShowPaywall(true) }}
-                          style={{
-                            padding: '9px 22px', background: '#f59e0b', color: 'white',
-                            border: 'none', borderRadius: '6px', fontSize: '0.85rem',
-                            fontWeight: 700, cursor: 'pointer'
-                          }}
-                        >
-                          ✦ Apply fixes &amp; regenerate
-                        </button>
-                        <span style={{
-                          background: '#f59e0b', color: 'white', fontSize: '0.6rem', fontWeight: 700,
-                          letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase'
-                        }}>Pro</span>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>
-                          Upgrade to rewrite with fixes applied
-                        </span>
-                      </div>
-                    )}
-                    {regenError && (
-                      <div style={{ width: '100%', color: '#ef4444', fontSize: '0.8rem', marginTop: '4px' }}>
-                        {regenError}
-                      </div>
-                    )}
-
-                    {regenerating && (
-                      <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '12px', marginTop: '12px', padding: '12px 14px', background: 'rgba(124,92,252,0.08)', borderRadius: '8px' }}>
-                        <img
-                          src="/jobsuncle-logo.png"
-                          alt=""
-                          style={{ width: 44, height: 'auto', flexShrink: 0, animation: 'logo-spin-pause 2s ease-in-out infinite', transformOrigin: 'center center' }}
-                        />
-                        <div>
-                          <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ink)' }}>Applying every fix from the analysis...</div>
-                          <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', marginTop: '2px' }}>Rewriting your resume and cover letter. About 15 seconds.</div>
+                      {/* RESUME TAB */}
+                      {activeResultTab === 'resume' && (
+                        <div className="result-section">
+                          {results.dualVersion && activeVersion === 'v1' ? (
+                            <>
+                              <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                                <button onClick={() => setActiveResume('a')} style={{ padding: '6px 16px', background: activeResume === 'a' ? '#6366f1' : 'transparent', color: activeResume === 'a' ? 'white' : 'var(--text-soft)', border: `1.5px solid ${activeResume === 'a' ? '#6366f1' : 'var(--border)'}`, borderRadius: '20px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}>
+                                  Version A — Leadership
+                                </button>
+                                <button onClick={() => setActiveResume('b')} style={{ padding: '6px 16px', background: activeResume === 'b' ? '#6366f1' : 'transparent', color: activeResume === 'b' ? 'white' : 'var(--text-soft)', border: `1.5px solid ${activeResume === 'b' ? '#6366f1' : 'var(--border)'}`, borderRadius: '20px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}>
+                                  Version B — Technical
+                                </button>
+                              </div>
+                              <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(activeResume === 'a' ? results.resumeA : results.resumeB)}} />
+                            </>
+                          ) : (
+                            <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(activeResumeContent)}} />
+                          )}
                         </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
+                      )}
 
-              {results.hiringManagerDM && (
-                <div className="result-section" style={{ borderLeft: '3px solid #6366f1', background: 'rgba(99,102,241,0.05)' }}>
-                  <div className="result-section-title">Hiring Manager DM</div>
-                  <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '12px' }}>Skip the line. Send this directly to the hiring manager on LinkedIn or email.</div>
-                  <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.hiringManagerDM)}} />
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(stripMarkdown(results.hiringManagerDM))
-                      setDmCopied(true)
-                      setTimeout(() => setDmCopied(false), 2000)
-                    }}
-                    style={{ marginTop: '12px', padding: '8px 20px', background: dmCopied ? '#22c55e' : '#6366f1', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s' }}
-                  >
-                    {dmCopied ? '✓ Copied!' : 'Copy DM'}
-                  </button>
-                </div>
-              )}
+                      {/* COVER LETTER TAB */}
+                      {activeResultTab === 'cover' && (
+                        <div className="result-section">
+                          <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(activeCoverContent)}} />
+                        </div>
+                      )}
+
+                      {/* RECRUITER ANALYSIS TAB */}
+                      {activeResultTab === 'recruiter' && results.recruiterNotes && (
+                        <div className="result-section" style={{ borderLeft: '3px solid #f59e0b', background: 'rgba(245,158,11,0.05)' }}>
+                          <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '8px' }}>ATS compatibility check plus honest gaps a recruiter would flag — and how to own them.</div>
+                          <div style={{ fontSize: '0.72rem', color: 'var(--text-soft)', marginBottom: '12px', padding: '8px 12px', background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '6px', lineHeight: 1.5 }}>
+                            <strong>Important:</strong> This analysis is AI-generated and may contain errors. Always verify all dates, facts, and recommendations against your original resume before taking any action. JobsUncle.ai provides this as a general career tool only and accepts no liability for the accuracy of this analysis or any outcomes resulting from its use.
+                          </div>
+                          <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.recruiterNotes)}} />
+
+                          {/* REGENERATE CTA */}
+                          <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid rgba(245,158,11,0.2)', display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                            {isPaid ? (
+                              <>
+                                <button
+                                  onClick={handleRegenerate}
+                                  disabled={regenerating || !!regeneratedResults}
+                                  style={{ padding: '9px 22px', background: regeneratedResults ? '#22c55e' : regenerating ? '#aaa' : '#f59e0b', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 700, cursor: regenerating || regeneratedResults ? 'default' : 'pointer', transition: 'background 0.2s' }}
+                                >
+                                  {regeneratedResults ? '✓ Version 2 ready' : regenerating ? '⟳ Applying fixes...' : '✦ Apply fixes & regenerate'}
+                                </button>
+                                {!regeneratedResults && !regenerating && (
+                                  <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>Rewrites your resume applying every fix above</span>
+                                )}
+                              </>
+                            ) : (
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                                <button onClick={() => { setPaywallSigninMode(false); setShowPaywall(true) }} style={{ padding: '9px 22px', background: '#f59e0b', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer' }}>
+                                  ✦ Apply fixes &amp; regenerate
+                                </button>
+                                <span style={{ background: '#f59e0b', color: 'white', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro</span>
+                                <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>Upgrade to rewrite with fixes applied</span>
+                              </div>
+                            )}
+                            {regenError && <div style={{ width: '100%', color: '#ef4444', fontSize: '0.8rem', marginTop: '4px' }}>{regenError}</div>}
+                            {regenerating && (
+                              <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '12px', marginTop: '12px', padding: '12px 14px', background: 'rgba(124,92,252,0.08)', borderRadius: '8px' }}>
+                                <img src="/jobsuncle-logo.png" alt="" style={{ width: 44, height: 'auto', flexShrink: 0, animation: 'logo-spin-pause 2s ease-in-out infinite', transformOrigin: 'center center' }} />
+                                <div>
+                                  <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ink)' }}>Applying every fix from the analysis...</div>
+                                  <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', marginTop: '2px' }}>Rewriting your resume and cover letter. About 15 seconds.</div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* HIRING MANAGER DM TAB */}
+                      {activeResultTab === 'dm' && results.hiringManagerDM && (
+                        <div className="result-section" style={{ borderLeft: '3px solid #6366f1', background: 'rgba(99,102,241,0.05)' }}>
+                          <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '12px' }}>Skip the line. Send this directly to the hiring manager on LinkedIn or email.</div>
+                          <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.hiringManagerDM)}} />
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(stripMarkdown(results.hiringManagerDM))
+                              setDmCopied(true)
+                              setTimeout(() => setDmCopied(false), 2000)
+                            }}
+                            style={{ marginTop: '12px', padding: '8px 20px', background: dmCopied ? '#22c55e' : '#6366f1', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s' }}
+                          >
+                            {dmCopied ? '✓ Copied!' : 'Copy DM'}
+                          </button>
+                        </div>
+                      )}
+
+                    </div>
+                  </>
+                )
+              })()}
 
               {/* ATS CHEAT SHEET */}
               <div className="result-section" style={{ borderLeft: '3px solid #10b981', background: 'rgba(16,185,129,0.04)' }}>

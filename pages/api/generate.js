@@ -294,6 +294,7 @@ export default async function handler(req, res) {
   }
 
   const dualVersion = (Array.isArray(fields.dualVersion) ? fields.dualVersion[0] : fields.dualVersion) === 'true'
+  const careerType = (Array.isArray(fields.careerType) ? fields.careerType[0] : fields.careerType) || 'freelance'
 
   if (!resumeFile || !jobDescription) {
     return res.status(400).json({ error: 'Missing resume file or job description' })
@@ -346,73 +347,86 @@ RESUME VERSION B — TECHNICAL/ACHIEVEMENT FOCUS:
 
 Generate both versions. Each should be complete and standalone — same experience, different lens.
 - Write in implied first person throughout both versions — NO "I", "my", or "me" anywhere. Every bullet leads with an action verb. "Engineered solution" not "I engineered"
-` : `
-RESUME REQUIREMENTS:
+` : careerType === 'freelance' ? `
+RESUME REQUIREMENTS — FREELANCE / CONTRACT CAREER:
+
+THIS PERSON IS A FREELANCER. A long list of short engagements is their track record, not a red flag.
+Your job is to write a career narrative, not a timesheet.
 
 JOB INCLUSION RULES — READ BEFORE WRITING:
 ${jobManifest}
 
-RULE 1 — PROTECTED JOBS (marked 🔒 above): These MUST appear in the resume.
-  Do not remove, merge, or skip them under any circumstances.
-  You MAY reframe bullet points to emphasize transferable skills relevant to this role.
-  Even if the job seems irrelevant (e.g. warehouse, retail), it fills a real gap on the timeline.
-  Removing it would create a suspicious gap that costs the applicant interviews.
+RULE 1 — PROTECTED JOBS (marked 🔒): Must appear, but can be consolidated into narrative prose — not forced into separate entries if they tell the same story.
+RULE 2 — DROPPABLE JOBS (marked ○): Omit if redundant AND removal creates no timeline gap.
+RULE 3 — 7-YEAR HARD FLOOR: All work from the last 7 years must be represented, even if consolidated.
+RULE 4 — NAMED CLIENT PRESERVATION: Every recognizable brand, agency, or client named in the source resume MUST appear by name in the output. Disney, NVIDIA, Goodby Silverstein, Red Car, Salesforce — these are credibility anchors. Never genericize them.
 
-RULE 2 — DROPPABLE JOBS (marked ○ above): Use judgment.
-  If the job adds nothing to this application AND its removal creates no gap, you may omit it.
-  If in doubt, keep it — a full timeline is safer than a tight but gappy one.
+VOICE — MOST IMPORTANT:
+Write like a specific human being, not a LinkedIn template.
+BANNED PHRASES: "Proven expertise in", "Leveraged X to drive Y", "Collaborated with cross-functional stakeholders", "Delivered premium [anything]", "Maintained brand voice", "Translated business strategy", "Demonstrated technical proficiency", "Results-driven", "Strong track record"
+INSTEAD: Name the actual thing. Short declarative sentences. Let credentials speak.
 
-RULE 3 — 7-YEAR HARD FLOOR: Never omit any job from the last 7 years, regardless of relevance.
+FREELANCE FORMATTING RULES:
+- DO NOT write one job entry per client. That produces an endless list that buries the story.
+- CONSOLIDATE similar engagements: group related work under a single entry or narrative block, weaving client names as proof points IN the prose. Example: "Cut campaigns for Xfinity, Doritos, and HP at Goodby Silverstein & Partners (2020–2024). Also cut national TV spots for SharkNinja and broadcast content for Disney ABC." — that's two lines, not six entries.
+- LEAD with the most impressive credential for THIS role, regardless of date
+- USE client names as proof woven into bullets — not as separate headers
+- Each role/group gets 2-3 tight sentences max. Flowing prose, not bullet lists within entries.
 
-RULE 4 — JOB COUNT INTEGRITY: Before finalizing, count the jobs in your output.
-  You must include all PROTECTED jobs. If your output has fewer jobs than the PROTECTED COUNT above, stop and add the missing ones.
+SUMMARY — make them sound exceptional:
+2-3 sentences. Lead with the single most impressive, specific credential for this role. Establish range. Name the differentiator nobody else has — whether that's coding ability, AI-native skills, festival selections, or working with legendary collaborators. Never generic.
+Bad: "Senior editor with 20+ years of brand storytelling experience."
+Good: "36 years cutting — Super Bowl campaigns, Golden State Warriors mini-docs, AI festival selection at Cannes 2026. Founding creative partner at Runway with early Seedance 2.0 access. The rare editor who codes and builds AI-native workflows from scratch."
 
-AFTER applying the rules above:
+If the candidate has skills beyond their primary role (coding, directing, AI tools, product building) — lead with that combination as the differentiator.
 
-VOICE — THIS IS THE MOST IMPORTANT INSTRUCTION:
-Write like a specific human being, not a LinkedIn template. The single biggest failure mode in AI-generated resumes is generic corporate language that sounds like every other resume. Avoid it completely.
+FORMAT: Summary, Experience (consolidated narrative), Skills, Education
+Use markdown bold (**text**) for employer/group headers and section titles only.
+Format each consolidated group as: **Client / Agency Name** | Role | Date range
+Write in implied first person — NO "I", "my", or "me". Lead every line with an action verb or the work itself.
+Mirror job description keywords naturally for ATS — never at the expense of voice.
+ANTI-FABRICATION: Every claim must come from the source resume. Reframing is allowed. Inventing is not.
+TITLE INTEGRITY: Never assign a title the candidate hasn't held.
+FLAG unprofessional email addresses in recruiter notes only.
+` : `
+RESUME REQUIREMENTS — FULL-TIME / IN-HOUSE CAREER:
 
-BANNED PHRASES — never use these or anything like them:
-- "Proven expertise in..."
-- "Passionate about..."
-- "Leveraged [skill] to drive [outcome]..."
-- "Collaborated with cross-functional stakeholders..."
-- "Delivered premium [anything]..."
-- "Maintained brand voice and visual standards..."
-- "Translated business strategy into..."
-- "Demonstrated technical proficiency..."
-- "Strong track record of..."
-- "Results-driven professional..."
-- Any phrase that could appear on ANY resume for ANY person in ANY industry
+THIS PERSON HAS A TRADITIONAL EMPLOYMENT HISTORY. Format this as a classic chronological resume.
+Stability, tenure, scope, and internal growth are the story. Make those the headline.
 
-INSTEAD — write with specificity and confidence:
-- Name the actual thing: not "national TV spots" but "national TV spots on RED cameras"
-- Name the actual client/brand/director where source resume provides it
-- Use short, declarative sentences. "Cut the Super Bowl spot. Full creative latitude." beats "Led creative team through Super Bowl campaign with full creative latitude."
-- Let credentials speak for themselves. Don't editorialize. "Michael Bay. Saturn. 1998." is more powerful than "Established foundation in premium commercial storytelling."
-- If the source resume has a remarkable credential, put it in the summary — don't bury it in a bullet
+JOB INCLUSION RULES — READ BEFORE WRITING:
+${jobManifest}
 
-SUMMARY RULE: The summary must make a recruiter stop scrolling. It should read like the first line of a great bio, not the opening of a cover letter. Lead with the most impressive, specific thing about this person. Two or three sentences max. No corporate filler. No "I am a [title] with X years of experience."
+RULE 1 — PROTECTED JOBS (marked 🔒): Must appear. Do not remove or merge.
+RULE 2 — DROPPABLE JOBS (marked ○): Omit only if no gap is created and the role adds nothing.
+RULE 3 — 7-YEAR HARD FLOOR: Never omit any job from the last 7 years.
+RULE 4 — NAMED CLIENT PRESERVATION: Every recognizable brand or employer named in the source resume stays in the output by name.
 
-- Lead with the single most relevant credential for THIS role, stated specifically
-- Use strong action verbs and concrete results where possible
-- Turn bullet points into achievement-focused statements — add metrics wherever the background supports it
-- Do NOT include an objective statement
-- Format cleanly with clear sections: Summary, Experience, Skills, Education
-- Use markdown bold (**text**) for company names and section headers ONLY — so they render visually on screen. Format each job as: **Company Name** | Role Title | Dates
-- Mirror keywords and phrases from the job description naturally throughout — optimize for ATS without sounding robotic
-- For PROTECTED jobs that seem irrelevant to this role: reframe bullets around transferable skills (customer interaction, reliability, communication, process adherence) — do NOT fabricate skills not implied by the role
-- Do NOT pad or embellish — be ruthlessly relevant
-- REORDER EXPERIENCE for relevance: If an older role is more relevant to this specific job than a recent one, move it higher. Lead with what matters to THIS employer, not just what's most recent. A 2019 healthcare billing role beats a 2023 veterinary receptionist role for a health insurance job.
-- SECTION HEADERS when reordering: If you reorder jobs so that older roles appear before newer ones, you MUST split the experience section into two labeled groups to avoid confusing recruiters and ATS systems:
-  Use "RELEVANT EXPERIENCE" as the header for the most relevant roles (regardless of date).
-  Use "ADDITIONAL EXPERIENCE" as the header for the remaining roles.
-  This is standard practice and signals intentional curation, not a mistake.
-- FLAG bad email addresses in recruiter notes: if the email looks unprofessional (e.g. pet names, nicknames, random numbers), flag it and suggest a professional alternative
-- Write in implied first person throughout — NO "I", "my", or "me" anywhere. Every bullet and sentence leads with an action verb or noun. "Led a team of 10" not "I led a team of 10"
-- NAMED CLIENT/BRAND PRESERVATION — CRITICAL: Every named brand, major agency, notable studio, or recognizable client mentioned in the source resume MUST appear in the tailored output by name. These are credibility anchors. Never consolidate or genericize them. "Agency clients included Disney, NVIDIA, and Salesforce" is always correct. "Major entertainment and tech clients" is never acceptable. If the source resume names Disney, NVIDIA, Goodby Silverstein, Red Car, Salesforce, Apple, Netflix, or any other recognizable name — it stays, verbatim, in the output. This rule overrides any brevity or relevance judgment.
-- ANTI-FABRICATION — HARD RULE: Every bullet point must be grounded in something explicitly stated or directly implied in the source resume. Do NOT invent responsibilities, client types, tools, or outcomes not present in the source. Do NOT reframe a classroom teacher's work as "client discovery sessions", "enterprise stakeholder management", or "technical requirements gathering" unless those exact activities are described. Reframing transferable skills is allowed. Inventing enterprise experience for someone who doesn't have it is not. A false bullet is worse than no bullet — it will be caught in an interview and destroy credibility.
-- TITLE INTEGRITY — HARD RULE: Never use "Director-level", "VP-level", "Senior", or any seniority prefix in the summary unless that exact title appears in the source resume. If the candidate is a teacher applying for a Director role, the summary must reflect what they ARE, not what they're applying for. Frame it as trajectory and capability, not a title they haven't earned. "Learning Experience Designer with 8+ years" is correct. "Director-level Learning Experience Designer" is not, unless they've held that title.
+VOICE — MOST IMPORTANT:
+Write like a specific human being, not a LinkedIn template.
+BANNED PHRASES: "Proven expertise in", "Leveraged X to drive Y", "Collaborated with cross-functional stakeholders", "Delivered premium [anything]", "Maintained brand voice", "Translated business strategy", "Demonstrated technical proficiency", "Results-driven", "Strong track record"
+INSTEAD: Name the actual thing. Specific scope, specific outcomes, specific teams. Short declarative sentences.
+
+FULL-TIME FORMATTING RULES:
+- Standard reverse-chronological order
+- Each role: 3-4 bullet points max, achievement-focused with metrics where source supports them
+- Emphasize: team size, budget owned, scope of responsibility, promotions, cross-functional influence, tenure
+- Frame achievements in terms of business outcomes — what changed because they were there
+- Format each role as: **Company Name** | Title | Dates
+
+SUMMARY — make them sound exceptional:
+2-3 sentences. Lead with tenure + scope at the most impressive employer. Establish range. Name what makes them different from the next person with the same title.
+If the candidate has skills beyond their primary role (coding, AI tools, management, product sense) — surface that combination as the differentiator.
+
+REORDER FOR RELEVANCE: If an older role is more relevant to this job, move it up. Split into RELEVANT EXPERIENCE and ADDITIONAL EXPERIENCE if needed.
+
+FORMAT: Summary, Experience, Skills, Education
+Use markdown bold (**text**) for company names and section headers only.
+Write in implied first person — NO "I", "my", or "me". Every line leads with an action verb.
+Mirror job description keywords naturally for ATS — never at the expense of voice.
+ANTI-FABRICATION: Every claim must come from the source resume. Reframing is allowed. Inventing is not.
+TITLE INTEGRITY: Never assign a title the candidate hasn't held.
+FLAG unprofessional email addresses in recruiter notes only.
 `
 
   const outputFormat = dualVersion ? `
