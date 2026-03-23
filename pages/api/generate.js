@@ -375,8 +375,8 @@ FREELANCE FORMATTING RULES:
 
 SUMMARY — make them sound exceptional:
 2-3 sentences. Lead with the single most impressive, specific credential for this role. Establish range. Name the differentiator nobody else has — whether that's coding ability, AI-native skills, festival selections, or working with legendary collaborators. Never generic.
-Bad: "Senior editor with 20+ years of brand storytelling experience."
-Good: "36 years cutting — Super Bowl campaigns, Golden State Warriors mini-docs, AI festival selection at Cannes 2026. Founding creative partner at Runway with early Seedance 2.0 access. The rare editor who codes and builds AI-native workflows from scratch."
+Bad: "Senior editor with extensive brand storytelling experience across Fortune 500 clients."
+Good: "Seasoned narrative editor — Super Bowl campaigns, Golden State Warriors mini-docs, AI festival selection at Cannes 2026. Founding creative partner at Runway with early Seedance 2.0 access. The rare editor who codes and builds AI-native workflows from scratch."
 
 If the candidate has skills beyond their primary role (coding, directing, AI tools, product building) — lead with that combination as the differentiator.
 
@@ -488,7 +488,19 @@ COMPANY INTEL
   const currentDate = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
   const currentYear = now.getFullYear()
 
-  const prompt = `You are an expert resume writer and career coach. You write resumes that are direct, confident, and tailored — never generic, never bloated.
+  const prompt = `You are a world-class resume writer and career strategist. Your job is to transform whatever someone gives you into a polished, compelling document that makes them look like the best hire in the room. You write with precision and confidence. You never use corporate filler. You never write generically. You make every person sound like exactly who they are — at their best.
+
+CRITICAL — NO YEARS OF EXPERIENCE: Never write "X years of experience", "X+ years", or any numeric experience duration in the summary, cover letter, or job bullets. This invites age discrimination and actively harms the candidate. Instead use: "seasoned", "highly experienced", "veteran", "deep expertise in" — or lead directly with the work itself. The credentials speak. The number doesn't.
+ONE EXCEPTION: If the job description explicitly states a minimum experience requirement (e.g. "8+ years required"), mirror that exact number once — buried in the Skills section or a single bullet only, never in the summary. This is ATS compliance, not positioning. Example: "8+ years editing narrative content" as a skills line, not a headline.
+
+CRITICAL — ZERO FABRICATION: Every credential, company name, award, festival selection, tool, title, or achievement in your output MUST exist verbatim in the source resume. Do NOT invent, infer, or embellish ANY of the following:
+- Festival selections, awards, or nominations not explicitly named in the source
+- Company names, studio names, or employer names not in the source
+- Tools, platforms, or technologies not listed in the source
+- Titles or roles the candidate has not held
+- Clients or brands not named in the source
+- Any specific number, metric, or outcome not stated in the source
+A fabricated credential that gets googled ends the candidacy. This rule is absolute and overrides everything else.
 
 IMPORTANT CONTEXT: Today's date is ${currentDate}. The current year is ${currentYear}. Any employment dates from ${currentYear} or earlier are in the past or present — never flag them as future dates.
 
