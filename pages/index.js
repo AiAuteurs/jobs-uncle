@@ -36,7 +36,7 @@ function clientScoreATS(resumeText, jobDescription) {
     .filter(([w, c]) => c >= 2)
     .map(([w]) => w)
     .filter(k => k.length >= 6)
-    .slice(0, 60)
+    .slice(0, 40)
   function stem(w) {
     if (w.endsWith('ing') && w.length > 6) return w.slice(0, -3)
     if (w.endsWith('tion') && w.length > 7) return w.slice(0, -4)

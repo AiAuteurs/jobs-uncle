@@ -160,14 +160,10 @@ function scoreKeywordMatch(resumeText, jobDescription) {
     .map(([word]) => word)
 
   // Also extract 2-word phrases from JD
-  const jdPhrases = extractPhrases(jobDescription)
-  const twoWordPhrases = [...jdPhrases].filter(p => p.includes(' ') && 
-    [...p.split(' ')].every(w => !STOP.has(w)))
-
-  // Combine: single important keywords + two-word phrases
-  const candidates = [...new Set([...jdKeywords, ...twoWordPhrases])]
+  // Single keywords only — two-word phrases have too many false negatives
+  const candidates = [...new Set(jdKeywords)]
     .filter(k => k.length >= 6)
-    .slice(0, 60) // cap at 60 candidates
+    .slice(0, 40) // cap at 40 candidates
 
   // Score against resume
   const resumeLower = resumeText.toLowerCase()
