@@ -260,10 +260,11 @@ export default function Home() {
       const fullJd = [jt && co ? `${jt} at ${co}\n\n` : jt ? `${jt}\n\n` : '', jd].join('')
       setJobDescription(fullJd)
       setJobDescInputMode('paste')
-      // Clean URL without reload
       window.history.replaceState({}, '', '/')
     }
   }, [])
+
+  useEffect(() => {
     if (router.query.signin === 'true') {
       setShowSignIn(true)
       router.replace('/', undefined, { shallow: true })
