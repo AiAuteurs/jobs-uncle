@@ -1394,44 +1394,6 @@ export default function Home() {
 
         {results && (
           <>
-            {/* RESULTS TAB BAR */}
-            {(() => {
-              const tabs = [
-                { key: 'resume', label: '📄\u00a0Resume' },
-                { key: 'ats', label: '🎯\u00a0ATS Score' },
-                { key: 'cover', label: '✉️\u00a0Cover Letter' },
-                { key: 'recruiter', label: '🔍\u00a0Recruiter Analysis' },
-                { key: 'dm', label: '💬\u00a0Hiring Manager DM' },
-                ...(results.companyIntel ? [{ key: 'intel', label: '🏢\u00a0Company Intel' }] : []),
-              ]
-              return (
-                <div style={{
-                  display: 'flex', gap: '0', overflowX: 'auto',
-                  scrollbarWidth: 'none', msOverflowStyle: 'none',
-                  borderBottom: '1px solid #2a2a2a',
-                  marginBottom: '28px',
-                }}>
-                  {tabs.map(({ key, label }) => (
-                    <button
-                      key={key}
-                      onClick={() => setActiveResultTab(key)}
-                      style={{
-                        background: 'none', border: 'none', cursor: 'pointer',
-                        padding: '11px 18px', whiteSpace: 'nowrap',
-                        fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', fontWeight: 600,
-                        color: activeResultTab === key ? '#00D1FF' : '#666',
-                        borderBottom: `2px solid ${activeResultTab === key ? '#00D1FF' : 'transparent'}`,
-                        transition: 'color 0.15s, border-color 0.15s',
-                        marginBottom: '-1px',
-                      }}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              )
-            })()}
-
             <div className="results">
               {/* LOOKS GREAT BANNER */}
               <div style={{
@@ -1461,6 +1423,44 @@ export default function Home() {
                 <div className="results-title">Your tailored documents</div>
                 <div className="results-badge">Ready to download</div>
               </div>
+
+              {/* RESULTS TAB BAR */}
+              {(() => {
+                const tabs = [
+                  { key: 'resume', label: '📄\u00a0Resume' },
+                  { key: 'ats', label: '🎯\u00a0ATS Score' },
+                  { key: 'cover', label: '✉️\u00a0Cover Letter' },
+                  { key: 'recruiter', label: '🔍\u00a0Recruiter Analysis' },
+                  { key: 'dm', label: '💬\u00a0Hiring Manager DM' },
+                  ...(results.companyIntel ? [{ key: 'intel', label: '🏢\u00a0Company Intel' }] : []),
+                ]
+                return (
+                  <div style={{
+                    display: 'flex', gap: '0', overflowX: 'auto',
+                    scrollbarWidth: 'none', msOverflowStyle: 'none',
+                    borderBottom: '1px solid #2a2a2a',
+                    marginBottom: '28px',
+                  }}>
+                    {tabs.map(({ key, label }) => (
+                      <button
+                        key={key}
+                        onClick={() => setActiveResultTab(key)}
+                        style={{
+                          background: 'none', border: 'none', cursor: 'pointer',
+                          padding: '11px 18px', whiteSpace: 'nowrap',
+                          fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', fontWeight: 600,
+                          color: activeResultTab === key ? '#00D1FF' : '#666',
+                          borderBottom: `2px solid ${activeResultTab === key ? '#00D1FF' : 'transparent'}`,
+                          transition: 'color 0.15s, border-color 0.15s',
+                          marginBottom: '-1px',
+                        }}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                )
+              })()}
 
               {/* V1 / V2 VERSION TOGGLE — appears once V2 is generated */}
               {regeneratedResults && (
