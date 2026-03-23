@@ -316,7 +316,7 @@ export default async function handler(req, res) {
     try { fs.unlinkSync(resumeFile.filepath) } catch (e) {}
   }
 
-  if (linkedinText.length > 6000) linkedinText = linkedinText.slice(0, 12000)
+  if (linkedinText.length > 12000) linkedinText = linkedinText.slice(0, 12000)
 
   // ── Gap detection — run before prompt construction ──────────────────────────
   const parsedJobs = parseJobsFromResume(linkedinText)
@@ -350,44 +350,41 @@ Generate both versions. Each should be complete and standalone — same experien
 ` : careerType === 'freelance' ? `
 RESUME REQUIREMENTS — FREELANCE / CONTRACT CAREER:
 
-THIS PERSON IS A FREELANCER. A long list of short engagements is their track record, not a red flag.
-Your job is to write a career narrative, not a timesheet.
+YOUR JOB: Act as a master resume writer, not a transcriptionist. Read what you're given, extract what matters for THIS role, and build the strongest possible case for this candidate — in one tight, compelling document.
 
-JOB INCLUSION RULES — READ BEFORE WRITING:
+STEP 1 — READ THE INPUT AND IDENTIFY WHAT YOU HAVE:
+- LONG LINKEDIN HISTORY or CLIENT DUMP (20+ engagements, lots of short gigs): You have hours of footage. Cut a tight film. Read everything. Pick the 6-8 most impressive and relevant engagements for this specific job. Group and consolidate. Use client names as proof woven into prose. The rest informs your writing — it doesn't go in the resume.
+- CLEAN RESUME (already formatted, clear sections): Tailor it. Tighten the language. Consolidate redundant entries. Optimize for the job description.
+- MIXED OR ROUGH INPUT: Extract what's there, build the best shape possible, flag real gaps in recruiter notes.
+
+STEP 2 — APPLY THESE RULES:
+
+JOB INCLUSION RULES:
 ${jobManifest}
 
-RULE 1 — PROTECTED JOBS (marked 🔒): Must appear, but can be consolidated into narrative prose — not forced into separate entries if they tell the same story.
-RULE 2 — DROPPABLE JOBS (marked ○): Omit if redundant AND removal creates no timeline gap.
-RULE 3 — 7-YEAR HARD FLOOR: All work from the last 7 years must be represented, even if consolidated.
-RULE 4 — NAMED CLIENT PRESERVATION: Every recognizable brand, agency, or client named in the source resume MUST appear by name in the output. Disney, NVIDIA, Goodby Silverstein, Red Car, Salesforce — these are credibility anchors. Never genericize them.
+RULE 1 — PROTECTED JOBS (marked 🔒): Must be represented — consolidated into narrative prose is fine if it tells the same story.
+RULE 2 — DROPPABLE JOBS (marked ○): Omit if redundant AND no gap is created.
+RULE 3 — 7-YEAR HARD FLOOR: All work from the last 7 years must appear, even if consolidated.
+RULE 4 — NAMED CREDENTIAL PRESERVATION: Every recognizable brand, agency, client, award, or festival selection in the source that is relevant to THIS role must appear by name. Goodby Silverstein, Michael Bay, Disney, NVIDIA, Cannes, Alibaba WAN — credibility anchors. Never genericize them. Never invent ones that aren't there.
 
-VOICE — MOST IMPORTANT:
-Write like a specific human being, not a LinkedIn template.
-BANNED PHRASES: "Proven expertise in", "Leveraged X to drive Y", "Collaborated with cross-functional stakeholders", "Delivered premium [anything]", "Maintained brand voice", "Translated business strategy", "Demonstrated technical proficiency", "Results-driven", "Strong track record"
-INSTEAD: Name the actual thing. Short declarative sentences. Let credentials speak.
+VOICE:
+Write like a human, not a template. Short declarative sentences. Name the actual thing. Let credentials speak.
+BANNED: "Proven expertise", "Leveraged X to drive Y", "Delivered premium anything", "Maintained brand voice", "Demonstrated technical proficiency", "Results-driven", "Strong track record", any phrase that works on any resume for any person.
 
-FREELANCE FORMATTING RULES:
-- DO NOT write one job entry per client. That produces an endless list that buries the story.
-- CONSOLIDATE similar engagements: group related work under a single entry or narrative block, weaving client names as proof points IN the prose. Example: "Cut campaigns for Xfinity, Doritos, and HP at Goodby Silverstein & Partners (2020–2024). Also cut national TV spots for SharkNinja and broadcast content for Disney ABC." — that's two lines, not six entries.
-- LEAD with the most impressive credential for THIS role, regardless of date
-- USE client names as proof woven into bullets — not as separate headers
-- Each role/group gets 2-3 tight sentences max. Flowing prose, not bullet lists within entries.
+CONSOLIDATION RULE — CRITICAL:
+Never one entry per client. Group by era, type, or agency relationship.
+Example of right: "Cut campaigns for Xfinity, Doritos, and HP at Goodby Silverstein & Partners. National TV for SharkNinja. Mini-docs for Golden State Warriors. Sizzle reels for NVIDIA, Oracle, and ServiceNow." — that's one narrative block covering a decade of work.
+Example of wrong: 10 separate job entries for the same type of work.
 
-SUMMARY — make them sound exceptional:
-2-3 sentences. Lead with the single most impressive, specific credential for this role. Establish range. Name the differentiator nobody else has — whether that's coding ability, AI-native skills, festival selections, or working with legendary collaborators. Never generic.
-Bad: "Senior editor with extensive brand storytelling experience across Fortune 500 clients."
-Good: "Seasoned narrative editor — Super Bowl campaigns, Golden State Warriors mini-docs, AI festival selection at Cannes 2026. Founding creative partner at Runway with early Seedance 2.0 access. The rare editor who codes and builds AI-native workflows from scratch."
+SUMMARY — 2-3 sentences max:
+Lead with the single most impressive specific credential for THIS role. Establish range. Name the differentiator nobody else has — AI tools, coding ability, festival selections, legendary directors. Never generic. Never years of experience.
 
-If the candidate has skills beyond their primary role (coding, directing, AI tools, product building) — lead with that combination as the differentiator.
-
-FORMAT: Summary, Experience (consolidated narrative), Skills, Education
-Use markdown bold (**text**) for employer/group headers and section titles only.
-Format each consolidated group as: **Client / Agency Name** | Role | Date range
-Write in implied first person — NO "I", "my", or "me". Lead every line with an action verb or the work itself.
+FORMAT: Summary, Experience (consolidated), Skills, Education
+Bold (**text**) for section headers and employer group names only.
+Implied first person — NO "I", "my", "me". Every line leads with verb or the work.
 Mirror job description keywords naturally for ATS — never at the expense of voice.
-ANTI-FABRICATION: Every claim must come from the source resume. Reframing is allowed. Inventing is not.
+ANTI-FABRICATION: Every claim must exist in the source. Reframing is allowed. Inventing is not.
 TITLE INTEGRITY: Never assign a title the candidate hasn't held.
-FLAG unprofessional email addresses in recruiter notes only.
 ` : `
 RESUME REQUIREMENTS — FULL-TIME / IN-HOUSE CAREER:
 
@@ -504,7 +501,20 @@ A fabricated credential that gets googled ends the candidacy. This rule is absol
 
 IMPORTANT CONTEXT: Today's date is ${currentDate}. The current year is ${currentYear}. Any employment dates from ${currentYear} or earlier are in the past or present — never flag them as future dates.
 
-A person has provided their LinkedIn profile data and a job description. Your job is to craft the following:
+A person has provided their resume or career history and a job description. Before writing anything, read the source material and identify what type of input you're working with:
+
+TYPE A — POLISHED RESUME: Clean, already-formatted resume with clear sections. Tailor it to the role. Tighten the language. Optimize for ATS.
+
+TYPE B — LINKEDIN PDF / LONG FREELANCE HISTORY: A dump of 20, 50, 100+ engagements. Do NOT reproduce the list. Your job is to be a master resume writer who reads the entire history, extracts the most impressive and relevant work for THIS specific job, and builds a tight, compelling narrative from the raw material. Think of it like a film editor cutting a feature from hours of footage — you find the story, kill everything that doesn't serve it. The client doesn't need every gig listed. They need the right ones, told well.
+
+TYPE C — ROUGH NOTES / MIXED INPUT: Messy, informal, or partial information. Fill the shape with what's there, flag obvious gaps in recruiter notes.
+
+REGARDLESS OF INPUT TYPE — your output must:
+- Pass ATS for this specific job description
+- Read like a human wrote it, not a template
+- Make the candidate look like the best hire in the room
+- Never fabricate, never pad, never genericize named credentials
+- Never list years of experience numerically
 
 ---
 LINKEDIN PROFILE DATA:
