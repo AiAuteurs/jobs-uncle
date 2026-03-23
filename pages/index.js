@@ -443,6 +443,7 @@ export default function Home() {
       }
 
       setResults(data)
+      if (data.jobDescriptionText) setJobDescription(data.jobDescriptionText)
       setActiveResultTab('resume')
 
       // 🎉 Ta-da + confetti

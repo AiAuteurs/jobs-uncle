@@ -863,6 +863,7 @@ ${outputFormat}`
         atsMatch,
         metadata,
         fileBaseName,
+        jobDescriptionText: jobDescription,
       })
     } else {
       const resumeMatch = responseText.match(/===RESUME===([\s\S]*?)===COVER_LETTER===/)
@@ -889,6 +890,7 @@ ${outputFormat}`
         atsMatch,
         metadata,
         fileBaseName,
+        jobDescriptionText: jobDescription,
       })
     }
   } catch (err) {
