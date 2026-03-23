@@ -51,7 +51,140 @@ async function extractTextFromFile(filePath, mimeType, originalName) {
 }
 
 
-// ─── JOB GAP DETECTION ────────────────────────────────────────────────────────
+// ─── ATS KEYWORD MATCH SCORING ────────────────────────────────────────────────
+
+/**
+ * Extracts meaningful keywords from a job description and scores them
+ * against the generated resume. No extra API call — pure JS.
+ * Returns { score, matched, missing, total }
+ */
+function scoreKeywordMatch(resumeText, jobDescription) {
+  // Stop words to ignore
+  const STOP = new Set([
+    'the','and','or','of','to','a','an','in','for','with','on','at','by','from',
+    'is','are','was','were','be','been','being','have','has','had','do','does',
+    'did','will','would','could','should','may','might','shall','can','need',
+    'this','that','these','those','we','you','your','our','their','its','it',
+    'as','if','so','but','not','no','nor','yet','both','either','each','more',
+    'most','other','some','such','than','then','there','when','where','who',
+    'which','while','about','above','after','before','between','into','through',
+    'during','including','across','within','without','along','following','across',
+    'behind','beyond','plus','except','up','out','around','down','off','above',
+    'use','using','used','work','working','experience','ability','strong','proven',
+    'demonstrated','required','preferred','including','ensure','maintain','manage',
+    'support','provide','develop','create','build','apply','help','make','take',
+    'give','get','set','keep','let','put','go','come','run','lead','drive',
+    'multiple','various','all','any','every','many','much','few','new','own',
+    'same','different','high','low','large','small','long','short','full','open',
+    'role','position','team','company','business','client','project','process',
+    'based','well','also','very','highly','quickly','effectively','efficiently',
+  ])
+
+  // Extract candidate phrases — 1 and 2 word sequences
+  function extractPhrases(text) {
+    const clean = text.toLowerCase()
+      .replace(/[^a-z0-9\s]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+    const words = clean.split(' ').filter(w => w.length > 2 && !STOP.has(w))
+    const phrases = new Set()
+
+    // Single keywords
+    words.forEach(w => phrases.add(w))
+
+    // Two-word phrases from original cleaned text
+    const allWords = clean.split(' ')
+    for (let i = 0; i < allWords.length - 1; i++) {
+      const w1 = allWords[i], w2 = allWords[i+1]
+      if (w1.length > 2 && w2.length > 2 && !STOP.has(w1) && !STOP.has(w2)) {
+        phrases.add(`${w1} ${w2}`)
+      }
+    }
+    return phrases
+  }
+
+  // Extract JD keywords with frequency — higher freq = more important
+  const jdLower = jobDescription.toLowerCase().replace(/[^a-z0-9\s]/g, ' ')
+  const jdWords = jdLower.split(/\s+/).filter(w => w.length > 2 && !STOP.has(w))
+  const freq = {}
+  jdWords.forEach(w => { freq[w] = (freq[w] || 0) + 1 })
+
+  // Keep words that appear 2+ times OR are technical/tool terms
+  const TECH_SIGNALS = [
+    // Video / Creative
+    'premiere', 'effects', 'photoshop', 'lightroom', 'resolve', 'editing',
+    'video', 'instagram', 'facebook', 'reels', 'footage', 'motion',
+    'graphics', 'color', 'audio', 'animation', 'dslr', 'cinema', 'broadcast',
+    'documentary', 'narrative', 'generative', 'tiktok', 'asana', 'iconik',
+    // General professional — works for ANY job type
+    'analytics', 'strategy', 'leadership', 'communication', 'collaboration',
+    'stakeholder', 'curriculum', 'instructional', 'learning', 'training',
+    'assessment', 'performance', 'outcomes', 'metrics', 'reporting',
+    'compliance', 'regulatory', 'healthcare', 'clinical', 'patient',
+    'engineering', 'software', 'development', 'javascript', 'python',
+    'typescript', 'react', 'backend', 'frontend', 'database', 'cloud',
+    'aws', 'azure', 'salesforce', 'tableau', 'excel', 'powerpoint',
+    'project', 'agile', 'scrum', 'product', 'research', 'data',
+    'financial', 'accounting', 'revenue', 'budget', 'forecasting',
+    'marketing', 'campaigns', 'seo', 'email', 'branding', 'copywriting',
+    'operations', 'logistics', 'procurement', 'vendor', 'contract',
+    'recruitment', 'onboarding', 'retention', 'diversity', 'inclusion',
+    'management', 'enterprise', 'technical', 'platform', 'integration',
+    'communications', 'content', 'design', 'workflow', 'standards',
+  ]
+
+  const jdKeywords = Object.entries(freq)
+    .filter(([word, count]) => count >= 1 || TECH_SIGNALS.some(t => word.includes(t)))
+    .map(([word]) => word)
+
+  // Also extract 2-word phrases from JD
+  const jdPhrases = extractPhrases(jobDescription)
+  const twoWordPhrases = [...jdPhrases].filter(p => p.includes(' ') && 
+    [...p.split(' ')].every(w => !STOP.has(w)))
+
+  // Combine: single important keywords + two-word phrases
+  const candidates = [...new Set([...jdKeywords, ...twoWordPhrases])]
+    .filter(k => k.length > 3)
+    .slice(0, 60) // cap at 60 candidates
+
+  // Score against resume
+  const resumeLower = resumeText.toLowerCase()
+  const matched = []
+  const missing = []
+
+  candidates.forEach(kw => {
+    if (resumeLower.includes(kw)) {
+      matched.push(kw)
+    } else {
+      // Check singular/plural variants
+      const variant = kw.endsWith('s') ? kw.slice(0, -1) : kw + 's'
+      if (resumeLower.includes(variant)) {
+        matched.push(kw)
+      } else {
+        missing.push(kw)
+      }
+    }
+  })
+
+  const score = candidates.length > 0 
+    ? Math.round((matched.length / candidates.length) * 100)
+    : 0
+
+  // Sort missing by JD frequency (most important first)
+  const missingByImportance = missing
+    .sort((a, b) => (freq[b] || 0) - (freq[a] || 0))
+    .slice(0, 15) // top 15 missing
+
+  return {
+    score,
+    matched: matched.slice(0, 30),
+    missing: missingByImportance,
+    total: candidates.length,
+  }
+}
+
+// ─── END ATS KEYWORD MATCH ─────────────────────────────────────────────────────
+
 
 /**
  * Parse all jobs from raw resume text.
@@ -452,8 +585,7 @@ Use markdown bold (**text**) for company names and section headers only.
 Write in implied first person — NO "I", "my", or "me". Every line leads with an action verb.
 Mirror job description keywords naturally for ATS — never at the expense of voice.
 ANTI-FABRICATION: Every claim must come from the source resume. Reframing is allowed. Inventing is not.
-TITLE INTEGRITY: Never assign a title the candidate hasn't held.
-FLAG unprofessional email addresses in recruiter notes only.
+CRITICAL — TITLE INTEGRITY — ZERO EXCEPTIONS: Never use "Director-level", "VP-level", "Senior-level", "Executive-level", or ANY seniority prefix in the summary or anywhere in the resume unless that EXACT title appears verbatim in the source resume. This rule has no exceptions — not even when the candidate is applying for a more senior role. If a teacher is applying for a Director role, the summary says "Learning Experience Designer" or "Curriculum Developer" — whatever they actually ARE. Frame trajectory and capability through the work, not through a title they haven't earned. A false title gets caught in the first 30 seconds of an interview and destroys all credibility. When in doubt, use the most senior title that actually appears in the source.
 `
 
   const outputFormat = dualVersion ? `
@@ -528,6 +660,8 @@ CRITICAL — ZERO FABRICATION: Every credential, company name, award, festival s
 - Clients or brands not named in the source
 - Any specific number, metric, or outcome not stated in the source
 A fabricated credential that gets googled ends the candidacy. This rule is absolute and overrides everything else.
+
+CRITICAL — TITLE INTEGRITY: Never write "Director-level", "VP-level", "Senior-level", "Executive-level" or any seniority prefix the candidate hasn't actually held. Check the source resume — use only titles that appear there. A teacher applying for a Director role is a teacher with Director-level capability, not a "Director-level" anything. Frame ambition through the work, never through a fabricated title.
 
 IMPORTANT CONTEXT: Today's date is ${currentDate}. The current year is ${currentYear}. Any employment dates from ${currentYear} or earlier are in the past or present — never flag them as future dates.
 
@@ -690,6 +824,9 @@ ${outputFormat}`
       const coverLetter = contactHeader + rawCover
       const hiringManagerDM = dmMatch ? dmMatch[1].trim() : ''
 
+      // ATS keyword match scoring (score against version A)
+      const atsMatch = scoreKeywordMatch(resumeA, jobDescription)
+
       return res.status(200).json({
         dualVersion: true,
         resumeA,
@@ -697,6 +834,7 @@ ${outputFormat}`
         coverLetter,
         recruiterNotes,
         hiringManagerDM,
+        atsMatch,
         metadata,
         fileBaseName,
       })
@@ -712,6 +850,9 @@ ${outputFormat}`
       const hiringManagerDM = dmMatch ? dmMatch[1].trim() : ''
       const companyIntel = intelMatch ? intelMatch[1].trim() : ''
 
+      // ATS keyword match scoring
+      const atsMatch = scoreKeywordMatch(resume, jobDescription)
+
       return res.status(200).json({
         dualVersion: false,
         resume,
@@ -719,6 +860,7 @@ ${outputFormat}`
         recruiterNotes,
         hiringManagerDM,
         companyIntel,
+        atsMatch,
         metadata,
         fileBaseName,
       })
