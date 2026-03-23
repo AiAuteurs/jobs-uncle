@@ -78,6 +78,11 @@ function scoreKeywordMatch(resumeText, jobDescription) {
     'same','different','high','low','large','small','long','short','full','open',
     'role','position','team','company','business','client','project','process',
     'based','well','also','very','highly','quickly','effectively','efficiently',
+    'looking','seeking','join','hybrid','onsite','remote','days','week','month',
+    'year','years','global','local','group','firm','serving','located','new',
+    'please','apply','must','will','able','across','within','including','ensure',
+    'responsible','opportunity','ideal','candidate','qualified','preferred',
+    'meridian','york','stake','stakes','measure','location','workforce',
   ])
 
   // Extract candidate phrases — 1 and 2 word sequences
