@@ -549,6 +549,10 @@ REGARDLESS OF INPUT TYPE — your output must:
 - Never fabricate, never pad, never genericize named credentials
 - Never list years of experience numerically
 
+CRITICAL — NO CREDENTIAL DUPLICATION: Every named credential, award, company, or achievement may appear ONCE in the entire resume. If it's in the summary, it cannot appear again in the competency blocks or bullets. If it's in a competency block, it cannot reappear in another block or the summary. Read your own output before finalizing — if you see the same specific credential twice, remove it from the less prominent location. The summary should reference the single most impressive credential; the body should build the story with everything else.
+
+CRITICAL — EDUCATION: Always include a real Education section using whatever is in the source — degree, school, field, year. Search the entire source document including the bottom, footer, and appendix-style sections — LinkedIn PDFs often bury education on the last page. If education genuinely cannot be found anywhere in the source, write "Education details available upon request" — but only as a last resort after searching thoroughly. Never default to this phrase lazily. If any degree, institution, or certification appears anywhere in the source, use it.
+
 ---
 LINKEDIN PROFILE DATA:
 ${linkedinText}
