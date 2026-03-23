@@ -255,6 +255,7 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
         }
         @media (max-width: 860px) {
           header nav { display: none !important; }
+          header { grid-template-columns: auto 1fr !important; padding: 0 16px !important; }
         }
       `}</style>
     </header>
