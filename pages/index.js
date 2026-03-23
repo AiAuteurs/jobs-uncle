@@ -1462,8 +1462,8 @@ export default function Home() {
                 )
               })()}
 
-              {/* V1 / V2 VERSION TOGGLE — appears once V2 is generated */}
-              {regeneratedResults && (
+              {/* V1 / V2 VERSION TOGGLE — appears once V2 is generated, only on Resume tab */}
+              {regeneratedResults && activeResultTab === 'resume' && (
                 <div
                   ref={versionToggleRef}
                   style={{
