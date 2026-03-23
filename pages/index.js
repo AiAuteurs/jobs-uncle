@@ -27,6 +27,9 @@ function clientScoreATS(resumeText, jobDescription) {
     'dental','vision','insurance','matching','holidays','access','workplace',
     'category','programs','coaching','mentoring','orientation','ranging',
     'qualifications','comprehensive','preferred','required','eligible','typical',
+    'colleague','colleagues','assigned','people','including','listen','provide',
+    'inspiring','putting','joining','forces','ensuring','requires','assistance',
+    'wellness','revenue','leadership','training','learning','researching',
   ])
   const jdLower = jobDescription.toLowerCase().replace(/[^a-z0-9\s]/g, ' ')
   const jdWords = jdLower.split(/\s+/).filter(w => w.length >= 6 && !STOP.has(w))
