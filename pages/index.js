@@ -1427,12 +1427,12 @@ export default function Home() {
               {/* RESULTS TAB BAR */}
               {(() => {
                 const tabs = [
-                  { key: 'resume', label: '📄\u00a0Resume' },
-                  ...(results.atsMatch ? [{ key: 'ats', label: '🎯\u00a0ATS Score' }] : []),
-                  { key: 'cover', label: '✉️\u00a0Cover Letter' },
-                  { key: 'recruiter', label: '🔍\u00a0Recruiter Analysis' },
-                  { key: 'dm', label: '💬\u00a0Hiring Manager DM' },
-                  ...(results.companyIntel ? [{ key: 'intel', label: '🏢\u00a0Company Intel' }] : []),
+                  { key: 'resume', label: '📄 Resume' },
+                  { key: 'ats', label: '🎯 ATS Score' },
+                  { key: 'cover', label: '✉️ Cover Letter' },
+                  { key: 'recruiter', label: '🔍 Recruiter Analysis' },
+                  { key: 'dm', label: '💬 Hiring Manager DM' },
+                  ...(results.companyIntel ? [{ key: 'intel', label: '🏢 Company Intel' }] : []),
                 ]
                 return (
                   <div style={{
@@ -1536,9 +1536,15 @@ export default function Home() {
                     : results.coverLetter
                 )}} />
               </div>}
-
               {/* ATS KEYWORD MATCH SCORE */}
-              {activeResultTab === 'ats' && results.atsMatch && (
+              {activeResultTab === 'ats' && (
+                !results.atsMatch ? (
+                  <div className="result-section" style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-soft)' }}>
+                    <div style={{ fontSize: '2rem', marginBottom: '12px' }}>🎯</div>
+                    <div style={{ fontWeight: 700, marginBottom: '8px' }}>ATS Score not available</div>
+                    <div style={{ fontSize: '0.85rem' }}>Run a new generation to see your keyword match score.</div>
+                  </div>
+                ) :
                 <div id="result-ats" className="result-section" style={{ borderLeft: '3px solid #00D1FF', background: 'rgba(0,209,255,0.04)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
                     <div>
