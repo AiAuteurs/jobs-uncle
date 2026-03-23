@@ -1462,8 +1462,8 @@ export default function Home() {
                 )
               })()}
 
-              {/* V1 / V2 VERSION TOGGLE — appears once V2 is generated, only on Resume tab */}
-              {regeneratedResults && activeResultTab === 'resume' && (
+              {/* V1 / V2 VERSION TOGGLE — appears once V2 is generated */}
+              {regeneratedResults && (
                 <div
                   ref={versionToggleRef}
                   style={{
@@ -1478,7 +1478,7 @@ export default function Home() {
                     ✓ Version 2 is ready — fixes applied from the recruiter analysis
                   </div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', marginBottom: '6px' }}>
-                    You're viewing Version 2 below. Switch back to compare.
+                    Affects the Resume tab. Switch to compare.
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0', border: '1.5px solid var(--border)', borderRadius: '8px', overflow: 'hidden', width: 'fit-content' }}>
                     {['v1', 'v2'].map(v => (
