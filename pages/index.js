@@ -29,6 +29,7 @@ function clientScoreATS(resumeText, jobDescription) {
     'qualifications','comprehensive','preferred','required','eligible','typical',
     'colleague','colleagues','assigned','people','including','listen','provide',
     'inspiring','putting','joining','forces','ensuring','requires','assistance',
+    'advocate','advocating','emotional','revenue','learning','researching','wellness',
     'wellness','revenue','leadership','training','learning','researching',
   ])
   const jdLower = jobDescription.toLowerCase().replace(/[^a-z0-9\s]/g, ' ')
