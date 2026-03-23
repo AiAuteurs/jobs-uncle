@@ -1096,34 +1096,7 @@ export default function Home() {
         }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
-            {/* DROP ZONE A — Resume */}
-            <div className="cc-zone-block">
-              <div className="cc-zone-header">
-                <span className="cc-zone-heading">📄 Your Resume</span>
-                <div className="cc-toggle">
-                  <button className={`cc-toggle-btn ${resumeInputMode === 'upload' ? 'active' : ''}`} onClick={() => setResumeInputMode('upload')}>Upload</button>
-                  <button className={`cc-toggle-btn ${resumeInputMode === 'paste' ? 'active' : ''}`} onClick={() => setResumeInputMode('paste')}>Paste</button>
-                </div>
-              </div>
-              {resumeInputMode === 'upload' ? (
-                <div
-                  className={`cc-zone ${dragover ? 'cc-zone--dragover' : ''} ${pdfFile ? 'cc-zone--done' : 'cc-zone--active'}`}
-                  onClick={() => fileInputRef.current?.click()}
-                  onDrop={handleDrop}
-                  onDragOver={(e) => { e.preventDefault(); setDragover(true) }}
-                  onDragLeave={() => setDragover(false)}
-                >
-                  <div className="cc-zone-icon">{pdfFile ? '✓' : '📄'}</div>
-                  <div className="cc-zone-title">{pdfFile ? pdfFile.name : 'Drop resume or click to browse'}</div>
-                  <div className="cc-zone-sub">PDF, DOCX, DOC, TXT — LinkedIn PDF works great</div>
-                  <input ref={fileInputRef} type="file" accept=".pdf,.doc,.docx,.txt" className="file-input" onChange={(e) => handleFile(e.target.files[0])} />
-                </div>
-              ) : (
-                <textarea className="cc-jd-input cc-jd-input--tall" placeholder="Paste your full resume here — work history, skills, education..." value={resumeText} onChange={(e) => setResumeText(e.target.value)} />
-              )}
-            </div>
-
-            {/* CAREER TYPE TOGGLE */}
+            {/* CAREER TYPE TOGGLE — top of form */}
             <div style={{ padding: '16px 20px', background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: '10px' }}>
               <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#555', marginBottom: '10px', fontFamily: 'Inter, sans-serif' }}>
                 Career type
@@ -1161,6 +1134,33 @@ export default function Home() {
                   ? 'Consolidates your engagements into a career narrative. Client names as proof, not a job list.'
                   : 'Traditional chronological format. Emphasizes tenure, scope, growth, and internal impact.'}
               </div>
+            </div>
+
+            {/* DROP ZONE A — Resume */}
+            <div className="cc-zone-block">
+              <div className="cc-zone-header">
+                <span className="cc-zone-heading">📄 Your Resume</span>
+                <div className="cc-toggle">
+                  <button className={`cc-toggle-btn ${resumeInputMode === 'upload' ? 'active' : ''}`} onClick={() => setResumeInputMode('upload')}>Upload</button>
+                  <button className={`cc-toggle-btn ${resumeInputMode === 'paste' ? 'active' : ''}`} onClick={() => setResumeInputMode('paste')}>Paste</button>
+                </div>
+              </div>
+              {resumeInputMode === 'upload' ? (
+                <div
+                  className={`cc-zone ${dragover ? 'cc-zone--dragover' : ''} ${pdfFile ? 'cc-zone--done' : 'cc-zone--active'}`}
+                  onClick={() => fileInputRef.current?.click()}
+                  onDrop={handleDrop}
+                  onDragOver={(e) => { e.preventDefault(); setDragover(true) }}
+                  onDragLeave={() => setDragover(false)}
+                >
+                  <div className="cc-zone-icon">{pdfFile ? '✓' : '📄'}</div>
+                  <div className="cc-zone-title">{pdfFile ? pdfFile.name : 'Drop resume or click to browse'}</div>
+                  <div className="cc-zone-sub">PDF, DOCX, DOC, TXT — LinkedIn PDF works great</div>
+                  <input ref={fileInputRef} type="file" accept=".pdf,.doc,.docx,.txt" className="file-input" onChange={(e) => handleFile(e.target.files[0])} />
+                </div>
+              ) : (
+                <textarea className="cc-jd-input cc-jd-input--tall" placeholder="Paste your full resume here — work history, skills, education..." value={resumeText} onChange={(e) => setResumeText(e.target.value)} />
+              )}
             </div>
 
             <div className="cc-zone-divider">+</div>
