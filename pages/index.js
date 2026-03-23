@@ -1428,7 +1428,7 @@ export default function Home() {
               {(() => {
                 const tabs = [
                   { key: 'resume', label: '📄\u00a0Resume' },
-                  { key: 'ats', label: '🎯\u00a0ATS Score' },
+                  ...(results.atsMatch ? [{ key: 'ats', label: '🎯\u00a0ATS Score' }] : []),
                   { key: 'cover', label: '✉️\u00a0Cover Letter' },
                   { key: 'recruiter', label: '🔍\u00a0Recruiter Analysis' },
                   { key: 'dm', label: '💬\u00a0Hiring Manager DM' },
