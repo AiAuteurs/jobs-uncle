@@ -153,6 +153,7 @@ export default function Home() {
   const [showPlusPaywall, setShowPlusPaywall] = useState(false)
   const [dualVersionEnabled, setDualVersionEnabled] = useState(false)
   const [activeResume, setActiveResume] = useState('a') // 'a' | 'b'
+  const [activeResultTab, setActiveResultTab] = useState('resume')
   const [showRestore, setShowRestore] = useState(false)
   const [restoreEmail, setRestoreEmail] = useState('')
   const [restoreStatus, setRestoreStatus] = useState(null) // null | 'loading' | 'success' | 'error'
@@ -381,6 +382,7 @@ export default function Home() {
       }
 
       setResults(data)
+      setActiveResultTab('resume')
 
       // 🎉 Ta-da + confetti
       playTada()
@@ -1392,6 +1394,44 @@ export default function Home() {
 
         {results && (
           <>
+            {/* RESULTS TAB BAR */}
+            {(() => {
+              const tabs = [
+                { key: 'resume', label: 'Resume' },
+                { key: 'ats', label: 'ATS Score' },
+                { key: 'cover', label: 'Cover Letter' },
+                { key: 'recruiter', label: 'Recruiter Analysis' },
+                { key: 'dm', label: 'Hiring Manager DM' },
+                ...(results.companyIntel ? [{ key: 'intel', label: 'Company Intel' }] : []),
+              ]
+              return (
+                <div style={{
+                  display: 'flex', gap: '0', overflowX: 'auto',
+                  scrollbarWidth: 'none', msOverflowStyle: 'none',
+                  borderBottom: '1px solid #2a2a2a',
+                  marginBottom: '28px',
+                }}>
+                  {tabs.map(({ key, label }) => (
+                    <button
+                      key={key}
+                      onClick={() => setActiveResultTab(key)}
+                      style={{
+                        background: 'none', border: 'none', cursor: 'pointer',
+                        padding: '11px 18px', whiteSpace: 'nowrap',
+                        fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', fontWeight: 600,
+                        color: activeResultTab === key ? '#00D1FF' : '#666',
+                        borderBottom: `2px solid ${activeResultTab === key ? '#00D1FF' : 'transparent'}`,
+                        transition: 'color 0.15s, border-color 0.15s',
+                        marginBottom: '-1px',
+                      }}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )
+            })()}
+
             <div className="results">
               {/* LOOKS GREAT BANNER */}
               <div style={{
@@ -1459,7 +1499,7 @@ export default function Home() {
                 </div>
               )}
 
-              <div className="result-section">
+              {activeResultTab === 'resume' && <div id="result-resume" className="result-section">
                 <div className="result-section-title">Resume</div>
                 {results.dualVersion && activeVersion === 'v1' ? (
                   <>
@@ -1488,18 +1528,19 @@ export default function Home() {
                 )}
               </div>
 
-              <div className="result-section">
+              {activeResultTab === 'cover' && <div className="result-section">
                 <div className="result-section-title">Cover Letter</div>
                 <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(
                   activeVersion === 'v2' && regeneratedResults
                     ? regeneratedResults.coverLetter
                     : results.coverLetter
                 )}} />
-              </div>
+              </div>}
 
+              }
               {/* ATS KEYWORD MATCH SCORE */}
-              {results.atsMatch && (
-                <div className="result-section" style={{ borderLeft: '3px solid #00D1FF', background: 'rgba(0,209,255,0.04)' }}>
+              {activeResultTab === 'ats' && results.atsMatch && (
+                <div id="result-ats" className="result-section" style={{ borderLeft: '3px solid #00D1FF', background: 'rgba(0,209,255,0.04)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
                     <div>
                       <div className="result-section-title" style={{ margin: 0, marginBottom: '4px' }}>ATS Keyword Match</div>
@@ -1546,8 +1587,8 @@ export default function Home() {
                 </div>
               )}
 
-              {results.recruiterNotes && (
-                <div className="result-section" style={{ borderLeft: '3px solid #f59e0b', background: 'rgba(245,158,11,0.05)' }}>
+              {activeResultTab === 'recruiter' && results.recruiterNotes && (
+                <div id="result-recruiter" className="result-section" style={{ borderLeft: '3px solid #f59e0b', background: 'rgba(245,158,11,0.05)' }}>
                   <div className="result-section-title">Recruiter &amp; ATS Analysis</div>
                   <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '8px' }}>ATS compatibility check plus honest gaps a recruiter would flag &mdash; and how to own them.</div>
                   <div style={{ fontSize: '0.72rem', color: 'var(--text-soft)', marginBottom: '12px', padding: '8px 12px', background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '6px', lineHeight: 1.5 }}>
@@ -1631,8 +1672,8 @@ export default function Home() {
                 </div>
               )}
 
-              {results.hiringManagerDM && (
-                <div className="result-section" style={{ borderLeft: '3px solid #6366f1', background: 'rgba(99,102,241,0.05)' }}>
+              {activeResultTab === 'dm' && results.hiringManagerDM && (
+                <div id="result-dm" className="result-section" style={{ borderLeft: '3px solid #6366f1', background: 'rgba(99,102,241,0.05)' }}>
                   <div className="result-section-title">Hiring Manager DM</div>
                   <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '12px' }}>Skip the line. Send this directly to the hiring manager on LinkedIn or email.</div>
                   <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.hiringManagerDM)}} />
