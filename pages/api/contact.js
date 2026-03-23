@@ -18,7 +18,7 @@ export default async function handler(req, res) {
         from: 'Oni from JobsUncle <oni@jobsuncle.ai>',
         to: 'jobsuncleai@gmail.com',
         reply_to: email,
-        subject: `📬 JobsUncle Contact: ${name}`,
+        subject: `📄 New Contact: ${name} — ${email}`,
         html: `
           <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 24px;">
             <h2 style="color: #6d28d9;">New Contact Message</h2>
