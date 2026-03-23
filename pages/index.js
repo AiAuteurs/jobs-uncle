@@ -249,9 +249,21 @@ export default function Home() {
   const [atsOpen, setAtsOpen] = useState(false)
   const [atsVersion, setAtsVersion] = useState(null) // 'v1' | 'v2' — which version was parsed
 
-  // Fetch resume counter + check access via cookie on mount
-  // Works in private/incognito — no localStorage dependency
+  // Read URL params — pre-fill from Chrome extension
   useEffect(() => {
+    if (typeof window === 'undefined') return
+    const params = new URLSearchParams(window.location.search)
+    const jd = params.get('jd')
+    const jt = params.get('jt')
+    const co = params.get('co')
+    if (jd) {
+      const fullJd = [jt && co ? `${jt} at ${co}\n\n` : jt ? `${jt}\n\n` : '', jd].join('')
+      setJobDescription(fullJd)
+      setJobDescInputMode('paste')
+      // Clean URL without reload
+      window.history.replaceState({}, '', '/')
+    }
+  }, [])
     if (router.query.signin === 'true') {
       setShowSignIn(true)
       router.replace('/', undefined, { shallow: true })
