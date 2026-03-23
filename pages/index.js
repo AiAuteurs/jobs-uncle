@@ -1397,12 +1397,12 @@ export default function Home() {
             {/* RESULTS TAB BAR */}
             {(() => {
               const tabs = [
-                { key: 'resume', label: 'Resume' },
-                { key: 'ats', label: 'ATS Score' },
-                { key: 'cover', label: 'Cover Letter' },
-                { key: 'recruiter', label: 'Recruiter Analysis' },
-                { key: 'dm', label: 'Hiring Manager DM' },
-                ...(results.companyIntel ? [{ key: 'intel', label: 'Company Intel' }] : []),
+                { key: 'resume', label: '📄\u00a0Resume' },
+                { key: 'ats', label: '🎯\u00a0ATS Score' },
+                { key: 'cover', label: '✉️\u00a0Cover Letter' },
+                { key: 'recruiter', label: '🔍\u00a0Recruiter Analysis' },
+                { key: 'dm', label: '💬\u00a0Hiring Manager DM' },
+                ...(results.companyIntel ? [{ key: 'intel', label: '🏢\u00a0Company Intel' }] : []),
               ]
               return (
                 <div style={{
