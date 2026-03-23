@@ -368,7 +368,33 @@ RULE 4 — JOB COUNT INTEGRITY: Before finalizing, count the jobs in your output
   You must include all PROTECTED jobs. If your output has fewer jobs than the PROTECTED COUNT above, stop and add the missing ones.
 
 AFTER applying the rules above:
-- Lead with a punchy 2-3 sentence professional summary that speaks directly to THIS role
+
+VOICE — THIS IS THE MOST IMPORTANT INSTRUCTION:
+Write like a specific human being, not a LinkedIn template. The single biggest failure mode in AI-generated resumes is generic corporate language that sounds like every other resume. Avoid it completely.
+
+BANNED PHRASES — never use these or anything like them:
+- "Proven expertise in..."
+- "Passionate about..."
+- "Leveraged [skill] to drive [outcome]..."
+- "Collaborated with cross-functional stakeholders..."
+- "Delivered premium [anything]..."
+- "Maintained brand voice and visual standards..."
+- "Translated business strategy into..."
+- "Demonstrated technical proficiency..."
+- "Strong track record of..."
+- "Results-driven professional..."
+- Any phrase that could appear on ANY resume for ANY person in ANY industry
+
+INSTEAD — write with specificity and confidence:
+- Name the actual thing: not "national TV spots" but "national TV spots on RED cameras"
+- Name the actual client/brand/director where source resume provides it
+- Use short, declarative sentences. "Cut the Super Bowl spot. Full creative latitude." beats "Led creative team through Super Bowl campaign with full creative latitude."
+- Let credentials speak for themselves. Don't editorialize. "Michael Bay. Saturn. 1998." is more powerful than "Established foundation in premium commercial storytelling."
+- If the source resume has a remarkable credential, put it in the summary — don't bury it in a bullet
+
+SUMMARY RULE: The summary must make a recruiter stop scrolling. It should read like the first line of a great bio, not the opening of a cover letter. Lead with the most impressive, specific thing about this person. Two or three sentences max. No corporate filler. No "I am a [title] with X years of experience."
+
+- Lead with the single most relevant credential for THIS role, stated specifically
 - Use strong action verbs and concrete results where possible
 - Turn bullet points into achievement-focused statements — add metrics wherever the background supports it
 - Do NOT include an objective statement
