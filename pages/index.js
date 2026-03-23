@@ -1467,7 +1467,7 @@ export default function Home() {
                 <div
                   ref={versionToggleRef}
                   style={{
-                    display: 'flex', flexDirection: 'column', gap: '8px',
+                    display: 'flex', flexDirection: 'column', gap: '10px',
                     marginBottom: '20px', padding: '14px 16px',
                     background: 'rgba(16,185,129,0.06)',
                     border: '2px solid #10b981',
@@ -1475,24 +1475,29 @@ export default function Home() {
                   }}
                 >
                   <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#10b981' }}>
-                    ✓ Version 2 is ready — fixes applied from the recruiter analysis
+                    ✓ Version 2 ready — fixes applied from the recruiter analysis
                   </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', marginBottom: '6px' }}>
-                    Click to switch versions — opens Resume tab to compare.
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0', border: '1.5px solid var(--border)', borderRadius: '8px', overflow: 'hidden', width: 'fit-content' }}>
-                    {['v1', 'v2'].map(v => (
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    {[
+                      { v: 'v1', label: 'Version 1 — Original' },
+                      { v: 'v2', label: '✦ Version 2 — Fixed' },
+                    ].map(({ v, label }) => (
                       <button
                         key={v}
                         onClick={() => { setActiveVersion(v); setActiveResultTab('resume'); }}
                         style={{
-                          padding: '8px 22px', border: 'none', cursor: 'pointer',
-                          fontSize: '0.82rem', fontWeight: 700, transition: 'all 0.15s',
-                          background: activeVersion === v ? 'var(--ink)' : 'var(--surface)',
-                          color: activeVersion === v ? 'white' : 'var(--text-soft)',
+                          padding: '9px 20px',
+                          borderRadius: '8px',
+                          border: `2px solid ${activeVersion === v ? (v === 'v2' ? '#10b981' : '#555') : '#333'}`,
+                          cursor: 'pointer',
+                          fontSize: '0.82rem',
+                          fontWeight: 700,
+                          transition: 'all 0.15s',
+                          background: activeVersion === v ? (v === 'v2' ? '#10b981' : '#333') : 'transparent',
+                          color: activeVersion === v ? 'white' : (v === 'v2' ? '#10b981' : '#aaa'),
                         }}
                       >
-                        {v === 'v1' ? 'Version 1 — Original' : '✦ Version 2 — Fixed'}
+                        {label}
                       </button>
                     ))}
                   </div>
@@ -1685,15 +1690,15 @@ export default function Home() {
                     )}
 
                     {regenerating && (
-                      <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '12px', marginTop: '12px', padding: '12px 14px', background: 'rgba(124,92,252,0.08)', borderRadius: '8px' }}>
+                      <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '12px', marginTop: '12px', padding: '14px 16px', background: '#1a1a2e', border: '1.5px solid #f59e0b', borderRadius: '8px' }}>
                         <img
                           src="/jobsuncle-logo.png"
                           alt=""
                           style={{ width: 44, height: 'auto', flexShrink: 0, animation: 'logo-spin-pause 2s ease-in-out infinite', transformOrigin: 'center center' }}
                         />
                         <div>
-                          <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ink)' }}>Applying every fix from the analysis...</div>
-                          <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', marginTop: '2px' }}>Rewriting your resume and cover letter. About 15 seconds.</div>
+                          <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#f59e0b' }}>Applying every fix from the analysis...</div>
+                          <div style={{ fontSize: '0.78rem', color: '#ccc', marginTop: '3px' }}>Rewriting your resume and cover letter. About 15 seconds.</div>
                         </div>
                       </div>
                     )}
