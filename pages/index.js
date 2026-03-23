@@ -487,6 +487,7 @@ export default function Home() {
       if (!res.ok) throw new Error(data.error || 'Regeneration failed.')
       setRegeneratedResults(data)
       setActiveVersion('v2')
+      setActiveResultTab('ats')
       setTimeout(() => {
         versionToggleRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
       }, 100)
