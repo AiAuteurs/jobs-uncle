@@ -1566,6 +1566,37 @@ export default function Home() {
                 </div>
               )}
 
+              {activeResultTab === 'resume' && regeneratedResults && activeVersion === 'v2' && (() => {
+                const v2ats = clientScoreATS(regeneratedResults.resume, jobDescription)
+                if (!v2ats) return null
+                const v1ats = results.atsMatch
+                const scoreColor = v2ats.score >= 75 ? '#10b981' : v2ats.score >= 55 ? '#f59e0b' : '#ef4444'
+                return (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px', padding: '12px 16px', background: 'rgba(16,185,129,0.06)', border: '1.5px solid rgba(16,185,129,0.3)', borderRadius: '10px', flexWrap: 'wrap' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: `conic-gradient(${scoreColor} ${v2ats.score * 3.6}deg, #2a2a2a 0deg)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'var(--surface)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <span style={{ fontWeight: 900, fontSize: '0.9rem', color: scoreColor }}>{v2ats.score}%</span>
+                        </div>
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#10b981' }}>ATS Score — Version 2</div>
+                        <div style={{ fontSize: '0.72rem', color: 'var(--text-soft)' }}>
+                          {v1ats ? `Up from ${v1ats.score}% on Version 1` : 'Keyword match against job description'}
+                        </div>
+                      </div>
+                    </div>
+                    {v2ats.missing && v2ats.missing.length > 0 && (
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-soft)' }}>
+                        <span style={{ color: '#ef4444', fontWeight: 600 }}>Still missing: </span>
+                        {v2ats.missing.slice(0, 5).join(', ')}
+                        {v2ats.missing.length > 5 ? ` +${v2ats.missing.length - 5} more` : ''}
+                      </div>
+                    )}
+                  </div>
+                )
+              })()}
+
               {activeResultTab === 'resume' && <div id="result-resume" className="result-section">
                 <div className="result-section-title">Resume</div>
                 {results.dualVersion && activeVersion === 'v1' ? (
