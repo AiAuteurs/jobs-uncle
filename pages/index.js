@@ -1568,6 +1568,30 @@ export default function Home() {
                     </div>
                   </div>
 
+                  {/* SCORE RANGE LEGEND */}
+                  <div style={{ marginBottom: '20px', padding: '12px 14px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid var(--border)' }}>
+                    <div style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-soft)', marginBottom: '10px' }}>Score guide</div>
+                    <div style={{ display: 'flex', gap: '6px' }}>
+                      {[
+                        { label: 'Poor', range: '0–40', color: '#ef4444', bg: 'rgba(239,68,68,0.08)', active: results.atsMatch.score <= 40 },
+                        { label: 'Needs Work', range: '41–54', color: '#f97316', bg: 'rgba(249,115,22,0.08)', active: results.atsMatch.score >= 41 && results.atsMatch.score <= 54 },
+                        { label: 'Good', range: '55–74', color: '#f59e0b', bg: 'rgba(245,158,11,0.08)', active: results.atsMatch.score >= 55 && results.atsMatch.score <= 74 },
+                        { label: 'Strong', range: '75–89', color: '#10b981', bg: 'rgba(16,185,129,0.08)', active: results.atsMatch.score >= 75 && results.atsMatch.score <= 89 },
+                        { label: 'Excellent', range: '90+', color: '#00D1FF', bg: 'rgba(0,209,255,0.08)', active: results.atsMatch.score >= 90 },
+                      ].map(({ label, range, color, bg, active }) => (
+                        <div key={label} style={{
+                          flex: 1, textAlign: 'center', padding: '6px 4px',
+                          borderRadius: '6px',
+                          background: active ? bg : 'transparent',
+                          border: `1.5px solid ${active ? color : 'transparent'}`,
+                        }}>
+                          <div style={{ fontSize: '0.72rem', fontWeight: active ? 800 : 500, color: active ? color : 'var(--text-soft)', lineHeight: 1.2 }}>{label}</div>
+                          <div style={{ fontSize: '0.62rem', color: active ? color : '#555', marginTop: '2px', opacity: active ? 1 : 0.7 }}>{range}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
                   {results.atsMatch.missing && results.atsMatch.missing.length > 0 && (
                     <div style={{ marginBottom: '12px' }}>
                       <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#ef4444', marginBottom: '8px' }}>Missing keywords ({results.atsMatch.missing.length})</div>
