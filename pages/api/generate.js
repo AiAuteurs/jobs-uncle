@@ -459,13 +459,6 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing resume file or job description' })
   }
 
-  // JD quality check — reject LinkedIn snippets before hitting Claude
-  const jdWordCount = jobDescription.trim().split(/\s+/).length
-  const hasRoleContent = /responsibilit|requirement|qualif|you will|duties|what you|about the role/i.test(jobDescription)
-  if (jdWordCount < 80 || !hasRoleContent) {
-    return res.status(400).json({ error: 'That job description looks incomplete — it may be a LinkedIn preview rather than the full posting. Paste the full job description including responsibilities and requirements for best results.' })
-  }
-
   // Validate file type
   const uploadExt = (resumeFile.originalFilename || '').split('.').pop().toLowerCase()
   const allowedExts = ['pdf', 'docx', 'txt']
@@ -902,6 +895,9 @@ ${outputFormat}`
     }
   } catch (err) {
     console.error('Claude API error:', err)
+    if (err?.error?.error?.message?.includes('credit balance is too low') || err?.message?.includes('credit balance is too low')) {
+      return res.status(503).json({ error: 'Service temporarily unavailable. Please try again in a few minutes.' })
+    }
     return res.status(500).json({ error: 'Generation failed. Please try again.' })
   }
 }
