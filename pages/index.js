@@ -386,12 +386,12 @@ export default function Home() {
     }
 
     // JD quality check — catch LinkedIn snippets and stubs
-    if (jobDescInputMode === 'paste') {
+    if (jobDescInputMode === 'paste' && jobDescription.trim().length > 0) {
       const jd = jobDescription.trim()
       const wordCount = jd.split(/\s+/).length
-      const hasResponsibilities = /responsibilit|requirement|qualif|you will|you'll|duties|what you|experience|skill|about the role|about this role/i.test(jd)
+      const hasResponsibilities = /responsibilit|requirement|qualif|you will|you.ll|duties|what you|about the role|about this role/i.test(jd)
       if (wordCount < 80 || !hasResponsibilities) {
-        setError('That job description looks incomplete — it may be a LinkedIn preview rather than the full posting. Paste the full job description (responsibilities, requirements, qualifications) for the best results.')
+        setError('That job description looks too short. It may be a LinkedIn preview — paste the full job posting including responsibilities and requirements.')
         return
       }
     }
