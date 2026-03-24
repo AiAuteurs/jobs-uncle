@@ -48,7 +48,7 @@ export default function About() {
 
           <p>As in: upload your resume, paste the job description, and ta-da — you have an excellently tailored resume. Bob's your uncle.</p>
 
-          <p style={{ fontStyle: 'italic', color: 'var(--ink)', opacity: 0.7 }}>But bobsyouruncle.ai was already taken.</p>
+          <p style={{ fontStyle: 'italic', color: '#ffffff' }}>But bobsyouruncle.ai was already taken.</p>
 
           <p>So we got creative. <em>Jobs</em> sounds like <em>Bobs</em>. Uncle stays. <strong>JobsUncle.</strong></p>
 
