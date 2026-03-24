@@ -386,7 +386,7 @@ export default function Home() {
     }
 
     // JD quality check — catch LinkedIn snippets and stubs
-    if (jobDescInputMode === 'paste' && jobDescription.trim().length > 0) {
+    if (jobDescription.trim().length > 0) {
       const jd = jobDescription.trim()
       const wordCount = jd.split(/\s+/).length
       const hasResponsibilities = /responsibilit|requirement|qualif|you will|you.ll|duties|what you|about the role|about this role/i.test(jd)
