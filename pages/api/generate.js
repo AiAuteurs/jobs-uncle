@@ -483,6 +483,20 @@ export default async function handler(req, res) {
   const jobManifest = buildJobManifest(taggedJobs)
   // ────────────────────────────────────────────────────────────────────────────
 
+  // ── ATS keyword pre-score — inject missing keywords into prompt ──────────────
+  // Score raw input resume against JD before generation. Claude then weaves
+  // missing keywords in naturally — score reliably goes up on every generate.
+  const preScore = scoreKeywordMatch(linkedinText, jobDescription)
+  const missingKeywords = preScore.missing.slice(0, 12) // top 12 by JD frequency
+  const keywordInjectionBlock = missingKeywords.length > 0 ? `
+ATS KEYWORD INJECTION — CRITICAL:
+These keywords appear in the job description but are missing from the source resume.
+Naturally incorporate as many as possible into the resume — summary, bullets, skills — wherever they fit truthfully.
+Do NOT force them awkwardly. Skip any that genuinely cannot be used honestly.
+Missing keywords: ${missingKeywords.join(', ')}
+` : ''
+  // ────────────────────────────────────────────────────────────────────────────
+
   const resumeInstructions = dualVersion ? `
 JOB INCLUSION RULES — READ BEFORE WRITING EITHER VERSION:
 ${jobManifest}
@@ -784,6 +798,7 @@ METADATA REQUIREMENTS:
 COMPANY INTEL REQUIREMENTS:
 Analyze the job description for organizational power signals. Infer which function holds actual decision-making power based on language patterns, stated priorities, reporting structures, success metrics, and cultural signals in the JD — NOT what the company claims about itself. Be direct. No hedging. If the JD is thin on signals, say so briefly and give your best inference. Never fabricate specifics not in the text.
 
+${keywordInjectionBlock}
 Respond in this exact format:
 ${outputFormat}`
 
