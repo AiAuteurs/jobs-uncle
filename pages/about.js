@@ -22,6 +22,8 @@ export default function About() {
           <a href="/about" className="header-nav-link" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.5rem' }}>Our Story</a>
           <a href="/example" className="header-nav-link" style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.25rem' }}>See an example</a>
           <a href="/faq" className="header-nav-link" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.25rem' }}>FAQ</a>
+          <a href="/pricing" className="header-nav-link" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.25rem' }}>Pricing</a>
+          <a href="mailto:jobsuncleai@gmail.com" className="header-nav-link" style={{ color: 'var(--text-soft)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.02em', marginLeft: '1.25rem' }}>Contact</a>
         </div>
         <span style={{ fontSize: '0.8rem', color: 'var(--text-soft)' }}>Resumes for the AI age.</span>
       </header>
