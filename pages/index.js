@@ -385,6 +385,17 @@ export default function Home() {
       return
     }
 
+    // JD quality check — catch LinkedIn snippets and stubs
+    if (jobDescInputMode === 'paste') {
+      const jd = jobDescription.trim()
+      const wordCount = jd.split(/\s+/).length
+      const hasResponsibilities = /responsibilit|requirement|qualif|you will|you'll|duties|what you|experience|skill|about the role|about this role/i.test(jd)
+      if (wordCount < 80 || !hasResponsibilities) {
+        setError('That job description looks incomplete — it may be a LinkedIn preview rather than the full posting. Paste the full job description (responsibilities, requirements, qualifications) for the best results.')
+        return
+      }
+    }
+
     // Check access unless already paid
     if (!isPaid) {
       const accessRes = await fetch('/api/check-access', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) })
