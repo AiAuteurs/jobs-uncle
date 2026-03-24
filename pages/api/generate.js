@@ -790,7 +790,7 @@ ${outputFormat}`
   try {
     const message = await client.messages.create({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: dualVersion ? 5000 : 3000,
+      max_tokens: dualVersion ? 6000 : 4500,
       messages: [{ role: 'user', content: prompt }],
     })
 
