@@ -1235,7 +1235,7 @@ export default function Home() {
                 </div>
               </div>
               {jobDescInputMode === 'paste' ? (
-                <textarea className="cc-jd-input cc-jd-input--tall" placeholder="Paste the full job posting — title, responsibilities, requirements..." value={jobDescription} onChange={(e) => setJobDescription(e.target.value)} />
+                <textarea className="cc-jd-input cc-jd-input--tall" placeholder="Paste the full job posting — title, responsibilities, requirements..." value={jobDescription} onChange={(e) => { setJobDescription(e.target.value); setError(null); }} />
               ) : (
                 <div className={`cc-zone ${jobDescFile ? 'cc-zone--done' : 'cc-zone--active'}`} onClick={() => jobDescFileRef.current?.click()}>
                   <div className="cc-zone-icon">{jobDescFile ? '✓' : '📋'}</div>
@@ -1360,7 +1360,7 @@ export default function Home() {
                       className="job-textarea"
                       placeholder="Paste the complete job description here — title, responsibilities, requirements, the works..."
                       value={jobDescription}
-                      onChange={(e) => setJobDescription(e.target.value)}
+                      onChange={(e) => { setJobDescription(e.target.value); setError(null); }}
                     />
                   </>
                 ) : (
