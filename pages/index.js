@@ -2133,6 +2133,55 @@ export default function Home() {
         )}
       </div>
 
+      {/* FEEDBACK BANNER */}
+      <div style={{
+        background: 'var(--surface)',
+        borderTop: '1px solid var(--border)',
+        padding: '3rem 2rem',
+        textAlign: 'center',
+      }}>
+        <p style={{
+          fontFamily: 'Cormorant Garamond, serif',
+          fontSize: 'clamp(1.3rem, 3vw, 1.75rem)',
+          fontWeight: 700,
+          color: 'var(--ink)',
+          lineHeight: 1.4,
+          maxWidth: '600px',
+          margin: '0 auto 0.75rem',
+        }}>
+          We're not done yet.
+        </p>
+        <p style={{
+          fontSize: '0.95rem',
+          color: 'var(--text-soft)',
+          maxWidth: '520px',
+          margin: '0 auto 1.5rem',
+          lineHeight: 1.7,
+        }}>
+          Every version of JobsUncle.ai is better than the last. Tell us what worked, what didn't, and what you wish existed. We read everything.
+        </p>
+        <button
+          onClick={() => setShowContact(true)}
+          style={{
+            background: 'transparent',
+            border: '1.5px solid var(--accent)',
+            color: 'var(--accent)',
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '0.85rem',
+            fontWeight: 700,
+            padding: '10px 28px',
+            borderRadius: '50px',
+            cursor: 'pointer',
+            letterSpacing: '0.02em',
+            transition: 'all 0.2s',
+          }}
+          onMouseEnter={e => { e.target.style.background = 'var(--accent)'; e.target.style.color = '#fff' }}
+          onMouseLeave={e => { e.target.style.background = 'transparent'; e.target.style.color = 'var(--accent)' }}
+        >
+          Send feedback →
+        </button>
+      </div>
+
       <footer className="footer">
         <p>© 2026 JobsUncle.ai · Your resume and documents are never stored · Built with AI</p>
         <p style={{ marginTop: '8px', fontSize: '0.75rem' }}>
