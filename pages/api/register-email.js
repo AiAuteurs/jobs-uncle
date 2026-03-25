@@ -70,7 +70,7 @@ export default async function handler(req, res) {
           },
           body: JSON.stringify({
             from: 'JobsUncle Signups <oni@jobsuncle.ai>',
-            to: 'michael@matassa.com',
+            to: 'jobsuncleai@gmail.com',
             subject: `New signup: ${normalized}`,
             html: `<p>New email gate registration:</p><p><strong>${normalized}</strong></p><p style="color:#999;font-size:12px;">${new Date().toISOString()}</p>`,
           }),
