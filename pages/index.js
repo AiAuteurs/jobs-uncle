@@ -1504,14 +1504,15 @@ export default function Home() {
                   { key: 'resume', label: '📄 Resume' },
                   { key: 'ats', label: '🎯 ATS Score' },
                   { key: 'cover', label: '✉️ Cover Letter' },
-                  { key: 'recruiter', label: '🔍 Recruiter Analysis' },
-                  { key: 'dm', label: '💬 Hiring Manager DM' },
-                  ...(results.companyIntel ? [{ key: 'intel', label: '🏢 Company Intel' }] : []),
+                  { key: 'recruiter', label: '🔍 Recruiter' },
+                  { key: 'dm', label: '💬 HM Outreach' },
+                  ...(results.companyIntel ? [{ key: 'intel', label: '🏢 Intel' }] : []),
                 ]
                 return (
                   <div style={{
                     display: 'flex', gap: '0', overflowX: 'auto',
                     scrollbarWidth: 'none', msOverflowStyle: 'none',
+                    WebkitOverflowScrolling: 'touch',
                     borderBottom: '1px solid #2a2a2a',
                     marginBottom: '28px',
                   }}>
@@ -1521,7 +1522,7 @@ export default function Home() {
                         onClick={() => setActiveResultTab(key)}
                         style={{
                           background: 'none', border: 'none', cursor: 'pointer',
-                          padding: '11px 18px', whiteSpace: 'nowrap',
+                          padding: '11px 14px', whiteSpace: 'nowrap', flexShrink: 0,
                           fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', fontWeight: 600,
                           color: activeResultTab === key ? '#00D1FF' : '#666',
                           borderBottom: `2px solid ${activeResultTab === key ? '#00D1FF' : 'transparent'}`,
