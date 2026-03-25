@@ -43,7 +43,7 @@ export default async function handler(req, res) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            from: 'Oni from JobsUncle <oni@jobsuncle.ai>',
+            from: 'Oni from JobsUncle <onboarding@resend.dev>',
             to: normalized,
             subject: "You're already ahead.",
             html: `
@@ -69,7 +69,7 @@ export default async function handler(req, res) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            from: 'JobsUncle Signups <oni@jobsuncle.ai>',
+            from: 'JobsUncle <onboarding@resend.dev>',
             to: 'jobsuncleai@gmail.com',
             subject: `New signup: ${normalized}`,
             html: `<p>New email gate registration:</p><p><strong>${normalized}</strong></p><p style="color:#999;font-size:12px;">${new Date().toISOString()}</p>`,
