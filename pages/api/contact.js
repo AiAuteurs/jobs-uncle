@@ -15,7 +15,7 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${process.env.RESEND_API}`
       },
       body: JSON.stringify({
-        from: 'JobsUncle <onboarding@resend.dev>',
+        from: 'Oni from JobsUncle <oni@jobsuncle.ai>',
         to: 'jobsuncleai@gmail.com',
         reply_to: email,
         subject: `📄 New Contact: ${name} — ${email}`,
@@ -34,11 +34,7 @@ export default async function handler(req, res) {
       })
     })
 
-    if (!response.ok) {
-      const errBody = await response.text()
-      console.error('Resend error body:', errBody)
-      throw new Error('Resend API error: ' + errBody)
-    }
+    if (!response.ok) throw new Error('Resend API error')
     res.status(200).json({ ok: true })
   } catch (err) {
     console.error('Contact email error:', err)
