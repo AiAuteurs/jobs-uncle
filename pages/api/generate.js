@@ -817,6 +817,12 @@ ${outputFormat}`
     if (metaMatch) {
       try { metadata = { ...metadata, ...JSON.parse(metaMatch[1]) } } catch (e) {}
     }
+    // Clean email — strip garbage prefix before @ (e.g. 'CA' from location bleed)
+    if (metadata.candidateEmail && metadata.candidateEmail.includes('@')) {
+      const atIdx = metadata.candidateEmail.indexOf('@')
+      const localPart = metadata.candidateEmail.slice(0, atIdx).replace(/^[^a-zA-Z0-9]+/, '')
+      metadata.candidateEmail = localPart + metadata.candidateEmail.slice(atIdx)
+    }
 
     // Notify you when someone generates a resume
     try {

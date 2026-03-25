@@ -766,6 +766,12 @@ export default function Home() {
           color: var(--surface) !important;
           border-color: var(--ink) !important;
         }
+        .tab-dropdown-mobile { display: none; }
+        .tab-bar-desktop { display: flex; }
+        @media (max-width: 700px) {
+          .tab-dropdown-mobile { display: block !important; }
+          .tab-bar-desktop { display: none !important; }
+        }
         @media (max-width: 900px) {
           .hero-grid {
             grid-template-columns: 1fr !important;
@@ -1502,38 +1508,58 @@ export default function Home() {
               {/* RESULTS TAB BAR */}
               {(() => {
                 const tabs = [
-                  { key: 'resume', label: '📄 Resume' },
-                  { key: 'ats', label: '🎯 ATS Score' },
-                  { key: 'cover', label: '✉️ Cover Letter' },
-                  { key: 'recruiter', label: '🔍 Recruiter Analysis' },
-                  { key: 'dm', label: '💬 Hiring Manager DM' },
-                  ...(results.companyIntel ? [{ key: 'intel', label: '🏢 Company Intel' }] : []),
+                  { key: 'resume', label: '📄 Resume' },
+                  { key: 'ats', label: '🎯 ATS Score' },
+                  { key: 'cover', label: '✉️ Cover Letter' },
+                  { key: 'recruiter', label: '🔍 Recruiter Analysis' },
+                  { key: 'dm', label: '💬 Hiring Manager DM' },
+                  ...(results.companyIntel ? [{ key: 'intel', label: '🏢 Company Intel' }] : []),
                 ]
                 return (
-                  <div style={{
-                    display: 'flex', gap: '0', overflowX: 'auto',
-                    scrollbarWidth: 'none', msOverflowStyle: 'none',
-                    borderBottom: '1px solid #2a2a2a',
-                    marginBottom: '28px',
-                  }}>
-                    {tabs.map(({ key, label }) => (
-                      <button
-                        key={key}
-                        onClick={() => setActiveResultTab(key)}
+                  <>
+                    {/* MOBILE: full-width dropdown */}
+                    <div className="tab-dropdown-mobile" style={{ marginBottom: '20px' }}>
+                      <select
+                        value={activeResultTab}
+                        onChange={e => setActiveResultTab(e.target.value)}
                         style={{
-                          background: 'none', border: 'none', cursor: 'pointer',
-                          padding: '11px 18px', whiteSpace: 'nowrap',
-                          fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', fontWeight: 600,
-                          color: activeResultTab === key ? '#00D1FF' : '#666',
-                          borderBottom: `2px solid ${activeResultTab === key ? '#00D1FF' : 'transparent'}`,
-                          transition: 'color 0.15s, border-color 0.15s',
-                          marginBottom: '-1px',
+                          width: '100%', padding: '12px 16px', borderRadius: '10px',
+                          border: '1.5px solid #00D1FF', background: '#111', color: '#fff',
+                          fontFamily: 'Inter, sans-serif', fontSize: '0.9rem', fontWeight: 600,
+                          cursor: 'pointer', appearance: 'none', WebkitAppearance: 'none',
+                          backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2300D1FF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E\")",
+                          backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', paddingRight: '36px',
                         }}
                       >
-                        {label}
-                      </button>
-                    ))}
-                  </div>
+                        {tabs.map(({ key, label }) => (
+                          <option key={key} value={key}>{label}</option>
+                        ))}
+                      </select>
+                    </div>
+                    {/* DESKTOP: tab bar */}
+                    <div className="tab-bar-desktop" style={{
+                      display: 'flex', gap: '0', overflowX: 'auto',
+                      scrollbarWidth: 'none', msOverflowStyle: 'none',
+                      borderBottom: '1px solid #2a2a2a', marginBottom: '28px',
+                    }}>
+                      {tabs.map(({ key, label }) => (
+                        <button
+                          key={key}
+                          onClick={() => setActiveResultTab(key)}
+                          style={{
+                            background: 'none', border: 'none', cursor: 'pointer',
+                            padding: '11px 18px', whiteSpace: 'nowrap', flexShrink: 0,
+                            fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', fontWeight: 600,
+                            color: activeResultTab === key ? '#00D1FF' : '#666',
+                            borderBottom: `2px solid ${activeResultTab === key ? '#00D1FF' : 'transparent'}`,
+                            transition: 'color 0.15s, border-color 0.15s', marginBottom: '-1px',
+                          }}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  </>
                 )
               })()}
 
