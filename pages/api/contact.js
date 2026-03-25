@@ -15,7 +15,7 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${process.env.RESEND_API}`
       },
       body: JSON.stringify({
-        from: 'Oni from JobsUncle <oni@jobsuncle.ai>',
+        from: 'JobsUncle <onboarding@resend.dev>',
         to: 'jobsuncleai@gmail.com',
         reply_to: email,
         subject: `📄 New Contact: ${name} — ${email}`,

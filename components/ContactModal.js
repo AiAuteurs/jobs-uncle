@@ -50,7 +50,7 @@ export default function ContactModal({ onClose }) {
             <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>✅</div>
             <p style={{ fontWeight: 700, color: '#00D1FF', margin: '0 0 0.5rem' }}>Message sent!</p>
             <p style={{ color: 'var(--text-soft, #666)', fontSize: '0.9rem', margin: 0 }}>
-              We'll get back to you soon. We'll get back to you soon.
+              We read every message. We'll be in touch.
             </p>
             <button onClick={onClose} style={{
               marginTop: '1.25rem', background: '#00D1FF', color: '#fff',
