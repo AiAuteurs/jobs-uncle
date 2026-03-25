@@ -34,7 +34,11 @@ export default async function handler(req, res) {
       })
     })
 
-    if (!response.ok) throw new Error('Resend API error')
+    if (!response.ok) {
+      const errBody = await response.text()
+      console.error('Resend error body:', errBody)
+      throw new Error('Resend API error: ' + errBody)
+    }
     res.status(200).json({ ok: true })
   } catch (err) {
     console.error('Contact email error:', err)
