@@ -1225,6 +1225,10 @@ export default function Home() {
               .hero-quad-overlay { animation: hqFadeIn 0.15s ease; }
             `}</style>
 
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 700, color: '#888', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Real output. Fictional candidate.</span>
+              <span style={{ background: '#f59e0b', color: '#000', fontSize: '0.55rem', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', padding: '3px 10px', borderRadius: '20px', fontFamily: 'Inter, sans-serif' }}>Example Output</span>
+            </div>
             <div className="hero-quad-grid">
               {/* Q1 RESUME */}
               <div className="hero-quad-cell" style={{ borderLeft: '3px solid #00D1FF' }} onMouseEnter={() => setHoveredQuad('resume')}>
@@ -1300,7 +1304,8 @@ export default function Home() {
               }}>
                 {hoveredQuad === 'resume' && (
                   <div>
-                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 800, color: '#00D1FF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>📄 Tailored Resume</div>
+                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 800, color: '#00D1FF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '4px' }}>📄 Tailored Resume</div>
+                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', color: '#bbb', marginBottom: '12px' }}>Example output — fictional candidate Riley Okafor applying to fictional company Vela.</div>
                     <div style={{ fontFamily: 'Georgia, serif', fontSize: '0.78rem', lineHeight: 1.75, color: '#1a1a1a' }}>
                       <strong>Riley Okafor</strong> — Head of Human Experience<br/>
                       <span style={{ color: '#888', fontSize: '0.72rem' }}>riley.okafor@mailbox.io · Portland, OR</span>
@@ -1318,7 +1323,8 @@ export default function Home() {
                 )}
                 {hoveredQuad === 'cover' && (
                   <div>
-                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 800, color: '#a78bfa', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>✉️ Cover Letter</div>
+                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 800, color: '#a78bfa', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '4px' }}>✉️ Cover Letter</div>
+                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', color: '#bbb', marginBottom: '12px' }}>Example output — fictional candidate Riley Okafor applying to fictional company Vela.</div>
                     <div style={{ fontFamily: 'Georgia, serif', fontSize: '0.82rem', lineHeight: 1.85, color: '#1a1a1a' }}>
                       <p style={{ margin: '0 0 14px' }}>Vela's approach to culture as infrastructure, not perk, hits exactly right. Too many companies treat human experience as an afterthought — you're building it as a product. That's the difference between culture that scales and culture that breaks.</p>
                       <p style={{ margin: '0 0 14px' }}>I've designed onboarding systems that cut time-to-productivity by 34%, and run offsites for 140-person distributed teams across 9 time zones. At Bright Arc, I built culture measurement frameworks that gave leadership real signals instead of vanity metrics.</p>
@@ -1328,7 +1334,8 @@ export default function Home() {
                 )}
                 {hoveredQuad === 'ats' && (
                   <div>
-                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px' }}>🎯 ATS Score</div>
+                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '4px' }}>🎯 ATS Score</div>
+                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', color: '#bbb', marginBottom: '12px' }}>Example output — fictional candidate Riley Okafor applying to fictional company Vela.</div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
                       <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'conic-gradient(#10b981 360deg, #e5e7eb 0deg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -1349,7 +1356,8 @@ export default function Home() {
                 )}
                 {hoveredQuad === 'dm' && (
                   <div>
-                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 800, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>💬 Hiring Manager DM</div>
+                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 800, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '4px' }}>💬 Hiring Manager DM</div>
+                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', color: '#bbb', marginBottom: '12px' }}>Example output — fictional candidate Riley Okafor applying to fictional company Vela.</div>
                     <div style={{ background: '#f8fafc', borderRadius: '10px', padding: '14px 16px', border: '1px solid #e5e7eb' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px', paddingBottom: '10px', borderBottom: '1px solid #e5e7eb' }}>
                         <div style={{ width: '24px', height: '24px', borderRadius: '5px', background: '#0077b5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
