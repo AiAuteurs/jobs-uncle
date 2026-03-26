@@ -1021,10 +1021,10 @@ export default function Home() {
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:image" content="https://www.jobsuncle.ai/og-image.png" />
-        <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=2" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/favicon-512.png?v=2" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/jobsuncle-favicon-32.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/jobsuncle-favicon.png" />
+        <link rel="apple-touch-icon" sizes="192x192" href="/jobsuncle-favicon.png" />
       </Head>
 
       <Header
@@ -1062,7 +1062,7 @@ export default function Home() {
           <img
             src="/jobsuncleaiblack.png"
             alt="JobsUncle.ai"
-            style={{ width: '336px', display: 'block' }}
+            style={{ width: '280px', display: 'block' }}
           />
         </div>
 
