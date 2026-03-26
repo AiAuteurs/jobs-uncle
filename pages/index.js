@@ -72,8 +72,9 @@ let tadaCtx = null
 async function loadTada() {
   if (tadaBuffer) return
   try {
-    tadaCtx = new (window.AudioContext || window.webkitAudioContext)()
     const res = await fetch('/tada.mp3')
+    if (!res.ok) return // file not present, skip silently
+    tadaCtx = new (window.AudioContext || window.webkitAudioContext)()
     const arr = await res.arrayBuffer()
     tadaBuffer = await tadaCtx.decodeAudioData(arr)
   } catch(e) {}
@@ -1153,7 +1154,6 @@ export default function Home() {
         {loading ? (
           <div style={{ 
             textAlign: 'center', 
-            minHeight: '70vh',
             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
             padding: '4rem 1rem', background: '#161616', border: '1px solid #2a2a2a', borderRadius: '16px' 
           }}>
