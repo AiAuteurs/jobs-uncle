@@ -16,6 +16,54 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing required fields.' })
   }
 
+  // ── ATS keyword injection (mirrors generate.js) ───────────────────────────
+  function scoreKeywordMatch(resumeText, jd) {
+    if (!resumeText || !jd) return { missing: [] }
+    const STOP = new Set([
+      'the','and','or','of','to','a','an','in','for','with','on','at','by','from',
+      'is','are','was','were','be','been','have','has','had','do','does','did',
+      'will','would','could','should','may','might','this','that','these','those',
+      'we','you','your','our','their','its','it','as','if','so','but','not','no',
+      'use','using','used','work','working','experience','ability','strong','proven',
+      'role','position','team','company','business','project','process','based',
+      'well','also','very','highly','quickly','effectively','efficiently',
+    ])
+    const jdLower = jd.toLowerCase().replace(/[^a-z0-9\s]/g, ' ')
+    const jdWords = jdLower.split(/\s+/).filter(w => w.length >= 6 && !STOP.has(w))
+    const freq = {}
+    jdWords.forEach(w => { freq[w] = (freq[w] || 0) + 1 })
+    const candidates = Object.entries(freq)
+      .filter(([, c]) => c >= 2)
+      .map(([w]) => w)
+      .filter(k => k.length >= 6)
+      .slice(0, 40)
+    function stem(w) {
+      if (w.endsWith('ing') && w.length > 6) return w.slice(0, -3)
+      if (w.endsWith('tion') && w.length > 7) return w.slice(0, -4)
+      if (w.endsWith('ed') && w.length > 5) return w.slice(0, -2)
+      if (w.endsWith('ly') && w.length > 5) return w.slice(0, -2)
+      if (w.endsWith('s') && w.length > 5) return w.slice(0, -1)
+      return w
+    }
+    const resumeLower = resumeText.toLowerCase()
+    const resumeWords = resumeLower.split(/\s+/)
+    const missing = []
+    candidates.forEach(kw => {
+      const kwStem = stem(kw)
+      const found = resumeLower.includes(kw) ||
+        resumeLower.includes(kw.endsWith('s') ? kw.slice(0, -1) : kw + 's') ||
+        resumeWords.some(w => stem(w) === kwStem)
+      if (!found) missing.push(kw)
+    })
+    return { missing: missing.slice(0, 15) }
+  }
+
+  const { missing: missingKeywords } = scoreKeywordMatch(resume, jobDescription)
+  const keywordBlock = missingKeywords.length > 0
+    ? `\nATS KEYWORDS STILL MISSING FROM RESUME (incorporate naturally where the original resume supports it — do not fabricate context):\n${missingKeywords.join(', ')}\n`
+    : ''
+
+
   // ── Prompt ────────────────────────────────────────────────────────────────
   const systemPrompt = `You are a professional resume writer and career strategist with a strict code of ethics. 
 You receive a resume, a job description, and a recruiter/ATS analysis that identifies gaps.
@@ -58,7 +106,7 @@ ${recruiterNotes}
 
 IMPORTANT: If a fix requires information not present in the original resume (e.g. "add metrics" when no metrics exist), skip that fix rather than inventing data. Strengthen the language around what IS there instead.
 
-Produce an improved Version 2 resume and cover letter. Return ONLY JSON: { "resume": "...", "coverLetter": "..." }`
+${keywordBlock}Produce an improved Version 2 resume and cover letter. Return ONLY JSON: { "resume": "...", "coverLetter": "..." }`
 
   try {
     const message = await client.messages.create({

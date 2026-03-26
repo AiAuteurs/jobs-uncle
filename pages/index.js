@@ -1021,7 +1021,6 @@ export default function Home() {
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:image" content="https://www.jobsuncle.ai/og-image.png" />
-        <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2" />
         <link rel="icon" type="image/png" sizes="32x32" href="/jobsuncle-favicon-32.png?v=2" />
         <link rel="icon" type="image/png" sizes="192x192" href="/jobsuncle-favicon.png?v=2" />
         <link rel="apple-touch-icon" sizes="192x192" href="/jobsuncle-favicon.png?v=2" />
