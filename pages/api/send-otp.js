@@ -3,8 +3,8 @@
 // Uses fetch REST only — no SDK packages required
 
 const kv = async (...cmd) => {
-  const res = await fetch(`${process.env.UPSTASH_REDIS_REST_URL}/${cmd.map(encodeURIComponent).join('/')}`, {
-    headers: { Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}` },
+  const res = await fetch(`${process.env.KV_REST_API_URL}/${cmd.map(encodeURIComponent).join('/')}`, {
+    headers: { Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}` },
   })
   return res.json()
 }
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
     const emailRes = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+        'Authorization': `Bearer ${process.env.RESEND_API}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
