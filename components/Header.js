@@ -189,10 +189,10 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
       <nav style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
         {onLogoClick && (
           <img
-            src="/jobsuncle-logo.png"
+            src="/jobsuncleaiblack.png"
             alt="JobsUncle.ai"
             onClick={onLogoClick}
-            style={{ width: '44px', height: '44px', objectFit: 'contain', cursor: 'pointer', marginRight: '8px', flexShrink: 0 }}
+            style={{ height: '36px', width: 'auto', objectFit: 'contain', cursor: 'pointer', marginRight: '8px', flexShrink: 0 }}
           />
         )}
         <a href="/about" style={navLink}>Our Story</a>
