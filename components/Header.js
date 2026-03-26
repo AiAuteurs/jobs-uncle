@@ -185,16 +185,14 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
         pointerEvents: 'none', zIndex: 200,
       }} />
 
-      {/* LEFT — logo (when results exist) + nav */}
+      {/* LEFT — logo + nav */}
       <nav style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-        {onLogoClick && (
-          <img
-            src="/jobsuncleaiblack.png"
-            alt="JobsUncle.ai"
-            onClick={onLogoClick}
-            style={{ height: '36px', width: 'auto', objectFit: 'contain', cursor: 'pointer', marginRight: '8px', flexShrink: 0 }}
-          />
-        )}
+        <img
+          src="/jobsuncleaiblack.png"
+          alt="JobsUncle.ai"
+          onClick={onLogoClick || undefined}
+          style={{ height: '36px', width: 'auto', objectFit: 'contain', cursor: onLogoClick ? 'pointer' : 'default', marginRight: '8px', flexShrink: 0 }}
+        />
         <a href="/about" style={navLink}>Our Story</a>
         <a href="/example" style={navLink}>See an example</a>
         <a href="/faq" style={navLink}>FAQ</a>
@@ -254,7 +252,7 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
           50%       { opacity: 0.35; transform: scale(0.65); }
         }
         @media (max-width: 860px) {
-          header nav { display: none !important; }
+          header nav a { display: none !important; }
           header { grid-template-columns: auto 1fr !important; padding: 0 16px !important; }
         }
       `}</style>
