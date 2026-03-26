@@ -229,6 +229,7 @@ export default function Home() {
   const [gateStatus, setGateStatus] = useState(null) // null | 'loading' | 'done' | 'error'
   const [gateMsg, setGateMsg] = useState('')
   const [showContact, setShowContact] = useState(false)
+  const [hoveredQuad, setHoveredQuad] = useState(null)
   const [otpStep, setOtpStep] = useState('email') // 'email' | 'otp'
   const [otpCode, setOtpCode] = useState(['', '', '', '', ''])
   const [otpStatus, setOtpStatus] = useState(null) // null | 'loading' | 'error'
@@ -1211,82 +1212,23 @@ export default function Home() {
 
         {/* COL 3 — 4-quad example card */}
         {!results && (
-          <div style={{ position: 'relative' }}>
+          <div style={{ position: 'relative' }} onMouseLeave={() => setHoveredQuad(null)}>
             <style>{`
-              .hero-quad-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 6px;
-                border-radius: 16px;
-                overflow: hidden;
-                box-shadow: 0 32px 64px rgba(0,0,0,0.5);
-              }
-              .hero-quad-cell {
-                background: #fff;
-                padding: 12px;
-                position: relative;
-                overflow: hidden;
-                cursor: default;
-                transition: transform 0.2s, box-shadow 0.2s, z-index 0s;
-                z-index: 1;
-              }
-              .hero-quad-cell:hover {
-                transform: scale(1.06);
-                box-shadow: 0 16px 48px rgba(0,0,0,0.35);
-                z-index: 10;
-                border-radius: 10px;
-              }
-              .hero-quad-label {
-                font-family: Inter, sans-serif;
-                font-size: 0.55rem;
-                font-weight: 800;
-                letter-spacing: 0.1em;
-                text-transform: uppercase;
-                margin-bottom: 7px;
-                display: flex;
-                align-items: center;
-                gap: 4px;
-              }
-              .hero-quad-dot {
-                width: 5px; height: 5px;
-                border-radius: 50%;
-                flex-shrink: 0;
-              }
-              .hero-quad-text {
-                font-family: Georgia, serif;
-                font-size: 0.62rem;
-                line-height: 1.65;
-                color: #333;
-              }
-              .hero-quad-fade {
-                position: absolute;
-                bottom: 0; left: 0; right: 0;
-                height: 40px;
-                background: linear-gradient(to bottom, transparent, #fff);
-              }
-              .hero-quad-badge {
-                display: inline-block;
-                background: #f59e0b;
-                color: #000;
-                font-size: 0.48rem;
-                font-weight: 800;
-                letter-spacing: 0.12em;
-                text-transform: uppercase;
-                padding: 2px 7px;
-                border-radius: 20px;
-                margin-bottom: 6px;
-                font-family: Inter, sans-serif;
-              }
+              .hero-quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; border-radius: 16px; overflow: hidden; box-shadow: 0 32px 64px rgba(0,0,0,0.5); }
+              .hero-quad-cell { background: #fff; padding: 12px; position: relative; overflow: hidden; cursor: pointer; transition: background 0.15s; }
+              .hero-quad-cell:hover { background: #fafafa; }
+              .hero-quad-label { font-family: Inter, sans-serif; font-size: 0.55rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 7px; display: flex; align-items: center; gap: 4px; }
+              .hero-quad-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+              .hero-quad-text { font-family: Georgia, serif; font-size: 0.62rem; line-height: 1.65; color: #333; }
+              .hero-quad-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 40px; background: linear-gradient(to bottom, transparent, #fff); }
+              @keyframes hqFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+              .hero-quad-overlay { animation: hqFadeIn 0.15s ease; }
             `}</style>
 
             <div className="hero-quad-grid">
-
               {/* Q1 RESUME */}
-              <div className="hero-quad-cell" style={{ borderLeft: '3px solid #00D1FF' }}>
-                <div className="hero-quad-label" style={{ color: '#00D1FF' }}>
-                  <span className="hero-quad-dot" style={{ background: '#00D1FF' }} />
-                  Resume
-                </div>
+              <div className="hero-quad-cell" style={{ borderLeft: '3px solid #00D1FF' }} onMouseEnter={() => setHoveredQuad('resume')}>
+                <div className="hero-quad-label" style={{ color: '#00D1FF' }}><span className="hero-quad-dot" style={{ background: '#00D1FF' }} />Resume</div>
                 <div className="hero-quad-text">
                   <strong style={{ fontSize: '0.66rem', color: '#111' }}>Riley Okafor</strong><br/>
                   Head of Human Experience<br/>
@@ -1294,33 +1236,26 @@ export default function Home() {
                   <br/><br/>
                   Culture strategist who designed onboarding systems reducing time-to-productivity by 34%. Built belonging programs across distributed teams spanning 9 time zones.
                   <br/><br/>
-                  <strong style={{ color: '#111', fontSize: '0.62rem' }}>Distributed Team Experience</strong><br/>
-                  • Onboarding program reducing time-to-productivity 34% across 6 depts<br/>
-                  • Peer mentorship adopted by 89% of new hires in Q1
+                  <strong style={{ color: '#111' }}>Distributed Team Experience</strong><br/>
+                  • Onboarding program, 34% faster time-to-productivity<br/>
+                  • Peer mentorship adopted by 89% of new hires
                 </div>
                 <div className="hero-quad-fade" />
               </div>
 
               {/* Q2 COVER LETTER */}
-              <div className="hero-quad-cell" style={{ borderLeft: '3px solid #a78bfa' }}>
-                <div className="hero-quad-label" style={{ color: '#a78bfa' }}>
-                  <span className="hero-quad-dot" style={{ background: '#a78bfa' }} />
-                  Cover Letter
-                </div>
+              <div className="hero-quad-cell" style={{ borderLeft: '3px solid #a78bfa' }} onMouseEnter={() => setHoveredQuad('cover')}>
+                <div className="hero-quad-label" style={{ color: '#a78bfa' }}><span className="hero-quad-dot" style={{ background: '#a78bfa' }} />Cover Letter</div>
                 <div className="hero-quad-text">
                   Vela's approach to culture as infrastructure, not perk, hits exactly right. Too many companies treat human experience as an afterthought — you're building it as a product.<br/><br/>
-                  I've designed onboarding systems that cut time-to-productivity by 34%, and run offsites for 140-person distributed teams across 9 time zones.<br/><br/>
-                  The direct CEO reporting structure tells me this role has real influence. I'm ready to own the experience of working at Vela from day one.
+                  I've designed onboarding systems that cut time-to-productivity by 34%, and run offsites for 140-person distributed teams across 9 time zones.
                 </div>
-                <div className="hero-quad-fade" style={{ background: 'linear-gradient(to bottom, transparent, #fff)' }} />
+                <div className="hero-quad-fade" />
               </div>
 
               {/* Q3 ATS SCORE */}
-              <div className="hero-quad-cell" style={{ borderLeft: '3px solid #10b981' }}>
-                <div className="hero-quad-label" style={{ color: '#10b981' }}>
-                  <span className="hero-quad-dot" style={{ background: '#10b981' }} />
-                  ATS Score
-                </div>
+              <div className="hero-quad-cell" style={{ borderLeft: '3px solid #10b981' }} onMouseEnter={() => setHoveredQuad('ats')}>
+                <div className="hero-quad-label" style={{ color: '#10b981' }}><span className="hero-quad-dot" style={{ background: '#10b981' }} />ATS Score</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                   <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'conic-gradient(#10b981 360deg, #e5e7eb 0deg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -1340,26 +1275,96 @@ export default function Home() {
               </div>
 
               {/* Q4 HIRING MANAGER DM */}
-              <div className="hero-quad-cell" style={{ borderLeft: '3px solid #f59e0b' }}>
-                <div className="hero-quad-label" style={{ color: '#f59e0b' }}>
-                  <span className="hero-quad-dot" style={{ background: '#f59e0b' }} />
-                  Hiring Manager DM
-                </div>
-                <div style={{ background: '#f8fafc', borderRadius: '6px', padding: '7px 8px', marginBottom: '6px' }}>
+              <div className="hero-quad-cell" style={{ borderLeft: '3px solid #f59e0b' }} onMouseEnter={() => setHoveredQuad('dm')}>
+                <div className="hero-quad-label" style={{ color: '#f59e0b' }}><span className="hero-quad-dot" style={{ background: '#f59e0b' }} />Hiring Manager DM</div>
+                <div style={{ background: '#f8fafc', borderRadius: '6px', padding: '7px 8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '5px' }}>
                     <div style={{ width: '14px', height: '14px', borderRadius: '3px', background: '#0077b5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                       <span style={{ color: '#fff', fontSize: '0.4rem', fontWeight: 800, fontFamily: 'Inter, sans-serif' }}>in</span>
                     </div>
                     <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.55rem', color: '#888' }}>To: Hiring Manager, Vela</span>
                   </div>
-                  <div className="hero-quad-text">
-                    I built onboarding systems that reduced time-to-productivity by 34% at a distributed company, and facilitated C-suite retreats at 8 companies. Your Head of Human Experience role caught my attention — you're treating culture as infrastructure, not a perk.
-                  </div>
+                  <div className="hero-quad-text">I built onboarding systems that reduced time-to-productivity by 34% at a distributed company, and facilitated C-suite retreats at 8 companies. Your Head of Human Experience role caught my attention — you're treating culture as infrastructure, not a perk.</div>
                 </div>
                 <div className="hero-quad-fade" style={{ background: 'linear-gradient(to bottom, transparent, #fff)' }} />
               </div>
-
             </div>
+
+            {/* HOVER OVERLAY */}
+            {hoveredQuad && (
+              <div className="hero-quad-overlay" style={{
+                position: 'absolute', top: 0, left: 0, right: 0,
+                background: '#fff', borderRadius: '16px', padding: '20px', zIndex: 50,
+                boxShadow: '0 24px 64px rgba(0,0,0,0.4)', border: '1px solid #e5e7eb',
+                maxHeight: '420px', overflowY: 'auto',
+              }}>
+                {hoveredQuad === 'resume' && (
+                  <div>
+                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 800, color: '#00D1FF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>📄 Tailored Resume</div>
+                    <div style={{ fontFamily: 'Georgia, serif', fontSize: '0.78rem', lineHeight: 1.75, color: '#1a1a1a' }}>
+                      <strong>Riley Okafor</strong> — Head of Human Experience<br/>
+                      <span style={{ color: '#888', fontSize: '0.72rem' }}>riley.okafor@mailbox.io · Portland, OR</span>
+                      <br/><br/>Culture strategist who designed onboarding systems reducing time-to-productivity by 34%. Built belonging and inclusion programs across distributed teams spanning 9 time zones.<br/><br/>
+                      <strong>Distributed Team Experience</strong><br/>
+                      • Onboarding program reducing time-to-productivity 34% across 6 departments<br/>
+                      • Annual offsite for 140-person distributed team across 9 time zones<br/>
+                      • Peer mentorship adopted by 89% of new hires in Q1<br/><br/>
+                      <strong>Executive Facilitation & Change Management</strong><br/>
+                      • Led facilitation for 3 org restructures affecting 200+ employees<br/>
+                      • Leadership retreats for C-suite teams at 8 mid-market companies<br/>
+                      • Grew consulting practice revenue 40% in 18 months
+                    </div>
+                  </div>
+                )}
+                {hoveredQuad === 'cover' && (
+                  <div>
+                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 800, color: '#a78bfa', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>✉️ Cover Letter</div>
+                    <div style={{ fontFamily: 'Georgia, serif', fontSize: '0.82rem', lineHeight: 1.85, color: '#1a1a1a' }}>
+                      <p style={{ margin: '0 0 14px' }}>Vela's approach to culture as infrastructure, not perk, hits exactly right. Too many companies treat human experience as an afterthought — you're building it as a product. That's the difference between culture that scales and culture that breaks.</p>
+                      <p style={{ margin: '0 0 14px' }}>I've designed onboarding systems that cut time-to-productivity by 34%, and run offsites for 140-person distributed teams across 9 time zones. At Bright Arc, I built culture measurement frameworks that gave leadership real signals instead of vanity metrics.</p>
+                      <p style={{ margin: 0 }}>The direct CEO reporting structure tells me this role has real influence. I'm ready to own the experience of working at Vela from day one.</p>
+                    </div>
+                  </div>
+                )}
+                {hoveredQuad === 'ats' && (
+                  <div>
+                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px' }}>🎯 ATS Score</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
+                      <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'conic-gradient(#10b981 360deg, #e5e7eb 0deg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <span style={{ fontWeight: 900, fontSize: '0.85rem', color: '#10b981', fontFamily: 'Inter, sans-serif' }}>100%</span>
+                        </div>
+                      </div>
+                      <div>
+                        <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: '0.9rem', color: '#10b981' }}>Excellent</div>
+                        <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', color: '#888' }}>15/15 keywords matched</div>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+                      {['onboarding','culture','distributed','facilitation','systems','leadership','inclusion','change','workflow','software','design','product','integration','management','department'].map(k => (
+                        <span key={k} style={{ fontSize: '0.68rem', padding: '3px 8px', borderRadius: '999px', background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)', color: '#059669', fontFamily: 'Inter, sans-serif', fontWeight: 600 }}>✓ {k}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {hoveredQuad === 'dm' && (
+                  <div>
+                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 800, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '10px' }}>💬 Hiring Manager DM</div>
+                    <div style={{ background: '#f8fafc', borderRadius: '10px', padding: '14px 16px', border: '1px solid #e5e7eb' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px', paddingBottom: '10px', borderBottom: '1px solid #e5e7eb' }}>
+                        <div style={{ width: '24px', height: '24px', borderRadius: '5px', background: '#0077b5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <span style={{ color: '#fff', fontSize: '0.55rem', fontWeight: 800, fontFamily: 'Inter, sans-serif' }}>in</span>
+                        </div>
+                        <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', color: '#888' }}>To: Hiring Manager, Vela</span>
+                      </div>
+                      <div style={{ fontFamily: 'Georgia, serif', fontSize: '0.8rem', lineHeight: 1.8, color: '#1a1a1a' }}>
+                        I built onboarding systems that reduced time-to-productivity by 34% at a distributed company, and facilitated leadership retreats for C-suite teams at 8 companies. Your Head of Human Experience role caught my attention because you're treating culture as infrastructure, not a perk. Worth a conversation about how this translates to your 180-person distributed team?
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
             <div style={{ textAlign: 'center', marginTop: '10px' }}>
               <a href="/example" style={{ fontSize: '0.72rem', color: '#00D1FF', fontWeight: 700, textDecoration: 'none', fontFamily: 'Inter, sans-serif' }}>See full example output →</a>
