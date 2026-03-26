@@ -1060,9 +1060,9 @@ export default function Home() {
         {/* COL 1 — logo */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <img
-            src="/jobsuncle-logo.png"
+            src="/jobsuncleaiblack.png"
             alt="JobsUncle.ai"
-            style={{ width: '240px', display: 'block' }}
+            style={{ width: '280px', display: 'block' }}
           />
         </div>
 
