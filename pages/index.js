@@ -1215,7 +1215,7 @@ export default function Home() {
           <div style={{ position: 'relative' }} onMouseLeave={() => setHoveredQuad(null)}>
             <style>{`
               .hero-quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; border-radius: 16px; overflow: hidden; box-shadow: 0 32px 64px rgba(0,0,0,0.5); }
-              .hero-quad-cell { background: #fff; padding: 12px; position: relative; overflow: hidden; cursor: pointer; transition: background 0.15s; }
+              .hero-quad-cell { background: #fff; padding: 10px 12px; position: relative; overflow: hidden; cursor: pointer; transition: background 0.15s; max-height: 200px; }
               .hero-quad-cell:hover { background: #fafafa; }
               .hero-quad-label { font-family: Inter, sans-serif; font-size: 0.55rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 7px; display: flex; align-items: center; gap: 4px; }
               .hero-quad-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
@@ -1225,9 +1225,9 @@ export default function Home() {
               .hero-quad-overlay { animation: hqFadeIn 0.15s ease; }
             `}</style>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 700, color: '#888', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Real output. Fictional candidate.</span>
-              <span style={{ background: '#f59e0b', color: '#000', fontSize: '0.55rem', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', padding: '3px 10px', borderRadius: '20px', fontFamily: 'Inter, sans-serif' }}>Example Output</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 10px', marginBottom: '6px', background: 'rgba(255,255,255,0.04)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.62rem', fontWeight: 600, color: '#666', letterSpacing: '0.04em' }}>Real output. Fictional candidate.</span>
+              <span style={{ background: '#f59e0b', color: '#000', fontSize: '0.52rem', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '2px 8px', borderRadius: '20px', fontFamily: 'Inter, sans-serif' }}>Example</span>
             </div>
             <div className="hero-quad-grid">
               {/* Q1 RESUME */}
