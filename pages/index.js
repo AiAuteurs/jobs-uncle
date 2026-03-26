@@ -783,6 +783,14 @@ export default function Home() {
           .hero-grid {
             padding: 24px 16px 40px !important;
           }
+          .hero-mascot-row {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 12px !important;
+          }
+          .hero-mascot-row img {
+            width: 80px !important;
+          }
         }
         .sample-output-panel {
           background: #ffffff !important;
@@ -1052,30 +1060,28 @@ export default function Home() {
       {/* ── HERO — hidden once results exist ─────────────────────── */}
       {!results && !loading && (
       <section style={{
-        maxWidth: '1200px', margin: '0 auto', padding: '40px 40px 64px',
-        display: 'grid', gridTemplateColumns: '260px 1fr 400px', gap: '48px',
+        maxWidth: '1100px', margin: '0 auto', padding: '48px 40px 64px',
+        display: 'grid', gridTemplateColumns: '1fr 400px', gap: '64px',
         alignItems: 'center',
       }} className="hero-grid">
 
-        {/* COL 1 — logo */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <img
-            src="/jobsuncleaiblack.png"
-            alt="JobsUncle.ai"
-            style={{ width: '380px', display: 'block' }}
-          />
-        </div>
-
-        {/* COL 2 — headline + pills + CTA */}
+        {/* COL 1 — mascot + headline + pills + CTA */}
         <div>
-          <h1 style={{
-            fontFamily: 'Inter, sans-serif', fontWeight: 900,
-            fontSize: 'clamp(1.9rem, 2.8vw, 2.8rem)', lineHeight: 1.1,
-            color: '#ffffff', margin: '0 0 20px', letterSpacing: '-0.02em',
-          }}>
-            Tailored resumes to the job description{' '}
-            <span style={{ color: '#00D1FF', whiteSpace: 'nowrap' }}>in 60 seconds.</span>
-          </h1>
+          <div className="hero-mascot-row" style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '24px' }}>
+            <img
+              src="/jobsuncleaiblack.png"
+              alt="JobsUncle.ai"
+              style={{ width: '110px', flexShrink: 0, display: 'block' }}
+            />
+            <h1 style={{
+              fontFamily: 'Inter, sans-serif', fontWeight: 900,
+              fontSize: 'clamp(2rem, 3vw, 3rem)', lineHeight: 1.08,
+              color: '#ffffff', margin: 0, letterSpacing: '-0.02em',
+            }}>
+              Tailored resumes to the job description{' '}
+              <span style={{ color: '#00D1FF', whiteSpace: 'nowrap' }}>in 60 seconds.</span>
+            </h1>
+          </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '32px' }}>
             {['Tailored resume', 'Cover letter', 'Recruiter & ATS analysis', 'Hiring manager DM'].map(item => (
               <span key={item} style={{
