@@ -72,9 +72,8 @@ let tadaCtx = null
 async function loadTada() {
   if (tadaBuffer) return
   try {
-    const res = await fetch('/tada.mp3')
-    if (!res.ok) return // file not present, skip silently
     tadaCtx = new (window.AudioContext || window.webkitAudioContext)()
+    const res = await fetch('/tada.mp3')
     const arr = await res.arrayBuffer()
     tadaBuffer = await tadaCtx.decodeAudioData(arr)
   } catch(e) {}
@@ -230,6 +229,10 @@ export default function Home() {
   const [gateStatus, setGateStatus] = useState(null) // null | 'loading' | 'done' | 'error'
   const [gateMsg, setGateMsg] = useState('')
   const [showContact, setShowContact] = useState(false)
+  const [otpStep, setOtpStep] = useState('email') // 'email' | 'otp'
+  const [otpCode, setOtpCode] = useState(['', '', '', '', ''])
+  const [otpStatus, setOtpStatus] = useState(null) // null | 'loading' | 'error'
+  const [otpMsg, setOtpMsg] = useState('')
   const fileInputRef = useRef(null)
 
   const confettiCanvasRef = useRef(null)
@@ -655,26 +658,75 @@ export default function Home() {
       return
     }
     setGateStatus('loading')
+    setGateMsg('')
     try {
-      const res = await fetch('/api/register-email', {
+      const res = await fetch('/api/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: gateEmail })
       })
+      const data = await res.json()
       if (res.ok) {
-        setGateStatus('done')
+        setGateStatus(null)
+        setOtpStep('otp')
+      } else {
+        setGateStatus('error')
+        setGateMsg(data.error || 'Something went wrong. Try again.')
+      }
+    } catch {
+      setGateStatus('error')
+      setGateMsg('Something went wrong. Try again.')
+    }
+  }
+
+  const handleOtpChange = (index, val) => {
+    if (!/^[0-9]?$/.test(val)) return
+    const next = [...otpCode]
+    next[index] = val
+    setOtpCode(next)
+    setOtpMsg('')
+    if (val && index < 4) {
+      const el = document.getElementById(`otp-${index + 1}`)
+      if (el) el.focus()
+    }
+  }
+
+  const handleOtpKeyDown = (index, e) => {
+    if (e.key === 'Backspace' && !otpCode[index] && index > 0) {
+      const el = document.getElementById(`otp-${index - 1}`)
+      if (el) el.focus()
+    }
+    if (e.key === 'Enter') handleVerifyOtp()
+  }
+
+  const handleVerifyOtp = async () => {
+    const code = otpCode.join('')
+    if (code.length < 5) { setOtpMsg('Enter the full 5-digit code.'); return }
+    setOtpStatus('loading')
+    setOtpMsg('')
+    try {
+      const res = await fetch('/api/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: gateEmail, code })
+      })
+      const data = await res.json()
+      if (res.ok && data.verified) {
+        setOtpStatus('done')
         setShowEmailGate(false)
+        setOtpStep('email')
+        setOtpCode(['', '', '', '', ''])
         if (typeof window !== 'undefined') {
           localStorage.setItem('ju_email_gate', '1')
           localStorage.setItem('ju_email', gateEmail)
         }
       } else {
-        setGateStatus('error')
-        setGateMsg('Something went wrong. Try again.')
+        setOtpStatus('error')
+        setOtpMsg(data.error || 'Incorrect code. Try again.')
       }
     } catch {
-      setGateStatus('error')
-      setGateMsg('Something went wrong. Try again.')
+      setOtpStatus('error')
+      setOtpMsg('Something went wrong. Try again.')
     }
   }
 
@@ -981,30 +1033,84 @@ export default function Home() {
       )}
 
       {showEmailGate && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', zIndex: 1001, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.35)' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.78)', zIndex: 1001, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+          <div style={{ background: 'var(--surface)', borderRadius: '20px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 32px 80px rgba(0,0,0,0.45)' }}>
             <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" style={{ width: 64, height: 'auto', marginBottom: '20px' }} />
-            <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.9rem', margin: '0 0 10px', lineHeight: 1.1 }}>Your first resume is ready.</h2>
-            <p style={{ color: 'var(--text-soft)', fontSize: '0.9rem', margin: '0 0 28px', lineHeight: 1.65 }}>
-              Enter your email to unlock <strong style={{ color: 'var(--ink)' }}>2 more free resumes.</strong><br />No password. No credit card. Just your email.
-            </p>
-            <input
-              type="email"
-              value={gateEmail}
-              onChange={e => setGateEmail(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleEmailGate()}
-              placeholder="you@email.com"
-              style={{ width: '100%', padding: '12px 14px', border: '1.5px solid var(--border)', borderRadius: '8px', fontSize: '0.95rem', background: 'var(--bg)', color: 'var(--ink)', outline: 'none', boxSizing: 'border-box', marginBottom: '12px' }}
-            />
-            {gateMsg && <p style={{ color: '#ef4444', fontSize: '0.82rem', margin: '0 0 10px' }}>{gateMsg}</p>}
-            <button
-              onClick={handleEmailGate}
-              disabled={gateStatus === 'loading'}
-              style={{ width: '100%', background: 'var(--accent)', color: 'white', border: 'none', padding: '14px', borderRadius: '8px', fontSize: '0.95rem', fontWeight: 700, cursor: 'pointer', letterSpacing: '0.02em' }}
-            >
-              {gateStatus === 'loading' ? 'Saving…' : 'Unlock 2 more free resumes'}
-            </button>
-            <p style={{ marginTop: '16px', fontSize: '0.78rem', color: 'var(--text-soft)' }}>We don't spam. Ever. Unsubscribe anytime.</p>
+
+            {otpStep === 'email' ? (
+              <>
+                <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.9rem', margin: '0 0 10px', lineHeight: 1.1 }}>Your first resume is ready.</h2>
+                <p style={{ color: 'var(--text-soft)', fontSize: '0.88rem', margin: '0 0 28px', lineHeight: 1.65 }}>
+                  Enter your email to unlock <strong style={{ color: 'var(--ink)' }}>2 more free resumes.</strong><br />No password. No credit card.
+                </p>
+                <input
+                  type="email"
+                  value={gateEmail}
+                  onChange={e => setGateEmail(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleEmailGate()}
+                  placeholder="you@email.com"
+                  autoFocus
+                  style={{ width: '100%', padding: '13px 14px', border: '1.5px solid var(--border)', borderRadius: '10px', fontSize: '0.95rem', background: 'var(--bg)', color: 'var(--ink)', outline: 'none', boxSizing: 'border-box', marginBottom: '12px', textAlign: 'center' }}
+                />
+                {gateMsg && <p style={{ color: '#ef4444', fontSize: '0.82rem', margin: '0 0 10px' }}>{gateMsg}</p>}
+                <button
+                  onClick={handleEmailGate}
+                  disabled={gateStatus === 'loading'}
+                  style={{ width: '100%', background: 'var(--accent)', color: '#000', border: 'none', padding: '14px', borderRadius: '10px', fontSize: '0.95rem', fontWeight: 800, cursor: 'pointer', letterSpacing: '0.01em' }}
+                >
+                  {gateStatus === 'loading' ? 'Sending code…' : 'Send me a code →'}
+                </button>
+                <p style={{ marginTop: '14px', fontSize: '0.75rem', color: 'var(--text-soft)' }}>We don't spam. Ever.</p>
+              </>
+            ) : (
+              <>
+                <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.9rem', margin: '0 0 10px', lineHeight: 1.1 }}>Check your email.</h2>
+                <p style={{ color: 'var(--text-soft)', fontSize: '0.88rem', margin: '0 0 6px', lineHeight: 1.65 }}>
+                  We sent a 5-digit code to
+                </p>
+                <p style={{ color: 'var(--ink)', fontSize: '0.88rem', fontWeight: 700, margin: '0 0 28px' }}>{gateEmail}</p>
+                <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginBottom: '20px' }}>
+                  {otpCode.map((digit, i) => (
+                    <input
+                      key={i}
+                      id={`otp-${i}`}
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={1}
+                      value={digit}
+                      onChange={e => handleOtpChange(i, e.target.value)}
+                      onKeyDown={e => handleOtpKeyDown(i, e)}
+                      autoFocus={i === 0}
+                      style={{
+                        width: '52px', height: '60px',
+                        border: `2px solid ${digit ? 'var(--accent)' : 'var(--border)'}`,
+                        borderRadius: '10px',
+                        fontSize: '1.6rem', fontWeight: 900, textAlign: 'center',
+                        background: 'var(--bg)', color: 'var(--ink)',
+                        outline: 'none',
+                        transition: 'border-color 0.15s',
+                        fontVariantNumeric: 'tabular-nums',
+                      }}
+                    />
+                  ))}
+                </div>
+                {otpMsg && <p style={{ color: '#ef4444', fontSize: '0.82rem', margin: '0 0 12px' }}>{otpMsg}</p>}
+                <button
+                  onClick={handleVerifyOtp}
+                  disabled={otpStatus === 'loading'}
+                  style={{ width: '100%', background: 'var(--accent)', color: '#000', border: 'none', padding: '14px', borderRadius: '10px', fontSize: '0.95rem', fontWeight: 800, cursor: 'pointer', letterSpacing: '0.01em', marginBottom: '14px' }}
+                >
+                  {otpStatus === 'loading' ? 'Verifying…' : 'Verify →'}
+                </button>
+                <button
+                  onClick={() => { setOtpStep('email'); setOtpCode(['','','','','']); setOtpMsg('') }}
+                  style={{ background: 'none', border: 'none', color: 'var(--text-soft)', fontSize: '0.8rem', cursor: 'pointer', padding: '4px' }}
+                >
+                  Wrong email? Go back
+                </button>
+                <p style={{ marginTop: '10px', fontSize: '0.72rem', color: 'var(--text-soft)' }}>Code expires in 10 minutes.</p>
+              </>
+            )}
           </div>
         </div>
       )}
@@ -1022,9 +1128,10 @@ export default function Home() {
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:image" content="https://www.jobsuncle.ai/og-image.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/jobsuncle-favicon-32.png?v=2" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/jobsuncle-favicon.png?v=2" />
-        <link rel="apple-touch-icon" sizes="192x192" href="/jobsuncle-favicon.png?v=2" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/jobsuncle-favicon-32.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/jobsuncle-favicon.png" />
+        <link rel="apple-touch-icon" sizes="192x192" href="/jobsuncle-favicon.png" />
       </Head>
 
       <Header
@@ -1062,7 +1169,7 @@ export default function Home() {
           <img
             src="/jobsuncleaiblack.png"
             alt="JobsUncle.ai"
-            style={{ width: '380px', display: 'block' }}
+            style={{ width: '280px', display: 'block' }}
           />
         </div>
 
@@ -1154,6 +1261,7 @@ export default function Home() {
         {loading ? (
           <div style={{ 
             textAlign: 'center', 
+            minHeight: '70vh',
             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
             padding: '4rem 1rem', background: '#161616', border: '1px solid #2a2a2a', borderRadius: '16px' 
           }}>
