@@ -1128,10 +1128,9 @@ export default function Home() {
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:image" content="https://www.jobsuncle.ai/og-image.png" />
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/jobsuncle-favicon-32.png" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/jobsuncle-favicon.png" />
-        <link rel="apple-touch-icon" sizes="192x192" href="/jobsuncle-favicon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/jobsuncle-favicon-32.png?v=2" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/jobsuncle-favicon.png?v=2" />
+        <link rel="apple-touch-icon" sizes="192x192" href="/jobsuncle-favicon.png?v=2" />
       </Head>
 
       <Header
@@ -1210,43 +1209,160 @@ export default function Home() {
           </div>
         </div>
 
-        {/* COL 3 — example resume card */}
+        {/* COL 3 — 4-quad example card */}
         {!results && (
-          <div style={{
-            background: '#ffffff', borderRadius: '16px', padding: '28px',
-            color: '#111', fontFamily: 'Inter, sans-serif',
-            boxShadow: '0 32px 64px rgba(0,0,0,0.5)',
-            position: 'relative', overflow: 'hidden',
-          }}>
-            <div style={{
-              position: 'absolute', top: '12px', right: '12px',
-              background: '#f59e0b', color: '#000', fontSize: '0.58rem',
-              fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase',
-              padding: '3px 10px', borderRadius: '20px',
-            }}>Example output</div>
-            <div style={{ marginBottom: '14px', paddingRight: '60px' }}>
-              <div style={{ fontWeight: 800, fontSize: '1.05rem', color: '#111', marginBottom: '3px' }}>Camille Leon</div>
-              <div style={{ color: '#888', fontSize: '0.71rem', lineHeight: 1.5 }}>camille.leon@gmail.com · linkedin.com/in/camilleleon · San Francisco, CA</div>
-            </div>
-            <div style={{ width: '100%', height: '1px', background: '#eee', marginBottom: '12px' }} />
-            <div style={{ marginBottom: '12px' }}>
-              <div style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#bbb', marginBottom: '5px' }}>Professional Summary</div>
-              <p style={{ margin: 0, fontSize: '0.79rem', lineHeight: 1.65, color: '#333' }}>
-                Learning Experience Designer with 8+ years building outcome-driven curriculum for enterprise clients. IDEO U-certified. Proven across Articulate Storyline, learning analytics, and global rollouts.
-              </p>
-            </div>
-            <div>
-              <div style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#bbb', marginBottom: '5px' }}>Relevant Experience</div>
-              <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#111', marginBottom: '4px' }}>
-                BrightPath Learning <span style={{ fontWeight: 400, color: '#777' }}>— Curriculum Developer · 2020–2022</span>
+          <div style={{ position: 'relative' }}>
+            <style>{`
+              .hero-quad-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+                border-radius: 16px;
+                overflow: hidden;
+                box-shadow: 0 32px 64px rgba(0,0,0,0.5);
+              }
+              .hero-quad-cell {
+                background: #fff;
+                padding: 12px;
+                position: relative;
+                overflow: hidden;
+                cursor: default;
+                transition: transform 0.2s, box-shadow 0.2s, z-index 0s;
+                z-index: 1;
+              }
+              .hero-quad-cell:hover {
+                transform: scale(1.06);
+                box-shadow: 0 16px 48px rgba(0,0,0,0.35);
+                z-index: 10;
+                border-radius: 10px;
+              }
+              .hero-quad-label {
+                font-family: Inter, sans-serif;
+                font-size: 0.55rem;
+                font-weight: 800;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                margin-bottom: 7px;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+              }
+              .hero-quad-dot {
+                width: 5px; height: 5px;
+                border-radius: 50%;
+                flex-shrink: 0;
+              }
+              .hero-quad-text {
+                font-family: Georgia, serif;
+                font-size: 0.62rem;
+                line-height: 1.65;
+                color: #333;
+              }
+              .hero-quad-fade {
+                position: absolute;
+                bottom: 0; left: 0; right: 0;
+                height: 40px;
+                background: linear-gradient(to bottom, transparent, #fff);
+              }
+              .hero-quad-badge {
+                display: inline-block;
+                background: #f59e0b;
+                color: #000;
+                font-size: 0.48rem;
+                font-weight: 800;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                padding: 2px 7px;
+                border-radius: 20px;
+                margin-bottom: 6px;
+                font-family: Inter, sans-serif;
+              }
+            `}</style>
+
+            <div className="hero-quad-grid">
+
+              {/* Q1 RESUME */}
+              <div className="hero-quad-cell" style={{ borderLeft: '3px solid #00D1FF' }}>
+                <div className="hero-quad-label" style={{ color: '#00D1FF' }}>
+                  <span className="hero-quad-dot" style={{ background: '#00D1FF' }} />
+                  Resume
+                </div>
+                <div className="hero-quad-text">
+                  <strong style={{ fontSize: '0.66rem', color: '#111' }}>Riley Okafor</strong><br/>
+                  Head of Human Experience<br/>
+                  <span style={{ color: '#999', fontSize: '0.58rem' }}>riley.okafor@mailbox.io · Portland, OR</span>
+                  <br/><br/>
+                  Culture strategist who designed onboarding systems reducing time-to-productivity by 34%. Built belonging programs across distributed teams spanning 9 time zones.
+                  <br/><br/>
+                  <strong style={{ color: '#111', fontSize: '0.62rem' }}>Distributed Team Experience</strong><br/>
+                  • Onboarding program reducing time-to-productivity 34% across 6 depts<br/>
+                  • Peer mentorship adopted by 89% of new hires in Q1
+                </div>
+                <div className="hero-quad-fade" />
               </div>
-              <ul style={{ margin: '0 0 0 14px', padding: 0, fontSize: '0.75rem', color: '#555', lineHeight: 1.75 }}>
-                <li>Authored 14 STEM modules across 200+ schools; reduced drop-off 22%</li>
-                <li>Built review rubric adopted by team of 6 contract developers</li>
-              </ul>
+
+              {/* Q2 COVER LETTER */}
+              <div className="hero-quad-cell" style={{ borderLeft: '3px solid #a78bfa' }}>
+                <div className="hero-quad-label" style={{ color: '#a78bfa' }}>
+                  <span className="hero-quad-dot" style={{ background: '#a78bfa' }} />
+                  Cover Letter
+                </div>
+                <div className="hero-quad-text">
+                  Vela's approach to culture as infrastructure, not perk, hits exactly right. Too many companies treat human experience as an afterthought — you're building it as a product.<br/><br/>
+                  I've designed onboarding systems that cut time-to-productivity by 34%, and run offsites for 140-person distributed teams across 9 time zones.<br/><br/>
+                  The direct CEO reporting structure tells me this role has real influence. I'm ready to own the experience of working at Vela from day one.
+                </div>
+                <div className="hero-quad-fade" style={{ background: 'linear-gradient(to bottom, transparent, #fff)' }} />
+              </div>
+
+              {/* Q3 ATS SCORE */}
+              <div className="hero-quad-cell" style={{ borderLeft: '3px solid #10b981' }}>
+                <div className="hero-quad-label" style={{ color: '#10b981' }}>
+                  <span className="hero-quad-dot" style={{ background: '#10b981' }} />
+                  ATS Score
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'conic-gradient(#10b981 360deg, #e5e7eb 0deg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <span style={{ fontWeight: 900, fontSize: '0.55rem', color: '#10b981', fontFamily: 'Inter, sans-serif' }}>100%</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: '0.65rem', color: '#10b981' }}>Excellent</div>
+                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.55rem', color: '#999' }}>15/15 keywords matched</div>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3px' }}>
+                  {['onboarding','culture','distributed','facilitation','systems','leadership','inclusion','change','workflow'].map(k => (
+                    <span key={k} style={{ fontSize: '0.5rem', padding: '1px 5px', borderRadius: '999px', background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)', color: '#059669', fontFamily: 'Inter, sans-serif', fontWeight: 600 }}>✓ {k}</span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Q4 HIRING MANAGER DM */}
+              <div className="hero-quad-cell" style={{ borderLeft: '3px solid #f59e0b' }}>
+                <div className="hero-quad-label" style={{ color: '#f59e0b' }}>
+                  <span className="hero-quad-dot" style={{ background: '#f59e0b' }} />
+                  Hiring Manager DM
+                </div>
+                <div style={{ background: '#f8fafc', borderRadius: '6px', padding: '7px 8px', marginBottom: '6px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '5px' }}>
+                    <div style={{ width: '14px', height: '14px', borderRadius: '3px', background: '#0077b5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <span style={{ color: '#fff', fontSize: '0.4rem', fontWeight: 800, fontFamily: 'Inter, sans-serif' }}>in</span>
+                    </div>
+                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.55rem', color: '#888' }}>To: Hiring Manager, Vela</span>
+                  </div>
+                  <div className="hero-quad-text">
+                    I built onboarding systems that reduced time-to-productivity by 34% at a distributed company, and facilitated C-suite retreats at 8 companies. Your Head of Human Experience role caught my attention — you're treating culture as infrastructure, not a perk.
+                  </div>
+                </div>
+                <div className="hero-quad-fade" style={{ background: 'linear-gradient(to bottom, transparent, #fff)' }} />
+              </div>
+
             </div>
-            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '64px', background: 'linear-gradient(to bottom, transparent, #fff)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '12px' }}>
-              <a href="/example" style={{ fontSize: '0.74rem', color: '#00a8cc', fontWeight: 700, textDecoration: 'none' }}>See full example output →</a>
+
+            <div style={{ textAlign: 'center', marginTop: '10px' }}>
+              <a href="/example" style={{ fontSize: '0.72rem', color: '#00D1FF', fontWeight: 700, textDecoration: 'none', fontFamily: 'Inter, sans-serif' }}>See full example output →</a>
             </div>
           </div>
         )}
