@@ -1205,7 +1205,7 @@ export default function Home() {
           >
             Get started free →
           </a>
-          <div style={{ marginTop: '10px', fontSize: '0.75rem', color: '#B0B0B8', fontFamily: 'Inter, sans-serif' }}>
+          <div style={{ marginTop: '10px', fontSize: '0.75rem', color: '#555', fontFamily: 'Inter, sans-serif' }}>
             No account needed. Free to try.
           </div>
         </div>
@@ -1743,29 +1743,14 @@ export default function Home() {
 
               {/* RESULTS TAB BAR */}
               {(() => {
-                const atsScore = (activeVersion === 'v2' && regeneratedResults?.atsMatch)
-                  ? regeneratedResults.atsMatch.score
-                  : results.atsMatch?.score
-                const atsColor = atsScore >= 90 ? '#00D1FF' : atsScore >= 75 ? '#10b981' : atsScore >= 55 ? '#f59e0b' : '#ef4444'
-                const resumeLabel = atsScore != null
-                  ? <span>📄 Resume <span style={{ fontSize: '0.7rem', fontWeight: 800, color: atsColor, marginLeft: '4px' }}>{atsScore}%</span></span>
-                  : '📄 Resume'
                 const tabs = [
-                  { key: 'resume', label: resumeLabel },
+                  { key: 'resume', label: '📄 Resume' },
                   { key: 'ats', label: '🎯 ATS Score' },
-                  { key: 'recruiter', label: '🔍 Recruiter Analysis' },
                   { key: 'cover', label: '✉️ Cover Letter' },
+                  { key: 'recruiter', label: '🔍 Recruiter Analysis' },
                   { key: 'dm', label: '💬 Hiring Manager DM' },
                   ...(results.companyIntel ? [{ key: 'intel', label: '🏢 Company Intel' }] : []),
                 ]
-                const tabPlainLabels = {
-                  resume: atsScore != null ? `📄 Resume · ${atsScore}%` : '📄 Resume',
-                  ats: '🎯 ATS Score',
-                  recruiter: '🔍 Recruiter Analysis',
-                  cover: '✉️ Cover Letter',
-                  dm: '💬 Hiring Manager DM',
-                  intel: '🏢 Company Intel',
-                }
                 return (
                   <>
                     {/* MOBILE: full-width dropdown */}
@@ -1782,8 +1767,8 @@ export default function Home() {
                           backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', paddingRight: '36px',
                         }}
                       >
-                        {tabs.map(({ key }) => (
-                          <option key={key} value={key}>{tabPlainLabels[key]}</option>
+                        {tabs.map(({ key, label }) => (
+                          <option key={key} value={key}>{label}</option>
                         ))}
                       </select>
                     </div>
@@ -2006,6 +1991,114 @@ export default function Home() {
                       </div>
                     </div>
                   )}
+
+                  {/* FIT CHECK + FIX CTA */}
+                  {(() => {
+                    const isFitIssue = atsMatch.score < 40
+                    const isFixable = atsMatch.score >= 40 && atsMatch.score < 75
+                    const isStrong = atsMatch.score >= 75
+
+                    // Pull first paragraph of recruiter notes as the fit summary
+                    const fitSummary = results.recruiterNotes
+                      ? results.recruiterNotes.split('\n').filter(l => l.trim().length > 60)[0] || null
+                      : null
+
+                    return (
+                      <div style={{
+                        marginTop: '20px', paddingTop: '16px',
+                        borderTop: '1px solid var(--border)',
+                      }}>
+                        {/* Fit summary from recruiter notes */}
+                        {fitSummary && (
+                          <div style={{
+                            marginBottom: '16px', padding: '12px 14px',
+                            background: isFitIssue ? 'rgba(239,68,68,0.06)' : isStrong ? 'rgba(16,185,129,0.06)' : 'rgba(245,158,11,0.06)',
+                            border: `1px solid ${isFitIssue ? 'rgba(239,68,68,0.2)' : isStrong ? 'rgba(16,185,129,0.2)' : 'rgba(245,158,11,0.2)'}`,
+                            borderRadius: '8px',
+                          }}>
+                            <div style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: isFitIssue ? '#ef4444' : isStrong ? '#10b981' : '#f59e0b', marginBottom: '6px' }}>
+                              {isFitIssue ? '⚠ Possible fit issue' : isStrong ? '✓ Recruiter read' : '📋 Recruiter read'}
+                            </div>
+                            <div style={{ fontSize: '0.82rem', color: 'var(--ink)', lineHeight: 1.6 }}>
+                              {fitSummary.replace(/\*\*/g, '').replace(/^#+\s*/, '')}
+                            </div>
+                            <button
+                              onClick={() => setActiveResultTab('recruiter')}
+                              style={{ marginTop: '8px', background: 'none', border: 'none', padding: 0, fontSize: '0.75rem', color: 'var(--accent)', fontWeight: 600, cursor: 'pointer' }}
+                            >
+                              Read full analysis →
+                            </button>
+                          </div>
+                        )}
+
+                        {/* Fit warning for very low scores */}
+                        {isFitIssue && (
+                          <div style={{
+                            marginBottom: '14px', padding: '10px 14px',
+                            background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.2)',
+                            borderRadius: '8px', fontSize: '0.8rem', color: '#ef4444', lineHeight: 1.5,
+                          }}>
+                            <strong>Before regenerating:</strong> a score this low often means the role requires skills or background that aren't in your resume. Rewriting won't fix a fit gap. Read the full recruiter analysis first to confirm this is worth pursuing.
+                          </div>
+                        )}
+
+                        {/* Fix CTA */}
+                        {!isStrong && (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                            {isPaid ? (
+                              <>
+                                <button
+                                  onClick={handleRegenerate}
+                                  disabled={regenerating || !!regeneratedResults}
+                                  style={{
+                                    padding: '10px 24px',
+                                    background: regeneratedResults ? '#22c55e' : regenerating ? '#aaa' : '#f59e0b',
+                                    color: 'white', border: 'none', borderRadius: '6px',
+                                    fontSize: '0.88rem', fontWeight: 700,
+                                    cursor: regenerating || regeneratedResults ? 'default' : 'pointer',
+                                  }}
+                                >
+                                  {regeneratedResults ? '✓ Version 2 ready — check Resume tab' : regenerating ? '⟳ Applying fixes...' : '✦ Apply fixes & regenerate'}
+                                </button>
+                                {!regeneratedResults && !regenerating && (
+                                  <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>
+                                    Rewrites your resume with missing keywords woven in
+                                  </span>
+                                )}
+                              </>
+                            ) : (
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                                <button
+                                  onClick={() => { setPaywallSigninMode(false); setShowPaywall(true) }}
+                                  style={{ padding: '10px 24px', background: '#f59e0b', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.88rem', fontWeight: 700, cursor: 'pointer' }}
+                                >
+                                  ✦ Apply fixes &amp; regenerate
+                                </button>
+                                <span style={{ background: '#f59e0b', color: 'white', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro</span>
+                              </div>
+                            )}
+                            {regenError && <div style={{ width: '100%', color: '#ef4444', fontSize: '0.8rem' }}>{regenError}</div>}
+                            {regenerating && (
+                              <div style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px', padding: '14px 16px', background: '#1a1a2e', border: '1.5px solid #f59e0b', borderRadius: '8px' }}>
+                                <img src="/jobsuncle-logo.png" alt="" style={{ width: 44, height: 'auto', flexShrink: 0, animation: 'logo-spin-pause 2s ease-in-out infinite' }} />
+                                <div>
+                                  <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#f59e0b' }}>Applying every fix from the analysis...</div>
+                                  <div style={{ fontSize: '0.78rem', color: '#ccc', marginTop: '3px' }}>Rewriting your resume and cover letter. About 15 seconds.</div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {isStrong && !regeneratedResults && (
+                          <div style={{ fontSize: '0.82rem', color: '#10b981', fontWeight: 600 }}>
+                            ✓ Score is strong. Move on to your Cover Letter.
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })()}
+
                 </div>
                 })()
               )}
