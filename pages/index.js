@@ -1382,6 +1382,25 @@ export default function Home() {
       </section>
       )}
 
+      {/* TESTIMONIAL — B.C. */}
+      {!results && !loading && (
+      <div style={{
+        textAlign: 'center', padding: '28px 24px',
+        borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)',
+        background: 'var(--surface)',
+      }}>
+        <p style={{
+          fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem',
+          fontStyle: 'italic', color: 'var(--ink)', margin: '0 0 8px', lineHeight: 1.5,
+        }}>"The results are solid. I like what I got back."</p>
+        <p style={{
+          fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-soft)',
+          letterSpacing: '0.06em', textTransform: 'uppercase', margin: 0,
+        }}>&mdash; B.C., ICF Certified Career Coach</p>
+      </div>
+      )}
+
+
             {/* ── UPLOAD SECTION ────────────────────────────────────────── */}
       {!results && (
       <section id="upload-section" style={{
@@ -2526,7 +2545,28 @@ export default function Home() {
           <textarea
             placeholder="Tell us exactly what happened. Good or bad."
             rows={3}
-            id="inline-feedback-text"
+id="inline-feedback-name"
+                  placeholder="Your name"
+                  style={{
+                    width: '100%', background: 'var(--surface)', border: '1px solid var(--border)',
+                    borderRadius: '8px', padding: '10px 14px', color: 'var(--ink)',
+                    fontSize: '0.85rem', fontFamily: 'Inter, sans-serif', marginBottom: '8px',
+                    boxSizing: 'border-box'
+                  }}
+                />
+                <input
+                  type="email"
+                  id="inline-feedback-email"
+                  placeholder="Your email"
+                  style={{
+                    width: '100%', background: 'var(--surface)', border: '1px solid var(--border)',
+                    borderRadius: '8px', padding: '10px 14px', color: 'var(--ink)',
+                    fontSize: '0.85rem', fontFamily: 'Inter, sans-serif', marginBottom: '8px',
+                    boxSizing: 'border-box'
+                  }}
+                />
+                <textarea
+                  id="inline-feedback-text"
             style={{
               width: '100%', padding: '14px 16px',
               background: 'var(--surface)', border: '1.5px solid var(--border)',
@@ -2546,7 +2586,11 @@ export default function Home() {
                 await fetch('/api/contact', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ name: 'JobsUncle User', email: 'feedback@jobsuncle.ai', message: text })
+                  body: JSON.stringify({
+                      name: document.getElementById('inline-feedback-name')?.value.trim() || 'Anonymous',
+                      email: document.getElementById('inline-feedback-email')?.value.trim() || 'no-email@jobsuncle.ai',
+                      message: text
+                    })
                 })
                 document.getElementById('inline-feedback-text').value = ''
                 document.getElementById('inline-feedback-thanks').style.display = 'block'
