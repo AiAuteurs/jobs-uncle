@@ -1390,7 +1390,7 @@ export default function Home() {
         {loading ? (
           <div style={{ 
             textAlign: 'center', 
-            minHeight: '70vh',
+            minHeight: 'auto',
             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
             padding: '4rem 1rem', background: '#161616', border: '1px solid #2a2a2a', borderRadius: '16px' 
           }}>
@@ -2520,37 +2520,50 @@ export default function Home() {
           maxWidth: '600px',
           margin: '0 auto 0.75rem',
         }}>
-          We're not done yet.
+          What would make this better?
         </p>
-        <p style={{
-          fontSize: '0.95rem',
-          color: 'var(--text-soft)',
-          maxWidth: '520px',
-          margin: '0 auto 1.5rem',
-          lineHeight: 1.7,
-        }}>
-          Every version of JobsUncle.ai is better than the last. Tell us what worked, what didn't, and what you wish existed. We read everything.
-        </p>
-        <button
-          onClick={() => setShowContact(true)}
-          style={{
-            background: 'transparent',
-            border: '1.5px solid var(--accent)',
-            color: 'var(--accent)',
-            fontFamily: 'Inter, sans-serif',
-            fontSize: '0.85rem',
-            fontWeight: 700,
-            padding: '10px 28px',
-            borderRadius: '50px',
-            cursor: 'pointer',
-            letterSpacing: '0.02em',
-            transition: 'all 0.2s',
-          }}
-          onMouseEnter={e => { e.target.style.background = 'var(--accent)'; e.target.style.color = '#fff' }}
-          onMouseLeave={e => { e.target.style.background = 'transparent'; e.target.style.color = 'var(--accent)' }}
-        >
-          Send feedback →
-        </button>
+        <div style={{ maxWidth: '520px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <textarea
+            placeholder="Tell us exactly what happened. Good or bad."
+            rows={3}
+            id="inline-feedback-text"
+            style={{
+              width: '100%', padding: '14px 16px',
+              background: 'var(--surface)', border: '1.5px solid var(--border)',
+              borderRadius: '10px', color: 'var(--ink)',
+              fontFamily: 'Inter, sans-serif', fontSize: '0.9rem',
+              lineHeight: 1.6, resize: 'vertical', outline: 'none',
+              boxSizing: 'border-box',
+            }}
+            onFocus={e => { e.target.style.borderColor = 'var(--accent)' }}
+            onBlur={e => { e.target.style.borderColor = 'var(--border)' }}
+          />
+          <button
+            onClick={async () => {
+              const text = document.getElementById('inline-feedback-text').value.trim()
+              if (!text) return
+              try {
+                await fetch('/api/contact', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ name: 'JobsUncle User', email: 'feedback@jobsuncle.ai', message: text })
+                })
+                document.getElementById('inline-feedback-text').value = ''
+                document.getElementById('inline-feedback-thanks').style.display = 'block'
+              } catch {}
+            }}
+            style={{
+              alignSelf: 'flex-end', padding: '10px 28px',
+              background: 'var(--accent)', color: '#000',
+              border: 'none', borderRadius: '50px',
+              fontFamily: 'Inter, sans-serif', fontSize: '0.85rem',
+              fontWeight: 700, cursor: 'pointer', letterSpacing: '0.02em',
+            }}
+          >
+            Send →
+          </button>
+          <p id="inline-feedback-thanks" style={{ display: 'none', fontSize: '0.85rem', color: '#10b981', margin: 0 }}>Got it. Thank you.</p>
+        </div>
       </div>
 
       <footer className="footer">
