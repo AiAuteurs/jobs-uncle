@@ -263,13 +263,13 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
 // ── STYLE TOKENS ─────────────────────────────────────────────────────────────
 const navLink = {
   fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', fontWeight: 500,
-  color: '#777', textDecoration: 'none', whiteSpace: 'nowrap',
+  color: '#aaa', textDecoration: 'none', whiteSpace: 'nowrap',
   transition: 'color 0.15s',
 }
 
 const rightLink = {
   fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', fontWeight: 600,
-  color: '#777', textDecoration: 'none', cursor: 'pointer', whiteSpace: 'nowrap',
+  color: '#aaa', textDecoration: 'none', cursor: 'pointer', whiteSpace: 'nowrap',
 }
 
 const badge = (bg, color) => ({
