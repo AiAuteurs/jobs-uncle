@@ -1744,7 +1744,7 @@ export default function Home() {
               {/* RESULTS TAB BAR */}
               {(() => {
                 const tabs = [
-                  { key: 'resume', label: results.atsMatch ? `📄 Resume · ${results.atsMatch.score}%` : '📄 Resume' },
+                  { key: 'resume', label: (() => { const s = (activeVersion === 'v2' && regeneratedResults) ? clientScoreATS(regeneratedResults.resume, jobDescription).score : results.atsMatch?.score; return s != null ? `📄 Resume · ${s}%` : '📄 Resume' })() },
                   { key: 'ats', label: '🎯 ATS Score' },
                   { key: 'recruiter', label: '🔍 Recruiter Analysis' },
                   { key: 'cover', label: '✉️ Cover Letter' },
