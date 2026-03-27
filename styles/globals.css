@@ -2007,9 +2007,9 @@ body {
   margin-bottom: 0.25rem;
 }
 
-.txt-badge  { background: #eef0f0; color: #555; }
-.docx-badge { background: #e8f0ff; color: #2050b0; }
-.pdf-badge  { background: var(--beta-bg); color: var(--beta-text); }
+.txt-badge  { background: rgba(255,255,255,0.08); color: #B0B0B8; border: 1px solid rgba(255,255,255,0.12); }
+.docx-badge { background: rgba(0,209,255,0.12); color: #00D1FF; border: 1px solid rgba(0,209,255,0.3); }
+.pdf-badge  { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
 
 .format-purpose {
   font-family: 'Inter', sans-serif;
