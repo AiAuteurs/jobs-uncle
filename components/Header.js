@@ -142,7 +142,7 @@ function AnimatedCounter({ value, onRollComplete }) {
 }
 
 // ── HEADER ───────────────────────────────────────────────────────────────────
-export default function Header({ isPaid = false, accessLevel = null, onSignIn, onManage, onContact, resumeCount = null, onLogoClick = null }) {
+export default function Header({ isPaid = false, accessLevel = null, onSignIn, onManage, onContact, resumeCount = null, onLogoClick = () => { window.location.href = '/' } }) {
   const { canvasRef, fire } = useConfetti()
   const [burst, setBurst] = useState(false)
 
