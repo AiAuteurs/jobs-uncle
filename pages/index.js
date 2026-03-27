@@ -909,7 +909,7 @@ export default function Home() {
               <button
                 onClick={handleManagePortal}
                 disabled={manageStatus === 'loading'}
-                style={{ width: '100%', padding: '12px', background: '#00D1FF', color: '#000', border: 'none', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer' }}
+                style={{ width: '100%', padding: '12px', background: 'var(--ink)', color: 'white', border: 'none', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer' }}
               >
                 {manageStatus === 'loading' ? 'Looking up your account…' : 'Go to billing →'}
               </button>
@@ -937,7 +937,7 @@ export default function Home() {
               <button
                 onClick={handleRestore}
                 disabled={restoreStatus === 'loading'}
-                style={{ width: '100%', padding: '12px', background: '#00D1FF', color: '#000', border: 'none', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer' }}
+                style={{ width: '100%', padding: '12px', background: 'var(--ink)', color: 'white', border: 'none', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer' }}
               >
                 {restoreStatus === 'loading' ? 'Checking…' : 'Restore my access'}
               </button>
@@ -1146,6 +1146,15 @@ export default function Home() {
           setTimeout(() => document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' }), 100)
         } : null}
       />
+
+      {/* MOBILE-ONLY NAV BAR */}
+      {!isPaid && (
+        <div className="mobile-signin-bar" style={{ display: 'none' }}>
+          <a onClick={e => { e.preventDefault(); setShowSignIn(true) }} style={{ color: 'var(--accent)', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', textDecoration: 'none' }}>Member Sign In</a>
+          <a href="/faq" style={{ color: 'var(--text-soft)', fontWeight: 600, fontSize: '0.85rem', textDecoration: 'none' }}>FAQ</a>
+          <a href="/about" style={{ color: 'var(--text-soft)', fontWeight: 600, fontSize: '0.85rem', textDecoration: 'none' }}>Our Story</a>
+        </div>
+      )}
 
       {/* ── HERO — hidden once results exist ─────────────────────── */}
       {!results && !loading && (
@@ -1734,14 +1743,29 @@ export default function Home() {
 
               {/* RESULTS TAB BAR */}
               {(() => {
+                const atsScore = (activeVersion === 'v2' && regeneratedResults?.atsMatch)
+                  ? regeneratedResults.atsMatch.score
+                  : results.atsMatch?.score
+                const atsColor = atsScore >= 90 ? '#00D1FF' : atsScore >= 75 ? '#10b981' : atsScore >= 55 ? '#f59e0b' : '#ef4444'
+                const resumeLabel = atsScore != null
+                  ? <span>📄 Resume <span style={{ fontSize: '0.7rem', fontWeight: 800, color: atsColor, marginLeft: '4px' }}>{atsScore}%</span></span>
+                  : '📄 Resume'
                 const tabs = [
-                  { key: 'resume', label: '📄 Resume' },
+                  { key: 'resume', label: resumeLabel },
                   { key: 'ats', label: '🎯 ATS Score' },
-                  { key: 'cover', label: '✉️ Cover Letter' },
                   { key: 'recruiter', label: '🔍 Recruiter Analysis' },
+                  { key: 'cover', label: '✉️ Cover Letter' },
                   { key: 'dm', label: '💬 Hiring Manager DM' },
                   ...(results.companyIntel ? [{ key: 'intel', label: '🏢 Company Intel' }] : []),
                 ]
+                const tabPlainLabels = {
+                  resume: atsScore != null ? `📄 Resume · ${atsScore}%` : '📄 Resume',
+                  ats: '🎯 ATS Score',
+                  recruiter: '🔍 Recruiter Analysis',
+                  cover: '✉️ Cover Letter',
+                  dm: '💬 Hiring Manager DM',
+                  intel: '🏢 Company Intel',
+                }
                 return (
                   <>
                     {/* MOBILE: full-width dropdown */}
@@ -1758,8 +1782,8 @@ export default function Home() {
                           backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px center', paddingRight: '36px',
                         }}
                       >
-                        {tabs.map(({ key, label }) => (
-                          <option key={key} value={key}>{label}</option>
+                        {tabs.map(({ key }) => (
+                          <option key={key} value={key}>{tabPlainLabels[key]}</option>
                         ))}
                       </select>
                     </div>
