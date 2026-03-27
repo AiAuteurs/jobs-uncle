@@ -1744,10 +1744,10 @@ export default function Home() {
               {/* RESULTS TAB BAR */}
               {(() => {
                 const tabs = [
-                  { key: 'resume', label: '📄 Resume' },
+                  { key: 'resume', label: results.atsMatch ? `📄 Resume · ${results.atsMatch.score}%` : '📄 Resume' },
                   { key: 'ats', label: '🎯 ATS Score' },
-                  { key: 'cover', label: '✉️ Cover Letter' },
                   { key: 'recruiter', label: '🔍 Recruiter Analysis' },
+                  { key: 'cover', label: '✉️ Cover Letter' },
                   { key: 'dm', label: '💬 Hiring Manager DM' },
                   ...(results.companyIntel ? [{ key: 'intel', label: '🏢 Company Intel' }] : []),
                 ]
