@@ -191,7 +191,7 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
           src="/jobsuncleaiblack.png"
           alt="JobsUncle.ai"
           onClick={onLogoClick || undefined}
-          style={{ height: '36px', width: 'auto', objectFit: 'contain', cursor: onLogoClick ? 'pointer' : 'default', marginRight: '8px', flexShrink: 0 }}
+          style={{ height: '42px', width: 'auto', objectFit: 'contain', cursor: onLogoClick ? 'pointer' : 'default', marginRight: '8px', flexShrink: 0 }}
         />
         <a href="/about" style={navLink}>Our Story</a>
         <a href="/example" style={navLink}>See an example</a>
@@ -253,7 +253,15 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
         }
         @media (max-width: 860px) {
           header nav a { display: none !important; }
-          header { grid-template-columns: auto 1fr !important; padding: 0 16px !important; }
+          header {
+            grid-template-columns: auto 1fr auto !important;
+            padding: 0 16px !important;
+          }
+          header nav img {
+            height: 44px !important;
+            margin-right: 0 !important;
+          }
+          header nav { gap: 0 !important; }
         }
       `}</style>
     </header>
