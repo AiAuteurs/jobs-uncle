@@ -1970,7 +1970,7 @@ body {
 .download-section-sub {
   font-family: 'Inter', sans-serif;
   font-size: 0.76rem;
-  color: var(--text-soft);
+  color: var(--ink);
   font-weight: 300;
 }
 

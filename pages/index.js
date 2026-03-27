@@ -2214,7 +2214,7 @@ export default function Home() {
                       <div className="result-section-title" style={{ margin: 0 }}>ATS Cheat Sheet</div>
                       <span style={{ background: '#6366f1', color: 'white', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
                     </div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>Every field an ATS will ask for — pre-staged, one click to copy.</div>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--ink)' }}>Every field an ATS will ask for — pre-staged, one click to copy.</div>
                   </div>
                   {isPlusUser ? (
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
