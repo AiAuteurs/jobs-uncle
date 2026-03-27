@@ -1385,7 +1385,7 @@ export default function Home() {
             {/* ── UPLOAD SECTION ────────────────────────────────────────── */}
       {!results && (
       <section id="upload-section" style={{
-        maxWidth: '760px', margin: '0 auto', padding: '0 24px 60px',
+        maxWidth: '760px', margin: '0 auto', padding: '0 24px 0',
       }}>
         {loading ? (
           <div style={{ 
