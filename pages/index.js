@@ -1205,7 +1205,7 @@ export default function Home() {
           >
             Get started free →
           </a>
-          <div style={{ marginTop: '10px', fontSize: '0.75rem', color: '#555', fontFamily: 'Inter, sans-serif' }}>
+          <div style={{ marginTop: '10px', fontSize: '0.75rem', color: '#B0B0B8', fontFamily: 'Inter, sans-serif' }}>
             No account needed. Free to try.
           </div>
         </div>
