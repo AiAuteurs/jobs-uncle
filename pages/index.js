@@ -2520,7 +2520,7 @@ export default function Home() {
           maxWidth: '600px',
           margin: '0 auto 0.75rem',
         }}>
-          What would make this better?
+          Getting better every day. We're listening.
         </p>
         <div style={{ maxWidth: '520px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <textarea
