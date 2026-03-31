@@ -343,8 +343,14 @@ export default function Home() {
     }
   }, [router.query.signin])
 
+  // Auto-score cover letter ATS when results arrive
   useEffect(() => {
-    fetch('/api/counter')
+    if (results?.coverLetter && jobDescription) {
+      setCoverAts(clientScoreATS(results.coverLetter, jobDescription))
+    }
+  }, [results])
+
+  useEffect(() => {
       .then(r => r.json())
       .then(d => setResumeCount(d.count))
       .catch(() => {})
@@ -1955,21 +1961,9 @@ export default function Home() {
                     : results.coverLetter
                 )}} />
 
-                {/* Cover Letter ATS Score */}
+                {/* Cover Letter ATS Score — auto-computed on load */}
                 <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid var(--border)' }}>
-                  {!coverAts ? (
-                    <button
-                      onClick={() => {
-                        const coverContent = activeVersion === 'v2' && regeneratedResults
-                          ? regeneratedResults.coverLetter
-                          : results.coverLetter
-                        setCoverAts(clientScoreATS(coverContent, jobDescription))
-                      }}
-                      style={{ padding: '9px 22px', background: '#6366f1', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer' }}
-                    >
-                      Score cover letter for ATS →
-                    </button>
-                  ) : (
+                  {coverAts && (
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                         <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--ink)' }}>Cover Letter ATS Match</div>
