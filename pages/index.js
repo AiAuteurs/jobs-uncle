@@ -775,6 +775,8 @@ export default function Home() {
     setAtsOpen(false)
     setAtsCopied({})
     setAtsVersion(null)
+    setActiveDownloadBtn(null)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleManagePortal = async () => {
@@ -2512,6 +2514,46 @@ export default function Home() {
                 Contact us
               </button>
             </div>
+
+            {activeDownloadBtn && (
+              <div style={{
+                marginTop: '24px',
+                padding: '20px 24px',
+                background: 'rgba(0,209,255,0.06)',
+                border: '1.5px solid rgba(0,209,255,0.25)',
+                borderRadius: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '12px',
+              }}>
+                <div>
+                  <div style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '2px' }}>
+                    ✓ Downloaded. Applying to another role?
+                  </div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-soft)' }}>
+                    Tailor a fresh resume in under a minute.
+                  </div>
+                </div>
+                <button
+                  onClick={handleReset}
+                  style={{
+                    padding: '10px 24px',
+                    background: 'var(--accent)',
+                    color: '#000',
+                    border: 'none',
+                    borderRadius: '50px',
+                    fontSize: '0.85rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  Tailor another →
+                </button>
+              </div>
+            )}
 
             <button className="reset-btn" onClick={handleReset}>
               ← Start over with a new job
