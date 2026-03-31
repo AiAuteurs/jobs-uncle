@@ -2224,6 +2224,14 @@ export default function Home() {
                 </div>
               )}
 
+              {activeResultTab === 'intel' && results.companyIntel && (
+                <div id="result-intel" className="result-section" style={{ borderLeft: '3px solid #f59e0b', background: 'rgba(245,158,11,0.05)' }}>
+                  <div className="result-section-title">🏢 Company Intel</div>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '12px' }}>What we know about this company — use it to tailor your pitch and prep for interviews.</div>
+                  <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.companyIntel)}} />
+                </div>
+              )}
+
               {/* ATS CHEAT SHEET */}
               <div className="result-section" style={{ borderLeft: '3px solid #10b981', background: 'rgba(16,185,129,0.04)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
