@@ -1275,7 +1275,7 @@ export default function Home() {
 
               {/* Q3 ATS SCORE */}
               <div className="hero-quad-cell" style={{ borderLeft: '3px solid #10b981' }} onMouseEnter={() => setHoveredQuad('ats')}>
-                <div className="hero-quad-label" style={{ color: '#10b981' }}><span className="hero-quad-dot" style={{ background: '#10b981' }} />ATS Score</div>
+                <div className="hero-quad-label" style={{ color: '#10b981' }}><span className="hero-quad-dot" style={{ background: '#10b981' }} />ATS Keyword Match</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                   <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'conic-gradient(#10b981 360deg, #e5e7eb 0deg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -1350,7 +1350,7 @@ export default function Home() {
                 )}
                 {hoveredQuad === 'ats' && (
                   <div>
-                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '4px' }}>🎯 ATS Score</div>
+                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '4px' }}>🎯 ATS Keyword Match</div>
                     <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', color: '#bbb', marginBottom: '12px' }}>Example output — fictional candidate Riley Okafor applying to fictional company Vela.</div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
                       <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'conic-gradient(#10b981 360deg, #e5e7eb 0deg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -1798,7 +1798,7 @@ export default function Home() {
               {(() => {
                 const tabs = [
                   { key: 'resume', label: (() => { const s = (activeVersion === 'v2' && regeneratedResults) ? clientScoreATS(regeneratedResults.resume, jobDescription).score : results.atsMatch?.score; return s != null ? `📄 Resume · ${s}%` : '📄 Resume' })() },
-                  { key: 'ats', label: '🎯 ATS Score' },
+                  { key: 'ats', label: '🎯 ATS Keyword Match' },
                   { key: 'recruiter', label: '🔍 Recruiter Analysis' },
                   { key: 'cover', label: coverAts ? `✉️ Cover Letter · ${coverAts.score}%` : repairedCover ? '✉️ Cover Letter · ✦ Repaired' : '✉️ Cover Letter' },
                   { key: 'dm', label: '💬 Hiring Manager DM' },
@@ -1908,7 +1908,7 @@ export default function Home() {
                         </div>
                       </div>
                       <div>
-                        <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#10b981' }}>ATS Score — Version 2</div>
+                        <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#10b981' }}>ATS Keyword Match — Version 2</div>
                         <div style={{ fontSize: '0.72rem', color: 'var(--text-soft)' }}>
                           {v1ats ? `Up from ${v1ats.score}% on Version 1` : 'Keyword match against job description'}
                         </div>
@@ -2085,7 +2085,7 @@ export default function Home() {
                   if (!activeAts) return (
                     <div className="result-section" style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-soft)' }}>
                       <div style={{ fontSize: '2rem', marginBottom: '12px' }}>🎯</div>
-                      <div style={{ fontWeight: 700, marginBottom: '8px' }}>ATS Score not available</div>
+                      <div style={{ fontWeight: 700, marginBottom: '8px' }}>ATS Keyword Match not available</div>
                       <div style={{ fontSize: '0.85rem' }}>Run a new generation to see your keyword match score.</div>
                     </div>
                   )
