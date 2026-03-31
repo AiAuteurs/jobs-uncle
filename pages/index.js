@@ -320,6 +320,9 @@ export default function Home() {
   const [activeVersion, setActiveVersion] = useState('v1')
   const [regenError, setRegenError] = useState(null)
 
+  // Cover Letter ATS state
+  const [coverAts, setCoverAts] = useState(null)
+
   // ATS Cheat Sheet state
   const [atsData, setAtsData] = useState(null)
   const [atsLoading, setAtsLoading] = useState(false)
@@ -775,6 +778,7 @@ export default function Home() {
     setAtsOpen(false)
     setAtsCopied({})
     setAtsVersion(null)
+    setCoverAts(null)
     setActiveDownloadBtn(null)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -1926,6 +1930,53 @@ export default function Home() {
                     ? regeneratedResults.coverLetter
                     : results.coverLetter
                 )}} />
+
+                {/* Cover Letter ATS Score */}
+                <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid var(--border)' }}>
+                  {!coverAts ? (
+                    <button
+                      onClick={() => {
+                        const coverContent = activeVersion === 'v2' && regeneratedResults
+                          ? regeneratedResults.coverLetter
+                          : results.coverLetter
+                        setCoverAts(clientScoreATS(coverContent, jobDescription))
+                      }}
+                      style={{ padding: '9px 22px', background: '#6366f1', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer' }}
+                    >
+                      Score cover letter for ATS →
+                    </button>
+                  ) : (
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                        <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--ink)' }}>Cover Letter ATS Match</div>
+                        <div style={{ fontWeight: 900, fontSize: '1.1rem', color: coverAts.score >= 70 ? '#22c55e' : coverAts.score >= 40 ? '#f59e0b' : '#ef4444' }}>
+                          {coverAts.score}%
+                        </div>
+                        <button onClick={() => setCoverAts(null)} style={{ background: 'none', border: 'none', fontSize: '0.75rem', color: 'var(--text-soft)', cursor: 'pointer', padding: 0 }}>Reset</button>
+                      </div>
+                      {coverAts.matched.length > 0 && (
+                        <div style={{ marginBottom: '10px' }}>
+                          <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#166534', marginBottom: '6px' }}>✓ Keywords found ({coverAts.matched.length})</div>
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                            {coverAts.matched.map(k => (
+                              <span key={k} className="match-tag--hit" style={{ fontSize: '0.75rem', padding: '2px 10px', borderRadius: '20px' }}>{k}</span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {coverAts.missing.length > 0 && (
+                        <div>
+                          <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#991b1b', marginBottom: '6px' }}>✗ Missing keywords ({coverAts.missing.length})</div>
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                            {coverAts.missing.map(k => (
+                              <span key={k} className="match-tag--miss" style={{ fontSize: '0.75rem', padding: '2px 10px', borderRadius: '20px' }}>{k}</span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>}
               {/* ATS KEYWORD MATCH SCORE */}
               {activeResultTab === 'ats' && (
