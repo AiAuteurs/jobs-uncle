@@ -351,6 +351,7 @@ export default function Home() {
   }, [results])
 
   useEffect(() => {
+    fetch('/api/counter')
       .then(r => r.json())
       .then(d => setResumeCount(d.count))
       .catch(() => {})
