@@ -1793,7 +1793,7 @@ export default function Home() {
                   { key: 'resume', label: (() => { const s = (activeVersion === 'v2' && regeneratedResults) ? clientScoreATS(regeneratedResults.resume, jobDescription).score : results.atsMatch?.score; return s != null ? `📄 Resume · ${s}%` : '📄 Resume' })() },
                   { key: 'ats', label: '🎯 ATS Score' },
                   { key: 'recruiter', label: '🔍 Recruiter Analysis' },
-                  { key: 'cover', label: '✉️ Cover Letter' },
+                  { key: 'cover', label: coverAts ? `✉️ Cover Letter · ${coverAts.score}%` : repairedCover ? '✉️ Cover Letter · ✦ Repaired' : '✉️ Cover Letter' },
                   { key: 'dm', label: '💬 Hiring Manager DM' },
                   ...(results.companyIntel ? [{ key: 'intel', label: '🏢 Company Intel' }] : []),
                 ]
@@ -1998,56 +1998,71 @@ export default function Home() {
                           </div>
                           {/* Repair button — Pro+ only */}
                           {isPlusUser ? (
-                            <div style={{ marginTop: '16px' }}>
-                              {!repairedCover && !coverRepairLoading && (
-                                <button
-                                  onClick={async () => {
-                                    setCoverRepairLoading(true)
-                                    setCoverRepairError(null)
-                                    try {
-                                      const coverContent = activeVersion === 'v2' && regeneratedResults
-                                        ? regeneratedResults.coverLetter
-                                        : results.coverLetter
-                                      const res = await fetch('/api/repair-cover', {
-                                        method: 'POST',
-                                        headers: { 'Content-Type': 'application/json' },
-                                        body: JSON.stringify({
-                                          coverLetter: coverContent,
-                                          jobDescription,
-                                          missingKeywords: coverAts.missing,
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginTop: '16px' }}>
+                              {!repairedCover && (
+                                <>
+                                  <button
+                                    onClick={async () => {
+                                      setCoverRepairLoading(true)
+                                      setCoverRepairError(null)
+                                      try {
+                                        const coverContent = activeVersion === 'v2' && regeneratedResults
+                                          ? regeneratedResults.coverLetter
+                                          : results.coverLetter
+                                        const res = await fetch('/api/repair-cover', {
+                                          method: 'POST',
+                                          headers: { 'Content-Type': 'application/json' },
+                                          body: JSON.stringify({
+                                            coverLetter: coverContent,
+                                            jobDescription,
+                                            missingKeywords: coverAts.missing,
+                                          })
                                         })
-                                      })
-                                      const data = await res.json()
-                                      if (!res.ok) throw new Error(data.error || 'Repair failed.')
-                                      setRepairedCover(data.coverLetter)
-                                      setCoverAts(null)
-                                    } catch (err) {
-                                      setCoverRepairError(err.message)
-                                    } finally {
-                                      setCoverRepairLoading(false)
-                                    }
-                                  }}
-                                  style={{ padding: '9px 22px', background: '#10b981', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer' }}
-                                >
-                                  ✦ Repair cover letter →
-                                </button>
+                                        const data = await res.json()
+                                        if (!res.ok) throw new Error(data.error || 'Repair failed.')
+                                        setRepairedCover(data.coverLetter)
+                                        setCoverAts(null)
+                                      } catch (err) {
+                                        setCoverRepairError(err.message)
+                                      } finally {
+                                        setCoverRepairLoading(false)
+                                      }
+                                    }}
+                                    disabled={coverRepairLoading}
+                                    style={{
+                                      padding: '10px 24px',
+                                      background: coverRepairLoading ? '#aaa' : '#f59e0b',
+                                      color: 'white', border: 'none', borderRadius: '6px',
+                                      fontSize: '0.88rem', fontWeight: 700,
+                                      cursor: coverRepairLoading ? 'default' : 'pointer',
+                                    }}
+                                  >
+                                    {coverRepairLoading ? '⟳ Repairing...' : '✦ Repair cover letter'}
+                                  </button>
+                                  {!coverRepairLoading && (
+                                    <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>
+                                      Rewrites your cover letter with missing keywords woven in
+                                    </span>
+                                  )}
+                                </>
                               )}
-                              {coverRepairLoading && (
-                                <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginTop: '8px' }}>Rewriting your cover letter…</div>
+                              {repairedCover && (
+                                <span style={{ fontSize: '0.88rem', color: '#22c55e', fontWeight: 700 }}>✓ Cover letter repaired — scroll down to see it</span>
                               )}
                               {coverRepairError && (
-                                <div style={{ fontSize: '0.82rem', color: '#ef4444', marginTop: '8px' }}>{coverRepairError}</div>
+                                <div style={{ color: '#ef4444', fontSize: '0.8rem' }}>{coverRepairError}</div>
                               )}
                             </div>
                           ) : (
-                            <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-                              <span style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>Repair cover letter is a Pro+ feature.</span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginTop: '16px' }}>
                               <button
                                 onClick={() => setShowPlusPaywall(true)}
-                                style={{ padding: '7px 18px', background: '#6366f1', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.82rem', fontWeight: 700, cursor: 'pointer' }}
+                                style={{ padding: '10px 24px', background: '#f59e0b', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.88rem', fontWeight: 700, cursor: 'pointer' }}
                               >
-                                Upgrade to Pro+
+                                ✦ Repair cover letter
                               </button>
+                              <span style={{ background: '#6366f1', color: 'white', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
+                              <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>Upgrade to rewrite with fixes applied</span>
                             </div>
                           )}
                         </div>
