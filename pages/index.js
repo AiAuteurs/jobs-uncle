@@ -1393,8 +1393,8 @@ export default function Home() {
         background: 'var(--surface)',
       }}>
         <p style={{
-          fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem',
-          fontStyle: 'italic', color: 'var(--ink)', margin: '0 0 8px', lineHeight: 1.5,
+          fontFamily: 'Inter, sans-serif', fontSize: '1rem',
+          fontStyle: 'normal', color: 'var(--ink)', margin: '0 0 8px', lineHeight: 1.6,
         }}>"The results are solid. I like what I got back."</p>
         <p style={{
           fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-soft)',
@@ -1411,9 +1411,9 @@ export default function Home() {
         background: 'var(--surface)',
       }}>
         <p style={{
-          fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem',
-          fontStyle: 'italic', color: 'var(--ink)', margin: '0 0 8px', lineHeight: 1.5,
-        }}>"HUNTR has a great ATS analyzer but is confusing in almost every other way that JobsUncle is not. I love how this app works."</p>
+          fontFamily: 'Inter, sans-serif', fontSize: '1rem',
+          fontStyle: 'normal', color: 'var(--ink)', margin: '0 0 8px', lineHeight: 1.6,
+        }}>"I've tried a few others. None of them tailor a resume the way this does. I love this app."</p>
         <p style={{
           fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-soft)',
           letterSpacing: '0.06em', textTransform: 'uppercase', margin: 0,
