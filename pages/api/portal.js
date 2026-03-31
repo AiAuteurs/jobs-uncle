@@ -1,34 +1,33 @@
 import Stripe from 'stripe'
-
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end()
 
-  const KV_URL = process.env.KV_REST_API_URL
-  const KV_TOKEN = process.env.KV_REST_API_TOKEN
+  const { email } = req.body
+  if (!email) return res.status(400).json({ error: 'Email required' })
+
+  const normalEmail = email.toLowerCase().trim()
 
   try {
-    // Get email from request body or cookie-based session
-    const { email } = req.body
+    // Look up customer in Stripe directly by email
+    const customers = await stripe.customers.list({ email: normalEmail, limit: 5 })
 
-    if (!email) {
-      return res.status(400).json({ error: 'Email required' })
+    if (!customers.data.length) {
+      return res.status(404).json({ error: 'No subscription found for that email.' })
     }
 
-    // Look up Stripe customer ID from KV
-    const customerKey = `stripe_customer:${email}`
-    const kvRes = await fetch(`${KV_URL}/get/${customerKey}`, {
-      headers: { Authorization: `Bearer ${KV_TOKEN}` }
-    })
-    const kvData = await kvRes.json()
-    const customerId = kvData.result
+    // Use first customer with an active subscription
+    let customerId = null
+    for (const customer of customers.data) {
+      const subs = await stripe.subscriptions.list({ customer: customer.id, status: 'active', limit: 1 })
+      if (subs.data.length) { customerId = customer.id; break }
+    }
 
     if (!customerId) {
-      return res.status(404).json({ error: 'No subscription found for this email.' })
+      return res.status(404).json({ error: 'No active subscription found for that email.' })
     }
 
-    // Create Stripe portal session
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: customerId,
       return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
