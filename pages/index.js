@@ -909,7 +909,7 @@ export default function Home() {
               <button
                 onClick={handleManagePortal}
                 disabled={manageStatus === 'loading'}
-                style={{ width: '100%', padding: '12px', background: 'var(--ink)', color: 'white', border: 'none', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer' }}
+                style={{ width: '100%', padding: '12px', background: '#111', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer' }}
               >
                 {manageStatus === 'loading' ? 'Looking up your account…' : 'Go to billing →'}
               </button>
@@ -937,7 +937,7 @@ export default function Home() {
               <button
                 onClick={handleRestore}
                 disabled={restoreStatus === 'loading'}
-                style={{ width: '100%', padding: '12px', background: 'var(--ink)', color: 'white', border: 'none', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer' }}
+                style={{ width: '100%', padding: '12px', background: '#111', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer' }}
               >
                 {restoreStatus === 'loading' ? 'Checking…' : 'Restore my access'}
               </button>
