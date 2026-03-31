@@ -1403,6 +1403,24 @@ export default function Home() {
       </div>
       )}
 
+      {/* TESTIMONIAL — John S. */}
+      {!results && !loading && (
+      <div style={{
+        textAlign: 'center', padding: '28px 24px',
+        borderBottom: '1px solid var(--border)',
+        background: 'var(--surface)',
+      }}>
+        <p style={{
+          fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem',
+          fontStyle: 'italic', color: 'var(--ink)', margin: '0 0 8px', lineHeight: 1.5,
+        }}>"HUNTR has a great ATS analyzer but is confusing in almost every other way that JobsUncle is not. I love how this app works."</p>
+        <p style={{
+          fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-soft)',
+          letterSpacing: '0.06em', textTransform: 'uppercase', margin: 0,
+        }}>&mdash; John S., Creative Director</p>
+      </div>
+      )}
+
 
             {/* ── UPLOAD SECTION ────────────────────────────────────────── */}
       {!results && (
