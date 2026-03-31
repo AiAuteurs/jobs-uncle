@@ -41,6 +41,21 @@ export default async function handler(req, res) {
         verified: true,
       }))
 
+      // Notify Matassa
+      fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.RESEND_API}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: 'JobsUncle Signups <oni@jobsuncle.ai>',
+          to: 'jobsuncleai@gmail.com',
+          subject: `New signup: ${normalized}`,
+          html: `<p>New verified user:</p><p><strong>${normalized}</strong></p><p style="color:#999;font-size:12px;">${new Date().toISOString()}</p>`,
+        }),
+      }).catch(() => {})
+
       // Welcome email
       fetch('https://api.resend.com/emails', {
         method: 'POST',
