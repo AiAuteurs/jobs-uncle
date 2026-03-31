@@ -322,6 +322,9 @@ export default function Home() {
 
   // Cover Letter ATS state
   const [coverAts, setCoverAts] = useState(null)
+  const [repairedCover, setRepairedCover] = useState(null)
+  const [coverRepairLoading, setCoverRepairLoading] = useState(false)
+  const [coverRepairError, setCoverRepairError] = useState(null)
 
   // ATS Cheat Sheet state
   const [atsData, setAtsData] = useState(null)
@@ -779,6 +782,9 @@ export default function Home() {
     setAtsCopied({})
     setAtsVersion(null)
     setCoverAts(null)
+    setRepairedCover(null)
+    setCoverRepairLoading(false)
+    setCoverRepairError(null)
     setActiveDownloadBtn(null)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -1990,13 +1996,77 @@ export default function Home() {
                               <span key={k} className="match-tag--miss" style={{ fontSize: '0.75rem', padding: '2px 10px', borderRadius: '20px' }}>{k}</span>
                             ))}
                           </div>
+                          {/* Repair button — Pro+ only */}
+                          {isPlusUser ? (
+                            <div style={{ marginTop: '16px' }}>
+                              {!repairedCover && !coverRepairLoading && (
+                                <button
+                                  onClick={async () => {
+                                    setCoverRepairLoading(true)
+                                    setCoverRepairError(null)
+                                    try {
+                                      const coverContent = activeVersion === 'v2' && regeneratedResults
+                                        ? regeneratedResults.coverLetter
+                                        : results.coverLetter
+                                      const res = await fetch('/api/repair-cover', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                          coverLetter: coverContent,
+                                          jobDescription,
+                                          missingKeywords: coverAts.missing,
+                                        })
+                                      })
+                                      const data = await res.json()
+                                      if (!res.ok) throw new Error(data.error || 'Repair failed.')
+                                      setRepairedCover(data.coverLetter)
+                                      setCoverAts(null)
+                                    } catch (err) {
+                                      setCoverRepairError(err.message)
+                                    } finally {
+                                      setCoverRepairLoading(false)
+                                    }
+                                  }}
+                                  style={{ padding: '9px 22px', background: '#10b981', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer' }}
+                                >
+                                  ✦ Repair cover letter →
+                                </button>
+                              )}
+                              {coverRepairLoading && (
+                                <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginTop: '8px' }}>Rewriting your cover letter…</div>
+                              )}
+                              {coverRepairError && (
+                                <div style={{ fontSize: '0.82rem', color: '#ef4444', marginTop: '8px' }}>{coverRepairError}</div>
+                              )}
+                            </div>
+                          ) : (
+                            <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                              <span style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>Repair cover letter is a Pro+ feature.</span>
+                              <button
+                                onClick={() => setShowPlusPaywall(true)}
+                                style={{ padding: '7px 18px', background: '#6366f1', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.82rem', fontWeight: 700, cursor: 'pointer' }}
+                              >
+                                Upgrade to Pro+
+                              </button>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
                   )}
                 </div>
               </div>}
-              {/* ATS KEYWORD MATCH SCORE */}
+
+              {/* Repaired cover letter */}
+              {activeResultTab === 'cover' && repairedCover && (
+                <div className="result-section" style={{ borderLeft: '3px solid #10b981', background: 'rgba(16,185,129,0.04)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#10b981' }}>✦ Repaired Cover Letter</div>
+                    <button onClick={() => setRepairedCover(null)} style={{ background: 'none', border: 'none', fontSize: '0.75rem', color: 'var(--text-soft)', cursor: 'pointer', padding: 0 }}>Reset</button>
+                  </div>
+                  <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(repairedCover)}} />
+                </div>
+              )}
               {activeResultTab === 'ats' && (
                 (() => {
                   const activeAts = (activeVersion === 'v2' && regeneratedResults)
