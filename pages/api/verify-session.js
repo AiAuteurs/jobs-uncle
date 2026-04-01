@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     const isPlus = plan === 'pro_plus_monthly' || plan === 'pro_plus_annual'
     const accessLevel = isPlus ? 'pro_plus' : 'paid'
 
-    // Write paid status to KV — expires in 1 year
+    // Write paid status to KV keyed by sessionId — expires in 1 year
     const paidKey = `paid:${sessionId}`
     await fetch(`${KV_URL}/set/${paidKey}/1/ex/31536000`, {
       method: 'POST',
@@ -38,10 +38,10 @@ export default async function handler(req, res) {
       })
     }
 
-    // Key by email if available
+    // Key by email — store accessLevel directly so check-access can resolve without sessionId
     if (session.customer_email) {
       const emailKey = `paid_email:${session.customer_email}`
-      await fetch(`${KV_URL}/set/${emailKey}/${sessionId}/ex/31536000`, {
+      await fetch(`${KV_URL}/set/${emailKey}/${accessLevel}/ex/31536000`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${KV_TOKEN}`, 'Content-Type': 'application/json' },
       })

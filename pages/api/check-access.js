@@ -1,5 +1,5 @@
 // Checks if a user has paid access or free resumes remaining
-// Priority: paid cookie → paid KV session → free cookie count → free KV count
+// Priority: paid cookie → email KV lookup → sessionId KV lookup → free cookie count → free KV count
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end()
@@ -16,12 +16,30 @@ export default async function handler(req, res) {
   try {
     const cookies = req.headers.cookie || ''
 
-    // 1. Paid cookie — set by verify-session after payment
+    // 1. Paid cookie — fastest path, set by verify-session after payment
     const cookieAccess = cookies.match(/ju_access=([^;]+)/)?.[1]
     if (cookieAccess === 'pro_plus') return res.json({ access: 'pro_plus', resumesLeft: 999 })
     if (cookieAccess === 'paid') return res.json({ access: 'paid', resumesLeft: 999 })
 
-    // 2. KV sessionId — fallback for users who paid before cookie rollout
+    // 2. Email KV lookup — permanent paid access for returning users who lost their cookie
+    // This is the fix for users who paid, closed the browser, and came back later
+    if (email) {
+      const emailRes = await fetch(`${KV_URL}/get/paid_email:${email}`, {
+        headers: { Authorization: `Bearer ${KV_TOKEN}` }
+      })
+      const emailAccess = (await emailRes.json()).result
+      if (emailAccess === 'pro_plus') {
+        // Re-set cookie so future requests are fast
+        res.setHeader('Set-Cookie', `ju_access=pro_plus; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000`)
+        return res.json({ access: 'pro_plus', resumesLeft: 999 })
+      }
+      if (emailAccess === 'paid') {
+        res.setHeader('Set-Cookie', `ju_access=paid; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000`)
+        return res.json({ access: 'paid', resumesLeft: 999 })
+      }
+    }
+
+    // 3. KV sessionId — fallback for users who paid before email-KV rollout
     if (sessionId) {
       const plusRes = await fetch(`${KV_URL}/get/paid_plus:${sessionId}`, {
         headers: { Authorization: `Bearer ${KV_TOKEN}` }
@@ -34,7 +52,7 @@ export default async function handler(req, res) {
       if ((await paidRes.json()).result) return res.json({ access: 'paid', resumesLeft: 999 })
     }
 
-    // 3. Free tier — cookie count is primary, KV is server-side backup
+    // 4. Free tier — cookie count is primary, KV is server-side backup
     // Use whichever is higher so neither can be trivially gamed
     const cookieCountRaw = cookies.match(/ju_uses=([^;]+)/)?.[1]
     const cookieCount = cookieCountRaw ? parseInt(cookieCountRaw, 10) : 0
