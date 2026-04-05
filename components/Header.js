@@ -247,7 +247,22 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
         {isPaid && (
           <a
             href="/api/signout"
-            style={{ ...rightLink, color: '#555', fontSize: '0.75rem', fontWeight: 500 }}
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              color: '#aaa',
+              textDecoration: 'none',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              border: '1.5px solid #333',
+              borderRadius: '999px',
+              padding: '4px 14px',
+              letterSpacing: '0.03em',
+              transition: 'border-color 0.15s, color 0.15s',
+            }}
+            onMouseEnter={e => { e.target.style.borderColor = '#666'; e.target.style.color = '#fff' }}
+            onMouseLeave={e => { e.target.style.borderColor = '#333'; e.target.style.color = '#aaa' }}
             onClick={() => {
               if (typeof window !== 'undefined') {
                 localStorage.removeItem('ju_email')
