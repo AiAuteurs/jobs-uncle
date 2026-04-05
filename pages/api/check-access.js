@@ -21,10 +21,14 @@ export default async function handler(req, res) {
     if (cookieAccess === 'pro_plus') return res.json({ access: 'pro_plus', resumesLeft: 999 })
     if (cookieAccess === 'paid') return res.json({ access: 'paid', resumesLeft: 999 })
 
+    // Resolve email: body takes priority, fall back to ju_email cookie
+    const cookieEmail = cookies.match(/ju_email=([^;]+)/)?.[1]
+    const resolvedEmail = email || cookieEmail
+
     // 2. Email KV lookup — permanent paid access for returning users who lost their cookie
     // This is the fix for users who paid, closed the browser, and came back later
-    if (email) {
-      const emailRes = await fetch(`${KV_URL}/get/paid_email:${email}`, {
+    if (resolvedEmail) {
+      const emailRes = await fetch(`${KV_URL}/get/paid_email:${resolvedEmail}`, {
         headers: { Authorization: `Bearer ${KV_TOKEN}` }
       })
       const emailAccess = (await emailRes.json()).result

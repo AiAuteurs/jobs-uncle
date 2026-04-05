@@ -356,11 +356,10 @@ export default function Home() {
       .then(d => setResumeCount(d.count))
       .catch(() => {})
 
-    const storedEmail = typeof window !== 'undefined' ? localStorage.getItem('ju_email') : null
     fetch('/api/check-access', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(storedEmail ? { email: storedEmail } : {})
+      body: JSON.stringify({})
     })
       .then(r => r.json())
       .then(d => {
@@ -735,6 +734,9 @@ export default function Home() {
           localStorage.setItem('ju_email_gate', '1')
           localStorage.setItem('ju_email', gateEmail)
         }
+        // If this email has a paid plan, update access state immediately
+        if (data.access === 'pro_plus') { setIsPaid(true); setIsPlusUser(true); setAccessLevel('pro_plus') }
+        else if (data.access === 'paid') { setIsPaid(true); setAccessLevel('paid') }
       } else {
         setOtpStatus('error')
         setOtpMsg(data.error || 'Incorrect code. Try again.')

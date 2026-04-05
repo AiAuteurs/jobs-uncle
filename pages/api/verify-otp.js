@@ -31,6 +31,18 @@ export default async function handler(req, res) {
   // Valid — delete so it can't be reused
   await kv('del', `otp:${normalized}`)
 
+  // Set persistent email cookie so any browser can restore paid access without localStorage
+  const cookieBase = `; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000`
+  const cookies = [`ju_email=${normalized}${cookieBase}`]
+
+  // If this email has a paid plan, re-set the access cookie immediately
+  const { result: paidLevel } = await kv('get', `paid_email:${normalized}`)
+  if (paidLevel === 'pro_plus' || paidLevel === 'paid') {
+    cookies.push(`ju_access=${paidLevel}${cookieBase}`)
+  }
+
+  res.setHeader('Set-Cookie', cookies)
+
   // Register if new user
   try {
     const { result: existing } = await kv('get', `user:${normalized}`)
@@ -89,5 +101,5 @@ export default async function handler(req, res) {
     // Non-fatal
   }
 
-  return res.status(200).json({ verified: true })
+  return res.status(200).json({ verified: true, access: paidLevel || null })
 }
