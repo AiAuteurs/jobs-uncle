@@ -356,10 +356,11 @@ export default function Home() {
       .then(d => setResumeCount(d.count))
       .catch(() => {})
 
+    const storedEmail = typeof window !== 'undefined' ? localStorage.getItem('ju_email') : null
     fetch('/api/check-access', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({})
+      body: JSON.stringify(storedEmail ? { email: storedEmail } : {})
     })
       .then(r => r.json())
       .then(d => {
