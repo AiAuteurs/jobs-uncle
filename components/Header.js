@@ -244,6 +244,20 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
           : !isPaid && onSignIn
           ? <a href="#signin" style={rightLink} onClick={e => { e.preventDefault(); onSignIn() }}>Sign In</a>
           : null}
+        {isPaid && (
+          <a
+            href="/api/signout"
+            style={{ ...rightLink, color: '#555', fontSize: '0.75rem', fontWeight: 500 }}
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                localStorage.removeItem('ju_email')
+                localStorage.removeItem('ju_email_gate')
+              }
+            }}
+          >
+            Sign out
+          </a>
+        )}
       </div>
 
       <style>{`
