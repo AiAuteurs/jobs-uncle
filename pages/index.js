@@ -363,8 +363,13 @@ export default function Home() {
     })
       .then(r => r.json())
       .then(d => {
-        if (d.access === 'pro_plus') { setIsPaid(true); setIsPlusUser(true); setAccessLevel('pro_plus') }
-        else if (d.access === 'paid') { setIsPaid(true); setAccessLevel('paid') }
+        if (d.access === 'pro_plus') {
+          setIsPaid(true); setIsPlusUser(true); setAccessLevel('pro_plus')
+          setTimeout(() => document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' }), 300)
+        } else if (d.access === 'paid') {
+          setIsPaid(true); setAccessLevel('paid')
+          setTimeout(() => document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' }), 300)
+        }
       })
       .catch(() => {})
   }, [])
@@ -1222,11 +1227,13 @@ export default function Home() {
               letterSpacing: '-0.01em', boxShadow: '0 0 40px rgba(0,209,255,0.25)',
             }}
           >
-            Get started free →
+            {isPaid ? 'Upload your resume →' : 'Get started free →'}
           </a>
-          <div style={{ marginTop: '10px', fontSize: '0.75rem', color: '#555', fontFamily: 'Inter, sans-serif' }}>
-            No account needed. Free to try.
-          </div>
+          {!isPaid && (
+            <div style={{ marginTop: '10px', fontSize: '0.75rem', color: '#555', fontFamily: 'Inter, sans-serif' }}>
+              No account needed. Free to try.
+            </div>
+          )}
         </div>
 
         {/* COL 3 — 4-quad example card */}
