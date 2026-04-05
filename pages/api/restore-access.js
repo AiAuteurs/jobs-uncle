@@ -35,11 +35,16 @@ export default async function handler(req, res) {
   try {
     // ── 1. KV fast path ──────────────────────────────────────────
     const emailKey = `paid_email:${normalEmail}`
-    const sessionId = await kvGet(KV_URL, KV_TOKEN, emailKey)
+    const kvValue = await kvGet(KV_URL, KV_TOKEN, emailKey)
 
-    if (sessionId) {
-      const plusKey = `paid_plus:${sessionId}`
-      const isPlus = await kvGet(KV_URL, KV_TOKEN, plusKey)
+    if (kvValue) {
+      // New format: value is the access level directly ('pro_plus' or 'paid')
+      if (kvValue === 'pro_plus' || kvValue === 'paid') {
+        setAccessCookie(res, kvValue)
+        return res.json({ ok: true, access: kvValue })
+      }
+      // Legacy format: value is a sessionId — check paid_plus:sessionId
+      const isPlus = await kvGet(KV_URL, KV_TOKEN, `paid_plus:${kvValue}`)
       const accessLevel = isPlus ? 'pro_plus' : 'paid'
       setAccessCookie(res, accessLevel)
       return res.json({ ok: true, access: accessLevel })
