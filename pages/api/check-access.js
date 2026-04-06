@@ -30,7 +30,7 @@ export default async function handler(req, res) {
         headers: { Authorization: `Bearer ${KV_TOKEN}` }
       })
       const tokenVal = (await tokenRes.json()).result
-      if (tokenVal) tokenEmail = decodeURIComponent(tokenVal)
+      if (tokenVal && tokenVal.includes('@')) tokenEmail = decodeURIComponent(tokenVal)
     }
     const resolvedEmail = email || cookieEmail || tokenEmail
 
