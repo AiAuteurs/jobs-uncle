@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     const isNew = !getData.result
 
     if (isNew) {
-      await fetch(`${KV_URL}/set/${kvKey}/1/ex/7776000`, {
+      await fetch(`${KV_URL}/set/${kvKey}/${encodeURIComponent(normalized)}/ex/7776000`, {
         headers: { Authorization: `Bearer ${KV_TOKEN}` }
       })
     }

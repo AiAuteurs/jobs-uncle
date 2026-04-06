@@ -21,9 +21,18 @@ export default async function handler(req, res) {
     if (cookieAccess === 'pro_plus') return res.json({ access: 'pro_plus', resumesLeft: 999 })
     if (cookieAccess === 'paid') return res.json({ access: 'paid', resumesLeft: 999 })
 
-    // Resolve email: body takes priority, fall back to ju_email cookie
+    // Resolve email: body → ju_email cookie → ju_email_token KV lookup
     const cookieEmail = cookies.match(/ju_email=([^;]+)/)?.[1]
-    const resolvedEmail = email || cookieEmail
+    const emailToken = cookies.match(/ju_email_token=([^;]+)/)?.[1]
+    let tokenEmail = null
+    if (!email && !cookieEmail && emailToken) {
+      const tokenRes = await fetch(`${KV_URL}/get/email_gate:${emailToken}`, {
+        headers: { Authorization: `Bearer ${KV_TOKEN}` }
+      })
+      const tokenVal = (await tokenRes.json()).result
+      if (tokenVal) tokenEmail = decodeURIComponent(tokenVal)
+    }
+    const resolvedEmail = email || cookieEmail || tokenEmail
 
     // 2. Email KV lookup — permanent paid access for returning users who lost their cookie
     // This is the fix for users who paid, closed the browser, and came back later
