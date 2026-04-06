@@ -499,7 +499,7 @@ export default function Home() {
 
       // Email gate — show 3s after first resume so you capture before paywall kicks in
       const alreadySubmitted = typeof window !== 'undefined' && localStorage.getItem('ju_email_gate')
-      if (!alreadySubmitted) {
+      if (!alreadySubmitted && !isPaid) {
         setTimeout(() => setShowEmailGate(true), 3000)
       }
     } catch (err) {
