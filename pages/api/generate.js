@@ -919,6 +919,9 @@ ${outputFormat}`
     if (err?.error?.error?.message?.includes('credit balance is too low') || err?.message?.includes('credit balance is too low')) {
       return res.status(503).json({ error: 'Service temporarily unavailable. Please try again in a few minutes.' })
     }
+    if (err?.status === 529 || err?.message?.includes('overloaded') || err?.message?.includes('529')) {
+      return res.status(503).json({ error: '⏳ Anthropic (our AI provider) is experiencing high demand and is temporarily overloaded — this is not a JobsUncle issue. Please give it a few minutes and try again.' })
+    }
     return res.status(500).json({ error: 'Generation failed. Please try again.' })
   }
 }
