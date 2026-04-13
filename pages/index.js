@@ -3,7 +3,6 @@ import Head from 'next/head'
 import Header from '../components/Header'
 import ContactModal from '../components/ContactModal'
 import { useRouter } from 'next/router'
-import { useWarnBeforeLeave } from '../hooks/useWarnBeforeLeave'
 
 
 // ─── CLIENT-SIDE ATS SCORER (mirrors server scoreKeywordMatch) ────────────────
@@ -179,7 +178,12 @@ export default function Home() {
   const router = useRouter()
 
   // ⚠️ Warn user before navigating away if a resume has been generated
-  useWarnBeforeLeave(!!results)
+  useEffect(() => {
+    if (!results) return
+    const handleBeforeUnload = (e) => { e.preventDefault(); e.returnValue = '' }
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [results])
 
   const [pdfFile, setPdfFile] = useState(null)
   const [resumeInputMode, setResumeInputMode] = useState('upload') // 'upload' | 'paste'
