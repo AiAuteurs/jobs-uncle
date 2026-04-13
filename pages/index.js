@@ -176,15 +176,6 @@ const stripMarkdown = (text) => {
 
 export default function Home() {
   const router = useRouter()
-
-  // ⚠️ Warn user before navigating away if a resume has been generated
-  useEffect(() => {
-    if (!results) return
-    const handleBeforeUnload = (e) => { e.preventDefault(); e.returnValue = '' }
-    window.addEventListener('beforeunload', handleBeforeUnload)
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
-  }, [results])
-
   const [pdfFile, setPdfFile] = useState(null)
   const [resumeInputMode, setResumeInputMode] = useState('upload') // 'upload' | 'paste'
   const [resumeText, setResumeText] = useState('')
