@@ -45,17 +45,41 @@ export default async function handler(req, res) {
           body: JSON.stringify({
             from: 'Oni from JobsUncle <oni@jobsuncle.ai>',
             to: normalized,
-            subject: "You're already ahead.",
+            subject: "You're in. Let's get you hired.",
             html: `
-              <div style="font-family: Georgia, serif; max-width: 560px; margin: 0 auto; padding: 40px 24px; color: #111;">
-                <img src="https://jobsuncle.ai/uncle-spin-hero.png" alt="Oni" style="width: 80px; height: auto; margin-bottom: 32px; display: block;" />
-                <p style="font-size: 16px; line-height: 1.7; margin: 0 0 20px;">Most people send the same resume to every job and wonder why they don't hear back.</p>
-                <p style="font-size: 16px; line-height: 1.7; margin: 0 0 20px;">You just changed that.</p>
-                <p style="font-size: 16px; line-height: 1.7; margin: 0 0 20px;">JobsUncle tailors your resume to every role — the way a great creative director would. Not by stuffing in keywords. By finding the right framing for your story.</p>
-                <p style="font-size: 16px; line-height: 1.7; margin: 0 0 32px;">You've got 3 free resumes. Use them on jobs that matter.</p>
-                <p style="font-size: 15px; color: #555; margin: 0;">— Oni, the JobsUncle mascot</p>
-                <hr style="border: none; border-top: 1px solid #eee; margin: 40px 0;" />
-                <p style="font-size: 12px; color: #999; margin: 0;"><a href="https://jobsuncle.ai" style="color: #6366f1; text-decoration: none;">jobsuncle.ai</a> · We don't spam. Ever.</p>
+              <div style="background: #000000; padding: 0; margin: 0;">
+                <div style="max-width: 560px; margin: 0 auto; padding: 48px 32px;">
+
+                  <!-- Logo -->
+                  <div style="text-align: center; margin-bottom: 40px;">
+                    <img src="https://jobsuncle.ai/jobsuncle-pfp.png" alt="JobsUncle.ai" style="width: 100px; height: 100px; border-radius: 50%; display: inline-block;" />
+                  </div>
+
+                  <!-- Headline -->
+                  <h1 style="font-family: Georgia, serif; font-size: 28px; font-weight: 400; color: #ffffff; text-align: center; margin: 0 0 8px; letter-spacing: -0.02em; line-height: 1.2;">You're in. Let's get you hired.</h1>
+
+                  <!-- Rule -->
+                  <div style="width: 40px; height: 1px; background: #00D1FF; margin: 24px auto;"></div>
+
+                  <!-- Body -->
+                  <p style="font-family: Georgia, serif; font-size: 16px; line-height: 1.8; color: #ffffff; margin: 0 0 20px; font-style: italic; text-align: center;">Most people send the same resume to every job<br>and wonder why they don't hear back.</p>
+
+                  <p style="font-family: Georgia, serif; font-size: 16px; line-height: 1.8; color: #ffffff; margin: 0 0 20px; text-align: center;">You just changed that.</p>
+
+                  <p style="font-family: Georgia, serif; font-size: 15px; line-height: 1.8; color: #ffffff; margin: 0 0 32px; text-align: center;">JobsUncle tailors your resume to every role — the way a great creative director would. Not by stuffing in keywords. By finding the right framing for your story.</p>
+
+                  <!-- CTA -->
+                  <div style="text-align: center; margin: 40px 0;">
+                    <p style="font-family: Georgia, serif; font-size: 18px; font-weight: 400; color: #ffffff; margin: 0 0 24px;">You've got <strong style="color: #00D1FF;">3 free resumes.</strong><br>Use them on jobs that matter.</p>
+                    <a href="https://jobsuncle.ai" style="display: inline-block; background: #00D1FF; color: #000000; font-family: Arial, sans-serif; font-size: 15px; font-weight: 700; padding: 14px 36px; border-radius: 50px; text-decoration: none; letter-spacing: 0.01em;">Back to JobsUncle →</a>
+                  </div>
+
+                  <!-- Footer -->
+                  <div style="border-top: 1px solid #222; margin-top: 48px; padding-top: 24px; text-align: center;">
+                    <p style="font-family: Arial, sans-serif; font-size: 12px; color: #555; margin: 0;">We don't spam. Ever. · <a href="https://jobsuncle.ai" style="color: #00D1FF; text-decoration: none;">jobsuncle.ai</a></p>
+                  </div>
+
+                </div>
               </div>
             `,
           }),
