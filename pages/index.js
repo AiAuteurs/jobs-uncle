@@ -1186,26 +1186,25 @@ export default function Home() {
       {!results && !loading && (
       <section style={{
         maxWidth: '1280px', margin: '0 auto', padding: '56px 48px 72px',
-        display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '64px',
-        alignItems: 'center',
       }} className="hero-grid">
 
-        {/* COL 1 — logo + headline + CTA */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        {/* TOP — logo + headline + CTA, full width, centered */}
+        <div style={{ textAlign: 'center', marginBottom: '64px' }}>
           <img
             src="/jobsuncleaiblack.png"
             alt="JobsUncle.ai"
-            style={{ width: '200px', display: 'block', marginBottom: '32px' }}
+            style={{ width: '220px', display: 'block', margin: '0 auto 32px' }}
           />
           <h1 style={{
             fontFamily: 'Inter, sans-serif', fontWeight: 900,
-            fontSize: 'clamp(2rem, 3vw, 3rem)', lineHeight: 1.08,
-            color: '#ffffff', margin: '0 0 20px', letterSpacing: '-0.03em',
+            fontSize: 'clamp(2.4rem, 4vw, 3.6rem)', lineHeight: 1.05,
+            color: '#ffffff', margin: '0 auto 20px', letterSpacing: '-0.03em',
+            maxWidth: '800px',
           }}>
-            Tailored resumes<br />to the job description{' '}
+            Tailored resumes to the job description{' '}
             <span style={{ color: '#00D1FF' }}>in 60 seconds.</span>
           </h1>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '36px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '36px', justifyContent: 'center' }}>
             {['Tailored resume', 'Cover letter', 'Recruiter & ATS analysis', 'Hiring manager DM'].map(item => (
               <span key={item} style={{
                 fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', fontWeight: 600,
@@ -1220,20 +1219,21 @@ export default function Home() {
             onClick={e => { e.preventDefault(); document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' }) }}
             style={{
               display: 'inline-block', background: '#00D1FF', color: '#000',
-              fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: '1.05rem',
-              padding: '15px 44px', borderRadius: '50px', textDecoration: 'none',
+              fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: '1.1rem',
+              padding: '16px 52px', borderRadius: '50px', textDecoration: 'none',
               letterSpacing: '-0.01em', boxShadow: '0 0 40px rgba(0,209,255,0.25)',
             }}
           >
             {isPaid ? 'Upload your resume →' : 'Get started free →'}
           </a>
           {!isPaid && (
-            <div style={{ marginTop: '10px', fontSize: '0.75rem', color: '#555', fontFamily: 'Inter, sans-serif' }}>
+            <div style={{ marginTop: '12px', fontSize: '0.75rem', color: '#555', fontFamily: 'Inter, sans-serif' }}>
               No account needed. Free to try.
             </div>
           )}
         </div>
 
+        {/* Interactive example — full width below hero */}
         {/* COL 3 — Interactive example */}
         {!results && (
           <div style={{ position: 'relative' }}>
@@ -1272,128 +1272,96 @@ export default function Home() {
             }}>
               <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00D1FF', flexShrink: 0 }} />
               <div style={{ fontFamily: 'Georgia, "Times New Roman", serif', fontSize: '0.88rem', color: '#ffffff', lineHeight: 1.4 }}>
-                Fictional candidate. Real output. — <span style={{ color: 'rgba(255,255,255,0.4)', fontStyle: 'italic' }}>Michael Torres applying to Acme Financial</span>
+                Fictional candidate. Real output. — <span style={{ color: '#ffffff', fontStyle: 'italic' }}>Michael Torres applying to Acme Financial</span>
               </div>
             </div>
 
             <div style={{ background: '#111', borderRadius: '14px', boxShadow: '0 32px 64px rgba(0,0,0,0.5)' }}>
-              {/* Tab bar */}
-              <div style={{ display: 'flex', borderBottom: '1px solid #222', overflowX: 'auto', padding: '0 8px' }}>
-                {['resume','cover','ats','cheat','dm'].map((t, i) => (
-                  <button key={t} className={`ex-tab-h${typeof window !== 'undefined' && window.__exTab === t ? ' active' : i === 0 ? ' active' : ''}`}
-                    onClick={e => {
-                      document.querySelectorAll('.ex-tab-h').forEach(b => b.classList.remove('active'))
-                      document.querySelectorAll('.ex-panel-h').forEach(p => p.classList.remove('active'))
-                      e.currentTarget.classList.add('active')
-                      document.getElementById('exh-' + t)?.classList.add('active')
-                    }}
-                  >
-                    {['Resume','Cover Letter','ATS Match','Cheat Sheet','Hiring DM'][i]}
-                  </button>
-                ))}
-              </div>
 
-              {/* Resume panel */}
-              <div id="exh-resume" className="ex-panel-h active" style={{ padding: '12px' }}>
-                <div style={{ display: 'flex', gap: '6px', marginBottom: '10px' }}>
-                  {['a','b'].map((v, i) => (
-                    <button key={v} className={`ver-btn-h${i === 0 ? ' active' : ''}`}
+              {/* FREE tabs */}
+              <div style={{ padding: '10px 16px 0', borderBottom: '1px solid #222' }}>
+                <div style={{ fontSize: '0.52rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#444', marginBottom: '6px', fontFamily: 'Inter, sans-serif' }}>Included in every plan</div>
+                <div style={{ display: 'flex', overflowX: 'auto', gap: '0' }}>
+                  {['resume','cover','ats','dm'].map((t, i) => (
+                    <button key={t} className={`ex-tab-h${i === 0 ? ' active' : ''}`}
                       onClick={e => {
-                        document.querySelectorAll('.ver-btn-h').forEach(b => b.classList.remove('active'))
+                        document.querySelectorAll('.ex-tab-h').forEach(b => b.classList.remove('active'))
+                        document.querySelectorAll('.ex-panel-h').forEach(p => p.classList.remove('active'))
                         e.currentTarget.classList.add('active')
-                        document.getElementById('exh-ver-a').style.display = v === 'a' ? 'block' : 'none'
-                        document.getElementById('exh-ver-b').style.display = v === 'b' ? 'block' : 'none'
+                        document.getElementById('exh-' + t)?.classList.add('active')
                       }}
-                    >{['Version A — Leadership','Version B — Technical'][i]}</button>
+                    >
+                      {['Resume','Cover Letter','ATS Match','Hiring Manager DM'][i]}
+                    </button>
                   ))}
                 </div>
-                <div id="exh-ver-a" className="ex-resume-h">
+              </div>
+
+              {/* PRO+ tabs */}
+              <div style={{ padding: '10px 16px 0', borderBottom: '1px solid #222' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                  <div style={{ fontSize: '0.52rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#6366f1', fontFamily: 'Inter, sans-serif' }}>Pro+ features</div>
+                  <span style={{ background: '#6366f1', color: 'white', fontSize: '0.48rem', fontWeight: 700, letterSpacing: '0.1em', padding: '1px 6px', borderRadius: '10px', textTransform: 'uppercase' }}>Pro+</span>
+                </div>
+                <div style={{ display: 'flex', overflowX: 'auto', gap: '0' }}>
+                  {['dual','cheat'].map((t, i) => (
+                    <button key={t} className="ex-tab-h"
+                      onClick={e => {
+                        document.querySelectorAll('.ex-tab-h').forEach(b => b.classList.remove('active'))
+                        document.querySelectorAll('.ex-panel-h').forEach(p => p.classList.remove('active'))
+                        e.currentTarget.classList.add('active')
+                        document.getElementById('exh-' + t)?.classList.add('active')
+                      }}
+                    >
+                      {['Dual Resume Versions','ATS Cheat Sheet'][i]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Resume panel — single clean version */}
+              <div id="exh-resume" className="ex-panel-h active" style={{ padding: '12px' }}>
+                <div className="ex-resume-h">
                   <h3>Michael Torres</h3>
                   <div className="ex-sub">VP of Product — Payments & Growth · michael.torres@email.com · linkedin.com/in/michaltorres · San Francisco, CA</div>
                   <div className="ex-sl">Summary</div>
-                  <p style={{ margin: '0 0 6px' }}>Product executive with a 15-year track record of scaling payment platforms and consumer SaaS products from early traction to global distribution. Built and led product organizations across Stripe, Square, and PayPal. Known for turning complex financial infrastructure into products that millions of small businesses actually use.</p>
+                  <p style={{ margin: '0 0 6px' }}>Product executive with a 15-year track record scaling payment platforms from early traction to global distribution. Built and led product organizations across Stripe, Square, PayPal, and Google. Known for turning complex financial infrastructure into products that millions of businesses actually use.</p>
                   <div className="ex-sl">Experience</div>
                   <div className="ex-jt">VP of Product</div>
                   <div className="ex-jc">Stripe · Mar 2020 – Present</div>
                   <ul>
-                    <li>Led product org of 38 PMs across merchant, payments, and platform — $2.1B in incremental revenue attributed to pod initiatives</li>
-                    <li>Launched Stripe for Platforms — onboarded 4,200 enterprise clients in first year, now core to 31% of Stripe's ARR</li>
-                    <li>Drove cross-functional alignment across 6 engineering orgs to ship real-time payouts in 47 markets</li>
-                    <li>Owned executive OKR process for product division — presented quarterly to board</li>
+                    <li>Led product org of 38 PMs — $2.1B in incremental revenue attributed to pod initiatives</li>
+                    <li>Launched Stripe for Platforms — 4,200 enterprise clients in year one, core to 31% of ARR</li>
+                    <li>Shipped real-time payouts across 47 markets, reducing settlement from T+2 to instant for 2.3M merchants</li>
+                    <li>Owned executive OKR process — presented quarterly to board</li>
                   </ul>
                   <div className="ex-jt">Director of Product, Seller Tools</div>
                   <div className="ex-jc">Square · Jan 2016 – Feb 2020</div>
                   <ul>
-                    <li>Built and scaled Square's invoice and recurring payments product from $0 to $340M ARR over 4 years</li>
-                    <li>Led team of 14 PMs; grew org from 4 through 3 rounds of strategic hiring</li>
-                    <li>Reduced seller onboarding time 61% through complete UX overhaul — largest single driver of seller activation in 2018</li>
-                    <li>Partnered with Salesforce on native Square integration — adopted by 18,000 SMBs within 6 months</li>
+                    <li>Built invoice and recurring payments from $0 to $340M ARR over 4 years</li>
+                    <li>Led team of 14 PMs; reduced seller onboarding time 61% — largest activation driver in 2018</li>
+                    <li>Shipped Salesforce integration — adopted by 18,000 SMBs within 6 months</li>
                   </ul>
                   <div className="ex-jt">Senior Product Manager, Checkout</div>
                   <div className="ex-jc">PayPal · Aug 2013 – Dec 2015</div>
                   <ul>
-                    <li>Owned checkout conversion across mobile and web — increased global checkout completion rate from 67% to 81%</li>
-                    <li>Shipped one-touch checkout on iOS — 40M activations in first 6 months, highest product adoption in PayPal history at launch</li>
-                    <li>Ran 90+ A/B experiments per year across 22 markets; drove $180M in incremental GMV</li>
+                    <li>Increased global checkout completion from 67% to 81%</li>
+                    <li>Shipped one-touch checkout on iOS — 40M activations in 6 months; $180M incremental GMV</li>
+                    <li>Ran 90+ A/B experiments per year across 22 markets</li>
                   </ul>
                   <div className="ex-jt">Product Manager</div>
                   <div className="ex-jc">Intuit · Jun 2011 – Jul 2013</div>
                   <ul>
                     <li>Launched QuickBooks Payments mobile card reader — 200,000 activations in first year</li>
-                    <li>Led competitive teardown program across 12 fintech products; findings shaped 2013 product roadmap</li>
+                    <li>Led competitive analysis across 12 fintech products; shaped 2013 roadmap</li>
                   </ul>
                   <div className="ex-jt">Associate Product Manager</div>
                   <div className="ex-jc">Google · Jul 2009 – May 2011</div>
                   <ul>
-                    <li>Rotational APM program — contributed to Google Wallet v1 and Google Checkout sunset strategy</li>
-                    <li>Developed merchant analytics dashboard adopted across 3 product teams</li>
+                    <li>APM rotation — contributed to Google Wallet v1; built merchant analytics dashboard adopted by 3 teams</li>
                   </ul>
                   <div className="ex-sl">Skills</div>
                   <p style={{ margin: 0 }}>Product Strategy · P&L Ownership · OKRs · Payments Infrastructure · Platform Products · Stakeholder Management · Go-to-Market · Agile · SQL · Figma · Amplitude · Mixpanel · Jira · Executive Communication</p>
-                  <div className="ex-sl">Education</div>
-                  <p style={{ margin: 0 }}>B.S. Computer Science · Stanford University · 2009</p>
-                </div>
-
-                <div id="exh-ver-b" className="ex-resume-h" style={{ display: 'none' }}>
-                  <h3>Michael Torres</h3>
-                  <div className="ex-sub">VP of Product — Payments & Growth · michael.torres@email.com · linkedin.com/in/michaltorres · San Francisco, CA</div>
-                  <div className="ex-sl">Summary</div>
-                  <p style={{ margin: '0 0 6px' }}>Product operator who ships at scale and measures everything. Built payment products used by tens of millions — from checkout conversion optimization at PayPal to real-time payout infrastructure at Stripe. Runs rigorous experimentation programs, owns data from day one, and delivers measurable ARR impact every year.</p>
-                  <div className="ex-sl">Experience</div>
-                  <div className="ex-jt">VP of Product</div>
-                  <div className="ex-jc">Stripe · Mar 2020 – Present</div>
-                  <ul>
-                    <li>Shipped real-time payouts across 47 markets — reduced settlement latency from T+2 to instant for 2.3M merchants</li>
-                    <li>Launched Stripe for Platforms: 4,200 enterprise clients onboarded in year one, $2.1B incremental revenue across pod portfolio</li>
-                    <li>Ran 200+ A/B experiments annually across checkout, onboarding, and pricing surfaces</li>
-                    <li>Built merchant analytics stack from scratch — reduced data-to-decision latency from 14 days to 4 hours</li>
-                  </ul>
-                  <div className="ex-jt">Director of Product, Seller Tools</div>
-                  <div className="ex-jc">Square · Jan 2016 – Feb 2020</div>
-                  <ul>
-                    <li>Scaled invoice and recurring payments from $0 to $340M ARR — built the product, the team, and the growth model</li>
-                    <li>Reduced seller onboarding drop-off 61% through complete funnel overhaul backed by 40+ user studies</li>
-                    <li>Shipped Salesforce integration using Square's first partner API — 18,000 SMB adoptions in 6 months</li>
-                  </ul>
-                  <div className="ex-jt">Senior Product Manager, Checkout</div>
-                  <div className="ex-jc">PayPal · Aug 2013 – Dec 2015</div>
-                  <ul>
-                    <li>Increased global checkout completion rate from 67% to 81% — largest conversion lift in PayPal's checkout history</li>
-                    <li>Shipped one-touch checkout on iOS: 40M activations in 6 months, $180M incremental GMV from experimentation program</li>
-                    <li>90+ A/B tests per year across 22 markets; built internal experiment velocity framework adopted org-wide</li>
-                  </ul>
-                  <div className="ex-jt">Product Manager</div>
-                  <div className="ex-jc">Intuit · Jun 2011 – Jul 2013</div>
-                  <ul>
-                    <li>Launched QuickBooks Payments card reader — 200,000 activations year one; built activation funnel and instrumented full analytics stack</li>
-                  </ul>
-                  <div className="ex-jt">Associate Product Manager</div>
-                  <div className="ex-jc">Google · Jul 2009 – May 2011</div>
-                  <ul>
-                    <li>APM rotation: Google Wallet v1 contributor; built merchant analytics dashboard adopted by 3 product teams</li>
-                  </ul>
-                  <div className="ex-sl">Skills</div>
-                  <p style={{ margin: 0 }}>Payments Infrastructure · A/B Testing · SQL · Amplitude · Mixpanel · Data Analytics · API Products · Funnel Optimization · Agile · Figma · Jira · Confluence · Experimentation Frameworks</p>
                   <div className="ex-sl">Education</div>
                   <p style={{ margin: 0 }}>B.S. Computer Science · Stanford University · 2009</p>
                 </div>
@@ -1473,9 +1441,96 @@ export default function Home() {
                   <p style={{ margin: 0, fontSize: '0.68rem', lineHeight: 1.75 }}>Led a small business dashboard at Stripe that reached 120,000 merchants in 90 days and drove $4.2M in new ARR through API partnerships — the Payments & Growth PM role at Acme looks like the same type of challenge, one layer deeper. Worth a conversation?</p>
                 </div>
               </div>
+
+              {/* PRO+ PANELS */}
+
+              {/* Dual Version panel */}
+              <div id="exh-dual" className="ex-panel-h" style={{ padding: '12px' }}>
+                <div style={{ display: 'flex', gap: '6px', marginBottom: '10px' }}>
+                  {['a','b'].map((v, i) => (
+                    <button key={v} className={`ver-btn-h${i === 0 ? ' active' : ''}`}
+                      onClick={e => {
+                        document.querySelectorAll('.ver-btn-h').forEach(b => b.classList.remove('active'))
+                        e.currentTarget.classList.add('active')
+                        document.getElementById('exh-ver-a').style.display = v === 'a' ? 'block' : 'none'
+                        document.getElementById('exh-ver-b').style.display = v === 'b' ? 'block' : 'none'
+                      }}
+                    >{['Version A — Leadership','Version B — Technical'][i]}</button>
+                  ))}
+                </div>
+                <div id="exh-ver-a" className="ex-resume-h">
+                  <h3>Michael Torres</h3>
+                  <div className="ex-sub">VP of Product — Payments & Growth · michael.torres@email.com · linkedin.com/in/michaltorres · San Francisco, CA</div>
+                  <div className="ex-sl">Summary</div>
+                  <p style={{ margin: '0 0 6px' }}>Product executive with a 15-year track record scaling payment platforms from early traction to global distribution. Built and led product organizations across Stripe, Square, and PayPal. Known for turning complex financial infrastructure into products that millions of businesses actually use.</p>
+                  <div className="ex-sl">Experience</div>
+                  <div className="ex-jt">VP of Product</div>
+                  <div className="ex-jc">Stripe · Mar 2020 – Present</div>
+                  <ul><li>Led product org of 38 PMs — $2.1B in incremental revenue attributed to pod initiatives</li><li>Launched Stripe for Platforms — 4,200 enterprise clients in year one, core to 31% of ARR</li><li>Drove alignment across 6 engineering orgs to ship real-time payouts in 47 markets</li></ul>
+                  <div className="ex-jt">Director of Product, Seller Tools</div>
+                  <div className="ex-jc">Square · Jan 2016 – Feb 2020</div>
+                  <ul><li>Built invoice and recurring payments from $0 to $340M ARR over 4 years</li><li>Led team of 14 PMs; reduced seller onboarding time 61%</li></ul>
+                  <div className="ex-jt">Senior Product Manager, Checkout</div>
+                  <div className="ex-jc">PayPal · Aug 2013 – Dec 2015</div>
+                  <ul><li>Increased global checkout completion from 67% to 81%</li><li>Shipped one-touch checkout on iOS — 40M activations in 6 months</li></ul>
+                </div>
+                <div id="exh-ver-b" className="ex-resume-h" style={{ display: 'none' }}>
+                  <h3>Michael Torres</h3>
+                  <div className="ex-sub">VP of Product — Payments & Growth · michael.torres@email.com · linkedin.com/in/michaltorres · San Francisco, CA</div>
+                  <div className="ex-sl">Summary</div>
+                  <p style={{ margin: '0 0 6px' }}>Product operator who ships at scale and measures everything. Built payment products used by tens of millions — checkout conversion at PayPal, $340M ARR at Square, real-time infrastructure at Stripe. Runs rigorous experimentation, owns data from day one.</p>
+                  <div className="ex-sl">Experience</div>
+                  <div className="ex-jt">VP of Product</div>
+                  <div className="ex-jc">Stripe · Mar 2020 – Present</div>
+                  <ul><li>Shipped real-time payouts across 47 markets — T+2 to instant for 2.3M merchants</li><li>Ran 200+ A/B experiments annually; built merchant analytics stack reducing decision latency from 14 days to 4 hours</li></ul>
+                  <div className="ex-jt">Director of Product, Seller Tools</div>
+                  <div className="ex-jc">Square · Jan 2016 – Feb 2020</div>
+                  <ul><li>Scaled invoice & recurring payments from $0 to $340M ARR; reduced onboarding drop-off 61% through 40+ user studies</li></ul>
+                  <div className="ex-jt">Senior Product Manager, Checkout</div>
+                  <div className="ex-jc">PayPal · Aug 2013 – Dec 2015</div>
+                  <ul><li>Lifted checkout completion 67%→81%; 90+ A/B tests/year across 22 markets; $180M incremental GMV</li></ul>
+                </div>
+              </div>
+
+              {/* Cheat Sheet panel */}
+              <div id="exh-cheat" className="ex-panel-h" style={{ padding: '12px' }}>
+                <div style={{ background: '#fff', borderRadius: '10px', padding: '16px', marginBottom: '8px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '0.52rem', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#999', marginBottom: '10px' }}>What this is</div>
+                  <p style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '0.68rem', lineHeight: 2, color: '#333', margin: 0 }}>
+                    You know when you finish uploading your resume<br />
+                    and the portal makes you type everything in again —<br />
+                    and you're like @#$%&amp;!<br />
+                    <span style={{ color: '#999' }}>This kills that.</span>
+                  </p>
+                  <div style={{ width: '24px', height: '1px', background: '#ddd', margin: '10px auto 8px' }} />
+                  <p style={{ fontSize: '0.6rem', color: '#777', margin: 0 }}>Every field pre-filled. One click to copy.</p>
+                </div>
+                {[
+                  { label: 'Headline', val: 'VP of Product — Payments & Growth' },
+                  { label: 'Summary', val: 'Product executive with 15-year track record scaling payment platforms from early traction to global distribution...' },
+                  { label: 'Skills', val: 'Product Strategy, P&L Ownership, OKRs, Payments Infrastructure, Platform Products, SQL, Amplitude, Mixpanel...' },
+                  { label: 'Stripe', val: 'VP of Product · Mar 2020 – Present' },
+                  { label: 'Square', val: 'Director of Product · Jan 2016 – Feb 2020' },
+                  { label: 'PayPal', val: 'Senior Product Manager · Aug 2013 – Dec 2015' },
+                ].map(({ label, val }) => (
+                  <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#fff', borderRadius: '8px', padding: '8px 10px', marginBottom: '6px' }}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '0.5rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#999', marginBottom: '2px' }}>{label}</div>
+                      <div style={{ fontSize: '0.62rem', color: '#111' }}>{val}</div>
+                    </div>
+                    <button className="ex-copy-btn" onClick={e => {
+                      navigator.clipboard.writeText(val)
+                      e.currentTarget.textContent = 'Copied'
+                      e.currentTarget.classList.add('copied')
+                      setTimeout(() => { e.currentTarget.textContent = 'Copy'; e.currentTarget.classList.remove('copied') }, 2000)
+                    }}>Copy</button>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}
+        </div>
       </section>
       )}
 
