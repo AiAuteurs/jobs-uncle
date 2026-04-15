@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     // 1. Paid cookie — fastest path, set by verify-session after payment
     const cookieAccess = cookies.match(/ju_access=([^;]+)/)?.[1]
     if (cookieAccess === 'pro_plus') return res.json({ access: 'pro_plus', resumesLeft: 999 })
-    if (cookieAccess === 'paid') return res.json({ access: 'paid', resumesLeft: 999 })
+    // NOTE: if cookie says 'paid', don't return yet — KV may have upgraded them to pro_plus
 
     // Resolve email: body → ju_email cookie → ju_email_token KV lookup
     const cookieEmail = cookies.match(/ju_email=([^;]+)/)?.[1]
@@ -51,6 +51,9 @@ export default async function handler(req, res) {
         return res.json({ access: 'paid', resumesLeft: 999 })
       }
     }
+
+    // 2b. Fall back to paid cookie if KV had nothing
+    if (cookieAccess === 'paid') return res.json({ access: 'paid', resumesLeft: 999 })
 
     // 3. KV sessionId — fallback for users who paid before email-KV rollout
     if (sessionId) {
