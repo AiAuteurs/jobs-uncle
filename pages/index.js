@@ -1182,48 +1182,53 @@ export default function Home() {
       }} className="hero-grid">
 
         {/* TOP — logo + headline + CTA, full width, centered */}
-        <div style={{ textAlign: 'center', marginBottom: '64px' }}>
-          <img
-            src="/jobsuncleaiblack.png"
-            alt="JobsUncle.ai"
-            style={{ width: '320px', display: 'block', margin: '0 auto 32px' }}
-          />
+        <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+
+          {/* Logo lockup — mascot + wordmark as one unit */}
+          <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', marginBottom: '40px' }}>
+            <img
+              src="/jobsuncleaiblack.png"
+              alt="JobsUncle.ai"
+              style={{ width: '260px', display: 'block' }}
+            />
+          </div>
+
+          {/* Headline — the whole point */}
           <h1 style={{
             fontFamily: 'Inter, sans-serif', fontWeight: 900,
-            fontSize: 'clamp(2.4rem, 4vw, 3.6rem)', lineHeight: 1.05,
-            color: '#ffffff', margin: '0 auto 20px', letterSpacing: '-0.03em',
-            maxWidth: '800px',
+            fontSize: 'clamp(3rem, 5vw, 4.5rem)', lineHeight: 1.0,
+            color: '#ffffff', margin: '0 auto 24px', letterSpacing: '-0.04em',
+            maxWidth: '900px',
           }}>
-            Tailored resumes to the job description{' '}
+            Tailored resumes<br />to the job description{' '}
             <span style={{ color: '#00D1FF' }}>in 60 seconds.</span>
           </h1>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '36px', justifyContent: 'center' }}>
+
+          {/* Feature pills */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '40px', justifyContent: 'center' }}>
             {['Tailored resume', 'Cover letter', 'Recruiter & ATS analysis', 'Hiring manager DM'].map(item => (
               <span key={item} style={{
-                fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', fontWeight: 600,
+                fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', fontWeight: 600,
                 color: '#00D1FF', background: 'rgba(0,209,255,0.08)',
                 border: '1px solid rgba(0,209,255,0.2)',
-                padding: '5px 12px', borderRadius: '999px',
+                padding: '6px 14px', borderRadius: '999px',
               }}>✓ {item}</span>
             ))}
           </div>
+
+          {/* CTA */}
           <a
             href="#upload-section"
             onClick={e => { e.preventDefault(); document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' }) }}
             style={{
               display: 'inline-block', background: '#00D1FF', color: '#000',
-              fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: '1.1rem',
-              padding: '16px 52px', borderRadius: '50px', textDecoration: 'none',
-              letterSpacing: '-0.01em', boxShadow: '0 0 40px rgba(0,209,255,0.25)',
+              fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: '1.15rem',
+              padding: '18px 56px', borderRadius: '50px', textDecoration: 'none',
+              letterSpacing: '-0.01em', boxShadow: '0 0 48px rgba(0,209,255,0.3)',
             }}
           >
             {isPaid ? 'Upload your resume →' : 'Get started free →'}
           </a>
-          {!isPaid && (
-            <div style={{ marginTop: '12px', fontSize: '0.75rem', color: '#555', fontFamily: 'Inter, sans-serif' }}>
-              No account needed. Free to try.
-            </div>
-          )}
         </div>
 
         {/* Interactive example — full width below hero */}
