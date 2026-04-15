@@ -1259,33 +1259,21 @@ export default function Home() {
               .ver-btn-h.active { background: #111; color: #fff; border-color: #111; }
             `}</style>
 
-            {/* Info box — same dark editorial style as Two Versions */}
+            {/* Info box — dark editorial, no redundant CTA */}
             <div style={{
               marginBottom: '12px',
               background: '#0a0a0a',
               border: '1px solid rgba(255,255,255,0.08)',
               borderRadius: '16px',
-              padding: '20px 28px',
+              padding: '16px 24px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '16px',
+              gap: '12px',
             }}>
-              <div>
-                <div style={{ fontFamily: 'Georgia, "Times New Roman", serif', fontSize: '1rem', fontWeight: 400, color: '#ffffff', lineHeight: 1.4, marginBottom: '4px' }}>
-                  Fictional candidate. Real output.
-                </div>
-                <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)', fontFamily: 'Inter, sans-serif' }}>
-                  Michael Torres → Senior PM, Acme Financial
-                </div>
+              <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00D1FF', flexShrink: 0 }} />
+              <div style={{ fontFamily: 'Georgia, "Times New Roman", serif', fontSize: '0.88rem', color: '#ffffff', lineHeight: 1.4 }}>
+                Fictional candidate. Real output. — <span style={{ color: 'rgba(255,255,255,0.4)', fontStyle: 'italic' }}>Michael Torres applying to Acme Financial</span>
               </div>
-              <a href="/example" style={{
-                flexShrink: 0,
-                fontSize: '0.78rem', color: '#000000', fontWeight: 800,
-                textDecoration: 'none', fontFamily: 'Inter, sans-serif',
-                background: '#ffffff', padding: '10px 20px', borderRadius: '50px',
-                whiteSpace: 'nowrap', letterSpacing: '-0.01em',
-              }}>See full example →</a>
             </div>
 
             <div style={{ background: '#111', borderRadius: '14px', boxShadow: '0 32px 64px rgba(0,0,0,0.5)' }}>
@@ -1321,39 +1309,93 @@ export default function Home() {
                 </div>
                 <div id="exh-ver-a" className="ex-resume-h">
                   <h3>Michael Torres</h3>
-                  <div className="ex-sub">Senior Product Manager — Payments & Growth · michael.torres@email.com · linkedin.com/in/michaltorres · San Francisco, CA</div>
+                  <div className="ex-sub">VP of Product — Payments & Growth · michael.torres@email.com · linkedin.com/in/michaltorres · San Francisco, CA</div>
                   <div className="ex-sl">Summary</div>
-                  <p style={{ margin: '0 0 6px' }}>Product leader who builds teams and roadmaps that move the needle. Drives measurable growth across SaaS, fintech, and e-commerce by aligning cross-functional stakeholders around clear outcomes.</p>
+                  <p style={{ margin: '0 0 6px' }}>Product executive with a 15-year track record of scaling payment platforms and consumer SaaS products from early traction to global distribution. Built and led product organizations across Stripe, Square, and PayPal. Known for turning complex financial infrastructure into products that millions of small businesses actually use.</p>
                   <div className="ex-sl">Experience</div>
-                  <div className="ex-jt">Senior Product Manager</div>
-                  <div className="ex-jc">Stripe · Jan 2022 – Present</div>
-                  <ul><li>Led cross-functional team of 12 to launch small business dashboard — 120,000 merchants in 90 days</li><li>Owned OKRs for merchant growth pod — 3 of 4 targets hit in year one</li><li>Drove API partnerships with Salesforce and Shopify generating $4.2M new ARR</li></ul>
+                  <div className="ex-jt">VP of Product</div>
+                  <div className="ex-jc">Stripe · Mar 2020 – Present</div>
+                  <ul>
+                    <li>Led product org of 38 PMs across merchant, payments, and platform — $2.1B in incremental revenue attributed to pod initiatives</li>
+                    <li>Launched Stripe for Platforms — onboarded 4,200 enterprise clients in first year, now core to 31% of Stripe's ARR</li>
+                    <li>Drove cross-functional alignment across 6 engineering orgs to ship real-time payouts in 47 markets</li>
+                    <li>Owned executive OKR process for product division — presented quarterly to board</li>
+                  </ul>
+                  <div className="ex-jt">Director of Product, Seller Tools</div>
+                  <div className="ex-jc">Square · Jan 2016 – Feb 2020</div>
+                  <ul>
+                    <li>Built and scaled Square's invoice and recurring payments product from $0 to $340M ARR over 4 years</li>
+                    <li>Led team of 14 PMs; grew org from 4 through 3 rounds of strategic hiring</li>
+                    <li>Reduced seller onboarding time 61% through complete UX overhaul — largest single driver of seller activation in 2018</li>
+                    <li>Partnered with Salesforce on native Square integration — adopted by 18,000 SMBs within 6 months</li>
+                  </ul>
+                  <div className="ex-jt">Senior Product Manager, Checkout</div>
+                  <div className="ex-jc">PayPal · Aug 2013 – Dec 2015</div>
+                  <ul>
+                    <li>Owned checkout conversion across mobile and web — increased global checkout completion rate from 67% to 81%</li>
+                    <li>Shipped one-touch checkout on iOS — 40M activations in first 6 months, highest product adoption in PayPal history at launch</li>
+                    <li>Ran 90+ A/B experiments per year across 22 markets; drove $180M in incremental GMV</li>
+                  </ul>
                   <div className="ex-jt">Product Manager</div>
-                  <div className="ex-jc">Notion · Mar 2020 – Dec 2021</div>
-                  <ul><li>Scaled Templates marketplace from 0 to 2.4M monthly active users</li><li>Led go-to-market for Notion for Teams — 3x team plan growth</li></ul>
+                  <div className="ex-jc">Intuit · Jun 2011 – Jul 2013</div>
+                  <ul>
+                    <li>Launched QuickBooks Payments mobile card reader — 200,000 activations in first year</li>
+                    <li>Led competitive teardown program across 12 fintech products; findings shaped 2013 product roadmap</li>
+                  </ul>
                   <div className="ex-jt">Associate Product Manager</div>
-                  <div className="ex-jc">Brex · Jun 2018 – Feb 2020</div>
-                  <ul><li>Partnered with compliance and legal to ship card controls under regulatory constraints</li></ul>
+                  <div className="ex-jc">Google · Jul 2009 – May 2011</div>
+                  <ul>
+                    <li>Rotational APM program — contributed to Google Wallet v1 and Google Checkout sunset strategy</li>
+                    <li>Developed merchant analytics dashboard adopted across 3 product teams</li>
+                  </ul>
                   <div className="ex-sl">Skills</div>
-                  <p style={{ margin: 0 }}>Product Strategy · OKRs · Roadmapping · Stakeholder Management · Go-to-Market · Agile · SQL · Figma · Jira · Amplitude · Mixpanel</p>
+                  <p style={{ margin: 0 }}>Product Strategy · P&L Ownership · OKRs · Payments Infrastructure · Platform Products · Stakeholder Management · Go-to-Market · Agile · SQL · Figma · Amplitude · Mixpanel · Jira · Executive Communication</p>
+                  <div className="ex-sl">Education</div>
+                  <p style={{ margin: 0 }}>B.S. Computer Science · Stanford University · 2009</p>
                 </div>
+
                 <div id="exh-ver-b" className="ex-resume-h" style={{ display: 'none' }}>
                   <h3>Michael Torres</h3>
-                  <div className="ex-sub">Senior Product Manager — Payments & Growth · michael.torres@email.com · linkedin.com/in/michaltorres · San Francisco, CA</div>
+                  <div className="ex-sub">VP of Product — Payments & Growth · michael.torres@email.com · linkedin.com/in/michaltorres · San Francisco, CA</div>
                   <div className="ex-sl">Summary</div>
-                  <p style={{ margin: '0 0 6px' }}>Data-driven PM with a track record of shipping at scale. Runs tight A/B testing cycles and delivers measurable outcomes — reduced drop-off, grew MAU, drove ARR — across payments, SaaS, and fintech.</p>
+                  <p style={{ margin: '0 0 6px' }}>Product operator who ships at scale and measures everything. Built payment products used by tens of millions — from checkout conversion optimization at PayPal to real-time payout infrastructure at Stripe. Runs rigorous experimentation programs, owns data from day one, and delivers measurable ARR impact every year.</p>
                   <div className="ex-sl">Experience</div>
-                  <div className="ex-jt">Senior Product Manager</div>
-                  <div className="ex-jc">Stripe · Jan 2022 – Present</div>
-                  <ul><li>Reduced payment setup drop-off 38% through complete UX overhaul</li><li>Engineered API integrations with Salesforce and Shopify — $4.2M new ARR</li><li>Ran 14 A/B tests in 12 months — 9 shipped to production</li></ul>
+                  <div className="ex-jt">VP of Product</div>
+                  <div className="ex-jc">Stripe · Mar 2020 – Present</div>
+                  <ul>
+                    <li>Shipped real-time payouts across 47 markets — reduced settlement latency from T+2 to instant for 2.3M merchants</li>
+                    <li>Launched Stripe for Platforms: 4,200 enterprise clients onboarded in year one, $2.1B incremental revenue across pod portfolio</li>
+                    <li>Ran 200+ A/B experiments annually across checkout, onboarding, and pricing surfaces</li>
+                    <li>Built merchant analytics stack from scratch — reduced data-to-decision latency from 14 days to 4 hours</li>
+                  </ul>
+                  <div className="ex-jt">Director of Product, Seller Tools</div>
+                  <div className="ex-jc">Square · Jan 2016 – Feb 2020</div>
+                  <ul>
+                    <li>Scaled invoice and recurring payments from $0 to $340M ARR — built the product, the team, and the growth model</li>
+                    <li>Reduced seller onboarding drop-off 61% through complete funnel overhaul backed by 40+ user studies</li>
+                    <li>Shipped Salesforce integration using Square's first partner API — 18,000 SMB adoptions in 6 months</li>
+                  </ul>
+                  <div className="ex-jt">Senior Product Manager, Checkout</div>
+                  <div className="ex-jc">PayPal · Aug 2013 – Dec 2015</div>
+                  <ul>
+                    <li>Increased global checkout completion rate from 67% to 81% — largest conversion lift in PayPal's checkout history</li>
+                    <li>Shipped one-touch checkout on iOS: 40M activations in 6 months, $180M incremental GMV from experimentation program</li>
+                    <li>90+ A/B tests per year across 22 markets; built internal experiment velocity framework adopted org-wide</li>
+                  </ul>
                   <div className="ex-jt">Product Manager</div>
-                  <div className="ex-jc">Notion · Mar 2020 – Dec 2021</div>
-                  <ul><li>Built Templates marketplace from 0 to 2.4M MAU</li><li>Reduced support ticket volume 22% with in-product onboarding tooltips</li></ul>
+                  <div className="ex-jc">Intuit · Jun 2011 – Jul 2013</div>
+                  <ul>
+                    <li>Launched QuickBooks Payments card reader — 200,000 activations year one; built activation funnel and instrumented full analytics stack</li>
+                  </ul>
                   <div className="ex-jt">Associate Product Manager</div>
-                  <div className="ex-jc">Brex · Jun 2018 – Feb 2020</div>
-                  <ul><li>Shipped card controls under tight compliance and regulatory constraints</li></ul>
+                  <div className="ex-jc">Google · Jul 2009 – May 2011</div>
+                  <ul>
+                    <li>APM rotation: Google Wallet v1 contributor; built merchant analytics dashboard adopted by 3 product teams</li>
+                  </ul>
                   <div className="ex-sl">Skills</div>
-                  <p style={{ margin: 0 }}>A/B Testing · SQL · Data Analysis · Amplitude · Mixpanel · API Integrations · Regulatory Compliance · Figma · Jira · Confluence · Agile</p>
+                  <p style={{ margin: 0 }}>Payments Infrastructure · A/B Testing · SQL · Amplitude · Mixpanel · Data Analytics · API Products · Funnel Optimization · Agile · Figma · Jira · Confluence · Experimentation Frameworks</p>
+                  <div className="ex-sl">Education</div>
+                  <p style={{ margin: 0 }}>B.S. Computer Science · Stanford University · 2009</p>
                 </div>
               </div>
 
