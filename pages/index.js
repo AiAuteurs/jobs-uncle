@@ -1754,19 +1754,112 @@ export default function Home() {
               <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
                 {/* DUAL RESUME — Pro+ upsell card */}
-                <div style={{ padding: '1rem 1.5rem', background: 'var(--surface)', border: '1.5px solid #6366f1', borderRadius: '8px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
-                    <div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
-                        <span style={{ fontSize: '0.85rem', color: 'var(--ink)', fontWeight: 600 }}>Dual Resume Versions</span>
-                        <span style={{ background: '#6366f1', color: 'white', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
-                      </div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', lineHeight: 1.5 }}>Your career can go in more than one direction. One generation gives you a Leadership version <em>and</em> a Technical version — read them side by side, send the one that fits. No guessing.</div>
-                    </div>
-                    <button onClick={() => setShowPlusPaywall(true)} style={{ flexShrink: 0, padding: '6px 16px', background: '#6366f1', color: 'white', border: 'none', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}>
-                      Upgrade to Pro+
-                    </button>
+                <div style={{
+                  position: 'relative',
+                  background: '#0a0a0a',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  borderRadius: '16px',
+                  padding: '48px 40px',
+                  overflow: 'hidden',
+                  textAlign: 'center',
+                }}>
+                  {/* Background texture */}
+                  <div style={{
+                    position: 'absolute', inset: 0,
+                    background: 'radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.15) 0%, transparent 70%)',
+                    pointerEvents: 'none',
+                  }} />
+                  <div style={{
+                    position: 'absolute', inset: 0,
+                    backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.02) 39px, rgba(255,255,255,0.02) 40px)',
+                    pointerEvents: 'none',
+                  }} />
+
+                  {/* Pro+ badge */}
+                  <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+                    <span style={{
+                      background: 'rgba(99,102,241,0.15)',
+                      border: '1px solid rgba(99,102,241,0.4)',
+                      color: '#a5b4fc',
+                      fontSize: '0.6rem', fontWeight: 700,
+                      letterSpacing: '0.2em', textTransform: 'uppercase',
+                      padding: '5px 14px', borderRadius: '20px',
+                    }}>Pro+ Feature</span>
                   </div>
+
+                  {/* Headline */}
+                  <div style={{
+                    fontFamily: 'Georgia, "Times New Roman", serif',
+                    fontSize: 'clamp(1.6rem, 3vw, 2.2rem)',
+                    fontWeight: 400,
+                    color: '#ffffff',
+                    lineHeight: 1.25,
+                    letterSpacing: '-0.02em',
+                    marginBottom: '8px',
+                  }}>
+                    Two versions.<br />One decision.
+                  </div>
+
+                  {/* Rule */}
+                  <div style={{
+                    width: '40px', height: '1px',
+                    background: 'rgba(255,255,255,0.2)',
+                    margin: '20px auto',
+                  }} />
+
+                  {/* Body */}
+                  <p style={{
+                    fontFamily: 'Georgia, serif',
+                    fontSize: '0.9rem',
+                    color: 'rgba(255,255,255,0.55)',
+                    lineHeight: 1.8,
+                    maxWidth: '360px',
+                    margin: '0 auto 32px',
+                    fontStyle: 'italic',
+                  }}>
+                    Your career can go in more than one direction. One generation. Two complete resumes — one built around leadership, one around execution. Read them side by side. Send the one that fits.
+                  </p>
+
+                  {/* Two columns */}
+                  <div style={{
+                    display: 'grid', gridTemplateColumns: '1fr 1fr',
+                    gap: '1px', background: 'rgba(255,255,255,0.06)',
+                    borderRadius: '10px', overflow: 'hidden',
+                    marginBottom: '32px',
+                  }}>
+                    {[
+                      { label: 'Version A', tag: 'Leadership', desc: 'Strategy. Scale. Influence. Built for director+ roles where the story is how you led.' },
+                      { label: 'Version B', tag: 'Technical', desc: 'Execution. Metrics. Craft. Built for roles where what you built matters more than who you managed.' },
+                    ].map(({ label, tag, desc }) => (
+                      <div key={tag} style={{
+                        padding: '20px 18px',
+                        background: 'rgba(255,255,255,0.03)',
+                        textAlign: 'left',
+                      }}>
+                        <div style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.3)', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '6px' }}>{label}</div>
+                        <div style={{ fontSize: '0.85rem', color: '#ffffff', fontWeight: 600, marginBottom: '8px' }}>{tag}</div>
+                        <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', lineHeight: 1.6 }}>{desc}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={() => setShowPlusPaywall(true)}
+                    style={{
+                      display: 'inline-block',
+                      padding: '13px 36px',
+                      background: '#ffffff',
+                      color: '#000000',
+                      border: 'none',
+                      borderRadius: '50px',
+                      fontSize: '0.85rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      letterSpacing: '0.02em',
+                    }}
+                  >
+                    Upgrade to Pro+ →
+                  </button>
                 </div>
 
                 {/* BETA CODE */}
