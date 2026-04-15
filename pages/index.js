@@ -1259,36 +1259,36 @@ export default function Home() {
               .ver-btn-h.active { background: #111; color: #fff; border-color: #111; }
             `}</style>
 
-            {/* Info box — above example, bright white, editorial */}
+            {/* Info box — same dark editorial style as Two Versions */}
             <div style={{
-              marginBottom: '10px',
-              background: '#ffffff',
-              border: '1px solid rgba(255,255,255,0.15)',
-              borderRadius: '12px',
-              padding: '14px 20px',
+              marginBottom: '12px',
+              background: '#0a0a0a',
+              border: '1px solid rgba(255,255,255,0.08)',
+              borderRadius: '16px',
+              padding: '20px 28px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              gap: '12px',
+              gap: '16px',
             }}>
               <div>
-                <div style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '0.82rem', color: '#111', fontWeight: 400, lineHeight: 1.5 }}>
+                <div style={{ fontFamily: 'Georgia, "Times New Roman", serif', fontSize: '1rem', fontWeight: 400, color: '#ffffff', lineHeight: 1.4, marginBottom: '4px' }}>
                   Fictional candidate. Real output.
                 </div>
-                <div style={{ fontSize: '0.65rem', color: '#666', fontFamily: 'Inter, sans-serif', marginTop: '2px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)', fontFamily: 'Inter, sans-serif' }}>
                   Michael Torres → Senior PM, Acme Financial
                 </div>
               </div>
               <a href="/example" style={{
                 flexShrink: 0,
-                fontSize: '0.72rem', color: '#000', fontWeight: 700,
+                fontSize: '0.78rem', color: '#000000', fontWeight: 800,
                 textDecoration: 'none', fontFamily: 'Inter, sans-serif',
-                background: '#00D1FF', padding: '7px 16px', borderRadius: '20px',
-                whiteSpace: 'nowrap',
+                background: '#ffffff', padding: '10px 20px', borderRadius: '50px',
+                whiteSpace: 'nowrap', letterSpacing: '-0.01em',
               }}>See full example →</a>
             </div>
 
-            <div style={{ background: '#111', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 32px 64px rgba(0,0,0,0.5)' }}>
+            <div style={{ background: '#111', borderRadius: '14px', boxShadow: '0 32px 64px rgba(0,0,0,0.5)' }}>
               {/* Tab bar */}
               <div style={{ display: 'flex', borderBottom: '1px solid #222', overflowX: 'auto', padding: '0 8px' }}>
                 {['resume','cover','ats','cheat','dm'].map((t, i) => (
