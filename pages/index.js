@@ -1047,7 +1047,7 @@ export default function Home() {
             <div style={{ display: 'inline-block', background: '#6366f1', color: 'white', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', padding: '4px 12px', borderRadius: '20px', marginBottom: '16px', textTransform: 'uppercase' }}>Pro+</div>
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Stop re-typing your resume into every job portal.</h2>
             <p style={{ color: 'var(--text-soft)', fontSize: '0.95rem', margin: '0 0 8px', lineHeight: 1.6 }}>
-              <strong style={{ color: 'var(--ink)' }}>ATS Cheat Sheet</strong> — every field an ATS will ask for, pre-staged with one-click copy buttons. Plus <strong style={{ color: 'var(--ink)' }}>dual resume versions</strong> (Leadership + Technical) for the same role.
+              <strong style={{ color: 'var(--ink)' }}>ATS Cheat Sheet</strong> — you know when you upload your resume and the portal makes you type everything in again manually — and you're like @#$%&amp;! This kills that. Every field pre-filled, one click to copy. Plus <strong style={{ color: 'var(--ink)' }}>dual resume versions</strong> (Leadership + Technical) for the same role.
             </p>
             <p style={{ color: 'var(--text-soft)', fontSize: '0.85rem', margin: '0 0 32px' }}>For serious job hunters who apply to multiple roles.</p>
             <a href="/pricing" style={{ display: 'block', width: '100%', background: '#6366f1', color: 'white', border: 'none', padding: '16px', borderRadius: '8px', fontSize: '1rem', fontWeight: 700, cursor: 'pointer', marginBottom: '6px', letterSpacing: '0.02em', textDecoration: 'none', textAlign: 'center', boxSizing: 'border-box' }}>
@@ -1799,20 +1799,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* SAVE WARNING BANNER */}
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: '12px',
-                marginBottom: '20px', padding: '12px 18px',
-                background: 'rgba(245,158,11,0.08)',
-                border: '1.5px solid rgba(245,158,11,0.4)',
-                borderRadius: '10px',
-              }}>
-                <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>⚠️</span>
-                <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', color: '#92400e', lineHeight: 1.55 }}>
-                  <strong style={{ color: '#78350f' }}>Download before you leave.</strong> For your privacy, JobsUncle never stores your resume or documents. Navigate away or generate a new one and this version is gone.
-                </div>
-              </div>
-
               <div className="results-header">
                 <div className="results-title">Your tailored documents</div>
                 <div className="results-badge">Ready to download</div>
@@ -2413,7 +2399,7 @@ export default function Home() {
                       <div className="result-section-title" style={{ margin: 0 }}>ATS Cheat Sheet</div>
                       <span style={{ background: '#6366f1', color: 'white', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
                     </div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--ink)' }}>Every field an ATS will ask for — pre-staged, one click to copy.</div>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--ink)', lineHeight: 1.55 }}>You know when you finish uploading your resume and the job portal makes you type everything in <em>again</em> manually — and you're like @#$%&amp;! This kills that. Every field pre-filled from your resume, one click to copy straight into the form.</div>
                   </div>
                   {isPlusUser ? (
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
