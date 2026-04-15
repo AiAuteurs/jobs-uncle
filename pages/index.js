@@ -1013,30 +1013,6 @@ export default function Home() {
             <button onClick={() => setShowPaywall(false)} style={{ display: 'block', background: 'none', border: 'none', color: 'var(--text-soft)', fontSize: '0.85rem', cursor: 'pointer', padding: '4px', margin: '0 auto' }}>
               I'll take my chances
             </button>
-
-            <div style={{ marginTop: '24px', borderTop: '1px solid var(--border)', paddingTop: '20px' }}>
-              <div>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-soft)', marginBottom: '6px' }}>Got a beta code?</div>
-                {!showBeta ? (
-                  <button onClick={() => setShowBeta(true)} style={{ background: 'none', border: '1.5px solid var(--border)', borderRadius: '20px', color: 'var(--text-soft)', fontSize: '0.8rem', fontWeight: 600, padding: '6px 16px', cursor: 'pointer' }}>
-                    Redeem
-                  </button>
-                ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <input type="text" value={betaCode} onChange={e => setBetaCode(e.target.value)} placeholder="UNCLE-BETA-XXXX" style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--border)', borderRadius: '6px', fontSize: '0.85rem', background: 'var(--surface)', color: 'var(--ink)', textTransform: 'uppercase', letterSpacing: '0.05em' }} />
-                    </div>
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <input type="email" value={betaEmail} onChange={e => setBetaEmail(e.target.value)} placeholder="Your email (to sign in later)" style={{ flex: 1, padding: '8px 12px', border: '1.5px solid var(--border)', borderRadius: '6px', fontSize: '0.85rem', background: 'var(--surface)', color: 'var(--ink)' }} onKeyDown={e => e.key === 'Enter' && handleBeta()} />
-                      <button onClick={handleBeta} disabled={betaStatus === 'loading'} style={{ padding: '8px 16px', background: 'var(--ink)', color: 'var(--bg)', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}>
-                        {betaStatus === 'loading' ? '...' : 'Redeem'}
-                      </button>
-                    </div>
-                    {betaMsg && <div style={{ fontSize: '0.8rem', color: betaStatus === 'success' ? '#22c55e' : '#ef4444' }}>{betaMsg}</div>}
-                  </div>
-                )}
-              </div>
-            </div>
           </div>
         </div>
       )}
@@ -1242,14 +1218,14 @@ export default function Home() {
               .ex-tab-h.active { color: #00D1FF; border-bottom-color: #00D1FF; }
               .ex-panel-h { display: none; }
               .ex-panel-h.active { display: block; }
-              .ex-resume-h { background: #fff; border-radius: 10px; padding: 16px 18px; font-size: 0.65rem; line-height: 1.7; color: #111; }
-              .ex-resume-h h3 { font-size: 0.85rem; font-weight: 700; margin: 0 0 1px; color: #111; }
-              .ex-resume-h .ex-sub { font-size: 0.62rem; color: #555; margin: 0 0 12px; }
-              .ex-resume-h .ex-sl { font-size: 0.52rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #999; border-bottom: 1px solid #eee; padding-bottom: 3px; margin: 10px 0 6px; }
-              .ex-resume-h .ex-jt { font-weight: 700; font-size: 0.65rem; margin: 0 0 1px; }
-              .ex-resume-h .ex-jc { font-size: 0.6rem; color: #777; margin: 0 0 5px; }
-              .ex-resume-h ul { margin: 0 0 8px; padding-left: 12px; }
-              .ex-resume-h ul li { margin-bottom: 2px; }
+              .ex-resume-h { background: #fff; border-radius: 10px; padding: 24px 28px; font-size: 0.82rem; line-height: 1.75; color: #111; }
+              .ex-resume-h h3 { font-size: 1.2rem; font-weight: 700; margin: 0 0 3px; color: #111; }
+              .ex-resume-h .ex-sub { font-size: 0.75rem; color: #555; margin: 0 0 16px; }
+              .ex-resume-h .ex-sl { font-size: 0.62rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #999; border-bottom: 1px solid #eee; padding-bottom: 4px; margin: 16px 0 8px; }
+              .ex-resume-h .ex-jt { font-weight: 700; font-size: 0.88rem; margin: 0 0 2px; }
+              .ex-resume-h .ex-jc { font-size: 0.75rem; color: #777; margin: 0 0 7px; }
+              .ex-resume-h ul { margin: 0 0 10px; padding-left: 16px; }
+              .ex-resume-h ul li { margin-bottom: 4px; }
               .kw-h { font-size: 0.55rem; padding: 2px 7px; border-radius: 20px; }
               .kw-hit-h { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
               .kw-miss-h { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
@@ -1280,7 +1256,7 @@ export default function Home() {
 
               {/* FREE tabs */}
               <div style={{ padding: '10px 16px 0', borderBottom: '1px solid #222' }}>
-                <div style={{ fontSize: '0.52rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#444', marginBottom: '6px', fontFamily: 'Inter, sans-serif' }}>Included in every plan</div>
+                <div style={{ fontSize: '0.6rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#ffffff', marginBottom: '6px', fontFamily: 'Inter, sans-serif' }}>Included in every plan</div>
                 <div style={{ display: 'flex', overflowX: 'auto', gap: '0' }}>
                   {['resume','cover','ats','dm'].map((t, i) => (
                     <button key={t} className={`ex-tab-h${i === 0 ? ' active' : ''}`}
@@ -1300,7 +1276,7 @@ export default function Home() {
               {/* PRO+ tabs */}
               <div style={{ padding: '10px 16px 0', borderBottom: '1px solid #222' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                  <div style={{ fontSize: '0.52rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#6366f1', fontFamily: 'Inter, sans-serif' }}>Pro+ features</div>
+                  <div style={{ fontSize: '0.6rem', fontWeight: 800, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#a5b4fc', fontFamily: 'Inter, sans-serif' }}>Pro+ features</div>
                   <span style={{ background: '#6366f1', color: 'white', fontSize: '0.48rem', fontWeight: 700, letterSpacing: '0.1em', padding: '1px 6px', borderRadius: '10px', textTransform: 'uppercase' }}>Pro+</span>
                 </div>
                 <div style={{ display: 'flex', overflowX: 'auto', gap: '0' }}>
@@ -1358,7 +1334,10 @@ export default function Home() {
                   <div className="ex-jt">Associate Product Manager</div>
                   <div className="ex-jc">Google · Jul 2009 – May 2011</div>
                   <ul>
-                    <li>APM rotation — contributed to Google Wallet v1; built merchant analytics dashboard adopted by 3 teams</li>
+                    <li>Selected for Google's APM rotational program — fewer than 30 accepted globally per cohort</li>
+                    <li>Contributed to Google Wallet v1 product definition and merchant onboarding flows — launched to 10,000 merchants in beta</li>
+                    <li>Built merchant analytics dashboard tracking GMV, conversion, and refund rates — adopted across 3 product teams within 6 months</li>
+                    <li>Led competitive teardown of PayPal, Square, and Intuit; presented findings to VP of Payments; shaped 2011 product roadmap</li>
                   </ul>
                   <div className="ex-sl">Skills</div>
                   <p style={{ margin: 0 }}>Product Strategy · P&L Ownership · OKRs · Payments Infrastructure · Platform Products · Stakeholder Management · Go-to-Market · Agile · SQL · Figma · Amplitude · Mixpanel · Jira · Executive Communication</p>
@@ -1370,9 +1349,9 @@ export default function Home() {
               {/* Cover Letter panel */}
               <div id="exh-cover" className="ex-panel-h" style={{ padding: '12px' }}>
                 <div className="ex-resume-h">
-                  <p>Acme Financial is building the payments infrastructure small businesses actually need — not bolt-on tools, but one place to get paid, manage expenses, and understand cash flow. That's exactly the kind of problem I want to work on.</p>
-                  <p>At Stripe, I led delivery of a small business dashboard that reached 120,000 merchants in 90 days — reducing drop-off 38% and driving $4.2M in new ARR through Salesforce and Shopify integrations. At Notion, I scaled the Templates marketplace from zero to 2.4M MAU running 14 A/B tests in 12 months.</p>
-                  <p style={{ margin: 0 }}>The Payments & Growth PM role is a direct match for how I work. I'd like to talk.</p>
+                  <p>Acme Financial is solving the right problem — small businesses shouldn't need five separate tools to get paid, track expenses, and understand their cash flow. That's exactly the kind of infrastructure problem I've spent 15 years working on.</p>
+                  <p>At Stripe, I led a product org of 38 PMs that generated $2.1B in incremental revenue — including launching Stripe for Platforms, which onboarded 4,200 enterprise clients in year one. At Square, I built invoice and recurring payments from zero to $340M ARR over four years. At PayPal, I lifted global checkout completion from 67% to 81% and shipped one-touch checkout on iOS to 40M users in six months.</p>
+                  <p>The VP of Product role at Acme is a direct match for how I work — owning infrastructure that scales, building the team around it, and shipping products that small businesses actually use. I'd like to talk.</p>
                 </div>
               </div>
 
@@ -2022,18 +2001,42 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* SAVE WARNING */}
+              {/* SAVE WARNING — editorial */}
               <div style={{
-                display: 'flex', alignItems: 'center', gap: '12px',
-                marginBottom: '20px', padding: '12px 18px',
-                background: 'rgba(245,158,11,0.08)',
-                border: '1.5px solid rgba(245,158,11,0.4)',
-                borderRadius: '10px',
+                marginBottom: '20px',
+                background: '#0a0a0a',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: '16px',
+                padding: '20px 28px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '24px',
               }}>
-                <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>⚠️</span>
-                <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', color: '#92400e', lineHeight: 1.55 }}>
-                  <strong style={{ color: '#78350f' }}>Download before you leave.</strong> For your privacy, JobsUncle never stores your resume or documents. Navigate away or generate a new one and this version is gone.
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <div style={{ width: '1px', height: '36px', background: '#00D1FF', flexShrink: 0 }} />
+                  <div>
+                    <div style={{ fontFamily: 'Georgia, "Times New Roman", serif', fontSize: '0.95rem', color: '#ffffff', fontWeight: 400, marginBottom: '4px' }}>
+                      Download before you leave.
+                    </div>
+                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', color: '#ffffff', lineHeight: 1.5 }}>
+                      For your privacy, JobsUncle never stores your resume or documents.<br />Navigate away and this version is gone.
+                    </div>
+                  </div>
                 </div>
+                <a
+                  href="#download-section"
+                  onClick={e => { e.preventDefault(); document.querySelector('.download-section')?.scrollIntoView({ behavior: 'smooth' }) }}
+                  style={{
+                    flexShrink: 0, whiteSpace: 'nowrap',
+                    fontFamily: 'Inter, sans-serif', fontSize: '0.75rem', fontWeight: 700,
+                    color: '#000', background: '#00D1FF',
+                    padding: '9px 20px', borderRadius: '50px',
+                    textDecoration: 'none', letterSpacing: '0.01em',
+                  }}
+                >
+                  Download now →
+                </a>
               </div>
 
               <div className="results-header">
