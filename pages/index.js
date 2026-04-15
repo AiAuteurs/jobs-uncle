@@ -1238,169 +1238,180 @@ export default function Home() {
           )}
         </div>
 
-        {/* COL 3 — 4-quad example card */}
+        {/* COL 3 — Interactive example */}
         {!results && (
-          <div style={{ position: 'relative' }} onMouseLeave={() => setHoveredQuad(null)}>
+          <div style={{ position: 'relative' }}>
             <style>{`
-              .hero-quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; border-radius: 16px; overflow: hidden; box-shadow: 0 32px 64px rgba(0,0,0,0.5); }
-              .hero-quad-cell { background: #fff; padding: 10px 12px; position: relative; overflow: hidden; cursor: pointer; transition: background 0.15s; max-height: 200px; }
-              .hero-quad-cell:hover { background: #fafafa; }
-              .hero-quad-label { font-family: Inter, sans-serif; font-size: 0.55rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 7px; display: flex; align-items: center; gap: 4px; }
-              .hero-quad-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-              .hero-quad-text { font-family: Georgia, serif; font-size: 0.62rem; line-height: 1.65; color: #333; }
-              .hero-quad-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 40px; background: linear-gradient(to bottom, transparent, #fff); }
-              @keyframes hqFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-              .hero-quad-overlay { animation: hqFadeIn 0.15s ease; }
+              .ex-tab-h { background: none; border: none; border-bottom: 2px solid transparent; padding: 8px 14px; font-size: 0.7rem; font-weight: 700; color: #666; cursor: pointer; white-space: nowrap; margin-bottom: -1px; letter-spacing: 0.02em; font-family: Inter, sans-serif; }
+              .ex-tab-h.active { color: #00D1FF; border-bottom-color: #00D1FF; }
+              .ex-panel-h { display: none; }
+              .ex-panel-h.active { display: block; }
+              .ex-resume-h { background: #fff; border-radius: 10px; padding: 16px 18px; font-size: 0.65rem; line-height: 1.7; color: #111; max-height: 320px; overflow-y: auto; }
+              .ex-resume-h h3 { font-size: 0.85rem; font-weight: 700; margin: 0 0 1px; color: #111; }
+              .ex-resume-h .ex-sub { font-size: 0.62rem; color: #555; margin: 0 0 12px; }
+              .ex-resume-h .ex-sl { font-size: 0.52rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #999; border-bottom: 1px solid #eee; padding-bottom: 3px; margin: 10px 0 6px; }
+              .ex-resume-h .ex-jt { font-weight: 700; font-size: 0.65rem; margin: 0 0 1px; }
+              .ex-resume-h .ex-jc { font-size: 0.6rem; color: #777; margin: 0 0 5px; }
+              .ex-resume-h ul { margin: 0 0 8px; padding-left: 12px; }
+              .ex-resume-h ul li { margin-bottom: 2px; }
+              .kw-h { font-size: 0.55rem; padding: 2px 7px; border-radius: 20px; }
+              .kw-hit-h { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+              .kw-miss-h { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+              .ex-copy-btn { flex-shrink: 0; padding: 3px 8px; border: 1px solid #ddd; border-radius: 5px; background: none; font-size: 0.55rem; font-weight: 600; color: #777; cursor: pointer; font-family: Inter, sans-serif; }
+              .ex-copy-btn.copied { color: #10b981; border-color: #10b981; }
+              .ver-btn-h { padding: 4px 12px; border: 1.5px solid #ddd; border-radius: 20px; background: none; font-size: 0.6rem; font-weight: 700; color: #777; cursor: pointer; font-family: Inter, sans-serif; }
+              .ver-btn-h.active { background: #111; color: #fff; border-color: #111; }
             `}</style>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 10px', marginBottom: '6px', background: 'rgba(255,255,255,0.04)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 10px', marginBottom: '8px', background: 'rgba(255,255,255,0.04)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
               <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.62rem', fontWeight: 600, color: '#666', letterSpacing: '0.04em' }}>Real output. Fictional candidate.</span>
               <span style={{ background: '#f59e0b', color: '#000', fontSize: '0.52rem', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '2px 8px', borderRadius: '20px', fontFamily: 'Inter, sans-serif' }}>Example</span>
             </div>
-            <div className="hero-quad-grid">
-              {/* Q1 RESUME */}
-              <div className="hero-quad-cell" style={{ borderLeft: '3px solid #00D1FF' }} onMouseEnter={() => setHoveredQuad('resume')}>
-                <div className="hero-quad-label" style={{ color: '#00D1FF' }}><span className="hero-quad-dot" style={{ background: '#00D1FF' }} />Resume</div>
-                <div className="hero-quad-text">
-                  <strong style={{ fontSize: '0.66rem', color: '#111' }}>Riley Okafor</strong><br/>
-                  Head of Human Experience<br/>
-                  <span style={{ color: '#999', fontSize: '0.58rem' }}>riley.okafor@mailbox.io · Portland, OR</span>
-                  <br/><br/>
-                  Culture strategist who designed onboarding systems reducing time-to-productivity by 34%. Built belonging programs across distributed teams spanning 9 time zones.
-                  <br/><br/>
-                  <strong style={{ color: '#111' }}>Distributed Team Experience</strong><br/>
-                  • Onboarding program, 34% faster time-to-productivity<br/>
-                  • Peer mentorship adopted by 89% of new hires
-                </div>
-                <div className="hero-quad-fade" />
+
+            <div style={{ background: '#111', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 32px 64px rgba(0,0,0,0.5)' }}>
+              {/* Tab bar */}
+              <div style={{ display: 'flex', borderBottom: '1px solid #222', overflowX: 'auto', padding: '0 8px' }}>
+                {['resume','cover','ats','cheat','dm'].map((t, i) => (
+                  <button key={t} className={`ex-tab-h${typeof window !== 'undefined' && window.__exTab === t ? ' active' : i === 0 ? ' active' : ''}`}
+                    onClick={e => {
+                      document.querySelectorAll('.ex-tab-h').forEach(b => b.classList.remove('active'))
+                      document.querySelectorAll('.ex-panel-h').forEach(p => p.classList.remove('active'))
+                      e.currentTarget.classList.add('active')
+                      document.getElementById('exh-' + t)?.classList.add('active')
+                    }}
+                  >
+                    {['Resume','Cover Letter','ATS Match','Cheat Sheet','Hiring DM'][i]}
+                  </button>
+                ))}
               </div>
 
-              {/* Q2 COVER LETTER */}
-              <div className="hero-quad-cell" style={{ borderLeft: '3px solid #a78bfa' }} onMouseEnter={() => setHoveredQuad('cover')}>
-                <div className="hero-quad-label" style={{ color: '#a78bfa' }}><span className="hero-quad-dot" style={{ background: '#a78bfa' }} />Cover Letter</div>
-                <div className="hero-quad-text">
-                  Vela's approach to culture as infrastructure, not perk, hits exactly right. Too many companies treat human experience as an afterthought — you're building it as a product.<br/><br/>
-                  I've designed onboarding systems that cut time-to-productivity by 34%, and run offsites for 140-person distributed teams across 9 time zones.
-                </div>
-                <div className="hero-quad-fade" />
-              </div>
-
-              {/* Q3 ATS SCORE */}
-              <div className="hero-quad-cell" style={{ borderLeft: '3px solid #10b981' }} onMouseEnter={() => setHoveredQuad('ats')}>
-                <div className="hero-quad-label" style={{ color: '#10b981' }}><span className="hero-quad-dot" style={{ background: '#10b981' }} />ATS Keyword Match</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'conic-gradient(#10b981 360deg, #e5e7eb 0deg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <span style={{ fontWeight: 900, fontSize: '0.55rem', color: '#10b981', fontFamily: 'Inter, sans-serif' }}>100%</span>
-                    </div>
-                  </div>
-                  <div>
-                    <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: '0.65rem', color: '#10b981' }}>Excellent</div>
-                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.55rem', color: '#999' }}>15/15 keywords matched</div>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3px' }}>
-                  {['onboarding','culture','distributed','facilitation','systems','leadership','inclusion','change','workflow'].map(k => (
-                    <span key={k} style={{ fontSize: '0.5rem', padding: '1px 5px', borderRadius: '999px', background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)', color: '#059669', fontFamily: 'Inter, sans-serif', fontWeight: 600 }}>✓ {k}</span>
+              {/* Resume panel */}
+              <div id="exh-resume" className="ex-panel-h active" style={{ padding: '12px' }}>
+                <div style={{ display: 'flex', gap: '6px', marginBottom: '10px' }}>
+                  {['a','b'].map((v, i) => (
+                    <button key={v} className={`ver-btn-h${i === 0 ? ' active' : ''}`}
+                      onClick={e => {
+                        document.querySelectorAll('.ver-btn-h').forEach(b => b.classList.remove('active'))
+                        e.currentTarget.classList.add('active')
+                        document.getElementById('exh-ver-a').style.display = v === 'a' ? 'block' : 'none'
+                        document.getElementById('exh-ver-b').style.display = v === 'b' ? 'block' : 'none'
+                      }}
+                    >{['Version A — Leadership','Version B — Technical'][i]}</button>
                   ))}
                 </div>
+                <div id="exh-ver-a" className="ex-resume-h">
+                  <h3>Michael Torres</h3>
+                  <div className="ex-sub">Senior Product Manager — Payments & Growth · michael.torres@email.com · linkedin.com/in/michaltorres · San Francisco, CA</div>
+                  <div className="ex-sl">Summary</div>
+                  <p style={{ margin: '0 0 6px' }}>Product leader who builds teams and roadmaps that move the needle. Drives measurable growth across SaaS, fintech, and e-commerce by aligning cross-functional stakeholders around clear outcomes.</p>
+                  <div className="ex-sl">Experience</div>
+                  <div className="ex-jt">Senior Product Manager</div>
+                  <div className="ex-jc">Stripe · Jan 2022 – Present</div>
+                  <ul><li>Led cross-functional team of 12 to launch small business dashboard — 120,000 merchants in 90 days</li><li>Owned OKRs for merchant growth pod — 3 of 4 targets hit in year one</li><li>Drove API partnerships with Salesforce and Shopify generating $4.2M new ARR</li></ul>
+                  <div className="ex-jt">Product Manager</div>
+                  <div className="ex-jc">Notion · Mar 2020 – Dec 2021</div>
+                  <ul><li>Scaled Templates marketplace from 0 to 2.4M monthly active users</li><li>Led go-to-market for Notion for Teams — 3x team plan growth</li></ul>
+                  <div className="ex-jt">Associate Product Manager</div>
+                  <div className="ex-jc">Brex · Jun 2018 – Feb 2020</div>
+                  <ul><li>Partnered with compliance and legal to ship card controls under regulatory constraints</li></ul>
+                  <div className="ex-sl">Skills</div>
+                  <p style={{ margin: 0 }}>Product Strategy · OKRs · Roadmapping · Stakeholder Management · Go-to-Market · Agile · SQL · Figma · Jira · Amplitude · Mixpanel</p>
+                </div>
+                <div id="exh-ver-b" className="ex-resume-h" style={{ display: 'none' }}>
+                  <h3>Michael Torres</h3>
+                  <div className="ex-sub">Senior Product Manager — Payments & Growth · michael.torres@email.com · linkedin.com/in/michaltorres · San Francisco, CA</div>
+                  <div className="ex-sl">Summary</div>
+                  <p style={{ margin: '0 0 6px' }}>Data-driven PM with a track record of shipping at scale. Runs tight A/B testing cycles and delivers measurable outcomes — reduced drop-off, grew MAU, drove ARR — across payments, SaaS, and fintech.</p>
+                  <div className="ex-sl">Experience</div>
+                  <div className="ex-jt">Senior Product Manager</div>
+                  <div className="ex-jc">Stripe · Jan 2022 – Present</div>
+                  <ul><li>Reduced payment setup drop-off 38% through complete UX overhaul</li><li>Engineered API integrations with Salesforce and Shopify — $4.2M new ARR</li><li>Ran 14 A/B tests in 12 months — 9 shipped to production</li></ul>
+                  <div className="ex-jt">Product Manager</div>
+                  <div className="ex-jc">Notion · Mar 2020 – Dec 2021</div>
+                  <ul><li>Built Templates marketplace from 0 to 2.4M MAU</li><li>Reduced support ticket volume 22% with in-product onboarding tooltips</li></ul>
+                  <div className="ex-jt">Associate Product Manager</div>
+                  <div className="ex-jc">Brex · Jun 2018 – Feb 2020</div>
+                  <ul><li>Shipped card controls under tight compliance and regulatory constraints</li></ul>
+                  <div className="ex-sl">Skills</div>
+                  <p style={{ margin: 0 }}>A/B Testing · SQL · Data Analysis · Amplitude · Mixpanel · API Integrations · Regulatory Compliance · Figma · Jira · Confluence · Agile</p>
+                </div>
               </div>
 
-              {/* Q4 HIRING MANAGER DM */}
-              <div className="hero-quad-cell" style={{ borderLeft: '3px solid #f59e0b' }} onMouseEnter={() => setHoveredQuad('dm')}>
-                <div className="hero-quad-label" style={{ color: '#f59e0b' }}><span className="hero-quad-dot" style={{ background: '#f59e0b' }} />Hiring Manager DM</div>
-                <div style={{ background: '#f8fafc', borderRadius: '6px', padding: '7px 8px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '5px' }}>
-                    <div style={{ width: '14px', height: '14px', borderRadius: '3px', background: '#0077b5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <span style={{ color: '#fff', fontSize: '0.4rem', fontWeight: 800, fontFamily: 'Inter, sans-serif' }}>in</span>
-                    </div>
-                    <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.55rem', color: '#888' }}>To: Hiring Manager, Vela</span>
-                  </div>
-                  <div className="hero-quad-text">I built onboarding systems that reduced time-to-productivity by 34% at a distributed company, and facilitated C-suite retreats at 8 companies. Your Head of Human Experience role caught my attention — you're treating culture as infrastructure, not a perk.</div>
+              {/* Cover Letter panel */}
+              <div id="exh-cover" className="ex-panel-h" style={{ padding: '12px' }}>
+                <div className="ex-resume-h">
+                  <p>Acme Financial is building the payments infrastructure small businesses actually need — not bolt-on tools, but one place to get paid, manage expenses, and understand cash flow. That's exactly the kind of problem I want to work on.</p>
+                  <p>At Stripe, I led delivery of a small business dashboard that reached 120,000 merchants in 90 days — reducing drop-off 38% and driving $4.2M in new ARR through Salesforce and Shopify integrations. At Notion, I scaled the Templates marketplace from zero to 2.4M MAU running 14 A/B tests in 12 months.</p>
+                  <p style={{ margin: 0 }}>The Payments & Growth PM role is a direct match for how I work. I'd like to talk.</p>
                 </div>
-                <div className="hero-quad-fade" style={{ background: 'linear-gradient(to bottom, transparent, #fff)' }} />
+              </div>
+
+              {/* ATS panel */}
+              <div id="exh-ats" className="ex-panel-h" style={{ padding: '12px' }}>
+                <div className="ex-resume-h">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
+                    <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: 'conic-gradient(#10b981 342deg, #e5e7eb 0deg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 800, color: '#10b981' }}>95%</div>
+                    </div>
+                    <div><div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#10b981' }}>Excellent</div><div style={{ fontSize: '0.6rem', color: '#777' }}>19 of 20 keywords matched</div></div>
+                  </div>
+                  <div style={{ fontSize: '0.55rem', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#10b981', marginBottom: '6px' }}>Matched</div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '10px' }}>
+                    {['roadmap','payments','onboarding','A/B testing','SQL','Amplitude','OKRs','stakeholder','API','compliance','Figma','Jira','agile','fintech','go-to-market'].map(k => <span key={k} className="kw-h kw-hit-h">{k}</span>)}
+                  </div>
+                  <div style={{ fontSize: '0.55rem', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#991b1b', marginBottom: '6px' }}>Missing</div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}><span className="kw-h kw-miss-h">forecasting</span></div>
+                </div>
+              </div>
+
+              {/* Cheat Sheet panel */}
+              <div id="exh-cheat" className="ex-panel-h" style={{ padding: '12px' }}>
+                <div style={{ background: '#fff', borderRadius: '10px', padding: '16px', marginBottom: '8px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '0.52rem', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#999', marginBottom: '10px' }}>What this is</div>
+                  <p style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '0.68rem', lineHeight: 2, color: '#333', margin: 0 }}>
+                    You know when you finish uploading your resume<br />
+                    and the portal makes you type everything in again —<br />
+                    and you're like @#$%&amp;!<br />
+                    <span style={{ color: '#999' }}>This kills that.</span>
+                  </p>
+                  <div style={{ width: '24px', height: '1px', background: '#ddd', margin: '10px auto 8px' }} />
+                  <p style={{ fontSize: '0.6rem', color: '#777', margin: 0 }}>Every field pre-filled. One click to copy.</p>
+                </div>
+                {[
+                  { label: 'Headline', val: 'Senior Product Manager — Payments & Growth' },
+                  { label: 'Skills', val: 'Product Strategy, OKRs, A/B Testing, SQL, Amplitude, Mixpanel, Figma, Jira...' },
+                  { label: 'Stripe', val: 'Senior Product Manager · Jan 2022 – Present' },
+                  { label: 'Notion', val: 'Product Manager · Mar 2020 – Dec 2021' },
+                  { label: 'Brex', val: 'Associate Product Manager · Jun 2018 – Feb 2020' },
+                ].map(({ label, val }) => (
+                  <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#fff', borderRadius: '8px', padding: '8px 10px', marginBottom: '6px' }}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '0.5rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#999', marginBottom: '2px' }}>{label}</div>
+                      <div style={{ fontSize: '0.62rem', color: '#111' }}>{val}</div>
+                    </div>
+                    <button className="ex-copy-btn" onClick={e => {
+                      navigator.clipboard.writeText(val)
+                      e.currentTarget.textContent = 'Copied'
+                      e.currentTarget.classList.add('copied')
+                      setTimeout(() => { e.currentTarget.textContent = 'Copy'; e.currentTarget.classList.remove('copied') }, 2000)
+                    }}>Copy</button>
+                  </div>
+                ))}
+              </div>
+
+              {/* DM panel */}
+              <div id="exh-dm" className="ex-panel-h" style={{ padding: '12px' }}>
+                <div className="ex-resume-h">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', paddingBottom: '8px', marginBottom: '10px', borderBottom: '1px solid #eee' }}>
+                    <div style={{ width: '16px', height: '16px', borderRadius: '3px', background: '#0077b5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <span style={{ color: '#fff', fontSize: '0.45rem', fontWeight: 800 }}>in</span>
+                    </div>
+                    <span style={{ fontSize: '0.6rem', color: '#777' }}>To: Hiring Manager, Acme Financial</span>
+                  </div>
+                  <p style={{ margin: 0, fontSize: '0.68rem', lineHeight: 1.75 }}>Led a small business dashboard at Stripe that reached 120,000 merchants in 90 days and drove $4.2M in new ARR through API partnerships — the Payments & Growth PM role at Acme looks like the same type of challenge, one layer deeper. Worth a conversation?</p>
+                </div>
               </div>
             </div>
-
-            {/* HOVER OVERLAY */}
-            {hoveredQuad && (
-              <div className="hero-quad-overlay" style={{
-                position: 'absolute', top: 0, left: 0, right: 0,
-                background: '#fff', borderRadius: '16px', padding: '20px', zIndex: 50,
-                boxShadow: '0 24px 64px rgba(0,0,0,0.4)', border: '1px solid #e5e7eb',
-                maxHeight: '420px', overflowY: 'auto',
-              }}>
-                {hoveredQuad === 'resume' && (
-                  <div>
-                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 800, color: '#00D1FF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '4px' }}>📄 Tailored Resume</div>
-                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', color: '#bbb', marginBottom: '12px' }}>Example output — fictional candidate Riley Okafor applying to fictional company Vela.</div>
-                    <div style={{ fontFamily: 'Georgia, serif', fontSize: '0.78rem', lineHeight: 1.75, color: '#1a1a1a' }}>
-                      <strong>Riley Okafor</strong> — Head of Human Experience<br/>
-                      <span style={{ color: '#888', fontSize: '0.72rem' }}>riley.okafor@mailbox.io · Portland, OR</span>
-                      <br/><br/>Culture strategist who designed onboarding systems reducing time-to-productivity by 34%. Built belonging and inclusion programs across distributed teams spanning 9 time zones.<br/><br/>
-                      <strong>Distributed Team Experience</strong><br/>
-                      • Onboarding program reducing time-to-productivity 34% across 6 departments<br/>
-                      • Annual offsite for 140-person distributed team across 9 time zones<br/>
-                      • Peer mentorship adopted by 89% of new hires in Q1<br/><br/>
-                      <strong>Executive Facilitation & Change Management</strong><br/>
-                      • Led facilitation for 3 org restructures affecting 200+ employees<br/>
-                      • Leadership retreats for C-suite teams at 8 mid-market companies<br/>
-                      • Grew consulting practice revenue 40% in 18 months
-                    </div>
-                  </div>
-                )}
-                {hoveredQuad === 'cover' && (
-                  <div>
-                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 800, color: '#a78bfa', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '4px' }}>✉️ Cover Letter</div>
-                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', color: '#bbb', marginBottom: '12px' }}>Example output — fictional candidate Riley Okafor applying to fictional company Vela.</div>
-                    <div style={{ fontFamily: 'Georgia, serif', fontSize: '0.82rem', lineHeight: 1.85, color: '#1a1a1a' }}>
-                      <p style={{ margin: '0 0 14px' }}>Vela's approach to culture as infrastructure, not perk, hits exactly right. Too many companies treat human experience as an afterthought — you're building it as a product. That's the difference between culture that scales and culture that breaks.</p>
-                      <p style={{ margin: '0 0 14px' }}>I've designed onboarding systems that cut time-to-productivity by 34%, and run offsites for 140-person distributed teams across 9 time zones. At Bright Arc, I built culture measurement frameworks that gave leadership real signals instead of vanity metrics.</p>
-                      <p style={{ margin: 0 }}>The direct CEO reporting structure tells me this role has real influence. I'm ready to own the experience of working at Vela from day one.</p>
-                    </div>
-                  </div>
-                )}
-                {hoveredQuad === 'ats' && (
-                  <div>
-                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 800, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '4px' }}>🎯 ATS Keyword Match</div>
-                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', color: '#bbb', marginBottom: '12px' }}>Example output — fictional candidate Riley Okafor applying to fictional company Vela.</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
-                      <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'conic-gradient(#10b981 360deg, #e5e7eb 0deg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                        <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <span style={{ fontWeight: 900, fontSize: '0.85rem', color: '#10b981', fontFamily: 'Inter, sans-serif' }}>100%</span>
-                        </div>
-                      </div>
-                      <div>
-                        <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 800, fontSize: '0.9rem', color: '#10b981' }}>Excellent</div>
-                        <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', color: '#888' }}>15/15 keywords matched</div>
-                      </div>
-                    </div>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
-                      {['onboarding','culture','distributed','facilitation','systems','leadership','inclusion','change','workflow','software','design','product','integration','management','department'].map(k => (
-                        <span key={k} style={{ fontSize: '0.68rem', padding: '3px 8px', borderRadius: '999px', background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)', color: '#059669', fontFamily: 'Inter, sans-serif', fontWeight: 600 }}>✓ {k}</span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {hoveredQuad === 'dm' && (
-                  <div>
-                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', fontWeight: 800, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '4px' }}>💬 Hiring Manager DM</div>
-                    <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.65rem', color: '#bbb', marginBottom: '12px' }}>Example output — fictional candidate Riley Okafor applying to fictional company Vela.</div>
-                    <div style={{ background: '#f8fafc', borderRadius: '10px', padding: '14px 16px', border: '1px solid #e5e7eb' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px', paddingBottom: '10px', borderBottom: '1px solid #e5e7eb' }}>
-                        <div style={{ width: '24px', height: '24px', borderRadius: '5px', background: '#0077b5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <span style={{ color: '#fff', fontSize: '0.55rem', fontWeight: 800, fontFamily: 'Inter, sans-serif' }}>in</span>
-                        </div>
-                        <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', color: '#888' }}>To: Hiring Manager, Vela</span>
-                      </div>
-                      <div style={{ fontFamily: 'Georgia, serif', fontSize: '0.8rem', lineHeight: 1.8, color: '#1a1a1a' }}>
-                        I built onboarding systems that reduced time-to-productivity by 34% at a distributed company, and facilitated leadership retreats for C-suite teams at 8 companies. Your Head of Human Experience role caught my attention because you're treating culture as infrastructure, not a perk. Worth a conversation about how this translates to your 180-person distributed team?
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
 
             <div style={{ textAlign: 'center', marginTop: '10px' }}>
               <a href="/example" style={{ fontSize: '0.72rem', color: '#00D1FF', fontWeight: 700, textDecoration: 'none', fontFamily: 'Inter, sans-serif' }}>See full example output →</a>
