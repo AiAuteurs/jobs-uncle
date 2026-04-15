@@ -1178,34 +1178,32 @@ export default function Home() {
       {/* ── HERO — hidden once results exist ─────────────────────── */}
       {!results && !loading && (
       <section style={{
-        maxWidth: '1280px', margin: '0 auto', padding: '56px 48px 72px',
+        maxWidth: '1280px', margin: '0 auto', padding: '24px 48px 72px',
       }} className="hero-grid">
 
         {/* TOP — logo + headline + CTA, full width, centered */}
-        <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '48px', paddingTop: '24px' }}>
 
-          {/* Logo lockup — mascot + wordmark as one unit */}
-          <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', marginBottom: '40px' }}>
-            <img
-              src="/jobsuncleaiblack.png"
-              alt="JobsUncle.ai"
-              style={{ width: '260px', display: 'block' }}
-            />
-          </div>
+          {/* Wordmark — large and dominant */}
+          <img
+            src="/jobsuncleaiblack.png"
+            alt="JobsUncle.ai"
+            style={{ width: '380px', display: 'block', margin: '0 auto 20px' }}
+          />
 
-          {/* Headline — the whole point */}
+          {/* Headline — tight to logo */}
           <h1 style={{
             fontFamily: 'Inter, sans-serif', fontWeight: 900,
-            fontSize: 'clamp(3rem, 5vw, 4.5rem)', lineHeight: 1.0,
-            color: '#ffffff', margin: '0 auto 24px', letterSpacing: '-0.04em',
-            maxWidth: '900px',
+            fontSize: 'clamp(2.8rem, 4.5vw, 4rem)', lineHeight: 1.0,
+            color: '#ffffff', margin: '0 auto 20px', letterSpacing: '-0.04em',
+            maxWidth: '860px',
           }}>
-            Tailored resumes<br />to the job description{' '}
+            Tailored resumes to the job description{' '}
             <span style={{ color: '#00D1FF' }}>in 60 seconds.</span>
           </h1>
 
           {/* Feature pills */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '40px', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '32px', justifyContent: 'center' }}>
             {['Tailored resume', 'Cover letter', 'Recruiter & ATS analysis', 'Hiring manager DM'].map(item => (
               <span key={item} style={{
                 fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', fontWeight: 600,
