@@ -2063,6 +2063,32 @@ export default function Home() {
                 </a>
               </div>
 
+              {/* DUAL VERSION — show in results for Pro+ users who generated without it enabled */}
+              {isPlusUser && !results.dualVersion && (
+                <div style={{
+                  marginBottom: '20px',
+                  background: '#0a0a0a',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  borderRadius: '16px',
+                  padding: '20px 24px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap',
+                }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                      <span style={{ fontFamily: 'Georgia, serif', fontSize: '0.95rem', color: '#ffffff' }}>Want Leadership + Technical versions?</span>
+                      <span style={{ background: '#6366f1', color: 'white', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
+                    </div>
+                    <p style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: '#ffffff', margin: 0, lineHeight: 1.5 }}>Enable Dual Versions and regenerate — one framed around leadership, one around execution. Two shots at the same role.</p>
+                  </div>
+                  <button
+                    onClick={() => { setDualVersionEnabled(true); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                    style={{ flexShrink: 0, padding: '10px 24px', background: '#ffffff', color: '#000000', border: 'none', borderRadius: '50px', fontSize: '0.82rem', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}
+                  >
+                    Enable + Start over →
+                  </button>
+                </div>
+              )}
+
               <div className="results-header">
                 <div className="results-title">Your tailored documents</div>
                 <div className="results-badge">Ready to download</div>
@@ -2309,8 +2335,8 @@ export default function Home() {
                                     {coverRepairLoading ? '⟳ Repairing...' : '✦ Repair cover letter'}
                                   </button>
                                   {!coverRepairLoading && (
-                                    <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>
-                                      Rewrites your cover letter with missing keywords woven in
+                                    <span style={{ fontSize: '0.75rem', color: 'var(--ink)' }}>
+                                      Rewrites your cover letter with every missing keyword woven in naturally — boosting your ATS score without changing your voice.
                                     </span>
                                   )}
                                 </>
@@ -2331,7 +2357,7 @@ export default function Home() {
                                 ✦ Repair cover letter
                               </button>
                               <span style={{ background: '#6366f1', color: 'white', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
-                              <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>Upgrade to rewrite with fixes applied</span>
+                              <span style={{ fontSize: '0.75rem', color: 'var(--ink)' }}>Rewrites your cover letter with every missing keyword woven in — boosts your ATS score instantly.</span>
                             </div>
                           )}
                         </div>
@@ -2581,7 +2607,7 @@ export default function Home() {
                         </button>
                         {!regeneratedResults && !regenerating && (
                           <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>
-                            Rewrites your resume applying every fix above
+                            Applies every fix from the recruiter analysis and rewrites your resume — higher ATS score, stronger positioning, same experience.
                           </span>
                         )}
                       </>
@@ -2602,7 +2628,7 @@ export default function Home() {
                           letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase'
                         }}>Pro</span>
                         <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>
-                          Upgrade to rewrite with fixes applied
+                          Applies every recruiter fix and rewrites your resume with a higher ATS score — upgrade to unlock.
                         </span>
                       </div>
                     )}
