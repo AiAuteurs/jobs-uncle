@@ -2682,21 +2682,32 @@ export default function Home() {
               )}
 
               {/* ATS CHEAT SHEET */}
-              <div className="result-section" style={{ borderLeft: '3px solid #10b981', background: 'rgba(16,185,129,0.04)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                      <div className="result-section-title" style={{ margin: 0 }}>ATS Cheat Sheet</div>
+              <div style={{
+                background: '#0a0a0a',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: '16px',
+                padding: '28px 32px',
+                marginTop: '8px',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px' }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                      <div style={{ fontFamily: 'Georgia, serif', fontSize: '1.1rem', fontWeight: 400, color: '#ffffff' }}>ATS Cheat Sheet</div>
                       <span style={{ background: '#6366f1', color: 'white', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
                     </div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--ink)', lineHeight: 1.55 }}>You know when you finish uploading your resume and the job portal makes you type everything in <em>again</em> manually — and you're like @#$%&amp;! This kills that. Every field pre-filled from your resume, one click to copy straight into the form.</div>
+                    <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.85rem', color: '#ffffff', lineHeight: 1.65, margin: '0 0 6px' }}>
+                      You know when you finish uploading your resume and the portal makes you type everything in <em>again</em> manually — and you're like @#$%&amp;!
+                    </p>
+                    <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.85rem', color: '#ffffff', lineHeight: 1.65, margin: 0 }}>
+                      This kills that. Every field from your resume — headline, summary, skills, employment history — pre-filled and ready to copy into any ATS form with one click.
+                    </p>
                   </div>
                   {isPlusUser ? (
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px', flexShrink: 0 }}>
                       {(!atsData || atsVersion !== activeVersion) && !atsLoading && (
                         <button
                           onClick={handleAtsCheatSheet}
-                          style={{ flexShrink: 0, padding: '9px 22px', background: '#10b981', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer' }}
+                          style={{ padding: '11px 26px', background: '#ffffff', color: '#000000', border: 'none', borderRadius: '50px', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}
                         >
                           {atsData && atsVersion !== activeVersion
                             ? `✦ Re-parse for ${activeVersion === 'v2' ? 'Version 2' : 'Version 1'}`
@@ -2704,7 +2715,7 @@ export default function Home() {
                         </button>
                       )}
                       {atsData && !atsLoading && (
-                        <div style={{ fontSize: '0.7rem', color: 'var(--text-soft)' }}>
+                        <div style={{ fontSize: '0.7rem', color: '#ffffff' }}>
                           Parsed from {atsVersion === 'v2' ? '✦ Version 2 — Fixed' : 'Version 1 — Original'}
                           {atsVersion !== activeVersion && (
                             <span style={{ color: '#f59e0b', fontWeight: 700 }}> · Switch above to match</span>
@@ -2715,9 +2726,9 @@ export default function Home() {
                   ) : (
                     <button
                       onClick={() => setShowPlusPaywall(true)}
-                      style={{ flexShrink: 0, padding: '9px 22px', background: '#6366f1', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer' }}
+                      style={{ flexShrink: 0, padding: '11px 26px', background: '#ffffff', color: '#000000', border: 'none', borderRadius: '50px', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}
                     >
-                      Upgrade to Pro+
+                      Upgrade to Pro+ →
                     </button>
                   )}
                 </div>
