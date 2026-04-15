@@ -1242,7 +1242,7 @@ export default function Home() {
               .ex-tab-h.active { color: #00D1FF; border-bottom-color: #00D1FF; }
               .ex-panel-h { display: none; }
               .ex-panel-h.active { display: block; }
-              .ex-resume-h { background: #fff; border-radius: 10px; padding: 16px 18px; font-size: 0.65rem; line-height: 1.7; color: #111; max-height: 320px; overflow-y: auto; }
+              .ex-resume-h { background: #fff; border-radius: 10px; padding: 16px 18px; font-size: 0.65rem; line-height: 1.7; color: #111; }
               .ex-resume-h h3 { font-size: 0.85rem; font-weight: 700; margin: 0 0 1px; color: #111; }
               .ex-resume-h .ex-sub { font-size: 0.62rem; color: #555; margin: 0 0 12px; }
               .ex-resume-h .ex-sl { font-size: 0.52rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #999; border-bottom: 1px solid #eee; padding-bottom: 3px; margin: 10px 0 6px; }
@@ -1258,6 +1258,35 @@ export default function Home() {
               .ver-btn-h { padding: 4px 12px; border: 1.5px solid #ddd; border-radius: 20px; background: none; font-size: 0.6rem; font-weight: 700; color: #777; cursor: pointer; font-family: Inter, sans-serif; }
               .ver-btn-h.active { background: #111; color: #fff; border-color: #111; }
             `}</style>
+
+            {/* Info box — above example, bright white, editorial */}
+            <div style={{
+              marginBottom: '10px',
+              background: '#ffffff',
+              border: '1px solid rgba(255,255,255,0.15)',
+              borderRadius: '12px',
+              padding: '14px 20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+            }}>
+              <div>
+                <div style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '0.82rem', color: '#111', fontWeight: 400, lineHeight: 1.5 }}>
+                  Fictional candidate. Real output.
+                </div>
+                <div style={{ fontSize: '0.65rem', color: '#666', fontFamily: 'Inter, sans-serif', marginTop: '2px' }}>
+                  Michael Torres → Senior PM, Acme Financial
+                </div>
+              </div>
+              <a href="/example" style={{
+                flexShrink: 0,
+                fontSize: '0.72rem', color: '#000', fontWeight: 700,
+                textDecoration: 'none', fontFamily: 'Inter, sans-serif',
+                background: '#00D1FF', padding: '7px 16px', borderRadius: '20px',
+                whiteSpace: 'nowrap',
+              }}>See full example →</a>
+            </div>
 
             <div style={{ background: '#111', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 32px 64px rgba(0,0,0,0.5)' }}>
               {/* Tab bar */}
@@ -1402,35 +1431,6 @@ export default function Home() {
                   <p style={{ margin: 0, fontSize: '0.68rem', lineHeight: 1.75 }}>Led a small business dashboard at Stripe that reached 120,000 merchants in 90 days and drove $4.2M in new ARR through API partnerships — the Payments & Growth PM role at Acme looks like the same type of challenge, one layer deeper. Worth a conversation?</p>
                 </div>
               </div>
-            </div>
-
-            {/* See full example info box — styled like Two Versions card */}
-            <div style={{
-              marginTop: '12px',
-              background: '#0a0a0a',
-              border: '1px solid rgba(255,255,255,0.08)',
-              borderRadius: '12px',
-              padding: '16px 20px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '12px',
-            }}>
-              <div>
-                <div style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '0.78rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.6 }}>
-                  Fictional candidate. Real output.
-                </div>
-                <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.25)', fontFamily: 'Inter, sans-serif', marginTop: '2px' }}>
-                  Michael Torres → Senior PM, Acme Financial
-                </div>
-              </div>
-              <a href="/example" style={{
-                flexShrink: 0,
-                fontSize: '0.72rem', color: '#000', fontWeight: 700,
-                textDecoration: 'none', fontFamily: 'Inter, sans-serif',
-                background: '#00D1FF', padding: '7px 16px', borderRadius: '20px',
-                whiteSpace: 'nowrap',
-              }}>See full example →</a>
             </div>
           </div>
         )}
