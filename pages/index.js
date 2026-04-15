@@ -1042,7 +1042,7 @@ export default function Home() {
             <div style={{ display: 'inline-block', background: '#6366f1', color: 'white', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', padding: '4px 12px', borderRadius: '20px', marginBottom: '16px', textTransform: 'uppercase' }}>Pro+</div>
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Stop re-typing your resume into every job portal.</h2>
             <p style={{ color: 'var(--text-soft)', fontSize: '0.95rem', margin: '0 0 8px', lineHeight: 1.6 }}>
-              <strong style={{ color: 'var(--ink)' }}>ATS Cheat Sheet</strong> — you know when you upload your resume and the portal makes you type everything in again manually — and you're like @#$%&amp;! This kills that. Every field pre-filled, one click to copy. Plus <strong style={{ color: 'var(--ink)' }}>dual resume versions</strong> (Leadership + Technical) for the same role.
+              <strong style={{ color: 'var(--ink)' }}>ATS Cheat Sheet</strong> — you know when you upload your resume and the portal makes you type everything in again manually — and you're like @#$%&amp;! 🤣 This kills that. Every field pre-filled, one click to copy. Plus <strong style={{ color: 'var(--ink)' }}>dual resume versions</strong> (Leadership + Technical) for the same role.
             </p>
             <p style={{ color: 'var(--text-soft)', fontSize: '0.85rem', margin: '0 0 32px' }}>For serious job hunters who apply to multiple roles.</p>
             <a href="/pricing" style={{ display: 'block', width: '100%', background: '#6366f1', color: 'white', border: 'none', padding: '16px', borderRadius: '8px', fontSize: '1rem', fontWeight: 700, cursor: 'pointer', marginBottom: '6px', letterSpacing: '0.02em', textDecoration: 'none', textAlign: 'center', boxSizing: 'border-box' }}>
@@ -1397,7 +1397,7 @@ export default function Home() {
                   <p style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '0.68rem', lineHeight: 2, color: '#333', margin: 0 }}>
                     You know when you finish uploading your resume<br />
                     and the portal makes you type everything in again —<br />
-                    and you're like @#$%&amp;!<br />
+                    and you're like @#$%&amp;! 🤣<br />
                     <span style={{ color: '#999' }}>This kills that.</span>
                   </p>
                   <div style={{ width: '24px', height: '1px', background: '#ddd', margin: '10px auto 8px' }} />
@@ -1495,7 +1495,7 @@ export default function Home() {
                   <p style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '0.68rem', lineHeight: 2, color: '#333', margin: 0 }}>
                     You know when you finish uploading your resume<br />
                     and the portal makes you type everything in again —<br />
-                    and you're like @#$%&amp;!<br />
+                    and you're like @#$%&amp;! 🤣<br />
                     <span style={{ color: '#999' }}>This kills that.</span>
                   </p>
                   <div style={{ width: '24px', height: '1px', background: '#ddd', margin: '10px auto 8px' }} />
@@ -2696,7 +2696,7 @@ export default function Home() {
                       <span style={{ background: '#6366f1', color: 'white', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
                     </div>
                     <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.85rem', color: '#ffffff', lineHeight: 1.65, margin: '0 0 6px' }}>
-                      You know when you finish uploading your resume and the portal makes you type everything in <em>again</em> manually — and you're like @#$%&amp;!
+                      You know when you finish uploading your resume and the portal makes you type everything in <em>again</em> manually — and you're like @#$%&amp;! 🤣
                     </p>
                     <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.85rem', color: '#ffffff', lineHeight: 1.65, margin: 0 }}>
                       This kills that. Every field from your resume — headline, summary, skills, employment history — pre-filled and ready to copy into any ATS form with one click.
@@ -2969,7 +2969,7 @@ export default function Home() {
                     <span style={{ background: '#6366f1', color: 'white', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
                   </div>
                   <p style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: '#ffffff', margin: 0, lineHeight: 1.6 }}>
-                    You know when you upload your resume and the portal makes you type everything in again —<br />and you're like @#$%&amp;! This kills that.<br />Every field pre-filled. One click to copy.<br />Plus Leadership <em>and</em> Technical resume versions in one shot.
+                    You know when you upload your resume and the portal makes you type everything in again —<br />and you're like @#$%&amp;! 🤣 This kills that.<br />Every field pre-filled. One click to copy.<br />Plus Leadership <em>and</em> Technical resume versions in one shot.
                   </p>
                 </div>
                 <button
