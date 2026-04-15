@@ -636,8 +636,17 @@ export default function Home() {
       const data = await res.json()
       if (data.ok) {
         setRestoreStatus('success')
-        setRestoreMsg('Access restored! Reloading...')
-        setTimeout(() => location.reload(), 1500)
+        // Update access level without reloading — preserves any generated resume
+        if (data.access === 'pro_plus') {
+          setIsPaid(true); setIsPlusUser(true); setAccessLevel('pro_plus')
+          setRestoreMsg('Pro+ access restored! Your resume is still here.')
+        } else if (data.access === 'paid') {
+          setIsPaid(true); setAccessLevel('paid')
+          setRestoreMsg('Pro access restored! Your resume is still here.')
+        } else {
+          setRestoreMsg('Access restored!')
+        }
+        setTimeout(() => { setShowSignIn(false); setRestoreMsg('') }, 2000)
       } else {
         setRestoreStatus('error')
         setRestoreMsg(data.error || 'No account found for that email.')
