@@ -1404,18 +1404,33 @@ export default function Home() {
               </div>
             </div>
 
+            {/* See full example info box — styled like Two Versions card */}
             <div style={{
               marginTop: '12px',
-              background: 'rgba(0,209,255,0.06)',
-              border: '1px solid rgba(0,209,255,0.2)',
-              borderRadius: '10px',
-              padding: '10px 16px',
+              background: '#0a0a0a',
+              border: '1px solid rgba(255,255,255,0.08)',
+              borderRadius: '12px',
+              padding: '16px 20px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
+              gap: '12px',
             }}>
-              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', color: '#555' }}>Fictional candidate. Real output.</span>
-              <a href="/example" style={{ fontSize: '0.72rem', color: '#00D1FF', fontWeight: 700, textDecoration: 'none', fontFamily: 'Inter, sans-serif' }}>See full example →</a>
+              <div>
+                <div style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '0.78rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.6 }}>
+                  Fictional candidate. Real output.
+                </div>
+                <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.25)', fontFamily: 'Inter, sans-serif', marginTop: '2px' }}>
+                  Michael Torres → Senior PM, Acme Financial
+                </div>
+              </div>
+              <a href="/example" style={{
+                flexShrink: 0,
+                fontSize: '0.72rem', color: '#000', fontWeight: 700,
+                textDecoration: 'none', fontFamily: 'Inter, sans-serif',
+                background: '#00D1FF', padding: '7px 16px', borderRadius: '20px',
+                whiteSpace: 'nowrap',
+              }}>See full example →</a>
             </div>
           </div>
         )}
