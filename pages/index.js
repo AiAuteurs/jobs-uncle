@@ -1813,11 +1813,11 @@ export default function Home() {
                     fontSize: '0.9rem',
                     color: 'rgba(255,255,255,0.55)',
                     lineHeight: 1.8,
-                    maxWidth: '360px',
+                    maxWidth: '420px',
                     margin: '0 auto 32px',
                     fontStyle: 'italic',
                   }}>
-                    Your career can go in more than one direction. One generation. Two complete resumes — one built around leadership, one around execution. Read them side by side. Send the one that fits.
+                    Your career can go in more than one direction. One generation gives you two complete resumes — one built around leadership, one around execution. Read them side by side and send the one that fits.
                   </p>
 
                   {/* Two columns */}
