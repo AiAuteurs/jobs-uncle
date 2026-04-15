@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 
 const CYAN = "#00cdd7";
 const WHITE = "#ffffff";
-const MUTED = "rgba(255,255,255,0.42)";
+const MUTED = "#ffffff";
 
 const TABS = [
   { id: "resume",    label: "📄 Resume" },
@@ -228,8 +228,8 @@ export default function HomepageDemoPanel() {
       {/* Privacy disclaimer */}
       <div style={{ display: "flex", alignItems: "flex-start", gap: 10, background: "rgba(251,191,36,0.06)", border: "1px solid rgba(251,191,36,0.2)", borderRadius: 10, padding: "12px 16px", marginBottom: 20 }}>
         <span style={{ fontSize: 14, flexShrink: 0 }}>🔒</span>
-        <p style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", lineHeight: 1.65, fontFamily: "system-ui,sans-serif" }}>
-          <strong style={{ color: "rgba(251,191,36,0.9)", fontWeight: 600 }}>Privacy note: </strong>
+        <p style={{ fontSize: 12, color: "#ffffff", lineHeight: 1.65, fontFamily: "system-ui,sans-serif" }}>
+          <strong style={{ color: "#fbbf24", fontWeight: 600 }}>Privacy note: </strong>
           "Michael Torres" is a fictional candidate created to demonstrate Jobsuncle's output. No real resume or personal data was used. All details — name, employer, metrics — are illustrative only.
         </p>
       </div>
@@ -280,7 +280,7 @@ export default function HomepageDemoPanel() {
 
         {/* Scroll nudge */}
         <div style={{ textAlign: "center", padding: "8px 0 10px", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.2)", fontFamily: "system-ui,sans-serif" }}>
+          <span style={{ fontSize: 11, color: "#ffffff", fontFamily: "system-ui,sans-serif" }}>
             ↑ scroll within panel to read more
           </span>
         </div>
