@@ -213,7 +213,6 @@ export default function Home() {
   const [isPlusUser, setIsPlusUser] = useState(false)
   const [showPlusPaywall, setShowPlusPaywall] = useState(false)
   const [dualVersionEnabled, setDualVersionEnabled] = useState(false)
-  const [resumeFormat, setResumeFormat] = useState('auto') // 'auto' | 'chronological' | 'skills'
   const [activeResume, setActiveResume] = useState('a') // 'a' | 'b'
   const [activeResultTab, setActiveResultTab] = useState('resume')
   const [showRestore, setShowRestore] = useState(false)
@@ -452,7 +451,6 @@ export default function Home() {
         formData.append('jobDescFile', jobDescFile)
       }
       formData.append('dualVersion', dualVersionEnabled && isPlusUser ? 'true' : 'false')
-      formData.append('resumeFormat', resumeFormat)
 
       const controller = new AbortController()
       const timeout = setTimeout(() => controller.abort(), 120000)
@@ -1556,32 +1554,6 @@ export default function Home() {
 
           </div>
 
-          <div style={{ marginTop: '16px', padding: '14px 16px', background: 'rgba(255,255,255,0.03)', border: '1px solid #2a2a2a', borderRadius: '10px' }}>
-            <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#666', marginBottom: '10px' }}>Resume Format</div>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              {[
-                { value: 'auto', label: '✦ Auto', desc: 'We decide' },
-                { value: 'chronological', label: '📅 Chronological', desc: 'Traditional' },
-                { value: 'skills', label: '⚡ Skills-based', desc: 'Hybrid' },
-              ].map(({ value, label, desc }) => (
-                <button
-                  key={value}
-                  onClick={() => setResumeFormat(value)}
-                  style={{
-                    flex: 1, padding: '8px 6px', borderRadius: '8px', cursor: 'pointer',
-                    border: `1.5px solid ${resumeFormat === value ? '#00D1FF' : '#2a2a2a'}`,
-                    background: resumeFormat === value ? 'rgba(0,209,255,0.08)' : 'transparent',
-                    color: resumeFormat === value ? '#00D1FF' : '#666',
-                    fontSize: '0.72rem', fontWeight: 600, textAlign: 'center', transition: 'all 0.15s',
-                  }}
-                >
-                  <div>{label}</div>
-                  <div style={{ fontSize: '0.62rem', fontWeight: 400, marginTop: '2px', opacity: 0.7 }}>{desc}</div>
-                </button>
-              ))}
-            </div>
-          </div>
-
           <button
             className={`cc-generate-btn ${canGenerate ? 'cc-generate-btn--ready' : 'cc-generate-btn--disabled'}`}
             onClick={handleGenerate}
@@ -1824,6 +1796,20 @@ export default function Home() {
                   <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', color: '#444444', lineHeight: 1.6 }}>
                     Tailored to this role. Download below — or scroll down for your cover letter, recruiter analysis, and hiring manager DM.
                   </div>
+                </div>
+              </div>
+
+              {/* SAVE WARNING BANNER */}
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: '12px',
+                marginBottom: '20px', padding: '12px 18px',
+                background: 'rgba(245,158,11,0.08)',
+                border: '1.5px solid rgba(245,158,11,0.4)',
+                borderRadius: '10px',
+              }}>
+                <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>⚠️</span>
+                <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', color: '#92400e', lineHeight: 1.55 }}>
+                  <strong style={{ color: '#78350f' }}>Download before you leave.</strong> For your privacy, JobsUncle never stores your resume or documents. Navigate away or generate a new one and this version is gone.
                 </div>
               </div>
 

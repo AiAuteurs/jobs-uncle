@@ -131,11 +131,17 @@ export default function PricingPage() {
           <h2>Everything in Pro+</h2>
           <ul className="features-list">
             <li>✓ Unlimited AI-tailored resumes</li>
-            <li>✓ Dual-version resumes — Leadership & Technical focus</li>
-            <li>✓ AI cover letters</li>
-            <li>✓ Recruiter gap analysis</li>
-            <li>✓ Hiring manager outreach DMs</li>
-            <li>✓ Promo code support on annual plans</li>
+            <li>✓ AI cover letters tailored to every role</li>
+            <li>✓ Recruiter gap analysis — know what's missing before they do</li>
+            <li>✓ Hiring manager DMs — skip the line, go direct</li>
+            <li>✓ ATS Keyword Match score on every resume</li>
+            <li>✓ Resume format control — Skills-based, Chronological, or Auto</li>
+            <li className="dual-feature">
+              <span className="dual-title">✓ Dual Resume Versions</span>
+              <span className="dual-desc">
+                One generation. Two complete resumes — one framed around leadership and strategy, one around execution and results. Built for senior people whose career can go in more than one direction, or anyone making a pivot. Read them side by side, send the one that fits. No guessing which version of yourself to present.
+              </span>
+            </li>
           </ul>
         </div>
       </main>
@@ -349,6 +355,27 @@ export default function PricingPage() {
           font-size: 15px;
           color: var(--ink);
           text-align: left;
+        }
+
+        .dual-feature {
+          border-top: 1px solid var(--border);
+          padding-top: 16px;
+          margin-top: 4px;
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+
+        .dual-title {
+          font-size: 15px;
+          font-weight: 700;
+          color: var(--ink);
+        }
+
+        .dual-desc {
+          font-size: 13px;
+          color: var(--text-soft);
+          line-height: 1.65;
         }
 
         @media (max-width: 640px) {
