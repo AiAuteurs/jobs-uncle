@@ -108,7 +108,43 @@ function RecruiterPane() {
   return (
     <div>
       <Label>RECRUITER ANALYSIS — EXAMPLE OUTPUT</Label>
-      <p style={{ fontSize: 13, color: MUTED, lineHeight: 1.65, marginBottom: 24 }}>ATS compatibility check plus honest gaps a recruiter would flag — and how to own them.</p>
+      <p style={{ fontSize: 13, color: WHITE, lineHeight: 1.65, marginBottom: 20 }}>ATS compatibility check plus honest gaps a recruiter would flag — and how to own them.</p>
+
+      {/* Steve Jobs callout */}
+      <div style={{
+        background: "rgba(0,205,215,0.06)",
+        border: "1px solid rgba(0,205,215,0.2)",
+        borderRadius: 12,
+        padding: "16px 20px",
+        marginBottom: 24,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 16,
+        flexWrap: "wrap",
+      }}>
+        <div style={{ flex: 1, minWidth: 200 }}>
+          <p style={{ fontSize: 14, fontWeight: 700, color: WHITE, fontFamily: "Georgia,serif", margin: "0 0 4px", lineHeight: 1.3 }}>
+            One button. Every fix applied.
+          </p>
+          <p style={{ fontSize: 12, color: WHITE, fontFamily: "system-ui,sans-serif", margin: 0, lineHeight: 1.6 }}>
+            Pro's <strong style={{ color: CYAN }}>"Apply fixes &amp; regenerate"</strong> reads these notes, rewrites your resume, and raises your ATS score — automatically. You walk in with your best foot forward.
+          </p>
+        </div>
+        <span style={{
+          background: "rgba(99,102,241,0.15)",
+          border: "1px solid rgba(99,102,241,0.35)",
+          borderRadius: 50,
+          padding: "4px 14px",
+          fontSize: 11,
+          color: "#a5b4fc",
+          fontFamily: "system-ui,sans-serif",
+          fontWeight: 700,
+          letterSpacing: "0.06em",
+          flexShrink: 0,
+        }}>PRO</span>
+      </div>
+
       {gaps.map((item, i) => (
         <div key={i} style={{ borderLeft: "2px solid rgba(255,255,255,0.1)", paddingLeft: 16, marginBottom: 20 }}>
           <p style={{ fontSize: 13, color: WHITE, lineHeight: 1.65, marginBottom: 6 }}>• {item.gap}</p>
