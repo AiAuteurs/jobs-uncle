@@ -1186,7 +1186,7 @@ export default function Home() {
           <img
             src="/jobsuncleaiblack.png"
             alt="JobsUncle.ai"
-            style={{ width: '220px', display: 'block', margin: '0 auto 32px' }}
+            style={{ width: '320px', display: 'block', margin: '0 auto 32px' }}
           />
           <h1 style={{
             fontFamily: 'Inter, sans-serif', fontWeight: 900,
