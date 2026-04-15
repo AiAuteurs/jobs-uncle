@@ -577,7 +577,15 @@ export default function Home() {
         resume: type === 'resume' || type === 'both' ? activeResumeContent : null,
         coverLetter: type === 'cover' || type === 'both' ? activeCoverContent : null,
         fileBaseName: results.fileBaseName
-          ? `${results.fileBaseName}_${type === 'resume' ? (results.dualVersion ? `Resume_${activeResume.toUpperCase()}` : activeVersion === 'v2' ? 'Resume_V2' : 'Resume') : type === 'cover' ? activeVersion === 'v2' ? 'Cover_Letter_V2' : 'Cover_Letter' : 'Full_Package'}`
+          ? `${results.fileBaseName}_${
+              type === 'resume'
+                ? results.dualVersion
+                  ? activeResume === 'a' ? 'Resume_Leadership' : 'Resume_Technical'
+                  : activeVersion === 'v2' ? 'Resume_Fixed' : 'Resume'
+                : type === 'cover'
+                ? activeVersion === 'v2' ? 'Cover_Letter_Fixed' : 'Cover_Letter'
+                : 'Full_Package'
+            }`
           : type,
       }
 
@@ -2829,10 +2837,10 @@ export default function Home() {
                     <div className="format-purpose">Paste into job portals</div>
                     <div className="format-desc">Plain text. No formatting. Exactly what ATS systems and online job applications expect.</div>
                     <div className="format-btns">
-                      <button className={`format-btn${activeDownloadBtn === 'txt-resume' ? ' format-btn-active' : ''}`} onClick={() => { setActiveDownloadBtn('txt-resume'); downloadTxt(activeResumeForDownload, activeVersion === 'v2' ? 'Resume_V2' : 'Resume') }}>
+                      <button className={`format-btn${activeDownloadBtn === 'txt-resume' ? ' format-btn-active' : ''}`} onClick={() => { setActiveDownloadBtn('txt-resume'); downloadTxt(activeResumeForDownload, results?.dualVersion ? (activeResume === 'a' ? 'Resume_Leadership' : 'Resume_Technical') : activeVersion === 'v2' ? 'Resume_Fixed' : 'Resume') }}>
                         Resume
                       </button>
-                      <button className={`format-btn${activeDownloadBtn === 'txt-cover' ? ' format-btn-active' : ''}`} onClick={() => { setActiveDownloadBtn('txt-cover'); downloadTxt(activeCoverForDownload, activeVersion === 'v2' ? 'Cover_Letter_V2' : 'Cover_Letter') }}>
+                      <button className={`format-btn${activeDownloadBtn === 'txt-cover' ? ' format-btn-active' : ''}`} onClick={() => { setActiveDownloadBtn('txt-cover'); downloadTxt(activeCoverForDownload, activeVersion === 'v2' ? 'Cover_Letter_Fixed' : 'Cover_Letter') }}>
                         Cover Letter
                       </button>
                     </div>
@@ -2867,10 +2875,10 @@ export default function Home() {
                     <div className="format-purpose">Print-ready version</div>
                     <div className="format-desc">Looks exactly right on paper or screen. Nothing shifts. Nothing reformats. Just print.</div>
                     <div className="format-btns">
-                      <button className={`format-btn${activeDownloadBtn === 'pdf-resume' ? ' format-btn-active' : ''}`} onClick={() => { setActiveDownloadBtn('pdf-resume'); downloadPdf(activeResumeForDownload, activeVersion === 'v2' ? 'Resume_V2' : 'Resume') }}>
+                      <button className={`format-btn${activeDownloadBtn === 'pdf-resume' ? ' format-btn-active' : ''}`} onClick={() => { setActiveDownloadBtn('pdf-resume'); downloadPdf(activeResumeForDownload, results?.dualVersion ? (activeResume === 'a' ? 'Resume_Leadership' : 'Resume_Technical') : activeVersion === 'v2' ? 'Resume_Fixed' : 'Resume') }}>
                         Resume
                       </button>
-                      <button className={`format-btn${activeDownloadBtn === 'pdf-cover' ? ' format-btn-active' : ''}`} onClick={() => { setActiveDownloadBtn('pdf-cover'); downloadPdf(activeCoverForDownload, activeVersion === 'v2' ? 'Cover_Letter_V2' : 'Cover_Letter') }}>
+                      <button className={`format-btn${activeDownloadBtn === 'pdf-cover' ? ' format-btn-active' : ''}`} onClick={() => { setActiveDownloadBtn('pdf-cover'); downloadPdf(activeCoverForDownload, activeVersion === 'v2' ? 'Cover_Letter_Fixed' : 'Cover_Letter') }}>
                         Cover Letter
                       </button>
                     </div>
