@@ -5,7 +5,7 @@
   --bg:           #121212;
   --surface:      #1A1A1A;
   --ink:          #FFFFFF;
-  --text-soft:    #B0B0B8;
+  --text-soft:    #ffffff;
   --border:       #2A2A2A;
   --border-soft:  #222222;
   --accent:       #00D1FF;
@@ -227,7 +227,7 @@ body {
   font-family: 'Inter', sans-serif;
   font-size: 0.78rem;
   font-weight: 400;
-  color: #666666;
+  color: #ffffff;
 }
 
 .header-tagline {
@@ -320,7 +320,7 @@ body {
 .cc-sub {
   font-family: 'Inter', sans-serif;
   font-size: 1.1rem;
-  color: #8E8E93;
+  color: #ffffff;
   line-height: 1.55;
   font-weight: 400;
   max-width: 460px;
@@ -360,7 +360,7 @@ body {
   font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   font-weight: 500;
-  color: #8E8E93;
+  color: #ffffff;
   text-decoration: none;
 }
 
@@ -1933,7 +1933,7 @@ body {
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #666666;
+  color: #ffffff;
   margin-bottom: 1rem;
 }
 
@@ -2023,7 +2023,7 @@ body {
 .format-desc {
   font-family: 'Inter', sans-serif;
   font-size: 0.73rem;
-  color: var(--text-soft);
+  color: #ffffff;
   line-height: 1.55;
   flex: 1;
   font-weight: 300;
@@ -2078,7 +2078,7 @@ body {
   width: 100%;
   padding: 0.75rem;
   background: transparent;
-  color: var(--text-soft);
+  color: #ffffff;
   border: 1px solid var(--border);
   border-radius: 4px;
   font-family: 'Inter', sans-serif;
@@ -2149,7 +2149,7 @@ body {
   text-align: center;
   font-family: 'Inter', sans-serif;
   font-size: 0.72rem;
-  color: var(--text-soft);
+  color: #ffffff;
   letter-spacing: 0.04em;
 }
 
@@ -2203,7 +2203,7 @@ body {
   font-family: 'Inter', sans-serif;
   font-size: 0.78rem;
   font-weight: 400;
-  color: #666666;
+  color: #ffffff;
 }
 
 .header-tagline { display: none !important; }

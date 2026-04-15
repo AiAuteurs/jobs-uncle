@@ -1366,9 +1366,10 @@ export default function Home() {
               {/* Cover Letter panel */}
               <div id="exh-cover" className="ex-panel-h" style={{ padding: '12px' }}>
                 <div className="ex-resume-h">
-                  <p>Acme Financial is solving the right problem — small businesses shouldn't need five separate tools to get paid, track expenses, and understand their cash flow. That's exactly the kind of infrastructure problem I've spent 15 years working on.</p>
-                  <p>At Stripe, I led a product org of 38 PMs that generated $2.1B in incremental revenue — including launching Stripe for Platforms, which onboarded 4,200 enterprise clients in year one. At Square, I built invoice and recurring payments from zero to $340M ARR over four years. At PayPal, I lifted global checkout completion from 67% to 81% and shipped one-touch checkout on iOS to 40M users in six months.</p>
-                  <p>The VP of Product role at Acme is a direct match for how I work — owning infrastructure that scales, building the team around it, and shipping products that small businesses actually use. I'd like to talk.</p>
+                  <p style={{ fontSize: '0.72rem', color: '#777', margin: '0 0 12px' }}>Michael Torres · michael.torres@email.com · (415) 555-0182</p>
+                  <p>Acme Financial's approach to building infrastructure that small businesses depend on to survive resonates deeply. I've spent my career at Stripe, Square, and PayPal turning complex payment systems into products that millions of merchants actually use — exactly what your 600,000 small business customers need.</p>
+                  <p>Three things from my background align directly with this role. First, I've built and led large PM organizations — currently managing 38 PMs across merchant, payments, and platform at Stripe, with direct experience scaling teams through rapid growth phases. Second, I've shipped payment products that drive meaningful revenue outcomes: built Square's invoice product from $0 to $340M ARR, launched Stripe for Platforms (now 31% of ARR), and delivered $2.1B in incremental revenue through experimentation and platform initiatives. Third, I've operated across global markets — shipped real-time payouts in 47 countries and increased checkout conversion across 22 markets at PayPal.</p>
+                  <p>The opportunity to own payments and growth for a Series C fintech helping small businesses manage their financial operations is exactly the type of infrastructure challenge I'm built for. I know what it means to own outcomes, not just ship features.</p>
                 </div>
               </div>
 
@@ -1376,17 +1377,23 @@ export default function Home() {
               <div id="exh-ats" className="ex-panel-h" style={{ padding: '12px' }}>
                 <div className="ex-resume-h">
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
-                    <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: 'conic-gradient(#10b981 342deg, #e5e7eb 0deg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 800, color: '#10b981' }}>95%</div>
+                    <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: 'conic-gradient(#10b981 324deg, #e5e7eb 0deg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 800, color: '#10b981' }}>90%</div>
                     </div>
-                    <div><div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#10b981' }}>Excellent</div><div style={{ fontSize: '0.6rem', color: '#777' }}>19 of 20 keywords matched</div></div>
+                    <div>
+                      <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#10b981' }}>Strong</div>
+                      <div style={{ fontSize: '0.6rem', color: '#555' }}>30 of 34 keywords matched</div>
+                    </div>
                   </div>
-                  <div style={{ fontSize: '0.55rem', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#10b981', marginBottom: '6px' }}>Matched</div>
+                  <div style={{ fontSize: '0.55rem', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#991b1b', marginBottom: '6px' }}>Missing (4)</div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '10px' }}>
-                    {['roadmap','payments','onboarding','A/B testing','SQL','Amplitude','OKRs','stakeholder','API','compliance','Figma','Jira','agile','fintech','go-to-market'].map(k => <span key={k} className="kw-h kw-hit-h">{k}</span>)}
+                    {['growing','weekly','velocity','design'].map(k => <span key={k} className="kw-h kw-miss-h">{k}</span>)}
                   </div>
-                  <div style={{ fontSize: '0.55rem', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#991b1b', marginBottom: '6px' }}>Missing</div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}><span className="kw-h kw-miss-h">forecasting</span></div>
+                  <div style={{ fontSize: '0.55rem', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#10b981', marginBottom: '6px' }}>Matched (30)</div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                    {['product','payments','growth','fintech','businesses','annual','payment','markets','infrastructure','outcomes','checkout','conversion','settlement','merchant','onboarding','platform','integrations','directly','present','quarterly'].map(k => <span key={k} className="kw-h kw-hit-h">{k}</span>)}
+                  </div>
+                  <div style={{ marginTop: '10px', fontSize: '0.72rem', color: '#10b981', fontWeight: 700 }}>✓ Score is strong. Move on to your Cover Letter.</div>
                 </div>
               </div>
 
@@ -1432,9 +1439,9 @@ export default function Home() {
                     <div style={{ width: '16px', height: '16px', borderRadius: '3px', background: '#0077b5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                       <span style={{ color: '#fff', fontSize: '0.45rem', fontWeight: 800 }}>in</span>
                     </div>
-                    <span style={{ fontSize: '0.6rem', color: '#777' }}>To: Hiring Manager, Acme Financial</span>
+                    <span style={{ fontSize: '0.6rem', color: '#555' }}>To: Hiring Manager, Acme Financial</span>
                   </div>
-                  <p style={{ margin: 0, fontSize: '0.68rem', lineHeight: 1.75 }}>Led a small business dashboard at Stripe that reached 120,000 merchants in 90 days and drove $4.2M in new ARR through API partnerships — the Payments & Growth PM role at Acme looks like the same type of challenge, one layer deeper. Worth a conversation?</p>
+                  <p style={{ margin: 0, fontSize: '0.78rem', lineHeight: 1.75 }}>I led the product team that launched Stripe for Platforms — 4,200 enterprise clients in year one, now driving 31% of Stripe's ARR. Acme's approach to building financial infrastructure for small businesses who can't afford CFOs is exactly the type of outcome-driven product challenge I've been solving. Currently managing 38 PMs across payments and platform at Stripe, but the opportunity to own the full payments and growth surface at a Series C fintech is compelling. Worth a conversation about your VP Product role?</p>
                 </div>
               </div>
 
@@ -2534,14 +2541,17 @@ export default function Home() {
                                 )}
                               </>
                             ) : (
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                                <button
-                                  onClick={() => { setPaywallSigninMode(false); setShowPaywall(true) }}
-                                  style={{ padding: '10px 24px', background: '#f59e0b', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.88rem', fontWeight: 700, cursor: 'pointer' }}
-                                >
-                                  ✦ Apply fixes &amp; regenerate
-                                </button>
-                                <span style={{ background: '#f59e0b', color: 'white', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro</span>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                                  <button
+                                    onClick={() => { setPaywallSigninMode(false); setShowPaywall(true) }}
+                                    style={{ padding: '10px 24px', background: '#f59e0b', color: 'white', border: 'none', borderRadius: '6px', fontSize: '0.88rem', fontWeight: 700, cursor: 'pointer' }}
+                                  >
+                                    ✦ Apply fixes & regenerate
+                                  </button>
+                                  <span style={{ background: '#f59e0b', color: 'white', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro</span>
+                                </div>
+                                <div style={{ fontSize: '0.78rem', color: 'var(--ink)', lineHeight: 1.5 }}>Takes every gap and fix from the recruiter analysis above and rewrites your resume with them applied — higher ATS score, stronger framing, same experience. Upgrade to Pro to unlock.</div>
                               </div>
                             )}
                             {regenError && <div style={{ width: '100%', color: '#ef4444', fontSize: '0.8rem' }}>{regenError}</div>}
@@ -2871,8 +2881,8 @@ export default function Home() {
                   {/* TXT */}
                   <div className="format-card">
                     <div className="format-badge txt-badge">TXT</div>
-                    <div className="format-purpose">Paste into job portals</div>
-                    <div className="format-desc">Plain text. No formatting. Exactly what ATS systems and online job applications expect.</div>
+                    <div className="format-purpose" style={{ color: "#ffffff" }}>Paste into job portals</div>
+                    <div className="format-desc" style={{ color: "#ffffff" }}>Plain text. No formatting. Exactly what ATS systems and online job applications expect.</div>
                     <div className="format-btns">
                       <button className={`format-btn${activeDownloadBtn === 'txt-resume' ? ' format-btn-active' : ''}`} onClick={() => { setActiveDownloadBtn('txt-resume'); downloadTxt(activeResumeForDownload, results?.dualVersion ? (activeResume === 'a' ? 'Resume_Leadership' : 'Resume_Technical') : activeVersion === 'v2' ? 'Resume_Fixed' : 'Resume') }}>
                         Resume
@@ -2886,8 +2896,8 @@ export default function Home() {
                   {/* DOCX */}
                   <div className="format-card format-card-featured">
                     <div className="format-badge docx-badge">DOCX</div>
-                    <div className="format-purpose">Send to a human</div>
-                    <div className="format-desc">A real Word document. Edit in Word or Google Docs, tweak the wording, make it yours.</div>
+                    <div className="format-purpose" style={{ color: "#ffffff" }}>Send to a human</div>
+                    <div className="format-desc" style={{ color: "#ffffff" }}>A real Word document. Edit in Word or Google Docs, tweak the wording, make it yours.</div>
                     <div className="format-btns">
                       <button
                         className={`format-btn format-btn-featured${activeDownloadBtn === 'docx-resume' ? ' format-btn-active' : ''}`}
@@ -2909,8 +2919,8 @@ export default function Home() {
                   {/* PDF */}
                   <div className="format-card">
                     <div className="format-badge pdf-badge">PDF</div>
-                    <div className="format-purpose">Print-ready version</div>
-                    <div className="format-desc">Looks exactly right on paper or screen. Nothing shifts. Nothing reformats. Just print.</div>
+                    <div className="format-purpose" style={{ color: "#ffffff" }}>Print-ready version</div>
+                    <div className="format-desc" style={{ color: "#ffffff" }}>Looks exactly right on paper or screen. Nothing shifts. Nothing reformats. Just print.</div>
                     <div className="format-btns">
                       <button className={`format-btn${activeDownloadBtn === 'pdf-resume' ? ' format-btn-active' : ''}`} onClick={() => { setActiveDownloadBtn('pdf-resume'); downloadPdf(activeResumeForDownload, results?.dualVersion ? (activeResume === 'a' ? 'Resume_Leadership' : 'Resume_Technical') : activeVersion === 'v2' ? 'Resume_Fixed' : 'Resume') }}>
                         Resume
