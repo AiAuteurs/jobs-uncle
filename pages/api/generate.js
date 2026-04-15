@@ -454,6 +454,12 @@ export default async function handler(req, res) {
 
   const dualVersion = (Array.isArray(fields.dualVersion) ? fields.dualVersion[0] : fields.dualVersion) === 'true'
   const careerType = (Array.isArray(fields.careerType) ? fields.careerType[0] : fields.careerType) || 'freelance'
+  const resumeFormat = (Array.isArray(fields.resumeFormat) ? fields.resumeFormat[0] : fields.resumeFormat) || 'auto'
+
+  // If user manually picked a format, override careerType
+  const effectiveCareerType = resumeFormat === 'chronological' ? 'fulltime'
+    : resumeFormat === 'skills' ? 'freelance'
+    : careerType
 
   if (!resumeFile || !jobDescription) {
     return res.status(400).json({ error: 'Missing resume file or job description' })
@@ -520,7 +526,7 @@ RESUME VERSION B — TECHNICAL/ACHIEVEMENT FOCUS:
 
 Generate both versions. Each should be complete and standalone — same experience, different lens.
 - Write in implied first person throughout both versions — NO "I", "my", or "me" anywhere. Every bullet leads with an action verb. "Engineered solution" not "I engineered"
-` : careerType === 'freelance' ? `
+` : effectiveCareerType === 'freelance' ? `
 RESUME REQUIREMENTS — FREELANCE / CONTRACT CAREER:
 
 YOUR JOB: Act as a master resume writer, not a transcriptionist. Read what you're given, extract what matters for THIS role, and build the strongest possible case in a hybrid format that reads beautifully for humans and passes ATS.
