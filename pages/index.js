@@ -213,6 +213,7 @@ export default function Home() {
   const [isPlusUser, setIsPlusUser] = useState(false)
   const [showPlusPaywall, setShowPlusPaywall] = useState(false)
   const [dualVersionEnabled, setDualVersionEnabled] = useState(false)
+  const [resumeFormat, setResumeFormat] = useState('auto') // 'auto' | 'chronological' | 'skills'
   const [activeResume, setActiveResume] = useState('a') // 'a' | 'b'
   const [activeResultTab, setActiveResultTab] = useState('resume')
   const [showRestore, setShowRestore] = useState(false)
@@ -451,6 +452,7 @@ export default function Home() {
         formData.append('jobDescFile', jobDescFile)
       }
       formData.append('dualVersion', dualVersionEnabled && isPlusUser ? 'true' : 'false')
+      formData.append('resumeFormat', resumeFormat)
 
       const controller = new AbortController()
       const timeout = setTimeout(() => controller.abort(), 120000)
@@ -1554,6 +1556,32 @@ export default function Home() {
 
           </div>
 
+          <div style={{ marginTop: '16px', padding: '14px 16px', background: 'rgba(255,255,255,0.03)', border: '1px solid #2a2a2a', borderRadius: '10px' }}>
+            <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#666', marginBottom: '10px' }}>Resume Format</div>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              {[
+                { value: 'auto', label: '✦ Auto', desc: 'We decide' },
+                { value: 'chronological', label: '📅 Chronological', desc: 'Traditional' },
+                { value: 'skills', label: '⚡ Skills-based', desc: 'Hybrid' },
+              ].map(({ value, label, desc }) => (
+                <button
+                  key={value}
+                  onClick={() => setResumeFormat(value)}
+                  style={{
+                    flex: 1, padding: '8px 6px', borderRadius: '8px', cursor: 'pointer',
+                    border: `1.5px solid ${resumeFormat === value ? '#00D1FF' : '#2a2a2a'}`,
+                    background: resumeFormat === value ? 'rgba(0,209,255,0.08)' : 'transparent',
+                    color: resumeFormat === value ? '#00D1FF' : '#666',
+                    fontSize: '0.72rem', fontWeight: 600, textAlign: 'center', transition: 'all 0.15s',
+                  }}
+                >
+                  <div>{label}</div>
+                  <div style={{ fontSize: '0.62rem', fontWeight: 400, marginTop: '2px', opacity: 0.7 }}>{desc}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+
           <button
             className={`cc-generate-btn ${canGenerate ? 'cc-generate-btn--ready' : 'cc-generate-btn--disabled'}`}
             onClick={handleGenerate}
@@ -1710,7 +1738,7 @@ export default function Home() {
                     <span style={{ fontFamily: 'Inter', fontWeight: 700, fontSize: '0.9rem', color: 'var(--ink)' }}>Dual Resume Versions</span>
                     <span style={{ background: '#6366f1', color: 'white', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
                   </div>
-                  <p style={{ fontFamily: 'Inter', fontSize: '0.75rem', color: 'var(--text-soft)', margin: 0 }}>Get a Leadership-focused <em>and</em> a Technical/Achievement-focused version in one shot.</p>
+                  <p style={{ fontFamily: 'Inter', fontSize: '0.75rem', color: 'var(--text-soft)', margin: 0 }}>One generation, two complete resumes — one framed around leadership, one around execution. Send whichever fits the role. Built for senior careers that can go in more than one direction.</p>
                 </div>
                 <button
                   onClick={() => setDualVersionEnabled(!dualVersionEnabled)}
@@ -1733,7 +1761,7 @@ export default function Home() {
                         <span style={{ fontSize: '0.85rem', color: 'var(--ink)', fontWeight: 600 }}>Dual Resume Versions</span>
                         <span style={{ background: '#6366f1', color: 'white', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
                       </div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>Leadership <em>and</em> Technical versions &mdash; two shots at the same role.</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', lineHeight: 1.5 }}>Your career can go in more than one direction. One generation gives you a Leadership version <em>and</em> a Technical version — read them side by side, send the one that fits. No guessing.</div>
                     </div>
                     <button onClick={() => setShowPlusPaywall(true)} style={{ flexShrink: 0, padding: '6px 16px', background: '#6366f1', color: 'white', border: 'none', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}>
                       Upgrade to Pro+
@@ -1796,6 +1824,20 @@ export default function Home() {
                   <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', color: '#444444', lineHeight: 1.6 }}>
                     Tailored to this role. Download below — or scroll down for your cover letter, recruiter analysis, and hiring manager DM.
                   </div>
+                </div>
+              </div>
+
+              {/* SAVE WARNING */}
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: '12px',
+                marginBottom: '20px', padding: '12px 18px',
+                background: 'rgba(245,158,11,0.08)',
+                border: '1.5px solid rgba(245,158,11,0.4)',
+                borderRadius: '10px',
+              }}>
+                <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>⚠️</span>
+                <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', color: '#92400e', lineHeight: 1.55 }}>
+                  <strong style={{ color: '#78350f' }}>Download before you leave.</strong> For your privacy, JobsUncle never stores your resume or documents. Navigate away or generate a new one and this version is gone.
                 </div>
               </div>
 
