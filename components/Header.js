@@ -194,7 +194,6 @@ export default function Header({ isPaid = false, accessLevel = null, onSignIn, o
           style={{ height: '42px', width: 'auto', objectFit: 'contain', cursor: onLogoClick ? 'pointer' : 'default', marginRight: '8px', flexShrink: 0 }}
         />
         <a href="/about" style={navLink}>Our Story</a>
-        <a href="/example" style={navLink}>See an example</a>
         <a href="/faq" style={navLink}>FAQ</a>
         <a href="/pricing" style={navLink}>Pricing</a>
         {onContact && (
