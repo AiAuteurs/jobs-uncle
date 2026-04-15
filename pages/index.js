@@ -1185,31 +1185,27 @@ export default function Home() {
       {/* ── HERO — hidden once results exist ─────────────────────── */}
       {!results && !loading && (
       <section style={{
-        maxWidth: '1200px', margin: '0 auto', padding: '40px 40px 64px',
-        display: 'grid', gridTemplateColumns: '260px 1fr 400px', gap: '48px',
+        maxWidth: '1280px', margin: '0 auto', padding: '56px 48px 72px',
+        display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '64px',
         alignItems: 'center',
       }} className="hero-grid">
 
-        {/* COL 1 — logo */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {/* COL 1 — logo + headline + CTA */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
           <img
             src="/jobsuncleaiblack.png"
             alt="JobsUncle.ai"
-            style={{ width: '280px', display: 'block' }}
+            style={{ width: '200px', display: 'block', marginBottom: '32px' }}
           />
-        </div>
-
-        {/* COL 2 — headline + pills + CTA */}
-        <div>
           <h1 style={{
             fontFamily: 'Inter, sans-serif', fontWeight: 900,
-            fontSize: 'clamp(1.9rem, 2.8vw, 2.8rem)', lineHeight: 1.1,
-            color: '#ffffff', margin: '0 0 20px', letterSpacing: '-0.02em',
+            fontSize: 'clamp(2rem, 3vw, 3rem)', lineHeight: 1.08,
+            color: '#ffffff', margin: '0 0 20px', letterSpacing: '-0.03em',
           }}>
-            Tailored resumes to the job description{' '}
-            <span style={{ color: '#00D1FF', whiteSpace: 'nowrap' }}>in 60 seconds.</span>
+            Tailored resumes<br />to the job description{' '}
+            <span style={{ color: '#00D1FF' }}>in 60 seconds.</span>
           </h1>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '32px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '36px' }}>
             {['Tailored resume', 'Cover letter', 'Recruiter & ATS analysis', 'Hiring manager DM'].map(item => (
               <span key={item} style={{
                 fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', fontWeight: 600,
@@ -1262,11 +1258,6 @@ export default function Home() {
               .ver-btn-h { padding: 4px 12px; border: 1.5px solid #ddd; border-radius: 20px; background: none; font-size: 0.6rem; font-weight: 700; color: #777; cursor: pointer; font-family: Inter, sans-serif; }
               .ver-btn-h.active { background: #111; color: #fff; border-color: #111; }
             `}</style>
-
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 10px', marginBottom: '8px', background: 'rgba(255,255,255,0.04)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.62rem', fontWeight: 600, color: '#666', letterSpacing: '0.04em' }}>Real output. Fictional candidate.</span>
-              <span style={{ background: '#f59e0b', color: '#000', fontSize: '0.52rem', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '2px 8px', borderRadius: '20px', fontFamily: 'Inter, sans-serif' }}>Example</span>
-            </div>
 
             <div style={{ background: '#111', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 32px 64px rgba(0,0,0,0.5)' }}>
               {/* Tab bar */}
@@ -1413,8 +1404,18 @@ export default function Home() {
               </div>
             </div>
 
-            <div style={{ textAlign: 'center', marginTop: '10px' }}>
-              <a href="/example" style={{ fontSize: '0.72rem', color: '#00D1FF', fontWeight: 700, textDecoration: 'none', fontFamily: 'Inter, sans-serif' }}>See full example output →</a>
+            <div style={{
+              marginTop: '12px',
+              background: 'rgba(0,209,255,0.06)',
+              border: '1px solid rgba(0,209,255,0.2)',
+              borderRadius: '10px',
+              padding: '10px 16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', color: '#555' }}>Fictional candidate. Real output.</span>
+              <a href="/example" style={{ fontSize: '0.72rem', color: '#00D1FF', fontWeight: 700, textDecoration: 'none', fontFamily: 'Inter, sans-serif' }}>See full example →</a>
             </div>
           </div>
         )}
