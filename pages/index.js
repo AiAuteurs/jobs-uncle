@@ -1843,17 +1843,24 @@ export default function Home() {
 
             {/* DUAL VERSION TOGGLE — Pro+ users only */}
             {isPlusUser && (
-              <div style={{ margin: '1.5rem 0 0', padding: '1.25rem 1.5rem', background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+              <div style={{
+                margin: '1.5rem 0 0',
+                background: '#0a0a0a',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: '16px',
+                padding: '20px 24px',
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap',
+              }}>
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                    <span style={{ fontFamily: 'Inter', fontWeight: 700, fontSize: '0.9rem', color: 'var(--ink)' }}>Dual Resume Versions</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                    <span style={{ fontFamily: 'Georgia, serif', fontSize: '1rem', fontWeight: 400, color: '#ffffff' }}>Dual Resume Versions</span>
                     <span style={{ background: '#6366f1', color: 'white', fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Pro+</span>
                   </div>
-                  <p style={{ fontFamily: 'Inter', fontSize: '0.75rem', color: 'var(--text-soft)', margin: 0 }}>One generation, two complete resumes — one framed around leadership, one around execution. Send whichever fits the role. Built for senior careers that can go in more than one direction.</p>
+                  <p style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: '#ffffff', margin: 0, lineHeight: 1.6 }}>One generation, two complete resumes — one framed around leadership, one around execution. Send whichever fits the role. Built for senior careers that can go in more than one direction.</p>
                 </div>
                 <button
                   onClick={() => setDualVersionEnabled(!dualVersionEnabled)}
-                  style={{ flexShrink: 0, padding: '8px 20px', background: dualVersionEnabled ? '#6366f1' : 'transparent', color: dualVersionEnabled ? 'white' : 'var(--text-soft)', border: `1.5px solid ${dualVersionEnabled ? '#6366f1' : 'var(--border)'}`, borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' }}
+                  style={{ flexShrink: 0, padding: '10px 24px', background: dualVersionEnabled ? '#6366f1' : '#ffffff', color: dualVersionEnabled ? 'white' : '#000', border: 'none', borderRadius: '50px', fontSize: '0.82rem', fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap' }}
                 >
                   {dualVersionEnabled ? '✓ Enabled' : 'Enable'}
                 </button>
