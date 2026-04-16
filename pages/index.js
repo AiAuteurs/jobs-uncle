@@ -939,10 +939,10 @@ export default function Home() {
       {showManageModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => setShowManageModal(false)}>
           <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)', position: 'relative' }} onClick={e => e.stopPropagation()}>
-            <button onClick={() => setShowManageModal(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', fontSize: '1.2rem', color: 'var(--text-soft)', cursor: 'pointer', lineHeight: 1, padding: '4px 8px' }}>✕</button>
+            <button onClick={() => setShowManageModal(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', fontSize: '1.2rem', color: '#ffffff', cursor: 'pointer', lineHeight: 1, padding: '4px 8px' }}>✕</button>
             <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" style={{ width: 80, height: 'auto', marginBottom: '20px' }} />
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.8rem', margin: '0 0 10px', lineHeight: 1.1 }}>Manage your subscription</h2>
-            <p style={{ color: 'var(--text-soft)', fontSize: '0.88rem', margin: '0 0 20px', lineHeight: 1.6 }}>Enter the email you used to sign up. We'll take you straight to your billing page.</p>
+            <p style={{ color: '#ffffff', fontSize: '0.88rem', margin: '0 0 20px', lineHeight: 1.6 }}>Enter the email you used to sign up. We'll take you straight to your billing page.</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <input
                 type="email"
@@ -952,7 +952,7 @@ export default function Home() {
                 placeholder="you@email.com"
                 style={{ width: '100%', padding: '11px 14px', border: '1.5px solid var(--border)', borderRadius: '8px', fontSize: '0.9rem', background: 'var(--bg)', color: 'var(--ink)', outline: 'none', boxSizing: 'border-box' }}
               />
-              {manageMsg && <p style={{ fontSize: '0.82rem', color: manageStatus === 'error' ? '#ef4444' : 'var(--text-soft)', margin: 0 }}>{manageMsg}</p>}
+              {manageMsg && <p style={{ fontSize: '0.82rem', color: manageStatus === 'error' ? '#ef4444' : '#ffffff', margin: 0 }}>{manageMsg}</p>}
               <button
                 onClick={handleManagePortal}
                 disabled={manageStatus === 'loading'}
@@ -968,10 +968,10 @@ export default function Home() {
       {showSignIn && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => setShowSignIn(false)}>
           <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)', position: 'relative' }} onClick={e => e.stopPropagation()}>
-            <button onClick={() => setShowSignIn(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', fontSize: '1.2rem', color: 'var(--text-soft)', cursor: 'pointer', lineHeight: 1, padding: '4px 8px' }}>✕</button>
+            <button onClick={() => setShowSignIn(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', fontSize: '1.2rem', color: '#ffffff', cursor: 'pointer', lineHeight: 1, padding: '4px 8px' }}>✕</button>
             <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Member sign in</h2>
-            <p style={{ color: 'var(--text-soft)', fontSize: '0.9rem', margin: '0 0 16px', lineHeight: 1.6 }}>Enter your email to restore Pro access.</p>
+            <p style={{ color: '#ffffff', fontSize: '0.9rem', margin: '0 0 16px', lineHeight: 1.6 }}>Enter your email to restore Pro access.</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
               <input
                 type="email"
@@ -990,7 +990,7 @@ export default function Home() {
               </button>
               {restoreMsg && <p style={{ fontSize: '0.82rem', color: restoreStatus === 'success' ? '#22c55e' : '#ef4444', margin: 0 }}>{restoreMsg}</p>}
             </div>
-            <div style={{ padding: '10px 14px', background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '8px', fontSize: '0.82rem', color: 'var(--text-soft)', textAlign: 'center' }}>
+            <div style={{ padding: '10px 14px', background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '8px', fontSize: '0.82rem', color: '#ffffff', textAlign: 'center' }}>
               New to JobsUncle? <button onClick={() => { setShowSignIn(false) }} style={{ background: 'none', border: 'none', color: 'var(--accent)', fontWeight: 700, cursor: 'pointer', fontSize: '0.82rem', padding: 0 }}>Try it free — no card needed →</button>
             </div>
           </div>
@@ -1000,19 +1000,19 @@ export default function Home() {
       {showPaywall && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => setShowPaywall(false)}>
           <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)', position: 'relative' }} onClick={e => e.stopPropagation()}>
-            <button onClick={() => setShowPaywall(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', fontSize: '1.2rem', color: 'var(--text-soft)', cursor: 'pointer', lineHeight: 1, padding: '4px 8px' }}>✕</button>
+            <button onClick={() => setShowPaywall(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', fontSize: '1.2rem', color: '#ffffff', cursor: 'pointer', lineHeight: 1, padding: '4px 8px' }}>✕</button>
             <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Your next job offer could be from this resume.</h2>
-            <p style={{ color: 'var(--text-soft)', fontSize: '0.95rem', margin: '0 0 20px', lineHeight: 1.6 }}>Unlimited resumes. Every job. Every time.</p>
+            <p style={{ color: '#ffffff', fontSize: '0.95rem', margin: '0 0 20px', lineHeight: 1.6 }}>Unlimited resumes. Every job. Every time.</p>
 
             <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
               <button
                 onClick={() => handleUpgrade('pro_monthly')}
                 style={{ flex: 1, padding: '14px 12px', background: 'transparent', color: 'var(--ink)', border: '1.5px solid var(--border)', borderRadius: '10px', cursor: 'pointer', textAlign: 'center' }}
               >
-                <div style={{ fontSize: '0.7rem', color: 'var(--text-soft)', marginBottom: '4px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Monthly</div>
+                <div style={{ fontSize: '0.7rem', color: '#ffffff', marginBottom: '4px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Monthly</div>
                 <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--ink)' }}>$9.99</div>
-                <div style={{ fontSize: '0.72rem', color: 'var(--text-soft)' }}>per month</div>
+                <div style={{ fontSize: '0.72rem', color: '#ffffff' }}>per month</div>
               </button>
               <button
                 onClick={() => handleUpgrade('pro')}
@@ -1028,7 +1028,7 @@ export default function Home() {
             <button onClick={() => { setShowPaywall(false); setShowSignIn(true) }} style={{ background: 'none', border: 'none', color: 'var(--accent)', fontSize: '0.85rem', cursor: 'pointer', padding: '8px', fontWeight: 600 }}>
               Already a member? Sign in →
             </button>
-            <button onClick={() => setShowPaywall(false)} style={{ display: 'block', background: 'none', border: 'none', color: 'var(--text-soft)', fontSize: '0.85rem', cursor: 'pointer', padding: '4px', margin: '0 auto' }}>
+            <button onClick={() => setShowPaywall(false)} style={{ display: 'block', background: 'none', border: 'none', color: '#ffffff', fontSize: '0.85rem', cursor: 'pointer', padding: '4px', margin: '0 auto' }}>
               I'll take my chances
             </button>
           </div>
@@ -1038,18 +1038,18 @@ export default function Home() {
       {showPlusPaywall && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }} onClick={() => setShowPlusPaywall(false)}>
           <div style={{ background: 'var(--surface)', borderRadius: '16px', padding: '48px 40px', maxWidth: '460px', width: '100%', textAlign: 'center', boxShadow: '0 24px 80px rgba(0,0,0,0.3)', position: 'relative' }} onClick={e => e.stopPropagation()}>
-            <button onClick={() => setShowPlusPaywall(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', fontSize: '1.2rem', color: 'var(--text-soft)', cursor: 'pointer', lineHeight: 1, padding: '4px 8px' }}>✕</button>
+            <button onClick={() => setShowPlusPaywall(false)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', fontSize: '1.2rem', color: '#ffffff', cursor: 'pointer', lineHeight: 1, padding: '4px 8px' }}>✕</button>
             <img src="/jobsuncle-logo.png" alt="JobsUncle.ai" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
             <div style={{ display: 'inline-block', background: '#6366f1', color: 'white', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', padding: '4px 12px', borderRadius: '20px', marginBottom: '16px', textTransform: 'uppercase' }}>Pro+</div>
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', margin: '0 0 12px', lineHeight: 1.1 }}>Stop re-typing your resume into every job portal.</h2>
-            <p style={{ color: 'var(--text-soft)', fontSize: '0.95rem', margin: '0 0 8px', lineHeight: 1.6 }}>
+            <p style={{ color: '#ffffff', fontSize: '0.95rem', margin: '0 0 8px', lineHeight: 1.6 }}>
               <strong style={{ color: 'var(--ink)' }}>ATS Cheat Sheet</strong> — you know when you upload your resume and the portal makes you type everything in again manually — and you're like @#$%&amp;! 🤣 This kills that. Every field pre-filled, one click to copy. Plus <strong style={{ color: 'var(--ink)' }}>dual resume versions</strong> (Leadership + Technical) for the same role.
             </p>
-            <p style={{ color: 'var(--text-soft)', fontSize: '0.85rem', margin: '0 0 32px' }}>For serious job hunters who apply to multiple roles.</p>
+            <p style={{ color: '#ffffff', fontSize: '0.85rem', margin: '0 0 32px' }}>For serious job hunters who apply to multiple roles.</p>
             <a href="/pricing" style={{ display: 'block', width: '100%', background: '#6366f1', color: 'white', border: 'none', padding: '16px', borderRadius: '8px', fontSize: '1rem', fontWeight: 700, cursor: 'pointer', marginBottom: '6px', letterSpacing: '0.02em', textDecoration: 'none', textAlign: 'center', boxSizing: 'border-box' }}>
               See Plans →
             </a>
-            <button onClick={() => setShowPlusPaywall(false)} style={{ background: 'none', border: 'none', color: 'var(--text-soft)', fontSize: '0.85rem', cursor: 'pointer', padding: '8px' }}>
+            <button onClick={() => setShowPlusPaywall(false)} style={{ background: 'none', border: 'none', color: '#ffffff', fontSize: '0.85rem', cursor: 'pointer', padding: '8px' }}>
               I'll take my chances
             </button>
           </div>
@@ -1064,7 +1064,7 @@ export default function Home() {
             {otpStep === 'email' ? (
               <>
                 <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.9rem', margin: '0 0 10px', lineHeight: 1.1 }}>Your first resume is ready.</h2>
-                <p style={{ color: 'var(--text-soft)', fontSize: '0.88rem', margin: '0 0 28px', lineHeight: 1.65 }}>
+                <p style={{ color: '#ffffff', fontSize: '0.88rem', margin: '0 0 28px', lineHeight: 1.65 }}>
                   Enter your email to unlock <strong style={{ color: 'var(--ink)' }}>2 more free resumes.</strong><br />No password. No credit card.
                 </p>
                 <input
@@ -1084,12 +1084,12 @@ export default function Home() {
                 >
                   {gateStatus === 'loading' ? 'Sending code…' : 'Send me a code →'}
                 </button>
-                <p style={{ marginTop: '14px', fontSize: '0.75rem', color: 'var(--text-soft)' }}>We don't spam. Ever.</p>
+                <p style={{ marginTop: '14px', fontSize: '0.75rem', color: '#ffffff' }}>We don't spam. Ever.</p>
               </>
             ) : (
               <>
                 <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.9rem', margin: '0 0 10px', lineHeight: 1.1 }}>Check your email.</h2>
-                <p style={{ color: 'var(--text-soft)', fontSize: '0.88rem', margin: '0 0 6px', lineHeight: 1.65 }}>
+                <p style={{ color: '#ffffff', fontSize: '0.88rem', margin: '0 0 6px', lineHeight: 1.65 }}>
                   We sent a 5-digit code to
                 </p>
                 <p style={{ color: 'var(--ink)', fontSize: '0.88rem', fontWeight: 700, margin: '0 0 28px' }}>{gateEmail}</p>
@@ -1128,11 +1128,11 @@ export default function Home() {
                 </button>
                 <button
                   onClick={() => { setOtpStep('email'); setOtpCode(['','','','','']); setOtpMsg('') }}
-                  style={{ background: 'none', border: 'none', color: 'var(--text-soft)', fontSize: '0.8rem', cursor: 'pointer', padding: '4px' }}
+                  style={{ background: 'none', border: 'none', color: '#ffffff', fontSize: '0.8rem', cursor: 'pointer', padding: '4px' }}
                 >
                   Wrong email? Go back
                 </button>
-                <p style={{ marginTop: '10px', fontSize: '0.72rem', color: 'var(--text-soft)' }}>Code expires in 10 minutes.</p>
+                <p style={{ marginTop: '10px', fontSize: '0.72rem', color: '#ffffff' }}>Code expires in 10 minutes.</p>
               </>
             )}
           </div>
@@ -1167,6 +1167,14 @@ export default function Home() {
         onLogoClick={() => { window.location.href = '/' }}
       />
 
+      {/* MOBILE-ONLY NAV BAR */}
+      {!isPaid && (
+        <div className="mobile-signin-bar" style={{ display: 'none' }}>
+          <a onClick={e => { e.preventDefault(); setShowSignIn(true) }} style={{ color: 'var(--accent)', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', textDecoration: 'none' }}>Member Sign In</a>
+          <a href="/faq" style={{ color: '#ffffff', fontWeight: 600, fontSize: '0.85rem', textDecoration: 'none' }}>FAQ</a>
+          <a href="/about" style={{ color: '#ffffff', fontWeight: 600, fontSize: '0.85rem', textDecoration: 'none' }}>Our Story</a>
+        </div>
+      )}
 
       {/* ── HERO — hidden once results exist ─────────────────────── */}
       {!results && !loading && (
@@ -1239,7 +1247,7 @@ export default function Home() {
           fontStyle: 'normal', color: 'var(--ink)', margin: '0 0 8px', lineHeight: 1.6,
         }}>"The results are solid. I like what I got back."</p>
         <p style={{
-          fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-soft)',
+          fontSize: '0.78rem', fontWeight: 600, color: '#ffffff',
           letterSpacing: '0.06em', textTransform: 'uppercase', margin: 0,
         }}>&mdash; B.C., ICF Certified Career Coach</p>
       </div>
@@ -1257,7 +1265,7 @@ export default function Home() {
           fontStyle: 'normal', color: 'var(--ink)', margin: '0 0 8px', lineHeight: 1.6,
         }}>"I've tried a few others. None of them tailor a resume the way this does. I love this app."</p>
         <p style={{
-          fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-soft)',
+          fontSize: '0.78rem', fontWeight: 600, color: '#ffffff',
           letterSpacing: '0.06em', textTransform: 'uppercase', margin: 0,
         }}>&mdash; John S., Creative Director</p>
       </div>
@@ -1427,13 +1435,13 @@ export default function Home() {
                 <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
                   <button
                     onClick={() => setResumeInputMode('upload')}
-                    style={{ flex: 1, padding: '8px 12px', background: resumeInputMode === 'upload' ? 'var(--accent)' : 'transparent', color: resumeInputMode === 'upload' ? '#fff' : 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                    style={{ flex: 1, padding: '8px 12px', background: resumeInputMode === 'upload' ? 'var(--accent)' : 'transparent', color: resumeInputMode === 'upload' ? '#fff' : '#ffffff', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
                   >
                     Upload file
                   </button>
                   <button
                     onClick={() => setResumeInputMode('paste')}
-                    style={{ flex: 1, padding: '8px 12px', background: resumeInputMode === 'paste' ? 'var(--accent)' : 'transparent', color: resumeInputMode === 'paste' ? '#fff' : 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                    style={{ flex: 1, padding: '8px 12px', background: resumeInputMode === 'paste' ? 'var(--accent)' : 'transparent', color: resumeInputMode === 'paste' ? '#fff' : '#ffffff', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
                   >
                     Paste text
                   </button>
@@ -1492,13 +1500,13 @@ export default function Home() {
                 <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
                   <button
                     onClick={() => setJobDescInputMode('upload')}
-                    style={{ flex: 1, padding: '8px 12px', background: jobDescInputMode === 'upload' ? 'var(--accent)' : 'transparent', color: jobDescInputMode === 'upload' ? '#fff' : 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                    style={{ flex: 1, padding: '8px 12px', background: jobDescInputMode === 'upload' ? 'var(--accent)' : 'transparent', color: jobDescInputMode === 'upload' ? '#fff' : '#ffffff', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
                   >
                     Upload file
                   </button>
                   <button
                     onClick={() => setJobDescInputMode('paste')}
-                    style={{ flex: 1, padding: '8px 12px', background: jobDescInputMode === 'paste' ? 'var(--accent)' : 'transparent', color: jobDescInputMode === 'paste' ? '#fff' : 'var(--text-soft)', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                    style={{ flex: 1, padding: '8px 12px', background: jobDescInputMode === 'paste' ? 'var(--accent)' : 'transparent', color: jobDescInputMode === 'paste' ? '#fff' : '#ffffff', border: '1.5px solid var(--border)', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
                   >
                     Paste text
                   </button>
@@ -1907,13 +1915,13 @@ export default function Home() {
                       </div>
                       <div>
                         <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#10b981' }}>ATS Keyword Match — Version 2</div>
-                        <div style={{ fontSize: '0.72rem', color: 'var(--text-soft)' }}>
+                        <div style={{ fontSize: '0.72rem', color: '#ffffff' }}>
                           {v1ats ? `Up from ${v1ats.score}% on Version 1` : 'Keyword match against job description'}
                         </div>
                       </div>
                     </div>
                     {v2ats.missing && v2ats.missing.length > 0 && (
-                      <div style={{ fontSize: '0.72rem', color: 'var(--text-soft)' }}>
+                      <div style={{ fontSize: '0.72rem', color: '#ffffff' }}>
                         <span style={{ color: '#ef4444', fontWeight: 600 }}>Still missing: </span>
                         {v2ats.missing.slice(0, 5).join(', ')}
                         {v2ats.missing.length > 5 ? ` +${v2ats.missing.length - 5} more` : ''}
@@ -1930,13 +1938,13 @@ export default function Home() {
                     <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
                       <button
                         onClick={() => setActiveResume('a')}
-                        style={{ padding: '6px 16px', background: activeResume === 'a' ? '#6366f1' : 'transparent', color: activeResume === 'a' ? 'white' : 'var(--text-soft)', border: `1.5px solid ${activeResume === 'a' ? '#6366f1' : 'var(--border)'}`, borderRadius: '20px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}
+                        style={{ padding: '6px 16px', background: activeResume === 'a' ? '#6366f1' : 'transparent', color: activeResume === 'a' ? 'white' : '#ffffff', border: `1.5px solid ${activeResume === 'a' ? '#6366f1' : 'var(--border)'}`, borderRadius: '20px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}
                       >
                         Version A &mdash; Leadership
                       </button>
                       <button
                         onClick={() => setActiveResume('b')}
-                        style={{ padding: '6px 16px', background: activeResume === 'b' ? '#6366f1' : 'transparent', color: activeResume === 'b' ? 'white' : 'var(--text-soft)', border: `1.5px solid ${activeResume === 'b' ? '#6366f1' : 'var(--border)'}`, borderRadius: '20px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}
+                        style={{ padding: '6px 16px', background: activeResume === 'b' ? '#6366f1' : 'transparent', color: activeResume === 'b' ? 'white' : '#ffffff', border: `1.5px solid ${activeResume === 'b' ? '#6366f1' : 'var(--border)'}`, borderRadius: '20px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}
                       >
                         Version B &mdash; Technical
                       </button>
@@ -1969,7 +1977,7 @@ export default function Home() {
                         <div style={{ fontWeight: 900, fontSize: '1.1rem', color: coverAts.score >= 70 ? '#22c55e' : coverAts.score >= 40 ? '#f59e0b' : '#ef4444' }}>
                           {coverAts.score}%
                         </div>
-                        <button onClick={() => setCoverAts(null)} style={{ background: 'none', border: 'none', fontSize: '0.75rem', color: 'var(--text-soft)', cursor: 'pointer', padding: 0 }}>Reset</button>
+                        <button onClick={() => setCoverAts(null)} style={{ background: 'none', border: 'none', fontSize: '0.75rem', color: '#ffffff', cursor: 'pointer', padding: 0 }}>Reset</button>
                       </div>
                       {coverAts.matched.length > 0 && (
                         <div style={{ marginBottom: '10px' }}>
@@ -2070,7 +2078,7 @@ export default function Home() {
                 <div className="result-section" style={{ borderLeft: '3px solid #10b981', background: 'rgba(16,185,129,0.04)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
                     <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#10b981' }}>✦ Repaired Cover Letter</div>
-                    <button onClick={() => setRepairedCover(null)} style={{ background: 'none', border: 'none', fontSize: '0.75rem', color: 'var(--text-soft)', cursor: 'pointer', padding: 0 }}>Reset</button>
+                    <button onClick={() => setRepairedCover(null)} style={{ background: 'none', border: 'none', fontSize: '0.75rem', color: '#ffffff', cursor: 'pointer', padding: 0 }}>Reset</button>
                   </div>
                   <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(repairedCover)}} />
                 </div>
@@ -2081,7 +2089,7 @@ export default function Home() {
                     ? clientScoreATS(regeneratedResults.resume, jobDescription)
                     : results.atsMatch
                   if (!activeAts) return (
-                    <div className="result-section" style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-soft)' }}>
+                    <div className="result-section" style={{ textAlign: 'center', padding: '40px 20px', color: '#ffffff' }}>
                       <div style={{ fontSize: '2rem', marginBottom: '12px' }}>🎯</div>
                       <div style={{ fontWeight: 700, marginBottom: '8px' }}>ATS Keyword Match not available</div>
                       <div style={{ fontSize: '0.85rem' }}>Run a new generation to see your keyword match score.</div>
@@ -2092,7 +2100,7 @@ export default function Home() {
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
                     <div>
                       <div className="result-section-title" style={{ margin: 0, marginBottom: '4px' }}>ATS Keyword Match {activeVersion === 'v2' && regeneratedResults ? <span style={{ fontSize: '0.65rem', background: '#10b981', color: 'white', padding: '2px 7px', borderRadius: '10px', marginLeft: '6px', fontWeight: 600 }}>v2 score</span> : null}</div>
-                      <div style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>{activeVersion === 'v2' && regeneratedResults ? 'Scored against your fixed Version 2 resume.' : 'How well your resume matches the job description keywords — no Jobscan needed.'}</div>
+                      <div style={{ fontSize: '0.82rem', color: '#ffffff' }}>{activeVersion === 'v2' && regeneratedResults ? 'Scored against your fixed Version 2 resume.' : 'How well your resume matches the job description keywords — no Jobscan needed.'}</div>
                     </div>
                     <div style={{ textAlign: 'center' }}>
                       <div style={{
@@ -2105,7 +2113,7 @@ export default function Home() {
                           <span style={{ fontFamily: 'Inter', fontWeight: 900, fontSize: '1.1rem', color: atsMatch.score >= 75 ? '#10b981' : atsMatch.score >= 55 ? '#f59e0b' : '#ef4444', lineHeight: 1 }}>{atsMatch.score}%</span>
                         </div>
                       </div>
-                      <div style={{ fontSize: '0.65rem', color: 'var(--text-soft)', marginTop: '4px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                      <div style={{ fontSize: '0.65rem', color: '#ffffff', marginTop: '4px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
                         {atsMatch.score >= 75 ? 'Strong' : atsMatch.score >= 55 ? 'Good' : 'Needs work'}
                       </div>
                     </div>
@@ -2113,7 +2121,7 @@ export default function Home() {
 
                   {/* SCORE RANGE LEGEND */}
                   <div style={{ marginBottom: '20px', padding: '12px 14px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid var(--border)' }}>
-                    <div style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-soft)', marginBottom: '10px' }}>Score guide</div>
+                    <div style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#ffffff', marginBottom: '10px' }}>Score guide</div>
                     <div style={{ display: 'flex', gap: '6px' }}>
                       {[
                         { label: 'Poor', range: '0–40', color: '#ef4444', bg: 'rgba(239,68,68,0.08)', active: atsMatch.score <= 40 },
@@ -2128,7 +2136,7 @@ export default function Home() {
                           background: active ? bg : 'transparent',
                           border: `1.5px solid ${active ? color : 'transparent'}`,
                         }}>
-                          <div style={{ fontSize: '0.72rem', fontWeight: active ? 800 : 500, color: active ? color : 'var(--text-soft)', lineHeight: 1.2 }}>{label}</div>
+                          <div style={{ fontSize: '0.72rem', fontWeight: active ? 800 : 500, color: active ? color : '#ffffff', lineHeight: 1.2 }}>{label}</div>
                           <div style={{ fontSize: '0.62rem', color: active ? color : '#555', marginTop: '2px', opacity: active ? 1 : 0.7 }}>{range}</div>
                         </div>
                       ))}
@@ -2226,7 +2234,7 @@ export default function Home() {
                                   {regeneratedResults ? '✓ Version 2 ready — check Resume tab' : regenerating ? '⟳ Applying fixes...' : '✦ Apply fixes & regenerate'}
                                 </button>
                                 {!regeneratedResults && !regenerating && (
-                                  <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>
+                                  <span style={{ fontSize: '0.75rem', color: '#ffffff' }}>
                                     Rewrites your resume with missing keywords woven in
                                   </span>
                                 )}
@@ -2274,8 +2282,8 @@ export default function Home() {
               {activeResultTab === 'recruiter' && results.recruiterNotes && (
                 <div id="result-recruiter" className="result-section" style={{ borderLeft: '3px solid #f59e0b', background: 'rgba(245,158,11,0.05)' }}>
                   <div className="result-section-title">Recruiter &amp; ATS Analysis</div>
-                  <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '8px' }}>ATS compatibility check plus honest gaps a recruiter would flag &mdash; and how to own them.</div>
-                  <div style={{ fontSize: '0.72rem', color: 'var(--text-soft)', marginBottom: '12px', padding: '8px 12px', background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '6px', lineHeight: 1.5 }}>
+                  <div style={{ fontSize: '0.85rem', color: '#ffffff', marginBottom: '8px' }}>ATS compatibility check plus honest gaps a recruiter would flag &mdash; and how to own them.</div>
+                  <div style={{ fontSize: '0.72rem', color: '#ffffff', marginBottom: '12px', padding: '8px 12px', background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '6px', lineHeight: 1.5 }}>
                     <strong>Important:</strong> This analysis is AI-generated and may contain errors. Always verify all dates, facts, and recommendations against your original resume before taking any action. JobsUncle.ai provides this as a general career tool only and accepts no liability for the accuracy of this analysis or any outcomes resulting from its use.
                   </div>
                   <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.recruiterNotes)}} />
@@ -2307,7 +2315,7 @@ export default function Home() {
                             : '✦ Apply fixes & regenerate'}
                         </button>
                         {!regeneratedResults && !regenerating && (
-                          <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>
+                          <span style={{ fontSize: '0.75rem', color: '#ffffff' }}>
                             Applies every fix from the recruiter analysis and rewrites your resume — higher ATS score, stronger positioning, same experience.
                           </span>
                         )}
@@ -2328,7 +2336,7 @@ export default function Home() {
                           background: '#f59e0b', color: 'white', fontSize: '0.6rem', fontWeight: 700,
                           letterSpacing: '0.1em', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase'
                         }}>Pro</span>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-soft)' }}>
+                        <span style={{ fontSize: '0.75rem', color: '#ffffff' }}>
                           Applies every recruiter fix and rewrites your resume with a higher ATS score — upgrade to unlock.
                         </span>
                       </div>
@@ -2359,7 +2367,7 @@ export default function Home() {
               {activeResultTab === 'dm' && results.hiringManagerDM && (
                 <div id="result-dm" className="result-section" style={{ borderLeft: '3px solid #6366f1', background: 'rgba(99,102,241,0.05)' }}>
                   <div className="result-section-title">Hiring Manager DM</div>
-                  <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '12px' }}>Skip the line. Send this directly to the hiring manager on LinkedIn or email.</div>
+                  <div style={{ fontSize: '0.85rem', color: '#ffffff', marginBottom: '12px' }}>Skip the line. Send this directly to the hiring manager on LinkedIn or email.</div>
                   <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.hiringManagerDM)}} />
                   <button
                     onClick={() => {
@@ -2377,7 +2385,7 @@ export default function Home() {
               {activeResultTab === 'intel' && results.companyIntel && (
                 <div id="result-intel" className="result-section" style={{ borderLeft: '3px solid #f59e0b', background: 'rgba(245,158,11,0.05)' }}>
                   <div className="result-section-title">🏢 Company Intel</div>
-                  <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '12px' }}>What we know about this company — use it to tailor your pitch and prep for interviews.</div>
+                  <div style={{ fontSize: '0.85rem', color: '#ffffff', marginBottom: '12px' }}>What we know about this company — use it to tailor your pitch and prep for interviews.</div>
                   <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.companyIntel)}} />
                 </div>
               )}
@@ -2443,7 +2451,7 @@ export default function Home() {
                     />
                     <div>
                       <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--ink)' }}>Parsing your resume into ATS fields...</div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-soft)', marginTop: '2px' }}>Staging every field for one-click copy. Just a moment.</div>
+                      <div style={{ fontSize: '0.75rem', color: '#ffffff', marginTop: '2px' }}>Staging every field for one-click copy. Just a moment.</div>
                     </div>
                   </div>
                 )}
@@ -2459,7 +2467,7 @@ export default function Home() {
                     {atsData.headline && (
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', background: 'var(--surface)', borderRadius: '6px', border: '1px solid var(--border)' }}>
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: '0.7rem', color: 'var(--text-soft)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '3px' }}>Headline / Title</div>
+                          <div style={{ fontSize: '0.7rem', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '3px' }}>Headline / Title</div>
                           <div style={{ fontSize: '0.88rem', color: 'var(--ink)' }}>{atsData.headline}</div>
                         </div>
                         <button onClick={() => copyAtsField('headline', atsData.headline)} style={{ flexShrink: 0, padding: '5px 14px', background: atsCopied.headline ? '#22c55e' : 'var(--accent)', color: 'white', border: 'none', borderRadius: '5px', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s' }}>
@@ -2472,7 +2480,7 @@ export default function Home() {
                     {atsData.summary && (
                       <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '10px 14px', background: 'var(--surface)', borderRadius: '6px', border: '1px solid var(--border)' }}>
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: '0.7rem', color: 'var(--text-soft)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '3px' }}>Summary</div>
+                          <div style={{ fontSize: '0.7rem', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '3px' }}>Summary</div>
                           <div style={{ fontSize: '0.88rem', color: 'var(--ink)', lineHeight: 1.5 }}>{atsData.summary}</div>
                         </div>
                         <button onClick={() => copyAtsField('summary', atsData.summary)} style={{ flexShrink: 0, padding: '5px 14px', background: atsCopied.summary ? '#22c55e' : 'var(--accent)', color: 'white', border: 'none', borderRadius: '5px', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s' }}>
@@ -2485,7 +2493,7 @@ export default function Home() {
                     {atsData.skills && atsData.skills.length > 0 && (
                       <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '10px 14px', background: 'var(--surface)', borderRadius: '6px', border: '1px solid var(--border)' }}>
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: '0.7rem', color: 'var(--text-soft)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '6px' }}>Skills (comma-separated for ATS)</div>
+                          <div style={{ fontSize: '0.7rem', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '6px' }}>Skills (comma-separated for ATS)</div>
                           <div style={{ fontSize: '0.82rem', color: 'var(--ink)', lineHeight: 1.6 }}>{atsData.skills.join(', ')}</div>
                         </div>
                         <button onClick={() => copyAtsField('skills', atsData.skills.join(', '))} style={{ flexShrink: 0, padding: '5px 14px', background: atsCopied.skills ? '#22c55e' : 'var(--accent)', color: 'white', border: 'none', borderRadius: '5px', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s' }}>
@@ -2497,19 +2505,19 @@ export default function Home() {
                     {/* EMPLOYMENT */}
                     {atsData.employment && atsData.employment.length > 0 && (
                       <div>
-                        <div style={{ fontSize: '0.7rem', color: 'var(--text-soft)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>Employment History</div>
+                        <div style={{ fontSize: '0.7rem', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>Employment History</div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                           {atsData.employment.map((job, i) => (
                             <div key={i} style={{ padding: '12px 14px', background: 'var(--surface)', borderRadius: '6px', border: '1px solid var(--border)' }}>
                               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
                                 <div style={{ fontWeight: 700, fontSize: '0.88rem', color: 'var(--ink)' }}>{job.employer}</div>
-                                <div style={{ fontSize: '0.78rem', color: 'var(--text-soft)' }}>
+                                <div style={{ fontSize: '0.78rem', color: '#ffffff' }}>
                                   {job.startMonth} {job.startYear} — {job.current ? 'Present' : `${job.endMonth} ${job.endYear}`}
                                 </div>
                               </div>
                               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
                                 <div style={{ flex: 1 }}>
-                                  <div style={{ fontSize: '0.7rem', color: 'var(--text-soft)', fontWeight: 600, marginBottom: '2px' }}>Job Title</div>
+                                  <div style={{ fontSize: '0.7rem', color: '#ffffff', fontWeight: 600, marginBottom: '2px' }}>Job Title</div>
                                   <div style={{ fontSize: '0.85rem', color: 'var(--ink)' }}>{job.title}</div>
                                 </div>
                                 <button onClick={() => copyAtsField(`title_${i}`, job.title)} style={{ flexShrink: 0, padding: '4px 12px', background: atsCopied[`title_${i}`] ? '#22c55e' : 'var(--accent)', color: 'white', border: 'none', borderRadius: '5px', fontSize: '0.72rem', fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s' }}>
@@ -2519,7 +2527,7 @@ export default function Home() {
                               {job.description && (
                                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                                   <div style={{ flex: 1 }}>
-                                    <div style={{ fontSize: '0.7rem', color: 'var(--text-soft)', fontWeight: 600, marginBottom: '2px' }}>Description</div>
+                                    <div style={{ fontSize: '0.7rem', color: '#ffffff', fontWeight: 600, marginBottom: '2px' }}>Description</div>
                                     <div style={{ fontSize: '0.82rem', color: 'var(--ink)', lineHeight: 1.5 }}>{job.description}</div>
                                   </div>
                                   <button onClick={() => copyAtsField(`desc_${i}`, job.description)} style={{ flexShrink: 0, padding: '4px 12px', background: atsCopied[`desc_${i}`] ? '#22c55e' : 'var(--accent)', color: 'white', border: 'none', borderRadius: '5px', fontSize: '0.72rem', fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s' }}>
@@ -2536,12 +2544,12 @@ export default function Home() {
                     {/* EDUCATION */}
                     {atsData.education && atsData.education.length > 0 && (
                       <div>
-                        <div style={{ fontSize: '0.7rem', color: 'var(--text-soft)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>Education</div>
+                        <div style={{ fontSize: '0.7rem', color: '#ffffff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>Education</div>
                         {atsData.education.map((edu, i) => (
                           <div key={i} style={{ padding: '12px 14px', background: 'var(--surface)', borderRadius: '6px', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
                             <div>
                               <div style={{ fontWeight: 700, fontSize: '0.88rem', color: 'var(--ink)', marginBottom: '2px' }}>{edu.school}</div>
-                              <div style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>{edu.degree}{edu.field ? ` · ${edu.field}` : ''}{edu.year ? ` · ${edu.year}` : ''}</div>
+                              <div style={{ fontSize: '0.82rem', color: '#ffffff' }}>{edu.degree}{edu.field ? ` · ${edu.field}` : ''}{edu.year ? ` · ${edu.year}` : ''}</div>
                             </div>
                             <button onClick={() => copyAtsField(`edu_${i}`, `${edu.school}${edu.degree ? ` | ${edu.degree}` : ''}${edu.field ? ` in ${edu.field}` : ''}${edu.year ? ` | ${edu.year}` : ''}`)} style={{ flexShrink: 0, padding: '5px 14px', background: atsCopied[`edu_${i}`] ? '#22c55e' : 'var(--accent)', color: 'white', border: 'none', borderRadius: '5px', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', transition: 'background 0.2s' }}>
                               {atsCopied[`edu_${i}`] ? '✓' : 'Copy'}
@@ -2635,7 +2643,7 @@ export default function Home() {
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                   flexWrap: 'wrap', gap: '10px',
                 }}>
-                  <div style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>
+                  <div style={{ fontSize: '0.82rem', color: '#ffffff' }}>
                     Got feedback? Questions? Something look off?
                   </div>
                   <button
@@ -2684,7 +2692,7 @@ export default function Home() {
 
             {/* CONTACT CTA */}
             <div style={{ margin: '1.5rem 0 0', textAlign: 'center', padding: '1.25rem', borderTop: '1px solid var(--border)' }}>
-              <span style={{ fontSize: '0.82rem', color: 'var(--text-soft)' }}>Questions or feedback? </span>
+              <span style={{ fontSize: '0.82rem', color: '#ffffff' }}>Questions or feedback? </span>
               <button
                 onClick={() => setShowContact(true)}
                 style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.82rem', color: 'var(--accent)', fontWeight: 600, textDecoration: 'underline', padding: 0 }}
@@ -2710,7 +2718,7 @@ export default function Home() {
                   <div style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '2px' }}>
                     ✓ Downloaded. Applying to another role?
                   </div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-soft)' }}>
+                  <div style={{ fontSize: '0.8rem', color: '#ffffff' }}>
                     Tailor a fresh resume in under a minute.
                   </div>
                 </div>
@@ -2830,8 +2838,8 @@ id="inline-feedback-name"
       <footer className="footer">
         <p>© 2026 JobsUncle.ai · Your resume and documents are never stored · Built with AI</p>
         <p style={{ marginTop: '8px', fontSize: '0.75rem' }}>
-          <a href="/privacy" style={{ color: 'var(--text-soft)', textDecoration: 'none', marginRight: '1rem' }}>Privacy Policy</a>
-          <a href="/terms" style={{ color: 'var(--text-soft)', textDecoration: 'none', marginRight: '1rem' }}>Terms of Service</a>
+          <a href="/privacy" style={{ color: '#ffffff', textDecoration: 'none', marginRight: '1rem' }}>Privacy Policy</a>
+          <a href="/terms" style={{ color: '#ffffff', textDecoration: 'none', marginRight: '1rem' }}>Terms of Service</a>
           <a href="https://jobsuncle.promotekit.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>Earn 20% — Become an Affiliate</a>
         </p>
       </footer>
