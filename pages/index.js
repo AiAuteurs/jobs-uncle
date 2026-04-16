@@ -1938,13 +1938,13 @@ export default function Home() {
                     <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
                       <button
                         onClick={() => setActiveResume('a')}
-                        style={{ padding: '6px 16px', background: activeResume === 'a' ? '#6366f1' : 'transparent', color: activeResume === 'a' ? 'white' : '#ffffff', border: `1.5px solid ${activeResume === 'a' ? '#6366f1' : 'var(--border)'}`, borderRadius: '20px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}
+                        style={{ padding: '6px 16px', background: activeResume === 'a' ? '#6366f1' : 'transparent', color: activeResume === 'a' ? '#ffffff' : '#111111', border: `1.5px solid ${activeResume === 'a' ? '#6366f1' : 'var(--border)'}`, borderRadius: '20px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}
                       >
                         Version A &mdash; Leadership
                       </button>
                       <button
                         onClick={() => setActiveResume('b')}
-                        style={{ padding: '6px 16px', background: activeResume === 'b' ? '#6366f1' : 'transparent', color: activeResume === 'b' ? 'white' : '#ffffff', border: `1.5px solid ${activeResume === 'b' ? '#6366f1' : 'var(--border)'}`, borderRadius: '20px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}
+                        style={{ padding: '6px 16px', background: activeResume === 'b' ? '#6366f1' : 'transparent', color: activeResume === 'b' ? '#ffffff' : '#111111', border: `1.5px solid ${activeResume === 'b' ? '#6366f1' : 'var(--border)'}`, borderRadius: '20px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}
                       >
                         Version B &mdash; Technical
                       </button>
@@ -2282,8 +2282,8 @@ export default function Home() {
               {activeResultTab === 'recruiter' && results.recruiterNotes && (
                 <div id="result-recruiter" className="result-section" style={{ borderLeft: '3px solid #f59e0b', background: 'rgba(245,158,11,0.05)' }}>
                   <div className="result-section-title">Recruiter &amp; ATS Analysis</div>
-                  <div style={{ fontSize: '0.85rem', color: '#ffffff', marginBottom: '8px' }}>ATS compatibility check plus honest gaps a recruiter would flag &mdash; and how to own them.</div>
-                  <div style={{ fontSize: '0.72rem', color: '#ffffff', marginBottom: '12px', padding: '8px 12px', background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '6px', lineHeight: 1.5 }}>
+                  <div style={{ fontSize: '0.85rem', color: '#111111', marginBottom: '8px' }}>ATS compatibility check plus honest gaps a recruiter would flag &mdash; and how to own them.</div>
+                  <div style={{ fontSize: '0.72rem', color: '#111111', marginBottom: '12px', padding: '8px 12px', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '6px', lineHeight: 1.5 }}>
                     <strong>Important:</strong> This analysis is AI-generated and may contain errors. Always verify all dates, facts, and recommendations against your original resume before taking any action. JobsUncle.ai provides this as a general career tool only and accepts no liability for the accuracy of this analysis or any outcomes resulting from its use.
                   </div>
                   <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(results.recruiterNotes)}} />
