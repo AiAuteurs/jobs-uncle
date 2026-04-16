@@ -1302,7 +1302,7 @@ export default function Home() {
               transition: 'all 0.5s ease',
             }}>
               <div style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#00D1FF', marginBottom: '6px' }}>Did you know?</div>
-              <div style={{ fontSize: '0.82rem', color: '#aaa', lineHeight: 1.6, fontFamily: 'Inter, sans-serif' }}>
+              <div style={{ fontSize: '0.82rem', color: '#ffffff', lineHeight: 1.6, fontFamily: 'Inter, sans-serif' }}>
                 {LOADING_TIPS[tipIndex]}
               </div>
             </div>
@@ -1316,9 +1316,9 @@ export default function Home() {
               fontVariantNumeric: 'tabular-nums',
               lineHeight: 1,
             }}>
-              {elapsedSeconds}<span style={{ fontSize: '2.2rem', fontWeight: 600, color: '#336', marginLeft: '6px' }}>s</span>
+              {elapsedSeconds}<span style={{ fontSize: '2.2rem', fontWeight: 600, color: '#ffffff', marginLeft: '6px' }}>s</span>
             </div>
-            <div style={{ marginTop: '10px', fontSize: '0.72rem', color: '#444', fontFamily: 'Inter, sans-serif', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            <div style={{ marginTop: '10px', fontSize: '0.72rem', color: '#ffffff', fontFamily: 'Inter, sans-serif', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
               elapsed
             </div>
           </div>
@@ -1382,7 +1382,7 @@ export default function Home() {
           </div>
 
           <div style={{ marginTop: '16px', padding: '14px 16px', background: 'rgba(255,255,255,0.03)', border: '1px solid #2a2a2a', borderRadius: '10px' }}>
-            <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#666', marginBottom: '10px' }}>Resume Format</div>
+            <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#ffffff', marginBottom: '10px' }}>Resume Format</div>
             <div style={{ display: 'flex', gap: '8px' }}>
               {[
                 { value: 'auto', label: '✦ Auto', desc: 'We decide' },
@@ -1725,7 +1725,7 @@ export default function Home() {
                   <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 900, fontSize: '1.4rem', color: '#111111', marginBottom: '6px', letterSpacing: '-0.02em' }}>
                     Looks great. 🎉
                   </div>
-                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', color: '#444444', lineHeight: 1.6 }}>
+                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', color: '#ffffff', lineHeight: 1.6 }}>
                     Tailored to this role. Download below — or scroll down for your cover letter, recruiter analysis, and hiring manager DM.
                   </div>
                 </div>
@@ -2259,7 +2259,7 @@ export default function Home() {
                                 <img src="/jobsuncle-logo.png" alt="" style={{ width: 44, height: 'auto', flexShrink: 0, animation: 'logo-spin-pause 2s ease-in-out infinite' }} />
                                 <div>
                                   <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#f59e0b' }}>Applying every fix from the analysis...</div>
-                                  <div style={{ fontSize: '0.78rem', color: '#ccc', marginTop: '3px' }}>Rewriting your resume and cover letter. About 15 seconds.</div>
+                                  <div style={{ fontSize: '0.78rem', color: '#ffffff', marginTop: '3px' }}>Rewriting your resume and cover letter. About 15 seconds.</div>
                                 </div>
                               </div>
                             )}
@@ -2356,7 +2356,7 @@ export default function Home() {
                         />
                         <div>
                           <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#f59e0b' }}>Applying every fix from the analysis...</div>
-                          <div style={{ fontSize: '0.78rem', color: '#ccc', marginTop: '3px' }}>Rewriting your resume and cover letter. About 15 seconds.</div>
+                          <div style={{ fontSize: '0.78rem', color: '#ffffff', marginTop: '3px' }}>Rewriting your resume and cover letter. About 15 seconds.</div>
                         </div>
                       </div>
                     )}
