@@ -569,8 +569,12 @@ Tools, platforms, software. Clean categories, one line each.
 Bare chronological strip. Company, title, dates. NO descriptions — the work was told in Part 1.
 Label: **Employment History**
 Format: **Company** | Title | Dates
-One line per entry. All PROTECTED jobs from the manifest must appear here.
-This section's only job is to give ATS systems parseable dates and titles.
+
+CONSOLIDATION RULES — READ BEFORE WRITING:
+- If the same client appears multiple times (e.g. SharkNinja 3x, VML 2x), MERGE them into ONE line using the earliest start date and latest end date. Example: SharkNinja | Freelance Senior Video Editor | Mar 2023 – Jun 2025
+- Cap the total list at 12 entries maximum. If more than 12 remain after merging, keep the most recognizable brands and the most recent work. Drop obscure one-month gigs from 3+ years ago.
+- All PROTECTED jobs must be REPRESENTED — but multiple entries from the same employer count as one after merging.
+- This section's only job is to give ATS systems parseable dates and titles. Brevity is better than an overwhelming wall of entries.
 
 FULL STRUCTURE:
 1. Contact header
@@ -734,7 +738,7 @@ REGARDLESS OF INPUT TYPE — your output must:
 
 CRITICAL — NO CREDENTIAL DUPLICATION: Every named credential, award, company, or achievement may appear ONCE in the entire resume. If it's in the summary, it cannot appear again in the competency blocks or bullets. If it's in a competency block, it cannot reappear in another block or the summary. Read your own output before finalizing — if you see the same specific credential twice, remove it from the less prominent location. The summary should reference the single most impressive credential; the body should build the story with everything else.
 
-CRITICAL — EDUCATION: Always include a real Education section using whatever is in the source — degree, school, field, year. Search the entire source document including the bottom, footer, and appendix-style sections — LinkedIn PDFs often bury education on the last page. If education genuinely cannot be found anywhere in the source, write "Education details available upon request" — but only as a last resort after searching thoroughly. Never default to this phrase lazily. If any degree, institution, or certification appears anywhere in the source, use it.
+CRITICAL — EDUCATION: Always include a real Education section. Search the ENTIRE source — bottom, footer, appendix, last page. LinkedIn PDFs and resumes almost always have education buried at the end. If you find ANY degree, institution, certification, or coursework anywhere in the source, use it. NEVER write "Education details available upon request" — this phrase is banned. If a real degree exists in the source (e.g. "Bachelor of Arts, Film and Television | State University of New York at New Paltz"), use it exactly. Only if the source contains absolutely zero education information of any kind should you write: "B.A. equivalent professional training" or simply omit the section entirely rather than using the "available upon request" placeholder.
 
 ---
 LINKEDIN PROFILE DATA:

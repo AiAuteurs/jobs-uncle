@@ -1795,6 +1795,22 @@ export default function Home() {
                 </div>
               )}
 
+              {/* LEGAL DISCLAIMER */}
+              <div style={{
+                margin: '0 0 16px',
+                padding: '10px 16px',
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: '8px',
+                fontSize: '0.72rem',
+                color: '#ffffff',
+                lineHeight: 1.6,
+                fontFamily: 'Inter, sans-serif',
+              }}>
+                <strong style={{ color: '#ffffff' }}>Important: </strong>
+                Always review your documents before sending. JobsUncle.ai uses AI to tailor your resume and may occasionally misrepresent, omit, or inaccurately reflect your experience. You are responsible for verifying all content for accuracy. JobsUncle.ai accepts no liability for errors, omissions, or outcomes resulting from use of these documents.
+              </div>
+
               <div className="results-header">
                 <div className="results-title">Your tailored documents</div>
                 <div className="results-badge">Ready to download</div>
