@@ -1787,7 +1787,7 @@ export default function Home() {
                     <p style={{ fontFamily: 'Inter', fontSize: '0.78rem', color: '#ffffff', margin: 0, lineHeight: 1.5 }}>Enable Dual Versions and regenerate — one framed around leadership, one around execution. Two shots at the same role.</p>
                   </div>
                   <button
-                    onClick={() => { setDualVersionEnabled(true); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                    onClick={() => { setDualVersionEnabled(true); handleReset() }}
                     style={{ flexShrink: 0, padding: '10px 24px', background: '#ffffff', color: '#000000', border: 'none', borderRadius: '50px', fontSize: '0.82rem', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}
                   >
                     Enable + Start over →
