@@ -593,7 +593,9 @@ Bold (**text**) for section headers and competency block titles only.
 Implied first person — NO "I", "my", "me".
 Mirror job description keywords naturally in competency blocks for ATS.
 ANTI-FABRICATION: Every claim must exist in the source. Reframing allowed. Inventing is not.
-TITLE INTEGRITY: Never assign a title the candidate hasn't held.
+REFRAMING DEFINED — what IS allowed: emphasizing the most relevant aspect of real work, using JD keywords to describe real tasks the candidate actually performed, restructuring bullet order for relevance.
+REFRAMING DEFINED — what is NOT allowed: adding responsibilities the candidate didn't perform, upgrading a role's scope beyond what's stated, or using action verbs that imply a different job function than the source title. For example: if the source says "Senior Video Editor" — do NOT write "Directed video production" or "Managed budgets and vendors" unless those responsibilities are explicitly stated in the source. An Editor edits. If the JD wants a Director and the candidate is an Editor, show Director-caliber results through the editing work — never fabricate Director-level responsibilities.
+TITLE INTEGRITY: Never assign a title the candidate hasn't held. Never use action verbs in bullets that imply a seniority, function, or responsibility not supported by the source.
 ` : `
 RESUME REQUIREMENTS — FULL-TIME / IN-HOUSE CAREER:
 
@@ -706,6 +708,7 @@ CRITICAL — ZERO FABRICATION: Every credential, company name, award, festival s
 - Clients or brands not named in the source
 - Any specific number, metric, or outcome not stated in the source
 A fabricated credential that gets googled ends the candidacy. This rule is absolute and overrides everything else.
+VERB FABRICATION IS FABRICATION: Using action verbs that imply responsibilities not in the source is fabrication. "Directed" when the source says "Edited" is fabrication. "Managed budgets" when no budget ownership is stated is fabrication. "Led a team" when no team leadership is in the source is fabrication. Match the candidate's actual function — elevate the OUTPUT of that function, never the implied seniority.
 
 CRITICAL — TITLE INTEGRITY: Never write "Director-level", "VP-level", "Senior-level", "Executive-level" or any seniority prefix the candidate hasn't actually held. Check the source resume — use only titles that appear there. A teacher applying for a Director role is a teacher with Director-level capability, not a "Director-level" anything. Frame ambition through the work, never through a fabricated title.
 
