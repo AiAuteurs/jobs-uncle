@@ -25,20 +25,38 @@ async function kvRequest(method, path, body) {
 export default async function handler(req, res) {
   try {
     if (req.method === 'POST') {
+      // Increment global counter
       const data = await kvRequest('POST', `/incr/${COUNTER_KEY}`)
       const count = (parseInt(data.result) || 0) + SEED
-      return res.status(200).json({ count })
+
+      // Increment daily counter — key format: resumes_daily:2026-04-20
+      const today = new Date().toISOString().slice(0, 10)
+      const dailyKey = `resumes_daily:${today}`
+      const dailyData = await kvRequest('POST', `/incr/${dailyKey}`)
+      
+      // Set 90-day TTL on first increment so old keys auto-expire
+      if (parseInt(dailyData.result) === 1) {
+        await kvRequest('POST', `/expire/${dailyKey}/7776000`)
+      }
+
+      return res.status(200).json({ count, today: parseInt(dailyData.result) || 0 })
     }
 
     if (req.method === 'GET') {
       const data = await kvRequest('GET', `/get/${COUNTER_KEY}`)
       const count = (parseInt(data.result) || 0) + SEED
-      return res.status(200).json({ count })
+
+      // Also return today's count
+      const today = new Date().toISOString().slice(0, 10)
+      const dailyData = await kvRequest('GET', `/get/resumes_daily:${today}`)
+      const todayCount = parseInt(dailyData.result) || 0
+
+      return res.status(200).json({ count, today: todayCount })
     }
 
     return res.status(405).json({ error: 'Method not allowed' })
   } catch (err) {
     // KV not configured yet — return seed silently
-    return res.status(200).json({ count: SEED })
+    return res.status(200).json({ count: SEED, today: 0 })
   }
 }

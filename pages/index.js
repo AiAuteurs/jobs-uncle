@@ -6,9 +6,110 @@ import HomepageDemoPanel from '../components/HomepageDemoPanel'
 import { useRouter } from 'next/router'
 
 
-// ─── CLIENT-SIDE ATS SCORER (mirrors server scoreKeywordMatch) ────────────────
+// ─── COVER LETTER ATS SCORER — lighter, phrase-aware, tone-adjusted ──────────
+function clientScoreCoverLetter(coverText, jobDescription) {
+  if (!coverText || !jobDescription) return null
+
+  const STOP = new Set([
+    'the','and','or','of','to','a','an','in','for','with','on','at','by','from',
+    'is','are','was','were','be','been','have','has','had','do','does','did',
+    'will','would','could','should','may','might','this','that','these','those',
+    'we','you','your','our','their','its','it','as','if','so','but','not','no',
+    'use','using','used','work','working','experience','ability','strong','proven',
+    'role','position','team','company','business','project','process','based',
+    'well','also','very','highly','quickly','effectively','efficiently','them',
+    'looking','seeking','join','what','like','just','make','know','want',
+    'good','great','best','first','last','people','including','provide',
+    'salary','compensation','benefits','required','preferred','eligible',
+  ])
+
+  const jdLower = jobDescription.toLowerCase().replace(/[^a-z0-9\s\-\/]/g, ' ')
+  const coverLower = coverText.toLowerCase()
+
+  // ── Step 1: Extract top 15 highest-signal JD keywords only ──
+  // Cover letters are short — only check the most important terms
+  const jdWords = jdLower.split(/\s+/).filter(w => w.length >= 4 && !STOP.has(w))
+  const freq = {}
+  jdWords.forEach(w => { freq[w] = (freq[w] || 0) + 1 })
+  const topKeywords = Object.entries(freq)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 15)
+    .map(([w]) => w)
+
+  // ── Step 2: Curated — only the highest-signal universal terms ──
+  const CURATED = [
+    // AI & tools — specific named tools matter most
+    'elevenlabs','runway','midjourney','sora','kling','minimax','seedance',
+    'premiere pro','davinci resolve','after effects','figma','photoshop',
+    'javascript','python','typescript','react','salesforce','hubspot',
+    'aws','azure','tableau','sql','excel',
+    // Role-level concepts — cover letters should hit these
+    'video','audio','content','social','creative','storytelling','cinematic',
+    'workflow','prompt','pipeline','campaign','analytics','strategy',
+    'payments','fintech','engineering','product','design','marketing',
+    'healthcare','clinical','compliance','regulatory','operations',
+    // Impact language — good cover letters use these
+    'revenue','growth','scale','launch','ship','build','led','drove',
+    'increased','reduced','delivered','managed','founded','created',
+  ]
+
+  const curatedHits = CURATED.filter(kw => jdLower.includes(kw))
+
+  // ── Step 3: Merge — small focused set for cover letters ──
+  const allCandidates = [...new Set([...curatedHits, ...topKeywords])].slice(0, 25)
+
+  // ── Step 4: Match — generous stemming, phrase-aware ──
+  function stem(w) {
+    if (w.endsWith('ing') && w.length > 5) return w.slice(0, -3)
+    if (w.endsWith('ed') && w.length > 4) return w.slice(0, -2)
+    if (w.endsWith('er') && w.length > 4) return w.slice(0, -2)
+    if (w.endsWith('ly') && w.length > 4) return w.slice(0, -2)
+    if (w.endsWith('s') && w.length > 4) return w.slice(0, -1)
+    return w
+  }
+
+  const coverWords = coverLower.split(/\s+/)
+  const matched = [], missing = []
+
+  allCandidates.forEach(kw => {
+    const found = kw.includes(' ')
+      ? coverLower.includes(kw)
+      : coverLower.includes(kw) ||
+        coverLower.includes(kw + 's') ||
+        coverLower.includes(kw + 'ed') ||
+        coverLower.includes(kw + 'ing') ||
+        (kw.endsWith('s') && coverLower.includes(kw.slice(0, -1))) ||
+        coverWords.some(w => stem(w) === stem(kw))
+    if (found) matched.push(kw)
+    else missing.push(kw)
+  })
+
+  // ── Step 5: Weighted — curated 2x, freq 1x, then apply cover letter curve ──
+  // Cover letters naturally hit fewer keywords so we apply a generous curve:
+  // raw match rate gets boosted by 15 points, capped at 99
+  let weightedScore = 0, totalWeight = 0
+  allCandidates.forEach(kw => {
+    const w = curatedHits.includes(kw) ? 2 : 1
+    totalWeight += w
+    if (matched.includes(kw)) weightedScore += w
+  })
+
+  const rawScore = totalWeight > 0 ? (weightedScore / totalWeight) * 100 : 0
+  const score = Math.min(99, Math.round(rawScore + 15))
+
+  return {
+    score,
+    matched: matched.slice(0, 20),
+    missing: missing.slice(0, 10),
+    total: allCandidates.length,
+  }
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ─── CLIENT-SIDE ATS SCORER v2 — hybrid frequency + curated universal keywords ─
 function clientScoreATS(resumeText, jobDescription) {
   if (!resumeText || !jobDescription) return null
+
   const STOP = new Set([
     'the','and','or','of','to','a','an','in','for','with','on','at','by','from',
     'is','are','was','were','be','been','have','has','had','do','does','did',
@@ -31,38 +132,129 @@ function clientScoreATS(resumeText, jobDescription) {
     'colleague','colleagues','assigned','people','including','listen','provide',
     'inspiring','putting','joining','forces','ensuring','requires','assistance',
     'advocate','advocating','emotional','revenue','learning','researching','wellness',
-    'wellness','revenue','leadership','training','learning','researching',
+    'leadership','training',
   ])
-  const jdLower = jobDescription.toLowerCase().replace(/[^a-z0-9\s]/g, ' ')
-  const jdWords = jdLower.split(/\s+/).filter(w => w.length >= 6 && !STOP.has(w))
+
+  // ── Universal curated keyword library ──
+  // Covers all major job categories — only counted if the JD mentions them
+  const CURATED = [
+    // AI & generative tools
+    'elevenlabs','runway','midjourney','sora','pika','kling','minimax','seedance',
+    'veo','stable diffusion','freepik','topaz','mmaudio','heygen','synthesia',
+    'dall-e','firefly','adobe firefly','luma','descript','gen-2','gen-3',
+    // Creative & video
+    'premiere pro','davinci resolve','after effects','final cut','avid',
+    'frame.io','lucidlink','editing','video','audio','image','reels','story',
+    'cinematic','voiceover','voice over','storyboard','b-roll','motion graphics',
+    'color grade','broadcast','documentary','narrative','animation','vfx',
+    'prompt','prompting','workflow','pipeline','storytelling','visual',
+    // Design
+    'figma','sketch','indesign','illustrator','photoshop','lightroom','canva',
+    'ui','ux','user experience','user interface','design system','wireframe',
+    'prototyping','typography','branding','brand identity',
+    // Social & marketing
+    'youtube','instagram','tiktok','twitter','linkedin','facebook','x platform',
+    'social media','content','seo','sem','email marketing','copywriting',
+    'campaign','paid media','influencer','creator','growth','engagement',
+    'analytics','conversion','retention','acquisition','ctr','roas','cpc',
+    // Engineering & dev
+    'javascript','python','typescript','react','node','nextjs','vue','angular',
+    'backend','frontend','fullstack','api','sql','nosql','mongodb','postgres',
+    'aws','azure','gcp','docker','kubernetes','devops','ci/cd','git','github',
+    'machine learning','deep learning','llm','nlp','data science','tensorflow',
+    'pytorch','cloud','microservices','rest','graphql','agile','scrum',
+    // Data & analytics
+    'tableau','power bi','looker','excel','sql','data analysis','reporting',
+    'dashboard','metrics','kpi','forecasting','modeling','visualization',
+    // Business & finance
+    'p&l','budget','forecasting','revenue','roi','financial modeling',
+    'accounting','audit','tax','compliance','regulatory','risk management',
+    'stakeholder','investor relations','m&a','due diligence',
+    // Sales & ops
+    'salesforce','hubspot','crm','pipeline','quota','b2b','b2c','enterprise',
+    'procurement','vendor','contract','logistics','supply chain','operations',
+    // Healthcare & clinical
+    'clinical','patient','healthcare','hipaa','ehr','emr','nursing','physician',
+    'diagnosis','treatment','pharmacy','medical','care coordination',
+    // HR & people
+    'recruitment','onboarding','retention','diversity','inclusion','equity',
+    'performance management','hris','compensation','payroll','talent',
+    // Education & learning
+    'curriculum','instructional design','lms','elearning','training',
+    'assessment','learning outcomes','pedagogy','facilitation',
+    // Legal
+    'litigation','contract','compliance','regulatory','legal research',
+    'paralegal','due diligence','intellectual property','gdpr',
+    // General professional
+    'project management','strategic planning','communication','presentation',
+    'collaboration','cross-functional','leadership','mentorship','problem solving',
+    'critical thinking','decision making','stakeholder management',
+  ]
+
+  const jdLower = jobDescription.toLowerCase().replace(/[^a-z0-9\s\-\/]/g, ' ')
+  const resumeLower = resumeText.toLowerCase()
+
+  // ── Step 1: Frequency extraction — relaxed to c >= 1, min 4 chars ──
+  const jdWords = jdLower.split(/\s+/).filter(w => w.length >= 4 && !STOP.has(w))
   const freq = {}
   jdWords.forEach(w => { freq[w] = (freq[w] || 0) + 1 })
-  const candidates = Object.entries(freq)
-    .filter(([w, c]) => c >= 2)
+  const freqCandidates = Object.entries(freq)
+    .filter(([w]) => !STOP.has(w))
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 50)
     .map(([w]) => w)
-    .filter(k => k.length >= 6)
-    .slice(0, 40)
+
+  // ── Step 2: Curated — only if JD mentions them ──
+  const curatedHits = CURATED.filter(kw => jdLower.includes(kw))
+
+  // ── Step 3: Merge and deduplicate ──
+  const allCandidates = [...new Set([...curatedHits, ...freqCandidates])].slice(0, 60)
+
+  // ── Step 4: Stemmer ──
   function stem(w) {
-    if (w.endsWith('ing') && w.length > 6) return w.slice(0, -3)
-    if (w.endsWith('tion') && w.length > 7) return w.slice(0, -4)
-    if (w.endsWith('ed') && w.length > 5) return w.slice(0, -2)
-    if (w.endsWith('ly') && w.length > 5) return w.slice(0, -2)
-    if (w.endsWith('s') && w.length > 5) return w.slice(0, -1)
+    if (w.endsWith('ing') && w.length > 5) return w.slice(0, -3)
+    if (w.endsWith('tion') && w.length > 6) return w.slice(0, -4)
+    if (w.endsWith('ed') && w.length > 4) return w.slice(0, -2)
+    if (w.endsWith('ly') && w.length > 4) return w.slice(0, -2)
+    if (w.endsWith('er') && w.length > 4) return w.slice(0, -2)
+    if (w.endsWith('ment') && w.length > 6) return w.slice(0, -4)
+    if (w.endsWith('s') && w.length > 4) return w.slice(0, -1)
     return w
   }
-  const resumeLower = resumeText.toLowerCase()
+
   const resumeWords = resumeLower.split(/\s+/)
+
+  // ── Step 5: Match ──
   const matched = [], missing = []
-  candidates.forEach(kw => {
-    const kwStem = stem(kw)
-    const found = resumeLower.includes(kw) ||
-      resumeLower.includes(kw.endsWith('s') ? kw.slice(0, -1) : kw + 's') ||
-      resumeWords.some(w => stem(w) === kwStem)
+  allCandidates.forEach(kw => {
+    const found = kw.includes(' ')
+      ? resumeLower.includes(kw)
+      : resumeLower.includes(kw) ||
+        resumeLower.includes(kw + 's') ||
+        resumeLower.includes(kw + 'ed') ||
+        resumeLower.includes(kw + 'ing') ||
+        (kw.endsWith('s') && resumeLower.includes(kw.slice(0, -1))) ||
+        resumeWords.some(w => stem(w) === stem(kw))
     if (found) matched.push(kw)
     else missing.push(kw)
   })
-  const score = candidates.length > 0 ? Math.round((matched.length / candidates.length) * 100) : 0
-  return { score, matched: matched.slice(0, 30), missing: missing.slice(0, 15), total: candidates.length }
+
+  // ── Step 6: Weighted score — curated matches worth 2x ──
+  let weightedScore = 0, totalWeight = 0
+  allCandidates.forEach(kw => {
+    const w = curatedHits.includes(kw) ? 2 : 1
+    totalWeight += w
+    if (matched.includes(kw)) weightedScore += w
+  })
+
+  const score = totalWeight > 0 ? Math.round((weightedScore / totalWeight) * 100) : 0
+
+  return {
+    score,
+    matched: matched.slice(0, 30),
+    missing: missing.slice(0, 20),
+    total: allCandidates.length,
+  }
 }
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -348,7 +540,7 @@ export default function Home() {
   // Auto-score cover letter ATS when results arrive
   useEffect(() => {
     if (results?.coverLetter && jobDescription) {
-      setCoverAts(clientScoreATS(results.coverLetter, jobDescription))
+      setCoverAts(clientScoreCoverLetter(results.coverLetter, jobDescription))
     }
   }, [results])
 
@@ -2038,7 +2230,7 @@ export default function Home() {
                                         const data = await res.json()
                                         if (!res.ok) throw new Error(data.error || 'Repair failed.')
                                         setRepairedCover(data.coverLetter)
-                                        setCoverAts(null)
+                                        setCoverAts(clientScoreCoverLetter(data.coverLetter, jobDescription))
                                       } catch (err) {
                                         setCoverRepairError(err.message)
                                       } finally {
