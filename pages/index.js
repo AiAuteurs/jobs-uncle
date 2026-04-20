@@ -204,14 +204,15 @@ function clientScoreATS(resumeText, jobDescription) {
   const jdLower = jobDescription.toLowerCase().replace(/[^a-z0-9\s\-\/]/g, ' ')
   const resumeLower = resumeText.toLowerCase()
 
-  // ── Step 1: Frequency extraction — relaxed to c >= 1, min 4 chars ──
+  // ── Step 1: Frequency extraction — c >= 2 for general words ──
+  // Curated list handles single-mention specific terms like tool names
   const jdWords = jdLower.split(/\s+/).filter(w => w.length >= 4 && !STOP.has(w))
   const freq = {}
   jdWords.forEach(w => { freq[w] = (freq[w] || 0) + 1 })
   const freqCandidates = Object.entries(freq)
-    .filter(([w]) => !STOP.has(w))
+    .filter(([w, c]) => c >= 2 && !STOP.has(w))
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 50)
+    .slice(0, 30)
     .map(([w]) => w)
 
   // ── Step 2: Curated — only if JD mentions them ──
