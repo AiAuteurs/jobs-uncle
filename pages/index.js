@@ -95,7 +95,7 @@ function clientScoreCoverLetter(coverText, jobDescription) {
   })
 
   const rawScore = totalWeight > 0 ? (weightedScore / totalWeight) * 100 : 0
-  const score = Math.min(99, Math.round(rawScore + 15))
+  const score = Math.min(99, Math.round(rawScore + 25))
 
   return {
     score,
