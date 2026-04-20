@@ -51,7 +51,7 @@ async function extractTextFromFile(filePath, mimeType, originalName) {
 }
 
 
-// ─── ATS KEYWORD MATCH SCORING v2 — hybrid frequency + curated universal ──────
+// ─── ATS KEYWORD MATCH SCORING — restored original that scored 90% ─────────────
 
 /**
  * Extracts meaningful keywords from a job description and scores them
@@ -67,8 +67,8 @@ function scoreKeywordMatch(resumeText, jobDescription) {
     'as','if','so','but','not','no','nor','yet','both','either','each','more',
     'most','other','some','such','than','then','there','when','where','who',
     'which','while','about','above','after','before','between','into','through',
-    'during','including','across','within','without','along','following',
-    'behind','beyond','plus','except','up','out','around','down','off',
+    'during','including','across','within','without','along','following','across',
+    'behind','beyond','plus','except','up','out','around','down','off','above',
     'use','using','used','work','working','experience','ability','strong','proven',
     'demonstrated','required','preferred','including','ensure','maintain','manage',
     'support','provide','develop','create','build','apply','help','make','take',
@@ -78,161 +78,103 @@ function scoreKeywordMatch(resumeText, jobDescription) {
     'role','position','team','company','business','client','project','process',
     'based','well','also','very','highly','quickly','effectively','efficiently',
     'looking','seeking','join','hybrid','onsite','remote','days','week','month',
-    'year','years','global','local','group','firm','serving','located',
-    'please','apply','must','able','responsible','opportunity','ideal','candidate',
-    'qualified','meridian','york','stake','stakes','location','workforce',
+    'year','years','global','local','group','firm','serving','located','new',
+    'please','apply','must','will','able','across','within','including','ensure',
+    'responsible','opportunity','ideal','candidate','qualified','preferred',
+    'meridian','york','stake','stakes','location','workforce',
     'what','three','fortune','world','include','apos','two','four','five',
     'them','kind','respectful','offer','improve','variety','satisfaction','members',
-    'listen','documenting','resolving','advocate','respond','caring',
-    'compassionate','inspiring','joining','forces','putting','people','heart',
+    'listen','interactions','documenting','resolving','advocate','respond','caring',
+    'compassionate','inspiring','joining','forces','putting','people','heart','work',
     'obsessed','trust','address','connections','doctors','providers','employers',
     'plans','options','resolve','empathy','benefits','benefit','resources',
     'welcome','colleague','colleagues','ongoing','assigned','reporting','eligible',
     'typical','anticipated','commitment','potential','adhering','willingness',
-    'passionate','excited','driven','dedicated','motivated','committed',
+    'seeking','passionate','excited','driven','dedicated','motivated','committed',
     'salary','compensation','depending','factors','competitive','financial','equity',
-    'dental','vision','insurance','matching','purchase','401k','bonus',
-    'vacation','holidays','closure','telework','agreement','internet',
+    'dental','vision','insurance','matching','purchase','401k','benefits','bonus',
+    'vacation','holidays','closure','hybrid','telework','agreement','internet',
     'access','workplace','category','programs','coaching','mentoring','orientation',
     'ranging','regardless','geography','relevant','performance','compliance',
-    'six','seven','eight','nine','ten','like','just','know','want',
+    'six','seven','eight','nine','ten','like','just','make','know','want',
     'good','great','best','first','last','next','said','says','per','via',
-    'clients','countries','ecosystems','academies','companies',
-    // Company/JD boilerplate that bleeds through
-    'acme','means','weekly','helping','series','equity','compensation',
-    'comfortable','define','results','growing','budget','regulatory',
-    'rest','backed','ribbit','andreessen','sequoia','discrimination',
-    'orientation','disability','religion','national','gender','sexual',
-    'directly','annually','quarterly','internally','externally',
-    'independently','consistently','proactively','meaningful','significant',
-    'substantial','exceptional','outstanding','anticipate','regardless',
+    'clients','countries','ecosystems','academies','companies','apos',
   ])
 
-  // ── Universal curated keyword library ──
-  // Covers all major job categories — only counted if JD mentions them
-  const CURATED = [
-    // AI & generative tools
-    'elevenlabs','runway','midjourney','sora','pika','kling','minimax','seedance',
-    'veo','stable diffusion','freepik','topaz','mmaudio','heygen','synthesia',
-    'dall-e','firefly','adobe firefly','luma','descript','gen-2','gen-3','chatgpt',
-    // Creative & video
-    'premiere pro','davinci resolve','after effects','final cut','avid',
-    'frame.io','lucidlink','editing','video','audio','image','reels',
-    'cinematic','voiceover','voice over','storyboard','b-roll','motion graphics',
-    'color grade','broadcast','documentary','narrative','animation','vfx',
-    'prompt','prompting','workflow','pipeline','storytelling','visual',
-    // Design
-    'figma','sketch','indesign','illustrator','photoshop','lightroom','canva',
-    'ui','ux','user experience','user interface','design system','wireframe',
-    'prototyping','typography','branding','brand identity',
-    // Social & marketing
-    'youtube','instagram','tiktok','twitter','linkedin','facebook',
-    'social media','content','seo','sem','email marketing','copywriting',
-    'campaign','paid media','growth','engagement','analytics','conversion',
-    'retention','acquisition','ctr','roas','cpc','influencer','creator',
-    // Engineering & dev
-    'javascript','python','typescript','react','node','nextjs','vue','angular',
-    'backend','frontend','fullstack','api','sql','nosql','mongodb','postgres',
-    'aws','azure','gcp','docker','kubernetes','devops','ci/cd','git','github',
-    'machine learning','deep learning','llm','nlp','data science','tensorflow',
-    'pytorch','cloud','microservices','rest','graphql','agile','scrum',
-    // Data & analytics
-    'tableau','power bi','looker','excel','data analysis','reporting',
-    'dashboard','metrics','kpi','forecasting','modeling','visualization',
-    // Business & finance
-    'budget','forecasting','roi','financial modeling',
-    'accounting','audit','tax','risk management',
-    'stakeholder','investor relations','due diligence',
-    // Sales & ops
-    'salesforce','hubspot','crm','pipeline','quota','b2b','b2c','enterprise',
-    'procurement','vendor','contract','logistics','supply chain','operations',
-    // Healthcare & clinical
-    'clinical','patient','healthcare','hipaa','ehr','emr','nursing','physician',
-    'diagnosis','treatment','pharmacy','medical','care coordination',
-    // HR & people
-    'recruitment','onboarding','retention','diversity','inclusion','equity',
-    'performance management','hris','compensation','payroll','talent',
-    // Education
-    'curriculum','instructional design','lms','elearning','training',
-    'assessment','learning outcomes','pedagogy','facilitation',
-    // Legal
-    'litigation','compliance','regulatory','legal research',
-    'paralegal','intellectual property','gdpr',
-    // General professional
-    'project management','strategic planning','communication','presentation',
-    'collaboration','cross-functional','mentorship','problem solving',
-    'stakeholder management',
+  const TECH_SIGNALS = [
+    'premiere','effects','photoshop','lightroom','resolve','editing',
+    'video','instagram','facebook','reels','footage','motion',
+    'graphics','color','audio','animation','dslr','cinema','broadcast',
+    'documentary','narrative','generative','tiktok','asana','iconik',
+    'elevenlabs','runway','midjourney','sora','pika','kling','minimax',
+    'seedance','veo','topaz','mmaudio','heygen','synthesia','figma',
+    'analytics','strategy','leadership','communication','collaboration',
+    'stakeholder','curriculum','instructional','learning','training',
+    'assessment','performance','outcomes','metrics','reporting',
+    'compliance','regulatory','healthcare','clinical','patient',
+    'engineering','software','development','javascript','python',
+    'typescript','react','backend','frontend','database','cloud',
+    'aws','azure','salesforce','tableau','excel','powerpoint',
+    'project','agile','scrum','product','research','data',
+    'financial','accounting','revenue','budget','forecasting',
+    'marketing','campaigns','seo','email','branding','copywriting',
+    'operations','logistics','procurement','vendor','contract',
+    'recruitment','onboarding','retention','diversity','inclusion',
+    'management','enterprise','technical','platform','integration',
+    'communications','content','design','workflow','standards',
+    'payments','fintech','settlement','merchant','checkout','api',
+    'sql','amplitude','mixpanel','okr','gmv','arr','churn',
   ]
 
-  const jdLower = jobDescription.toLowerCase().replace(/[^a-z0-9\s\-\/]/g, ' ')
-  const resumeLower = resumeText.toLowerCase()
-
-  // ── Step 1: Frequency extraction — c >= 2 for general words ──
-  // Curated list handles single-mention specific terms like tool names
-  const jdWords = jdLower.split(/\s+/).filter(w => w.length >= 4 && !STOP.has(w))
+  const jdLower = jobDescription.toLowerCase().replace(/[^a-z0-9\s]/g, ' ')
+  const jdWords = jdLower.split(/\s+/).filter(w => w.length >= 5 && !STOP.has(w))
   const freq = {}
   jdWords.forEach(w => { freq[w] = (freq[w] || 0) + 1 })
-  const freqCandidates = Object.entries(freq)
-    .filter(([w, c]) => c >= 2 && !STOP.has(w))
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 30)
-    .map(([w]) => w)
 
-  // ── Step 2: Curated — only if JD mentions them ──
-  const curatedHits = CURATED.filter(kw => jdLower.includes(kw))
+  const jdKeywords = Object.entries(freq)
+    .filter(([word, count]) => count >= 2 || TECH_SIGNALS.some(t => word.includes(t)))
+    .map(([word]) => word)
 
-  // ── Step 3: Merge and deduplicate ──
-  const allCandidates = [...new Set([...curatedHits, ...freqCandidates])].slice(0, 60)
+  const candidates = [...new Set(jdKeywords)]
+    .filter(k => k.length >= 4)
+    .slice(0, 40)
 
-  // ── Step 4: Stemmer ──
+  const resumeLower = resumeText.toLowerCase()
+  const matched = [], missing = []
+
   function simpleStem(w) {
-    if (w.endsWith('ing') && w.length > 5) return w.slice(0, -3)
-    if (w.endsWith('tion') && w.length > 6) return w.slice(0, -4)
-    if (w.endsWith('ed') && w.length > 4) return w.slice(0, -2)
-    if (w.endsWith('ly') && w.length > 4) return w.slice(0, -2)
-    if (w.endsWith('er') && w.length > 4) return w.slice(0, -2)
-    if (w.endsWith('ment') && w.length > 6) return w.slice(0, -4)
-    if (w.endsWith('s') && w.length > 4) return w.slice(0, -1)
+    if (w.endsWith('ing') && w.length > 6) return w.slice(0, -3)
+    if (w.endsWith('tion') && w.length > 7) return w.slice(0, -4)
+    if (w.endsWith('ed') && w.length > 5) return w.slice(0, -2)
+    if (w.endsWith('ly') && w.length > 5) return w.slice(0, -2)
+    if (w.endsWith('ment') && w.length > 7) return w.slice(0, -4)
+    if (w.endsWith('s') && w.length > 5) return w.slice(0, -1)
     return w
   }
 
   const resumeWords = resumeLower.split(/\s+/)
-
-  // ── Step 5: Match ──
-  const matched = [], missing = []
-  allCandidates.forEach(kw => {
-    const found = kw.includes(' ')
-      ? resumeLower.includes(kw)
-      : resumeLower.includes(kw) ||
-        resumeLower.includes(kw + 's') ||
-        resumeLower.includes(kw + 'ed') ||
-        resumeLower.includes(kw + 'ing') ||
-        (kw.endsWith('s') && resumeLower.includes(kw.slice(0, -1))) ||
-        resumeWords.some(w => simpleStem(w) === simpleStem(kw))
+  candidates.forEach(kw => {
+    const kwStem = simpleStem(kw)
+    const found = resumeLower.includes(kw) ||
+      resumeLower.includes(kw.endsWith('s') ? kw.slice(0, -1) : kw + 's') ||
+      resumeWords.some(w => simpleStem(w) === kwStem)
     if (found) matched.push(kw)
     else missing.push(kw)
   })
 
-  // ── Step 6: Weighted score — curated 2x, freq 1x ──
-  let weightedScore = 0, totalWeight = 0
-  allCandidates.forEach(kw => {
-    const w = curatedHits.includes(kw) ? 2 : 1
-    totalWeight += w
-    if (matched.includes(kw)) weightedScore += w
-  })
+  const score = candidates.length > 0
+    ? Math.round((matched.length / candidates.length) * 100)
+    : 0
 
-  const score = totalWeight > 0 ? Math.round((weightedScore / totalWeight) * 100) : 0
-
-  // Sort missing by JD frequency (most important first)
   const missingByImportance = missing
     .sort((a, b) => (freq[b] || 0) - (freq[a] || 0))
-    .slice(0, 20)
+    .slice(0, 15)
 
   return {
     score,
     matched: matched.slice(0, 30),
     missing: missingByImportance,
-    total: allCandidates.length,
+    total: candidates.length,
   }
 }
 
