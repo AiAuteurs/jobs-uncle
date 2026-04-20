@@ -133,6 +133,16 @@ function clientScoreATS(resumeText, jobDescription) {
     'inspiring','putting','joining','forces','ensuring','requires','assistance',
     'advocate','advocating','emotional','revenue','learning','researching','wellness',
     'leadership','training',
+    // Company/JD boilerplate that bleeds through
+    'acme','means','weekly','helping','series','equity','compensation',
+    'comfortable','define','results','growing','budget','regulatory',
+    'rest','helping','backed','backed','Series','ribbit','andreessen',
+    'sequoia','discrimination','orientation','disability','religion',
+    'national','gender','sexual','directly','annually','quarterly',
+    'internally','externally','independently','consistently','proactively',
+    'meaningful','significant','substantial','exceptional','outstanding',
+    'responsible','opportunity','ideal','candidate','qualified',
+    'anticipate','depending','regardless','geography','typical',
   ])
 
   // ── Universal curated keyword library ──

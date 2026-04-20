@@ -98,6 +98,14 @@ function scoreKeywordMatch(resumeText, jobDescription) {
     'six','seven','eight','nine','ten','like','just','know','want',
     'good','great','best','first','last','next','said','says','per','via',
     'clients','countries','ecosystems','academies','companies',
+    // Company/JD boilerplate that bleeds through
+    'acme','means','weekly','helping','series','equity','compensation',
+    'comfortable','define','results','growing','budget','regulatory',
+    'rest','backed','ribbit','andreessen','sequoia','discrimination',
+    'orientation','disability','religion','national','gender','sexual',
+    'directly','annually','quarterly','internally','externally',
+    'independently','consistently','proactively','meaningful','significant',
+    'substantial','exceptional','outstanding','anticipate','regardless',
   ])
 
   // ── Universal curated keyword library ──
