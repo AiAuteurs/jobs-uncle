@@ -11,6 +11,15 @@ const nextConfig = {
       },
     ]
   },
+  async redirects() {
+    return [
+      {
+        source: '/extension',
+        destination: 'https://chromewebstore.google.com/detail/jobsuncle-tailor-resume/dpnicfabpajheepcgfmedfcepldfnpma',
+        permanent: false,
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig
