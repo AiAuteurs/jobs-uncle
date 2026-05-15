@@ -71,28 +71,28 @@ export default async function handler(req, res) {
         const email = await getEmailFromCustomer(customerId)
         if (email) {
           if (status === 'active' || status === 'trialing') {
-            await kvSet(`paid_email:${email}`, accessLevel)
+            await kvSet(`paid:${email}`, accessLevel)
           } else if (status === 'canceled' || status === 'unpaid' || status === 'past_due') {
-            await kvDelete(`paid_email:${email}`)
+            await kvDelete(`paid:${email}`)
           }
         }
         break
       }
       case 'customer.subscription.deleted': {
         const email = await getEmailFromCustomer(obj.customer)
-        if (email) await kvDelete(`paid_email:${email}`)
+        if (email) await kvDelete(`paid:${email}`)
         break
       }
       case 'invoice.payment_failed': {
         const email = await getEmailFromCustomer(obj.customer)
-        if (email && (obj.attempt_count || 1) >= 3) await kvDelete(`paid_email:${email}`)
+        if (email && (obj.attempt_count || 1) >= 3) await kvDelete(`paid:${email}`)
         break
       }
       case 'invoice.paid': {
         const email = await getEmailFromCustomer(obj.customer)
         if (email && obj.subscription) {
           const sub = await stripe.subscriptions.retrieve(obj.subscription)
-          await kvSet(`paid_email:${email}`, getAccessLevel(sub.metadata?.plan))
+          await kvSet(`paid:${email}`, getAccessLevel(sub.metadata?.plan))
         }
         break
       }
