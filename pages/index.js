@@ -509,18 +509,18 @@ export default function Home() {
 
   // Auto-populate from extension URL params (?jt=title&co=company&jd=description)
   useEffect(() => {
-    const { jt, co, jd } = router.query
-    if (jd && jd.trim().length > 50) {
-      setJobDescription(decodeURIComponent(jd))
-      setJobDescInputMode('paste')
-      if (jt) {
-        // Store job title for reference
-        window.__ju_jt = decodeURIComponent(jt)
+    try {
+      const { jd } = router.query
+      if (jd && typeof jd === 'string' && jd.trim().length > 50) {
+        const decoded = jd.replace(/[+]/g, ' ')
+        setJobDescription(decoded)
+        setJobDescInputMode('paste')
+        setTimeout(() => {
+          document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' })
+        }, 400)
       }
-      // Scroll to upload section so user just needs to add their resume
-      setTimeout(() => {
-        document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' })
-      }, 400)
+    } catch (e) {
+      // fail silently
     }
   }, [router.query.jd])
 
