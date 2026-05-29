@@ -507,6 +507,23 @@ export default function Home() {
     }
   }, [router.query.signin])
 
+  // Auto-populate from extension URL params (?jt=title&co=company&jd=description)
+  useEffect(() => {
+    const { jt, co, jd } = router.query
+    if (jd && jd.trim().length > 50) {
+      setJobDescription(decodeURIComponent(jd))
+      setJobDescInputMode('paste')
+      if (jt) {
+        // Store job title for reference
+        window.__ju_jt = decodeURIComponent(jt)
+      }
+      // Scroll to upload section so user just needs to add their resume
+      setTimeout(() => {
+        document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' })
+      }, 400)
+    }
+  }, [router.query.jd])
+
   // Auto-score cover letter ATS when results arrive
   useEffect(() => {
     if (results?.coverLetter && jobDescription) {
