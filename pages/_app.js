@@ -1,9 +1,13 @@
 import '../styles/globals.css'
 import Script from 'next/script'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { Analytics } from '@vercel/analytics/react'
 
 export default function App({ Component, pageProps }) {
+  const { pathname } = useRouter()
+  // Never run third-party scripts or analytics on customer administration pages.
+  if (pathname === '/admin' || pathname.startsWith('/admin/')) return <Component {...pageProps} />
   return (
     <>
       <Head>
