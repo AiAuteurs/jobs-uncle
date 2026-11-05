@@ -459,6 +459,15 @@ function headerTokens(header) {
 }
 
 function findSuspects(sourceResume, docs) {
+  try {
+    return findSuspectsUnsafe(sourceResume, docs)
+  } catch (e) {
+    console.error('Code checks skipped:', e?.message || e)
+    return []
+  }
+}
+
+function findSuspectsUnsafe(sourceResume, docs) {
   const src = blocksOf(sourceResume)
   const jobHeaders = [...new Set(src.filter(b => b.owner.kind === 'job').map(b => b.owner.header))]
   // tokens that identify exactly one job (e.g. "stillwater", "brightline", "oakland")
@@ -476,16 +485,54 @@ function findSuspects(sourceResume, docs) {
       splitSentences(b.line).filter(x => metricsIn(x).includes(m)).forEach(x => where[m].sentences.push(x))
     }
   }
-  const sourceHasCause = (m) => (where[m]?.sentences || []).some(x => CAUSE_RE.test(x))
   const tokensFor = (owner) => owner.kind === 'job' ? (distinctive.get(owner.header) || []) : []
+  const sourceHasCause = (m) => (where[m]?.sentences || []).some(x => CAUSE_RE.test(x))
+
+  // Phrase fingerprints: 3-word runs that occur in exactly one source item ("top install source",
+  // "6-minute user interview"). They survive when the AI drops the number but keeps the false claim.
+  const STOPW = new Set(['the', 'and', 'for', 'with', 'into', 'that', 'this', 'from', 'our', 'their', 'a', 'an', 'of', 'to', 'in', 'on', 'at', 'by', 'as', 'or', 'is', 'was', 'were', 'it'])
+  const tri = (t) => {
+    const w = wordsOf(t).filter(x => x.length > 1)
+    const out = []
+    for (let i = 0; i + 3 <= w.length; i++) {
+      const g = w.slice(i, i + 3)
+      if (g.filter(x => STOPW.has(x)).length >= 2) continue
+      out.push(g.join(' '))
+    }
+    return out
+  }
+  const triCount = {}
+  src.forEach(b => new Set(tri(b.line)).forEach(g => { triCount[g] = (triCount[g] || 0) + 1 }))
+  const items = src
+    .filter(b => b.owner.kind === 'job' || b.owner.kind === 'unattached')
+    .map((b, idx) => {
+      const prints = new Set(tri(b.line).filter(g => triCount[g] === 1))
+      const named = allDistinctive.filter(t => new RegExp(`\\b${t}\\b`, 'i').test(b.line))
+      return { idx, line: b.line, owner: b.owner, prints, allowed: [...new Set([...tokensFor(b.owner), ...named])] }
+    })
+    .filter(it => it.prints.size >= 2)
+  const matchItems = (text) => {
+    const g = new Set(tri(text))
+    return items.filter(it => [...it.prints].filter(p => g.has(p)).length >= 2)
+  }
 
   const suspects = []
   const seen = new Set()
-  const add = (doc, text, why) => {
+  const byKey = new Map()
+  const nice = (t) => t ? t.charAt(0).toUpperCase() + t.slice(1) : 'another employer'
+  const label = (h) => h ? h.charAt(0).toUpperCase() + h.slice(1).toLowerCase() : 'Selected work'
+  const add = (doc, text, why, plain) => {
     const k = doc + '|' + text
-    if (seen.has(k)) return
+    const existing = byKey.get(k)
+    if (existing) {
+      if (!existing.why.includes(why)) existing.why += ' Also: ' + why
+      if (plain && !existing.plain.includes(plain)) existing.plain += ' ' + plain
+      return
+    }
+    const item = { doc, text, why, plain: plain || 'This may go further than your resume says.' }
+    byKey.set(k, item)
     seen.add(k)
-    suspects.push({ doc, text, why })
+    suspects.push(item)
   }
 
   for (const [doc, body] of Object.entries(docs)) {
@@ -496,6 +543,28 @@ function findSuspects(sourceResume, docs) {
       : blocksOf(body).flatMap(b => splitSentences(b.line).map(t => ({ line: t, owner: b.owner })))
 
     for (const u of units) {
+      // phrase-based checks (work even when the number was dropped)
+      const hits = matchItems(u.line)
+      if (hits.length) {
+        const lower = u.line.toLowerCase()
+        const outTokens = (!isLetter && u.owner?.kind === 'job') ? [...headerTokens(u.owner.header)] : []
+        const namedHere = allDistinctive.filter(t => new RegExp(`\\b${t}\\b`).test(lower))
+        const employerHere = outTokens.length ? outTokens : namedHere
+        for (const it of hits) {
+          if (!employerHere.length) continue
+          const ok = it.allowed.some(t => employerHere.includes(t))
+          if (!ok) {
+            const where = it.owner.kind === 'unattached' ? `"${it.owner.header}" with no employer` : 'a different job'
+            const who = nice(employerHere.find(t => !it.allowed.includes(t)))
+            add(doc, u.line, `This describes work the source lists under ${where} ("${it.line.slice(0, 60)}…"), but it is credited to ${who} here. Fix the credit (remove the employer, or remove this item if it is a duplicate); do not just delete numbers.`,
+              it.owner.kind === 'unattached' ? `Your resume doesn't say this was at ${who}.` : `Your resume lists this under a different job, not ${who}.`)
+          }
+        }
+        const kinds = new Set(hits.map(it => it.owner.kind === 'unattached' ? 'u:' + it.owner.header : 'j:' + it.owner.header))
+        if (!isLetter && hits.length >= 2 && kinds.size >= 2) {
+          add(doc, u.line, 'This merges two separate items from the source into one claim. Keep only what belongs to this job.', 'This combines two separate items from your resume into one.')
+        }
+      }
       for (const m of metricsIn(u.line)) {
         const info = where[m]
         if (!info) continue // unknown numbers are the AI fact-checker's job
@@ -509,8 +578,9 @@ function findSuspects(sourceResume, docs) {
         if (!isLetter && u.owner?.kind === 'job') {
           const outTokens = [...headerTokens(u.owner.header)]
           const matchesSource = srcJobTokens.some(t => outTokens.includes(t))
-          if (unattachedOnly) add(doc, u.line, `The source lists the ${m} result under "${srcOwners.find(o => o.kind === 'unattached').header}" with no employer, but this puts it under a job. If it is also listed elsewhere in the document, this is a duplicate: remove it.`)
-          else if (srcJobTokens.length && !matchesSource) add(doc, u.line, `The source puts the ${m} result under a different job.`)
+          if (unattachedOnly) add(doc, u.line, `The source lists the ${m} result under "${srcOwners.find(o => o.kind === 'unattached').header}" with no employer, but this puts it under a job. If it is also listed elsewhere in the document, this is a duplicate: remove it.`,
+            `Your resume lists this under "${label(srcOwners.find(o => o.kind === 'unattached').header)}" without an employer, but here it's under a job.`)
+          else if (srcJobTokens.length && !matchesSource) add(doc, u.line, `The source puts the ${m} result under a different job.`, 'Your resume credits this result to a different job.')
         }
         // 2. sentence names an employer the number doesn't belong to (cover letter, summary)
         if (isLetter || u.owner?.kind !== 'job') {
@@ -520,12 +590,14 @@ function findSuspects(sourceResume, docs) {
           if (wrong.length && (unattachedOnly || !named.some(t => srcJobTokens.includes(t)))) {
             add(doc, u.line, unattachedOnly
               ? `The source lists the ${m} result with no employer, but this sentence ties it to ${wrong[0]}.`
-              : `The source puts the ${m} result under a different job than ${wrong[0]}.`)
+              : `The source puts the ${m} result under a different job than ${wrong[0]}.`,
+              unattachedOnly ? `Your resume doesn't say this was at ${nice(wrong[0])}.` : `Your resume credits this result to a different job, not ${nice(wrong[0])}.`)
           }
         }
         // 3. invented cause
         if (CAUSE_RE.test(u.line) && !sourceHasCause(m)) {
-          add(doc, u.line, `This sentence explains how its result happened ("${(u.line.match(CAUSE_RE) || [''])[0]}…"), but the source never says how. Remove the explanation, keep the numbers.`)
+          add(doc, u.line, `This sentence explains how its result happened ("${(u.line.match(CAUSE_RE) || [''])[0]}…"), but the source never says how. Remove the explanation, keep the numbers.`,
+            `Your resume doesn't say how this result happened ("${(u.line.match(CAUSE_RE) || [''])[0]}…").`)
         }
       }
     }
@@ -583,7 +655,7 @@ FLAG a claim when it:
 ${suspectBlock}
 DO NOT flag: rewording, tightening, reordering, summarizing, combining facts that the source states about the same job, keyword choices that are true to the source, tone, or opinions about the company in the cover letter.
 
-For each flagged claim give the smallest fix that makes it true to the source: keep the sentence and its meaning, remove or correct only the unsupported part. If nothing true can be said, delete just that clause. "replacement" must be the full corrected version of "original" — never repeat words that come right before or after it in the document. If an item duplicates another item already in the document (e.g. the same project appears under a job AND under Selected Work), set "original" to the whole duplicate bullet and "replacement" to an empty string.
+For each flagged claim give the smallest fix that makes it true to the source: keep the sentence and its meaning, remove or correct only the unsupported part. If nothing true can be said, delete just that clause. "replacement" must be the full corrected version of "original" — never repeat words that come right before or after it in the document. Never fix a wrong employer or a merge by deleting the numbers and keeping the claim: fix the credit itself (remove the employer from the sentence, or remove the item). If an item duplicates another item already in the document (e.g. the same project appears under a job AND under Selected Work), set "original" to the whole duplicate bullet and "replacement" to an empty string.
 
 Respond with ONLY a JSON object, no markdown fences:
 {"fixes":[{"doc":"<doc id>","original":"<exact text copied character-for-character from that doc, at most one sentence or one bullet>","replacement":"<corrected text>","reason":"<under 15 words, plain English, addressed to the candidate, e.g. 'Your resume doesn't say this was at Brightline.'>"}]}
@@ -625,10 +697,15 @@ Maximum 12 fixes. If everything is supported, return {"fixes":[]}.`
         reason: String(f.reason || '').slice(0, 140),
       })
     }
-    return { docs: out, factCheck: { checked: true, fixes: applied, flagged: suspects.length } }
+    // Re-run the code checks on the fixed text. Anything still wrong is shown to the customer, not hidden.
+    const remaining = findSuspects(sourceResume, out).map(x => ({ doc: x.doc, text: x.text, reason: x.plain }))
+    return { docs: out, factCheck: { checked: true, fixes: applied, flagged: suspects.length, needsReview: remaining } }
   } catch (e) {
     console.error('Fact check skipped:', e?.message || e)
-    return { docs, factCheck: { checked: false, fixes: [] } }
+    // Even without the AI pass, the code checks can still warn the customer
+    let remaining = []
+    try { remaining = findSuspects(sourceResume, docs).map(x => ({ doc: x.doc, text: x.text, reason: x.plain })) } catch (_) {}
+    return { docs, factCheck: { checked: remaining.length > 0, fixes: [], needsReview: remaining } }
   }
 }
 

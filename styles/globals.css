@@ -2456,3 +2456,9 @@ body {
   padding-top: 2px;
   color: #7a8088;
 }
+/* Lines the code checks still doubt after fixing */
+.factcheck-review { margin-top: 10px; padding: 10px 12px; background: #FFF8EC; border: 1px solid #F3D9A8; border-radius: 8px; }
+.factcheck-review-title { font-weight: 700; color: #8A5A00; margin-bottom: 6px; }
+.factcheck-review .factcheck-list { margin-top: 6px; }
+.factcheck-review .factcheck-list li { border-color: #F3E3C3; }
+.factcheck-quote { color: #3d4450; font-style: italic; }

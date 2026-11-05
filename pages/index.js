@@ -453,22 +453,39 @@ function FactCheckNote({ factCheck, docs }) {
   const [open, setOpen] = useState(false)
   if (!factCheck || !factCheck.checked) return null
   const fixes = (factCheck.fixes || []).filter(f => docs.includes(f.doc))
+  const review = (factCheck.needsReview || []).filter(f => docs.includes(f.doc))
   const n = fixes.length
+  const summary = n === 0 && review.length === 0
+    ? 'Every line traces back to your resume.'
+    : n > 0
+      ? `We corrected ${n} line${n === 1 ? '' : 's'} that went further than your resume says.`
+      : 'We checked every line against your resume.'
   return (
-    <div className="factcheck-note" role="note">
+    <div className={`factcheck-note${review.length ? ' factcheck-note--review' : ''}`} role="note">
       <div className="factcheck-head">
         <span className="factcheck-badge">✓ Fact-checked</span>
-        <span className="factcheck-summary">
-          {n === 0
-            ? 'Every line traces back to your resume.'
-            : `We corrected ${n} line${n === 1 ? '' : 's'} that went further than your resume says.`}
-        </span>
+        <span className="factcheck-summary">{summary}</span>
         {n > 0 && (
           <button type="button" className="factcheck-toggle" onClick={() => setOpen(o => !o)} aria-expanded={open}>
             {open ? 'Hide changes' : 'See changes'}
           </button>
         )}
       </div>
+      {review.length > 0 && (
+        <div className="factcheck-review">
+          <div className="factcheck-review-title">
+            {review.length === 1 ? '1 line to double-check before you send' : `${review.length} lines to double-check before you send`}
+          </div>
+          <ul className="factcheck-list">
+            {review.map((f, i) => (
+              <li key={i}>
+                <div className="factcheck-reason">{f.reason}</div>
+                <div className="factcheck-quote">“{f.text}”</div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       {open && n > 0 && (
         <ul className="factcheck-list">
           {fixes.map((f, i) => (
