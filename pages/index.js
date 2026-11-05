@@ -318,15 +318,70 @@ function BulletDemo() {
 }
 
 
-const renderMarkdown = (text) => {
+// Turns the AI's text into clean, readable HTML for the preview and the PDF.
+// Built to survive however the model formats things: drops "---" separators,
+// trims stray blank lines, and recognises plain-text section titles ("Summary",
+// "Skills"…) so the reader sees a real document, not raw markup.
+const SECTION_LABEL = /^(summary|professional summary|profile|about|experience|work experience|professional experience|relevant experience|employment history|employment|career history|skills|core skills|key skills|skills and tools|skills & tools|technical skills|tools|software|education|certifications?|licenses|selected work|portfolio|projects|awards|honors|publications|languages|volunteer|volunteering|interests)$/i
+const RULE_LINE = /^([-*_])(\s*\1){2,}$/
+const BULLET_LINE = /^[-•*–]\s+/
+
+const renderMarkdown = (text, { resume = false } = {}) => {
   if (!text) return ''
-  return text
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/^#{1,3}\s+(.+)$/gm, '<strong>$1</strong>')
-    .replace(/\n\n/g, '</p><p>')
-    .replace(/\n/g, '<br/>')
-    .replace(/^/, '<p>').replace(/$/, '</p>')
+  const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  const inline = (t) => esc(t).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+  const unwrap = (t) => t.replace(/^#{1,3}\s+/, '').replace(/^\*\*(.+)\*\*$/, '$1').replace(/:$/, '')
+
+  const lines = String(text).replace(/\r/g, '').replace(/\u00a0/g, ' ').split('\n').map((l) => l.trim())
+  const out = []
+  let para = []
+  let list = []
+  const flushPara = () => { if (para.length) { out.push(`<p>${para.join('<br/>')}</p>`); para = [] } }
+  const flushList = () => { if (list.length) { out.push(`<ul class="doc-list">${list.join('')}</ul>`); list = [] } }
+  const flush = () => { flushPara(); flushList() }
+  const nextLine = (i) => { for (let j = i + 1; j < lines.length; j++) if (lines[j] && !RULE_LINE.test(lines[j])) return lines[j]; return '' }
+
+  let i = 0
+  while (i < lines.length && (!lines[i] || RULE_LINE.test(lines[i]))) i++ // no blank gap at the top
+
+  // Resume header: name, then title/contact lines until the first break
+  if (resume && i < lines.length) {
+    out.push(`<p class="doc-name">${inline(unwrap(lines[i]))}</p>`)
+    const header = []
+    i++
+    while (i < lines.length && lines[i] && !RULE_LINE.test(lines[i]) && !SECTION_LABEL.test(unwrap(lines[i])) && !/^#{1,3}\s/.test(lines[i])) {
+      header.push(inline(lines[i])); i++
+    }
+    if (header.length) out.push(`<p class="doc-contact">${header.join('<br/>')}</p>`)
+  }
+
+  for (; i < lines.length; i++) {
+    const line = lines[i]
+    if (!line) { flush(); continue }
+    if (RULE_LINE.test(line)) { flush(); continue } // separators: headings already separate sections
+
+    const isMdHeading = /^#{1,3}\s+/.test(line) || /^\*\*[^*]+\*\*:?$/.test(line)
+    if (isMdHeading || (resume && SECTION_LABEL.test(unwrap(line)))) {
+      flush()
+      out.push(`<p class="doc-h">${inline(unwrap(line))}</p>`)
+      continue
+    }
+    if (BULLET_LINE.test(line)) {
+      flushPara()
+      list.push(`<li>${inline(line.replace(BULLET_LINE, ''))}</li>`)
+      continue
+    }
+    // Resume: a short title line sitting on top of bullets = a role or skill-group heading
+    if (resume && line.length <= 90 && !/[.!?]$/.test(line) && BULLET_LINE.test(nextLine(i))) {
+      flush()
+      out.push(`<p class="doc-sub">${inline(line)}</p>`)
+      continue
+    }
+    flushList()
+    para.push(inline(line))
+  }
+  flush()
+  return out.join('')
 }
 
 const stripMarkdown = (text) => {
@@ -877,10 +932,18 @@ export default function Home() {
         body { font-family: Georgia, serif; font-size: 12pt; line-height: 1.65; max-width: 680px; margin: 40px auto; padding: 0 20px; color: #111; }
         strong { font-weight: bold; }
         p { margin: 0 0 0.75em 0; }
+        .doc-name { font-family: Helvetica, Arial, sans-serif; font-size: 22pt; font-weight: 700; line-height: 1.15; margin: 0 0 4px; }
+        .doc-contact { font-size: 10.5pt; color: #444; margin: 0 0 18px; }
+        .doc-h { font-family: Helvetica, Arial, sans-serif; font-size: 10.5pt; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border-bottom: 1px solid #bbb; padding-bottom: 3px; margin: 18px 0 8px; }
+        .doc-sub { font-weight: bold; margin: 12px 0 4px; }
+        .doc-list { margin: 0 0 0.75em 0; padding-left: 1.2em; }
+        .doc-list li { margin: 0 0 4px; }
+        .doc-h, .doc-sub { break-after: avoid; }
+        .doc-list li { break-inside: avoid; }
         @media print { body { margin: 0; } }
       </style>
     </head><body>
-      <div>${renderMarkdown(content)}</div>
+      <div>${renderMarkdown(content, { resume: /^Resume/.test(label) })}</div>
     <script>window.onload = () => { window.print(); }<\/script>
     </body></html>`)
     win.document.close()
@@ -2006,7 +2069,7 @@ export default function Home() {
                   <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 900, fontSize: '1.4rem', color: '#111111', marginBottom: '6px', letterSpacing: '-0.02em' }}>
                     Looks great. 🎉
                   </div>
-                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', color: '#ffffff', lineHeight: 1.6 }}>
+                  <div style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', color: '#3d4450', lineHeight: 1.6 }}>
                     Tailored to this role. Download below — or scroll down for your cover letter, recruiter analysis, and hiring manager DM.
                   </div>
                 </div>
@@ -2246,13 +2309,14 @@ export default function Home() {
                         Version B &mdash; Technical
                       </button>
                     </div>
-                    <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(activeResume === 'a' ? results.resumeA : results.resumeB)}} />
+                    <div className="result-content result-content--resume" dangerouslySetInnerHTML={{__html: renderMarkdown(activeResume === 'a' ? results.resumeA : results.resumeB, { resume: true })}} />
                   </>
                 ) : (
-                  <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(
+                  <div className="result-content result-content--resume" dangerouslySetInnerHTML={{__html: renderMarkdown(
                     activeVersion === 'v2' && regeneratedResults
                       ? regeneratedResults.resume
-                      : results.resume
+                      : results.resume,
+                    { resume: true }
                   )}} />
                 )}
               </div>}
