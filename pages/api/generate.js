@@ -397,10 +397,170 @@ const FACT_CHECK_TIMEOUT_MS = 45000
 
 const numbersIn = (t) => (String(t).match(/\d[\d,.]*\s*[%xkKmMbB]?/g) || []).map(n => n.replace(/\s+/g, '').toLowerCase())
 
+// ── Code checks that don't rely on AI judgment ──────────────────────────────
+// Every achievement worth checking has a number ("3.6M views", "52% to 78%", "2.4x").
+// We record where each number lives in the source (which job, or an unattached
+// "Selected work" item) and whether the source explains it with a cause, then
+// flag output sentences that move it or invent a "by/through/because".
+const METRIC_RE = /\$?\d+(?:[.,]\d+)?\s?(?:%|[kKmMbB]\b|x\b)/g
+const MONTH = '(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\\.?'
+const DATE_RANGE_RE = new RegExp(`(?:${MONTH}\\s+)?(?:19|20)\\d{2}\\s*[–—-]\\s*(?:(?:${MONTH}\\s+)?(?:19|20)\\d{2}|present|current|now)`, 'i')
+const UNATTACHED_LABEL = /^(selected work|selected projects|projects|portfolio|highlights|notable work|key projects)$/i
+const OTHER_LABEL = /^(summary|professional summary|profile|about|skills|core skills|skills and tools|skills & tools|tools|software|education|certifications?|awards|languages|interests|experience|work experience|professional experience|employment history)$/i
+const CAUSE_RE = /\b(by (?!friday|monday|tuesday|wednesday|thursday|saturday|sunday|the end|end of|day|week|month|quarter|year|\d)\w+|through|thanks to|because|due to|driven by|as a result of|which (?:led|drove|pushed|lifted|raised))\b/i
+const STOP_TOKENS = new Set(['senior', 'junior', 'lead', 'video', 'editor', 'editing', 'growth', 'present', 'current', 'remote', 'hybrid', 'manager', 'director', 'creative', 'designer', 'producer', 'specialist', 'associate', 'head', 'the', 'and', 'inc', 'llc', 'ltd'])
+
+const cleanLine = (l) => l.replace(/\*\*/g, '').replace(/^#{1,3}\s+/, '').replace(/^[-•*–]\s+/, '').trim()
+const metricsIn = (t) => (String(t).match(METRIC_RE) || []).map(m => m.replace(/\s+/g, '').toLowerCase())
+const splitSentences = (t) => String(t).replace(/\n+/g, ' \n ').split(/(?<=[.!?])\s+(?=[A-Z"“])|\n/).map(x => x.trim()).filter(Boolean)
+
+// PDFs break sentences across lines ("…from\n38% to 61%."). Rejoin wrapped lines into
+// logical lines: a new one starts at a bullet, a section title, a job header, or after a blank line.
+function logicalLines(text) {
+  const raw = String(text).replace(/\r/g, '').split('\n')
+  const out = []
+  let startNew = true
+  for (let i = 0; i < raw.length; i++) {
+    const r = raw[i].trim()
+    if (!r) { startNew = true; continue }
+    if (/^[•●▪◦\-*–]$/.test(r)) { startNew = true; out.push('- '); startNew = false; out.isBulletPending = true; continue }
+    const bare = cleanLine(r).replace(/:$/, '')
+    const boundary = /^[-•●▪◦*–]\s/.test(r) || UNATTACHED_LABEL.test(bare) || OTHER_LABEL.test(bare) ||
+      (r.length < 200 && DATE_RANGE_RE.test(r) && !/[.!?]$/.test(r))
+    if (out.isBulletPending) { out[out.length - 1] += r; out.isBulletPending = false; startNew = false; continue }
+    if (startNew || boundary || !out.length) out.push(r)
+    else out[out.length - 1] += ' ' + r
+    startNew = UNATTACHED_LABEL.test(bare) || OTHER_LABEL.test(bare) || (r.length < 200 && DATE_RANGE_RE.test(r) && !/[.!?]$/.test(r))
+  }
+  return out
+}
+
+// Walk a document line by line, tagging each line with its block: a job header, an unattached section, or other
+function blocksOf(text) {
+  const out = []
+  let owner = { kind: 'other', header: '' }
+  for (const raw of logicalLines(text)) {
+    const line = cleanLine(raw)
+    if (!line) continue
+    const bare = line.replace(/:$/, '')
+    if (UNATTACHED_LABEL.test(bare)) { owner = { kind: 'unattached', header: bare }; continue }
+    if (OTHER_LABEL.test(bare)) { owner = { kind: 'other', header: bare }; continue }
+    if (!/^[-•*–]\s/.test(raw.trim()) && line.length < 200 && DATE_RANGE_RE.test(line)) {
+      owner = { kind: 'job', header: line }
+      continue
+    }
+    out.push({ line, owner })
+  }
+  return out
+}
+
+function headerTokens(header) {
+  return new Set((header.match(/[A-Z][A-Za-z&'’.-]{3,}/g) || []).map(w => w.toLowerCase()).filter(w => !STOP_TOKENS.has(w)))
+}
+
+function findSuspects(sourceResume, docs) {
+  const src = blocksOf(sourceResume)
+  const jobHeaders = [...new Set(src.filter(b => b.owner.kind === 'job').map(b => b.owner.header))]
+  // tokens that identify exactly one job (e.g. "stillwater", "brightline", "oakland")
+  const counts = {}
+  jobHeaders.forEach(h => headerTokens(h).forEach(t => { counts[t] = (counts[t] || 0) + 1 }))
+  const distinctive = new Map(jobHeaders.map(h => [h, [...headerTokens(h)].filter(t => counts[t] === 1)]))
+  const allDistinctive = [...distinctive.values()].flat()
+
+  // metric → where it lives in the source, and whether the source explains it
+  const where = {}
+  for (const b of src) {
+    for (const m of metricsIn(b.line)) {
+      (where[m] = where[m] || { owners: [], sentences: [] })
+      where[m].owners.push(b.owner)
+      splitSentences(b.line).filter(x => metricsIn(x).includes(m)).forEach(x => where[m].sentences.push(x))
+    }
+  }
+  const sourceHasCause = (m) => (where[m]?.sentences || []).some(x => CAUSE_RE.test(x))
+  const tokensFor = (owner) => owner.kind === 'job' ? (distinctive.get(owner.header) || []) : []
+
+  const suspects = []
+  const seen = new Set()
+  const add = (doc, text, why) => {
+    const k = doc + '|' + text
+    if (seen.has(k)) return
+    seen.add(k)
+    suspects.push({ doc, text, why })
+  }
+
+  for (const [doc, body] of Object.entries(docs)) {
+    if (!body) continue
+    const isLetter = doc === 'cover'
+    const units = isLetter
+      ? splitSentences(body).map(t => ({ line: t, owner: null }))
+      : blocksOf(body).flatMap(b => splitSentences(b.line).map(t => ({ line: t, owner: b.owner })))
+
+    for (const u of units) {
+      for (const m of metricsIn(u.line)) {
+        const info = where[m]
+        if (!info) continue // unknown numbers are the AI fact-checker's job
+        const srcOwners = info.owners
+        // employers the source itself names next to this number, e.g. "(Stillwater, TikTok)" in Selected work
+        const mentioned = allDistinctive.filter(t => info.sentences.some(x => new RegExp(`\\b${t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(x)))
+        const srcJobTokens = [...new Set([...srcOwners.flatMap(tokensFor), ...mentioned])]
+        const unattachedOnly = srcOwners.every(o => o.kind !== 'job') && srcOwners.some(o => o.kind === 'unattached') && !mentioned.length
+
+        // 1. moved to a different job (resume)
+        if (!isLetter && u.owner?.kind === 'job') {
+          const outTokens = [...headerTokens(u.owner.header)]
+          const matchesSource = srcJobTokens.some(t => outTokens.includes(t))
+          if (unattachedOnly) add(doc, u.line, `The source lists the ${m} result under "${srcOwners.find(o => o.kind === 'unattached').header}" with no employer, but this puts it under a job. If it is also listed elsewhere in the document, this is a duplicate: remove it.`)
+          else if (srcJobTokens.length && !matchesSource) add(doc, u.line, `The source puts the ${m} result under a different job.`)
+        }
+        // 2. sentence names an employer the number doesn't belong to (cover letter, summary)
+        if (isLetter || u.owner?.kind !== 'job') {
+          const lower = u.line.toLowerCase()
+          const named = allDistinctive.filter(t => new RegExp(`\\b${t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`).test(lower))
+          const wrong = named.filter(t => !srcJobTokens.includes(t))
+          if (wrong.length && (unattachedOnly || !named.some(t => srcJobTokens.includes(t)))) {
+            add(doc, u.line, unattachedOnly
+              ? `The source lists the ${m} result with no employer, but this sentence ties it to ${wrong[0]}.`
+              : `The source puts the ${m} result under a different job than ${wrong[0]}.`)
+          }
+        }
+        // 3. invented cause
+        if (CAUSE_RE.test(u.line) && !sourceHasCause(m)) {
+          add(doc, u.line, `This sentence explains how its result happened ("${(u.line.match(CAUSE_RE) || [''])[0]}…"), but the source never says how. Remove the explanation, keep the numbers.`)
+        }
+      }
+    }
+  }
+  return suspects.slice(0, 12)
+}
+
+const wordsOf = (t) => t.toLowerCase().replace(/[^a-z0-9%\s]/g, ' ').split(/\s+/).filter(Boolean)
+function hasRepeatedPhrase(text, n = 6) {
+  for (const line of String(text).split('\n')) {
+    const w = wordsOf(line)
+    const seen = new Set()
+    for (let i = 0; i + n <= w.length; i++) {
+      const k = w.slice(i, i + n).join(' ')
+      if (seen.has(k)) return true
+      seen.add(k)
+    }
+  }
+  return false
+}
+const tidy = (t) => t
+  .replace(/(?<!\.)\.\.(?!\.)/g, '.')
+  .replace(/[ \t]{2,}/g, ' ')
+  .replace(/ ([,.;:])/g, '$1')
+  .replace(/^[-•*–]\s*$/gm, '')
+  .replace(/\n{3,}/g, '\n\n')
+
 async function factCheckDocs(sourceResume, docs) {
   const names = Object.keys(docs).filter(k => docs[k] && docs[k].trim())
   if (!names.length) return { docs, factCheck: { checked: false, fixes: [] } }
 
+  const suspects = findSuspects(sourceResume, docs)
+  const suspectBlock = suspects.length
+    ? `\nAUTOMATED CHECKS flagged these sentences. Each is very likely wrong. Fix every one unless the source resume clearly and explicitly supports it:\n${suspects.map(x => `- [${x.doc}] "${x.text}" — ${x.why}`).join('\n')}\n`
+    : ''
   const labels = { resume: 'TAILORED RESUME', resumeA: 'TAILORED RESUME (VERSION A)', resumeB: 'TAILORED RESUME (VERSION B)', cover: 'COVER LETTER' }
   const blocks = names.map(n => `<doc id="${n}" label="${labels[n] || n}">\n${docs[n]}\n</doc>`).join('\n\n')
 
@@ -420,9 +580,10 @@ FLAG a claim when it:
 - inflates scope: "every", "all", "led", "owned", "made the call", "built from nothing" when the source says less (e.g. the source says "with the marketing lead")
 - invents a working habit, motivation, or anecdote ("before anyone asks twice")
 
+${suspectBlock}
 DO NOT flag: rewording, tightening, reordering, summarizing, combining facts that the source states about the same job, keyword choices that are true to the source, tone, or opinions about the company in the cover letter.
 
-For each flagged claim give the smallest fix that makes it true to the source: keep the sentence and its meaning, remove or correct only the unsupported part. If nothing true can be said, delete just that clause.
+For each flagged claim give the smallest fix that makes it true to the source: keep the sentence and its meaning, remove or correct only the unsupported part. If nothing true can be said, delete just that clause. "replacement" must be the full corrected version of "original" — never repeat words that come right before or after it in the document. If an item duplicates another item already in the document (e.g. the same project appears under a job AND under Selected Work), set "original" to the whole duplicate bullet and "replacement" to an empty string.
 
 Respond with ONLY a JSON object, no markdown fences:
 {"fixes":[{"doc":"<doc id>","original":"<exact text copied character-for-character from that doc, at most one sentence or one bullet>","replacement":"<corrected text>","reason":"<under 15 words, plain English, addressed to the candidate, e.g. 'Your resume doesn't say this was at Brightline.'>"}]}
@@ -450,10 +611,13 @@ Maximum 12 fixes. If everything is supported, return {"fixes":[]}.`
       if (!out[id] || original.length < 8) continue
       if (out[id].split(original).length !== 2) continue // must match exactly once
       if (replacement.length > original.length + 40) continue // a fix may not add new material
+      if (replacement && replacement !== original && replacement.includes(original.trim())) continue // a fix may not append to the original
       // a fix may not introduce numbers that are in neither the source nor the original line
       const allowed = new Set([...sourceNums, ...numbersIn(original)])
       if (numbersIn(replacement).some(n => !allowed.has(n))) continue
-      out[id] = out[id].replace(original, replacement)
+      const next = tidy(out[id].replace(original, replacement))
+      if (hasRepeatedPhrase(next) && !hasRepeatedPhrase(out[id])) continue // a fix may never create duplicated text
+      out[id] = next
       applied.push({
         doc: id,
         before: original.trim(),
@@ -461,7 +625,7 @@ Maximum 12 fixes. If everything is supported, return {"fixes":[]}.`
         reason: String(f.reason || '').slice(0, 140),
       })
     }
-    return { docs: out, factCheck: { checked: true, fixes: applied } }
+    return { docs: out, factCheck: { checked: true, fixes: applied, flagged: suspects.length } }
   } catch (e) {
     console.error('Fact check skipped:', e?.message || e)
     return { docs, factCheck: { checked: false, fixes: [] } }
