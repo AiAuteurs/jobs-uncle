@@ -337,6 +337,46 @@ const stripMarkdown = (text) => {
     .trim()
 }
 
+// Textarea that grows with its content, so people can read the whole job or resume
+// without scrolling inside a tiny box. Very long text caps at ~2/3 of the screen
+// (then scrolls inside) so the Generate button stays within reach.
+function AutoGrowTextarea({ minHeight = 160, maxVh = 66, value, ...props }) {
+  const ref = useRef(null)
+  const resize = useCallback(() => {
+    const el = ref.current
+    if (!el || typeof window === 'undefined') return
+    const scrollY = window.scrollY
+    el.style.height = 'auto'
+    const max = Math.round(window.innerHeight * maxVh / 100)
+    const needed = el.scrollHeight + 2
+    el.style.height = Math.max(minHeight, Math.min(needed, max)) + 'px'
+    el.style.overflowY = needed > max ? 'auto' : 'hidden'
+    if (window.scrollY !== scrollY) window.scrollTo(0, scrollY) // no page jump while typing
+  }, [minHeight, maxVh])
+  useEffect(() => { resize() }, [value, resize])
+  useEffect(() => {
+    window.addEventListener('resize', resize)
+    return () => window.removeEventListener('resize', resize)
+  }, [resize])
+  return <textarea ref={ref} value={value} {...props} />
+}
+
+const SOURCE_NAMES = {
+  'linkedin.com': 'LinkedIn', 'indeed.com': 'Indeed', 'glassdoor.com': 'Glassdoor',
+  'ziprecruiter.com': 'ZipRecruiter', 'monster.com': 'Monster', 'careerbuilder.com': 'CareerBuilder',
+  'usajobs.gov': 'USAJOBS', 'flexjobs.com': 'FlexJobs', 'greenhouse.io': 'Greenhouse', 'lever.co': 'Lever',
+  'myworkdayjobs.com': 'Workday', 'ashbyhq.com': 'Ashby', 'wellfound.com': 'Wellfound', 'dice.com': 'Dice',
+}
+function sourceName(url) {
+  try {
+    const host = new URL(url).hostname.replace(/^www\./, '')
+    const known = Object.keys(SOURCE_NAMES).find(d => host === d || host.endsWith('.' + d))
+    return known ? SOURCE_NAMES[known] : host
+  } catch (e) {
+    return ''
+  }
+}
+
 export default function Home() {
   const router = useRouter()
   const [pdfFile, setPdfFile] = useState(null)
@@ -511,8 +551,9 @@ export default function Home() {
   // v1.2+: extension stores the job in chrome.storage.local, opens /?src=ext, and its
   // bridge content script postMessages { title, company, description } to this page.
   const extJobApplied = useRef(false)
+  const [importedJob, setImportedJob] = useState(null) // { source, title, company } when the extension filled the JD
 
-  const applyExtensionJob = useCallback(({ title, company, description }) => {
+  const applyExtensionJob = useCallback(({ title, company, description, url }) => {
     if (extJobApplied.current) return
     const desc = typeof description === 'string' ? description.trim().slice(0, 12000) : ''
     if (desc.length < 50) return
@@ -521,6 +562,7 @@ export default function Home() {
     const c = typeof company === 'string' ? company.trim().slice(0, 120) : ''
     const header = [t && `Job title: ${t}`, c && `Company: ${c}`].filter(Boolean).join('\n')
     setJobDescription(header ? `${header}\n\n${desc}` : desc)
+    setImportedJob({ source: sourceName(url), title: t, company: c })
     setJobDescInputMode('paste')
     setError(null)
     setTimeout(() => {
@@ -1016,6 +1058,7 @@ export default function Home() {
 
   const handleReset = () => {
     setJobDescription('')
+    setImportedJob(null)
     setResults(null)
     setError(null)
     setRegeneratedResults(null)
@@ -1563,7 +1606,7 @@ export default function Home() {
                   <input ref={fileInputRef} type="file" accept=".pdf,.doc,.docx,.txt" className="file-input" onChange={(e) => handleFile(e.target.files[0])} />
                 </div>
               ) : (
-                <textarea className="cc-jd-input cc-jd-input--tall" placeholder="Paste your full resume here — work history, skills, education..." value={resumeText} onChange={(e) => setResumeText(e.target.value)} />
+                <AutoGrowTextarea className="cc-jd-input cc-jd-input--tall" placeholder="Paste your full resume here — work history, skills, education..." value={resumeText} onChange={(e) => setResumeText(e.target.value)} />
               )}
             </div>
 
@@ -1579,7 +1622,34 @@ export default function Home() {
                 </div>
               </div>
               {jobDescInputMode === 'paste' ? (
-                <textarea className="cc-jd-input cc-jd-input--tall" placeholder="Paste the full job posting — title, responsibilities, requirements..." value={jobDescription} onChange={(e) => { setJobDescription(e.target.value); setError(null); }} />
+                <>
+                  {importedJob && jobDescription.trim() && (
+                    <div className="cc-import-note" role="status">
+                      <span className="cc-import-check" aria-hidden="true">✓</span>
+                      <span className="cc-import-text">
+                        Job imported{importedJob.source ? ` from ${importedJob.source}` : ''}
+                        {(importedJob.title || importedJob.company) && (
+                          <span className="cc-import-job">
+                            {' · '}{[importedJob.title, importedJob.company].filter(Boolean).join(' at ')}
+                          </span>
+                        )}
+                      </span>
+                      <button
+                        type="button"
+                        className="cc-import-clear"
+                        onClick={() => { setJobDescription(''); setImportedJob(null); }}
+                      >
+                        Clear
+                      </button>
+                    </div>
+                  )}
+                  <AutoGrowTextarea
+                    className="cc-jd-input cc-jd-input--tall"
+                    placeholder="Paste the full job posting — title, responsibilities, requirements..."
+                    value={jobDescription}
+                    onChange={(e) => { setJobDescription(e.target.value); setError(null); if (!e.target.value.trim()) setImportedJob(null); }}
+                  />
+                </>
               ) : (
                 <div className={`cc-zone ${jobDescFile ? 'cc-zone--done' : 'cc-zone--active'}`} onClick={() => jobDescFileRef.current?.click()}>
                   <div className="cc-zone-icon">{jobDescFile ? '✓' : '📋'}</div>

@@ -520,7 +520,7 @@ body {
 .cc-jd-input::placeholder { color: #444; }
 
 .cc-jd-input--tall {
-  min-height: 90px;
+  min-height: 160px;
   border: 1px dashed rgba(0,209,255,0.3);
   border-radius: 12px;
   padding: 12px 14px;
@@ -532,6 +532,65 @@ body {
   box-shadow: 0 0 0 2px rgba(0,209,255,0.1);
   outline: none;
 }
+
+/* Confirmation when the Chrome extension fills in the job */
+.cc-import-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 10px;
+  padding: 10px 12px 10px 14px;
+  background: rgba(0,209,255,0.06);
+  border: 1px solid rgba(0,209,255,0.28);
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: #FFFFFF;
+  animation: cc-import-in 0.35s ease-out 1;
+}
+.cc-import-check {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #00D1FF;
+  color: #121212;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+.cc-import-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cc-import-job { font-weight: 400; color: #B8BCC4; }
+.cc-import-clear {
+  flex: 0 0 auto;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid #3a3a3a;
+  border-radius: 999px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.cc-import-clear:hover { border-color: #00D1FF; background: rgba(0,209,255,0.08); }
+.cc-import-clear:focus-visible { outline: 2px solid #00D1FF; outline-offset: 2px; }
+@keyframes cc-import-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+@media (max-width: 520px) {
+  .cc-import-text { white-space: normal; }
+}
+@media (prefers-reduced-motion: reduce) { .cc-import-note { animation: none; } }
 
 .cc-zone-divider {
   text-align: center;
