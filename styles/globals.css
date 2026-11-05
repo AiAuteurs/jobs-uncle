@@ -2374,3 +2374,29 @@ body {
 .mascot-spin {
   animation: mascot-spin 0.9s ease-in-out;
 }
+
+/* Tells the user which layout Auto picked and why */
+.format-note {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  background: #F4FBFD;
+  border: 1px solid #CDEFF8;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #3d4450;
+}
+.format-note strong { color: #111111; font-weight: 700; }
+.format-note-label {
+  flex: 0 0 auto;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #007A99;
+}

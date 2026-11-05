@@ -327,6 +327,65 @@ function buildJobManifest(taggedJobs) {
 
 // ─── END GAP DETECTION ────────────────────────────────────────────────────────
 
+/**
+ * Auto format: pick the layout that fits the person's actual career.
+ * Chronological is the safe default recruiters and ATS expect. Skills-based (hybrid)
+ * only when the history really is freelance/contract: most recent work labelled
+ * freelance/contract, or lots of short, overlapping engagements.
+ * Returns { type: 'fulltime' | 'freelance', reason }
+ */
+const FREELANCE_WORDS = /\b(freelance[rd]?|free-lance|contract(or|ed)?|contract role|self[- ]employed|independent|consultant|consulting|1099|various clients|multiple clients|gig)\b/i
+
+function detectCareerType(resumeText, jobs) {
+  const lines = resumeText.split('\n')
+  const now = new Date()
+  const nowTs = now.getFullYear() * 12 + now.getMonth()
+  const windowStart = nowTs - 60 // last 5 years
+
+  // de-dupe the same date range found twice (e.g. header + body)
+  const seen = new Set()
+  const unique = jobs.filter(j => {
+    const k = `${j.startDate}-${j.endDate}-${(j.employer || '').slice(0, 30)}`
+    if (seen.has(k)) return false
+    seen.add(k)
+    return true
+  })
+  const recent = unique.filter(j => j.endDate >= windowStart)
+
+  if (recent.length === 0) {
+    const hits = (resumeText.match(new RegExp(FREELANCE_WORDS.source, 'gi')) || []).length
+    return hits >= 3
+      ? { type: 'freelance', reason: 'your resume describes freelance or contract work' }
+      : { type: 'fulltime', reason: 'it suits most careers and is what recruiters expect' }
+  }
+
+  const context = j => [lines[j.lineIndex - 1], lines[j.lineIndex], lines[j.lineIndex + 1], j.employer].filter(Boolean).join(' ')
+  const freelanceRecent = recent.filter(j => FREELANCE_WORDS.test(context(j))).length
+
+  let overlaps = 0
+  for (let a = 0; a < recent.length; a++) {
+    for (let b = a + 1; b < recent.length; b++) {
+      const o = Math.min(recent[a].endDate, recent[b].endDate) - Math.max(recent[a].startDate, recent[b].startDate)
+      if (o > 2) overlaps++
+    }
+  }
+  const tenures = recent.map(j => Math.max(1, j.endDate - j.startDate)).sort((x, y) => x - y)
+  const median = tenures[Math.floor(tenures.length / 2)]
+
+  let score = 0
+  if (recent.length >= 6) score++
+  if (overlaps >= 2) score++
+  if (recent.length >= 4 && median < 9) score++
+
+  if (freelanceRecent / recent.length >= 0.5) {
+    return { type: 'freelance', reason: 'most of your recent work is freelance or contract' }
+  }
+  if (score >= 2) {
+    return { type: 'freelance', reason: 'your recent work is many short or overlapping engagements' }
+  }
+  return { type: 'fulltime', reason: 'your recent roles are steady positions' }
+}
+
 const RATE_LIMIT = 50        // max requests per window
 const RATE_WINDOW = 60 * 60 // 1 hour in seconds
 
@@ -422,13 +481,17 @@ export default async function handler(req, res) {
   }
 
   const dualVersion = (Array.isArray(fields.dualVersion) ? fields.dualVersion[0] : fields.dualVersion) === 'true'
-  const careerType = (Array.isArray(fields.careerType) ? fields.careerType[0] : fields.careerType) || 'freelance'
+  // careerType is optional; the site doesn't send it. When absent, Auto decides from the resume below.
+  // (It used to default to 'freelance', which made every Auto resume skills-based.)
+  const careerTypeField = (Array.isArray(fields.careerType) ? fields.careerType[0] : fields.careerType) || ''
   const resumeFormat = (Array.isArray(fields.resumeFormat) ? fields.resumeFormat[0] : fields.resumeFormat) || 'auto'
 
   // If user manually picked a format, override careerType
-  const effectiveCareerType = resumeFormat === 'chronological' ? 'fulltime'
+  let effectiveCareerType = resumeFormat === 'chronological' ? 'fulltime'
     : resumeFormat === 'skills' ? 'freelance'
-    : careerType
+    : (careerTypeField === 'freelance' || careerTypeField === 'fulltime') ? careerTypeField
+    : null // decided after the resume is parsed
+  let formatReason = resumeFormat === 'auto' ? '' : 'you picked it'
 
   if (!resumeFile || !jobDescription) {
     return res.status(400).json({ error: 'Missing resume file or job description' })
@@ -456,6 +519,11 @@ export default async function handler(req, res) {
   const parsedJobs = parseJobsFromResume(linkedinText)
   const taggedJobs = tagProtectedJobs(parsedJobs)
   const jobManifest = buildJobManifest(taggedJobs)
+  if (!effectiveCareerType) {
+    const decided = detectCareerType(linkedinText, parsedJobs)
+    effectiveCareerType = decided.type
+    formatReason = decided.reason
+  }
   // ────────────────────────────────────────────────────────────────────────────
 
   // ── ATS keyword pre-score — inject missing keywords into prompt ──────────────
@@ -885,6 +953,9 @@ ${outputFormat}`
 
       return res.status(200).json({
         dualVersion: false,
+        formatUsed: effectiveCareerType === 'freelance' ? 'skills' : 'chronological',
+        formatAuto: resumeFormat === 'auto',
+        formatReason,
         resume,
         coverLetter,
         recruiterNotes,

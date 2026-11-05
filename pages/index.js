@@ -2292,6 +2292,16 @@ export default function Home() {
               })()}
 
               {activeResultTab === 'resume' && <div id="result-resume" className="result-section">
+                {results?.formatAuto && results?.formatUsed && !results?.dualVersion && (
+                  <div className="format-note" role="note">
+                    <span className="format-note-label">Auto format</span>
+                    <span>
+                      We used <strong>{results.formatUsed === 'skills' ? 'Skills-based' : 'Chronological'}</strong>
+                      {results.formatReason ? ` because ${results.formatReason}.` : '.'}
+                      {' '}You can pick a different format under Resume Format next time.
+                    </span>
+                  </div>
+                )}
                 <div className="result-section-title">Resume</div>
                 {results.dualVersion && activeVersion === 'v1' ? (
                   <>

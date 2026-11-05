@@ -36,6 +36,8 @@ const descAndAfter = `
 const leftList = `<ul>${Array.from({ length: 30 }, (_, i) =>
   `<li><div>Job card ${i}</div><div>Company ${i}</div><button aria-label="Save job ${i}">Save</button><span>Easy Apply</span></li>`).join('')}</ul>`
 
+const BULLETS_URL = 'https://www.linkedin.com/jobs/view/5555/'
+const TRUNCATED_URL = 'https://www.linkedin.com/jobs/search/?currentJobId=999&keywords=video'
 const PAGES = {
   'https://www.linkedin.com/jobs/search/?currentJobId=4123&keywords=creative%20lead':
     `<header><button>Easy Apply</button><span>Date posted</span></header>
@@ -43,6 +45,13 @@ const PAGES = {
      <div class="right" style="overflow-y:auto">${topCard('Easy Apply')}${descAndAfter}</div></div>`,
   'https://www.linkedin.com/jobs/view/4123/':
     `<main>${topCard('Apply')}${descAndAfter}</main>`,
+  // Description with a real <ul> list (LinkedIn's bullets are CSS markers, not text)
+  [BULLETS_URL]:
+    `<main>${topCard('Apply')}<div><h2>About the job</h2><div><p>${esc(KREA_JD.split('\n')[0])}</p><p>What You Will Work On</p><ul><li>Edit short-form videos for TikTok, Instagram Reels, and YouTube Shorts</li><li>Grab attention in the first second and keep people watching to the end</li></ul><p>Full-time. San Francisco preferred, remote work possible. Competitive salary and stock in the company.</p></div></div><div><h2>About the company</h2></div></main>`,
+  // Description truncated in the DOM until "… more" is clicked
+  [TRUNCATED_URL]:
+    `<main>${topCard('Apply')}<div><h2>About the job</h2><div id="d"><p>${esc(KREA_JD.split('\n')[0])}</p><p>You will turn raw footage into short videos people… <button id="m">more</button></p></div></div>
+     <div><h2>About the company</h2></div></main>`,
 }
 
 // jsdom has no layout or innerText; polyfill just enough
@@ -74,8 +83,13 @@ const wait = ms => new Promise(r => setTimeout(r, ms))
 ;(async () => {
   let pass = 0
   for (const [url, html] of Object.entries(PAGES)) {
-    console.log(url.includes('/view/') ? '/jobs/view/ page' : 'Two-pane search page')
+    console.log(url === BULLETS_URL ? 'Bulleted list (bullets restored)' : url === TRUNCATED_URL ? 'Truncated description ("… more" must be clicked)' : url.includes('/view/') ? '/jobs/view/ page' : 'Two-pane search page')
     const { w, sent } = setup(url, html)
+    if (url === TRUNCATED_URL) {
+      w.document.getElementById('m').addEventListener('click', () => {
+        w.document.getElementById('d').innerHTML = jdHtml // LinkedIn swaps in the full text
+      })
+    }
     await wait(1100)
     const d = w.document
     const wrap = d.getElementById('jobsuncle-wrapper')
@@ -92,12 +106,17 @@ const wait = ms => new Promise(r => setTimeout(r, ms))
     assert(sent.some(m => m.type === 'JU_JOB_STATE' && m.detected === true)); pass++; console.log('  ✓ badge message sent')
 
     d.getElementById('jobsuncle-inject-btn').click()
-    await wait(20)
+    await wait(700)
     const open = sent.find(m => m.type === 'JU_OPEN')
     assert(open, 'no JU_OPEN')
     assert.strictEqual(open.job.title, 'Creative Lead')
     assert.strictEqual(open.job.company, 'Krea')
-    const norm = s => s.replace(/\n+/g, '\n'); assert.strictEqual(norm(open.job.description), norm(KREA_JD)) // polyfilled innerText drops blank lines
+    const norm = s => s.replace(/\n+/g, '\n')
+    if (url === BULLETS_URL) {
+      assert(open.job.description.includes('• Edit short-form videos for TikTok'), 'no bullet on list item')
+      assert(open.job.description.includes('• Grab attention in the first second'), 'no bullet on second item')
+      assert(!open.job.description.includes('• What You Will Work On'), 'bullet on a non-list line')
+    } else assert.strictEqual(norm(open.job.description), norm(KREA_JD)) // polyfilled innerText drops blank lines
     pass++; console.log('  ✓ click → JU_OPEN with clean title/company and exact JD (' + open.job.description.length + ' chars)')
     assert(!w.location.href.includes('jd=')); pass++; console.log('  ✓ nothing in the URL')
   }
