@@ -340,6 +340,8 @@ const renderMarkdown = (text, { resume = false } = {}) => {
   const flushList = () => { if (list.length) { out.push(`<ul class="doc-list">${list.join('')}</ul>`); list = [] } }
   const flush = () => { flushPara(); flushList() }
   const nextLine = (i) => { for (let j = i + 1; j < lines.length; j++) if (lines[j] && !RULE_LINE.test(lines[j])) return lines[j]; return '' }
+  const isTitleLine = (l) => l.length <= 90 && !/[.!?]$/.test(l) && !BULLET_LINE.test(l) && !RULE_LINE.test(l) &&
+    !/^#{1,3}\s/.test(l) && !SECTION_LABEL.test(unwrap(l))
 
   let i = 0
   while (i < lines.length && (!lines[i] || RULE_LINE.test(lines[i]))) i++ // no blank gap at the top
@@ -371,11 +373,19 @@ const renderMarkdown = (text, { resume = false } = {}) => {
       list.push(`<li>${inline(line.replace(BULLET_LINE, ''))}</li>`)
       continue
     }
-    // Resume: a short title line sitting on top of bullets = a role or skill-group heading
-    if (resume && line.length <= 90 && !/[.!?]$/.test(line) && BULLET_LINE.test(nextLine(i))) {
-      flush()
-      out.push(`<p class="doc-sub">${inline(line)}</p>`)
-      continue
+    // Resume: short title lines sitting on top of bullets = a role block
+    // ("Stillwater | Senior Video Editor | 2023 – Present" then "San Francisco, CA").
+    // First line is the heading; the rest are quieter detail lines.
+    if (resume && isTitleLine(line)) {
+      let j = i
+      while (j + 1 < lines.length && lines[j + 1] && isTitleLine(lines[j + 1])) j++
+      if (BULLET_LINE.test(nextLine(j))) {
+        flush()
+        out.push(`<p class="doc-sub">${inline(line)}</p>`)
+        if (j > i) out.push(`<p class="doc-meta">${lines.slice(i + 1, j + 1).map(inline).join('<br/>')}</p>`)
+        i = j
+        continue
+      }
     }
     flushList()
     para.push(inline(line))
@@ -435,6 +445,43 @@ function sourceName(url) {
   } catch (e) {
     return ''
   }
+}
+
+// Shows the customer that their documents were checked against their own resume,
+// and exactly which lines were corrected and why.
+function FactCheckNote({ factCheck, docs }) {
+  const [open, setOpen] = useState(false)
+  if (!factCheck || !factCheck.checked) return null
+  const fixes = (factCheck.fixes || []).filter(f => docs.includes(f.doc))
+  const n = fixes.length
+  return (
+    <div className="factcheck-note" role="note">
+      <div className="factcheck-head">
+        <span className="factcheck-badge">✓ Fact-checked</span>
+        <span className="factcheck-summary">
+          {n === 0
+            ? 'Every line traces back to your resume.'
+            : `We corrected ${n} line${n === 1 ? '' : 's'} that went further than your resume says.`}
+        </span>
+        {n > 0 && (
+          <button type="button" className="factcheck-toggle" onClick={() => setOpen(o => !o)} aria-expanded={open}>
+            {open ? 'Hide changes' : 'See changes'}
+          </button>
+        )}
+      </div>
+      {open && n > 0 && (
+        <ul className="factcheck-list">
+          {fixes.map((f, i) => (
+            <li key={i}>
+              {f.reason && <div className="factcheck-reason">{f.reason}</div>}
+              <div className="factcheck-before"><span>Was</span><s>{f.before}</s></div>
+              <div className="factcheck-after"><span>Now</span>{f.after ? f.after : <em>Removed</em>}</div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
 }
 
 export default function Home() {
@@ -940,7 +987,8 @@ export default function Home() {
         .doc-name { font-family: Helvetica, Arial, sans-serif; font-size: 22pt; font-weight: 700; line-height: 1.15; margin: 0 0 4px; }
         .doc-contact { font-size: 10.5pt; color: #444; margin: 0 0 18px; }
         .doc-h { font-family: Helvetica, Arial, sans-serif; font-size: 10.5pt; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border-bottom: 1px solid #bbb; padding-bottom: 3px; margin: 18px 0 8px; }
-        .doc-sub { font-weight: bold; margin: 12px 0 4px; }
+        .doc-sub { font-weight: bold; margin: 12px 0 2px; }
+        .doc-meta { font-size: 10pt; color: #555; margin: 0 0 4px; }
         .doc-list { margin: 0 0 0.75em 0; padding-left: 1.2em; }
         .doc-list li { margin: 0 0 4px; }
         .doc-h, .doc-sub { break-after: avoid; }
@@ -2307,6 +2355,9 @@ export default function Home() {
                     </span>
                   </div>
                 )}
+                {!(activeVersion === 'v2' && regeneratedResults) && (
+                  <FactCheckNote factCheck={results?.factCheck} docs={['resume', 'resumeA', 'resumeB']} />
+                )}
                 <div className="result-section-title">Resume</div>
                 {results.dualVersion && activeVersion === 'v1' ? (
                   <>
@@ -2337,6 +2388,9 @@ export default function Home() {
               </div>}
 
               {activeResultTab === 'cover' && <div className="result-section">
+                {!(activeVersion === 'v2' && regeneratedResults) && (
+                  <FactCheckNote factCheck={results?.factCheck} docs={['cover']} />
+                )}
                 <div className="result-section-title">Cover Letter</div>
                 <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(
                   activeVersion === 'v2' && regeneratedResults

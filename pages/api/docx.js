@@ -45,6 +45,8 @@ function parseResume(text) {
     i++
   }
   let lastBlank = false
+  const isTitleLine = (l) => l.length <= 90 && !/[.!?]$/.test(l) && !BULLET_LINE.test(l) && !RULE_LINE.test(l) &&
+    !/^#{1,3}\s/.test(l) && !SECTION_LABEL.test(l.replace(/:$/, ''))
   const nextLine = (k) => { for (let j = k + 1; j < lines.length; j++) if (lines[j] && !RULE_LINE.test(lines[j])) return lines[j]; return '' }
 
   for (; i < lines.length; i++) {
@@ -63,14 +65,29 @@ function parseResume(text) {
       continue
     }
 
-    // Short title line sitting on top of bullets = a role or skill-group heading
-    if (!/^#|^\*\*/.test(line) && !BULLET_LINE.test(line) && line.length <= 90 && !/[.!?]$/.test(line) && BULLET_LINE.test(nextLine(i))) {
-      paragraphs.push(new Paragraph({
-        children: [new TextRun({ text: line, bold: true, font: 'Calibri', size: 22 })],
-        spacing: { before: 160, after: 40 },
-        keepNext: true,
-      }))
-      continue
+    // Short title lines sitting on top of bullets = a role block: first line bold heading,
+    // following lines (location, dates) as quieter detail lines.
+    if (isTitleLine(line)) {
+      let j = i
+      while (j + 1 < lines.length && lines[j + 1] && isTitleLine(lines[j + 1])) j++
+      if (BULLET_LINE.test(nextLine(j))) {
+        const plain = (t) => t.replace(/\*\*(.+?)\*\*/g, '$1')
+        paragraphs.push(new Paragraph({
+          children: [new TextRun({ text: plain(line), bold: true, font: 'Calibri', size: 22 })],
+          spacing: { before: 160, after: j > i ? 0 : 40 },
+          keepNext: true,
+        }))
+        for (let k = i + 1; k <= j; k++) {
+          paragraphs.push(new Paragraph({
+            children: [new TextRun({ text: plain(lines[k]), font: 'Calibri', size: 20, color: '555555' })],
+            spacing: { after: k === j ? 40 : 0 },
+            keepNext: true,
+          }))
+        }
+        lastBlank = false
+        i = j
+        continue
+      }
     }
 
     if (/^#\s+/.test(line)) {

@@ -386,6 +386,88 @@ function detectCareerType(resumeText, jobs) {
   return { type: 'fulltime', reason: 'your recent roles are steady positions' }
 }
 
+/**
+ * FACT CHECK — second pass that compares generated text against the source resume.
+ * Fixes claims the source doesn't support (invented causes/methods, achievements moved
+ * to another job, merged projects, inflated scope) with the smallest possible edit.
+ * Never throws: on any failure it returns the documents unchanged with checked: false.
+ */
+const FACT_CHECK_MODEL = process.env.FACT_CHECK_MODEL || 'claude-haiku-4-5'
+const FACT_CHECK_TIMEOUT_MS = 45000
+
+const numbersIn = (t) => (String(t).match(/\d[\d,.]*\s*[%xkKmMbB]?/g) || []).map(n => n.replace(/\s+/g, '').toLowerCase())
+
+async function factCheckDocs(sourceResume, docs) {
+  const names = Object.keys(docs).filter(k => docs[k] && docs[k].trim())
+  if (!names.length) return { docs, factCheck: { checked: false, fixes: [] } }
+
+  const labels = { resume: 'TAILORED RESUME', resumeA: 'TAILORED RESUME (VERSION A)', resumeB: 'TAILORED RESUME (VERSION B)', cover: 'COVER LETTER' }
+  const blocks = names.map(n => `<doc id="${n}" label="${labels[n] || n}">\n${docs[n]}\n</doc>`).join('\n\n')
+
+  const prompt = `You are a strict fact-checker for job applications. Compare each generated document against the candidate's SOURCE RESUME and find claims the source does not support.
+
+<source_resume>
+${sourceResume.slice(0, 20000)}
+</source_resume>
+
+${blocks}
+
+FLAG a claim when it:
+- states a number, metric, date, title, employer, client, tool, or credential that is not in the source
+- explains HOW or WHY a result happened ("by doing X", "because Y", "through Z", "no voiceover, no hard sell") when the source does not say so
+- attaches an achievement to a different job, employer, or project than the source does, or assigns an employer to something the source lists without one (e.g. a "Selected work" item for "a fintech client")
+- merges two separate projects or results into one, or ties a metric to a project the source doesn't tie it to
+- inflates scope: "every", "all", "led", "owned", "made the call", "built from nothing" when the source says less (e.g. the source says "with the marketing lead")
+- invents a working habit, motivation, or anecdote ("before anyone asks twice")
+
+DO NOT flag: rewording, tightening, reordering, summarizing, combining facts that the source states about the same job, keyword choices that are true to the source, tone, or opinions about the company in the cover letter.
+
+For each flagged claim give the smallest fix that makes it true to the source: keep the sentence and its meaning, remove or correct only the unsupported part. If nothing true can be said, delete just that clause.
+
+Respond with ONLY a JSON object, no markdown fences:
+{"fixes":[{"doc":"<doc id>","original":"<exact text copied character-for-character from that doc, at most one sentence or one bullet>","replacement":"<corrected text>","reason":"<under 15 words, plain English, addressed to the candidate, e.g. 'Your resume doesn't say this was at Brightline.'>"}]}
+Maximum 12 fixes. If everything is supported, return {"fixes":[]}.`
+
+  try {
+    const call = client.messages.create({
+      model: FACT_CHECK_MODEL,
+      max_tokens: 2500,
+      messages: [{ role: 'user', content: prompt }],
+    })
+    const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('fact-check timeout')), FACT_CHECK_TIMEOUT_MS))
+    const msg = await Promise.race([call, timeout])
+    const text = (msg.content || []).map(b => b.text || '').join('').replace(/```json|```/g, '').trim()
+    const jsonText = text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1)
+    const parsed = JSON.parse(jsonText)
+    const out = { ...docs }
+    const applied = []
+    const sourceNums = new Set(numbersIn(sourceResume))
+
+    for (const f of (parsed.fixes || []).slice(0, 12)) {
+      const id = f && f.doc
+      const original = f && typeof f.original === 'string' ? f.original : ''
+      const replacement = f && typeof f.replacement === 'string' ? f.replacement : ''
+      if (!out[id] || original.length < 8) continue
+      if (out[id].split(original).length !== 2) continue // must match exactly once
+      if (replacement.length > original.length + 40) continue // a fix may not add new material
+      // a fix may not introduce numbers that are in neither the source nor the original line
+      const allowed = new Set([...sourceNums, ...numbersIn(original)])
+      if (numbersIn(replacement).some(n => !allowed.has(n))) continue
+      out[id] = out[id].replace(original, replacement)
+      applied.push({
+        doc: id,
+        before: original.trim(),
+        after: replacement.trim(),
+        reason: String(f.reason || '').slice(0, 140),
+      })
+    }
+    return { docs: out, factCheck: { checked: true, fixes: applied } }
+  } catch (e) {
+    console.error('Fact check skipped:', e?.message || e)
+    return { docs, factCheck: { checked: false, fixes: [] } }
+  }
+}
+
 const RATE_LIMIT = 50        // max requests per window
 const RATE_WINDOW = 60 * 60 // 1 hour in seconds
 
@@ -971,9 +1053,15 @@ ${outputFormat}`
       const coverMatch = responseText.match(/===COVER_LETTER===([\s\S]*?)===HIRING_MANAGER_DM===/)
       const dmMatch = responseText.match(/===HIRING_MANAGER_DM===([\s\S]*)$/)
 
-      const resumeA = resumeAMatch ? resumeAMatch[1].trim() : ''
-      const resumeB = resumeBMatch ? resumeBMatch[1].trim() : ''
-      const rawCover = coverMatch ? coverMatch[1].trim() : ''
+      const checkedDual = await factCheckDocs(linkedinText, {
+        resumeA: resumeAMatch ? resumeAMatch[1].trim() : '',
+        resumeB: resumeBMatch ? resumeBMatch[1].trim() : '',
+        cover: coverMatch ? coverMatch[1].trim() : '',
+      })
+      const resumeA = checkedDual.docs.resumeA
+      const resumeB = checkedDual.docs.resumeB
+      const rawCover = checkedDual.docs.cover
+      const factCheck = checkedDual.factCheck
       const coverLetter = contactHeader + finishCoverLetter(rawCover)
       const hiringManagerDM = dmMatch ? dmMatch[1].trim() : ''
 
@@ -982,6 +1070,7 @@ ${outputFormat}`
 
       return res.status(200).json({
         dualVersion: true,
+        factCheck,
         resumeA,
         resumeB,
         coverLetter,
@@ -998,8 +1087,13 @@ ${outputFormat}`
       const dmMatch = responseText.match(/===HIRING_MANAGER_DM===([\s\S]*?)(?:===COMPANY_INTEL===|$)/)
       const intelMatch = responseText.match(/===COMPANY_INTEL===([\s\S]*)$/)
 
-      const resume = resumeMatch ? resumeMatch[1].trim() : responseText
-      const rawCover = coverMatch ? coverMatch[1].trim() : ''
+      const checked = await factCheckDocs(linkedinText, {
+        resume: resumeMatch ? resumeMatch[1].trim() : responseText,
+        cover: coverMatch ? coverMatch[1].trim() : '',
+      })
+      const resume = checked.docs.resume
+      const rawCover = checked.docs.cover
+      const factCheck = checked.factCheck
       const coverLetter = contactHeader + finishCoverLetter(rawCover)
       const hiringManagerDM = dmMatch ? dmMatch[1].trim() : ''
       const companyIntel = intelMatch ? intelMatch[1].trim() : ''
@@ -1009,6 +1103,7 @@ ${outputFormat}`
 
       return res.status(200).json({
         dualVersion: false,
+        factCheck,
         formatUsed: effectiveCareerType === 'freelance' ? 'skills' : 'chronological',
         formatAuto: resumeFormat === 'auto',
         formatReason,

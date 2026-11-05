@@ -2013,7 +2013,8 @@ body {
 .result-content .doc-h       { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #111111;
                                border-bottom: 1px solid #e3e5e8; padding-bottom: 6px; margin: 1.6rem 0 0.7rem; }
 .result-content .doc-h:first-child { margin-top: 0; }
-.result-content .doc-sub     { font-weight: 600; color: #111111; margin: 1rem 0 0.3rem; }
+.result-content .doc-sub     { font-weight: 600; color: #111111; margin: 1rem 0 0.15rem; }
+.result-content .doc-meta    { font-size: 0.85em; color: #5b616b; margin: 0 0 0.35rem; }
 .result-content .doc-list    { margin: 0 0 0.75rem; padding-left: 1.15rem; }
 .result-content .doc-list li { margin: 0 0 0.35rem; padding-left: 0.15rem; }
 .result-content .doc-list li::marker { color: #9aa0a8; }
@@ -2399,4 +2400,59 @@ body {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #007A99;
+}
+
+/* Fact-check note on the Resume and Cover Letter tabs */
+.factcheck-note {
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  background: #F3FAF5;
+  border: 1px solid #CFEBD8;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #3d4450;
+}
+.factcheck-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 10px; }
+.factcheck-badge {
+  flex: 0 0 auto;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1E7A43;
+}
+.factcheck-summary { flex: 1 1 260px; }
+.factcheck-toggle {
+  flex: 0 0 auto;
+  margin-left: auto;
+  padding: 4px 12px;
+  background: #ffffff;
+  border: 1px solid #CFEBD8;
+  border-radius: 999px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #1E7A43;
+  cursor: pointer;
+}
+.factcheck-toggle:hover { border-color: #1E7A43; }
+.factcheck-toggle:focus-visible { outline: 2px solid #1E7A43; outline-offset: 2px; }
+.factcheck-list { list-style: none; margin: 12px 0 2px; padding: 0; display: grid; gap: 10px; }
+.factcheck-list li { padding: 10px 12px; background: #ffffff; border: 1px solid #E3EEE6; border-radius: 8px; }
+.factcheck-reason { font-weight: 600; color: #111111; margin-bottom: 6px; }
+.factcheck-before, .factcheck-after { display: flex; gap: 8px; line-height: 1.45; }
+.factcheck-before { color: #8a5a5a; margin-bottom: 4px; }
+.factcheck-before s { text-decoration-color: rgba(138, 90, 90, 0.55); }
+.factcheck-after { color: #1f3d2a; }
+.factcheck-before span, .factcheck-after span {
+  flex: 0 0 34px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: inline-block;
+  padding-top: 2px;
+  color: #7a8088;
 }
