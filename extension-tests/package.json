@@ -1,0 +1,10 @@
+{
+  "name": "jobsuncle-extension-tests",
+  "private": true,
+  "scripts": {
+    "test": "node test.js && node dom-test.js && node universal-test.js && node bridge-test.js"
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.3"
+  }
+}

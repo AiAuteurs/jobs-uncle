@@ -507,17 +507,49 @@ export default function Home() {
     }
   }, [router.query.signin])
 
-  // Auto-populate from extension URL params (?jt=title&co=company&jd=description)
+  // ── Chrome extension handoff ────────────────────────────────────────────────
+  // v1.2+: extension stores the job in chrome.storage.local, opens /?src=ext, and its
+  // bridge content script postMessages { title, company, description } to this page.
+  const extJobApplied = useRef(false)
+
+  const applyExtensionJob = useCallback(({ title, company, description }) => {
+    if (extJobApplied.current) return
+    const desc = typeof description === 'string' ? description.trim().slice(0, 12000) : ''
+    if (desc.length < 50) return
+    extJobApplied.current = true
+    const t = typeof title === 'string' ? title.trim().slice(0, 200) : ''
+    const c = typeof company === 'string' ? company.trim().slice(0, 120) : ''
+    const header = [t && `Job title: ${t}`, c && `Company: ${c}`].filter(Boolean).join('\n')
+    setJobDescription(header ? `${header}\n\n${desc}` : desc)
+    setJobDescInputMode('paste')
+    setError(null)
+    setTimeout(() => {
+      document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' })
+    }, 400)
+  }, [])
+
+  useEffect(() => {
+    const onMessage = (e) => {
+      if (e.source !== window || e.origin !== window.location.origin) return
+      const d = e.data
+      if (!d || d.source !== 'jobsuncle-ext' || d.type !== 'JU_JOB' || !d.job) return
+      window.postMessage({ source: 'jobsuncle-page', type: 'JU_ACK' }, window.location.origin)
+      applyExtensionJob(d.job)
+      if (window.location.search.includes('src=ext')) router.replace('/', undefined, { shallow: true })
+    }
+    window.addEventListener('message', onMessage)
+    window.postMessage({ source: 'jobsuncle-page', type: 'JU_PAGE_READY' }, window.location.origin)
+    return () => window.removeEventListener('message', onMessage)
+  }, [])
+
+  // Legacy (extension ≤1.1.x): ?jt=title&co=company&jd=description
+  // router.query is already decoded; the old .replace(/[+]/g, ' ') turned "C++" / "99+" into spaces.
   useEffect(() => {
     try {
-      const { jd } = router.query
+      const { jd, jt, co } = router.query
       if (jd && typeof jd === 'string' && jd.trim().length > 50) {
-        const decoded = jd.replace(/[+]/g, ' ')
-        setJobDescription(decoded)
-        setJobDescInputMode('paste')
-        setTimeout(() => {
-          document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' })
-        }, 400)
+        applyExtensionJob({ title: jt, company: co, description: jd })
+        router.replace('/', undefined, { shallow: true })
       }
     } catch (e) {
       // fail silently
