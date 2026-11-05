@@ -384,11 +384,16 @@ const renderMarkdown = (text, { resume = false } = {}) => {
   return out.join('')
 }
 
+// Plain text for the TXT download and for pasting into job portals:
+// no markdown, no "---" separator lines, no runs of blank lines.
 const stripMarkdown = (text) => {
   if (!text) return ''
-  return text
+  return String(text)
+    .replace(/\r/g, '')
     .replace(/\*\*(.+?)\*\*/g, '$1')
     .replace(/^#{1,3}\s+/gm, '')
+    .replace(/^[ \t]*([-*_])([ \t]*\1){2,}[ \t]*$/gm, '')
+    .replace(/\n{3,}/g, '\n\n')
     .trim()
 }
 

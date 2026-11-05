@@ -658,6 +658,7 @@ INSTEAD: Name the actual thing. Specific scope, specific outcomes, specific team
 
 FULL-TIME FORMATTING RULES:
 - Standard reverse-chronological order
+- If the source has a "Selected work", "Projects", or "Portfolio" section with items not tied to a specific job, keep them in a "Selected Work" section after Experience (see ATTRIBUTION INTEGRITY)
 - Each role: 3-4 bullet points max, achievement-focused with metrics where source supports them
 - Emphasize: team size, budget owned, scope of responsibility, promotions, cross-functional influence, tenure
 - Frame achievements in terms of business outcomes — what changed because they were there
@@ -749,6 +750,12 @@ CRITICAL — ZERO FABRICATION: Every credential, company name, award, festival s
 - Clients or brands not named in the source
 - Any specific number, metric, or outcome not stated in the source
 A fabricated credential that gets googled ends the candidacy. This rule is absolute and overrides everything else.
+ATTRIBUTION INTEGRITY: Every achievement stays with the employer, client, or project the source attaches it to.
+- Never move an achievement into a different job than the source puts it under.
+- Never merge two separate projects, videos, campaigns, or results into one bullet or one claim. Two items in the source = two items in the output.
+- If the source lists an achievement WITHOUT saying which job it happened at (for example under "Selected work", "Projects", or "Portfolio"), do NOT assign it to a job and do NOT guess the employer from context. Keep it in a "Selected Work" section, naming the client exactly as the source does (e.g. "fintech client").
+- Never attach a metric to a different project than the source does. If the source gives a channel-wide or role-wide number, keep it at that level.
+NO INVENTED CAUSES OR METHODS: Restate numbers exactly as given. Do not add "by doing X", "through Y", "thanks to Z", or any explanation of how or why a result happened unless the source states it. Do not invent working methods, motivations, or anecdotes. If the source only says what happened, write only what happened.
 VERB FABRICATION IS FABRICATION: Using action verbs that imply responsibilities not in the source is fabrication. "Directed" when the source says "Edited" is fabrication. "Managed budgets" when no budget ownership is stated is fabrication. "Led a team" when no team leadership is in the source is fabrication. Match the candidate's actual function — elevate the OUTPUT of that function, never the implied seniority.
 
 CRITICAL — TITLE INTEGRITY: Never write "Director-level", "VP-level", "Senior-level", "Executive-level" or any seniority prefix the candidate hasn't actually held. Check the source resume — use only titles that appear there. A teacher applying for a Director role is a teacher with Director-level capability, not a "Director-level" anything. Frame ambition through the work, never through a fabricated title.
@@ -802,13 +809,18 @@ RECRUITER GAP ANALYSIS REQUIREMENTS:
 ${resumeInstructions}
 
 COVER LETTER REQUIREMENTS:
-- Maximum 3 paragraphs
-- Open with something specific about the company or role — not "I am writing to apply for..."
+- First line, on its own: a greeting. If the job description names the hiring manager, founder, or the person the candidate would work with (e.g. "You work directly with Jonathan, the founder"), write "Hi Jonathan," using their first name. If no person is named, write "Hi [Company name] team,". Never "To whom it may concern", "Dear Hiring Manager", or "Dear Sir/Madam".
+- Then maximum 3 paragraphs
+- First paragraph opens with something specific about the company or role — not "I am writing to apply for..."
 - Middle paragraph: the 2-3 specific things from their background that make them right for this role
 - Close with confidence, not desperation
+- End with "Best," on its own line, then the candidate's full name on the next line
 - Conversational but professional tone
 - Do NOT use clichés or corporate filler
-- Do NOT include a contact info header
+- Do NOT include a contact info header (it is added automatically)
+- SAME FACT RULES AS THE RESUME: every claim, number, method, and explanation must come from the source resume. Do not invent how a result was achieved, what the candidate felt, or what they avoided ("not by chasing trends"). Keep each achievement with the job or project the source attaches it to.
+- BANNED PATTERNS in the cover letter: the contrast formula "That's not X. That's Y." / "This isn't X — it's Y." / "Not X, but Y."; "genuinely"; "passionate"; "I'm excited to"; "I'd love to"; "perfect fit"; "hit the ground running". Say the point directly instead.
+- Every sentence must make plain sense on first read. No mixed metaphors or stacked clauses.
 
 HIRING MANAGER DM REQUIREMENTS:
 - 3-4 sentences max
@@ -900,9 +912,53 @@ ${outputFormat}`
       : responseText.match(/===RECRUITER_NOTES===([\s\S]*?)===RESUME===/)
     const recruiterNotes = recruiterNotesMatch ? recruiterNotesMatch[1].trim() : ''
 
-    // Build contact header
-    const contactParts = [metadata.candidateName, metadata.candidateEmail, metadata.candidatePhone].filter(Boolean)
+    // Build contact header: name · email · phone · portfolio/reel · LinkedIn
+    // Links come from the generated resume's own header, so they're the candidate's real ones.
+    const headerLinks = (() => {
+      const resumeText = (dualVersion
+        ? (responseText.match(/===RESUME_A===([\s\S]*?)===RESUME_B===/) || [])[1]
+        : (responseText.match(/===RESUME===([\s\S]*?)===COVER_LETTER===/) || [])[1]) || ''
+      const head = resumeText.trim().split('\n').slice(0, 6).join(' ')
+      const urls = (head.match(/\b(?:https?:\/\/)?(?:www\.)?(?:[a-z0-9-]+\.)+[a-z]{2,}(?:\/[^\s·|,;)]*)?/gi) || [])
+        .filter(u => !u.includes('@') && !/@/.test(head.slice(Math.max(0, head.indexOf(u) - 1), head.indexOf(u))))
+        .map(u => u.replace(/[.,]+$/, ''))
+      const email = (metadata.candidateEmail || '').toLowerCase()
+      const clean = [...new Set(urls)].filter(u => !email.endsWith(u.toLowerCase()) && !email.includes(u.toLowerCase()))
+      const linkedin = clean.filter(u => /linkedin\.com/i.test(u))
+      const other = clean.filter(u => !/linkedin\.com/i.test(u))
+      return [...other.slice(0, 1), ...linkedin.slice(0, 1)]
+    })()
+    const contactParts = [metadata.candidateName, metadata.candidateEmail, metadata.candidatePhone, ...headerLinks].filter(Boolean)
     const contactHeader = contactParts.length > 0 ? contactParts.join(' · ') + '\n\n' : ''
+
+    // Guarantee a greeting and a sign-off even if the model forgets
+    const finishCoverLetter = (raw) => {
+      let text = (raw || '').trim()
+      if (!text) return text
+      const firstLine = text.split('\n')[0].trim()
+      if (!/^(hi|hello|dear|hey)\b/i.test(firstLine)) {
+        const company = (metadata.companyName || '').trim()
+        text = `${company ? `Hi ${company} team,` : 'Hello,'}\n\n${text}`
+      }
+      const name = (metadata.candidateName || '').trim()
+      const CLOSING = /^(best|best regards|all the best|thanks|thank you|many thanks|cheers|sincerely|warmly|warm regards|kind regards|regards)[,!.]?$/i
+      const lines = text.split('\n')
+      while (lines.length && !lines[lines.length - 1].trim()) lines.pop()
+      const last = (lines[lines.length - 1] || '').trim()
+      const prev = (lines[lines.length - 2] || '').trim()
+      if (name && last.toLowerCase() === name.toLowerCase()) {
+        if (!CLOSING.test(prev)) {
+          lines.splice(lines.length - 1, 0, 'Best,')
+          if (prev) lines.splice(lines.length - 2, 0, '')
+        }
+      } else if (!CLOSING.test(last)) {
+        lines.push('', 'Best,')
+        if (name) lines.push(name)
+      } else if (name) {
+        lines.push(name)
+      }
+      return lines.join('\n')
+    }
 
     // Build slug
     const slug = (str) => str.replace(/[^a-zA-Z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '')
@@ -918,7 +974,7 @@ ${outputFormat}`
       const resumeA = resumeAMatch ? resumeAMatch[1].trim() : ''
       const resumeB = resumeBMatch ? resumeBMatch[1].trim() : ''
       const rawCover = coverMatch ? coverMatch[1].trim() : ''
-      const coverLetter = contactHeader + rawCover
+      const coverLetter = contactHeader + finishCoverLetter(rawCover)
       const hiringManagerDM = dmMatch ? dmMatch[1].trim() : ''
 
       // ATS keyword match scoring (score against version A)
@@ -944,7 +1000,7 @@ ${outputFormat}`
 
       const resume = resumeMatch ? resumeMatch[1].trim() : responseText
       const rawCover = coverMatch ? coverMatch[1].trim() : ''
-      const coverLetter = contactHeader + rawCover
+      const coverLetter = contactHeader + finishCoverLetter(rawCover)
       const hiringManagerDM = dmMatch ? dmMatch[1].trim() : ''
       const companyIntel = intelMatch ? intelMatch[1].trim() : ''
 

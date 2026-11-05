@@ -134,10 +134,17 @@ function parseCoverLetter(text) {
   const paragraphs = []
   const blocks = text.split(/\n\n+/)
   for (const block of blocks) {
-    const cleaned = block.trim().replace(/\n/g, ' ')
+    const lines = block.trim().split('\n').map((l) => l.trim()).filter(Boolean)
+    const cleaned = lines.join(' ')
     if (!cleaned || /^([-*_])(\s*\1){2,}$/.test(cleaned)) continue
+    // Short stacked lines (sign-off "Best," + name, contact lines) keep their line breaks;
+    // wrapped prose is joined back into one flowing paragraph.
+    const keepBreaks = lines.length > 1 && lines.every((l) => l.length <= 60)
+    const children = keepBreaks
+      ? lines.flatMap((l, i) => (i ? [new TextRun({ break: 1 }), ...parseInline(l)] : parseInline(l)))
+      : parseInline(cleaned)
     paragraphs.push(new Paragraph({
-      children: parseInline(cleaned),
+      children,
       spacing: { after: 240 },
       alignment: AlignmentType.LEFT,
     }))
