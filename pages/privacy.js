@@ -33,17 +33,20 @@ export default function Privacy() {
         </div>
 
         <h1 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Privacy Policy</h1>
-        <p style={{ color: 'var(--text-soft)', fontSize: '0.85rem', marginBottom: '2.5rem' }}>Last updated: March 14, 2026</p>
+        <p style={{ color: 'var(--text-soft)', fontSize: '0.85rem', marginBottom: '2.5rem' }}>Last updated: November 9, 2026</p>
 
         <div style={{ lineHeight: 1.8, color: 'var(--ink)', fontSize: '0.95rem' }}>
 
           <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem', marginTop: '2rem' }}>What happens when you use JobsUncle.ai</h2>
           <p>You upload a PDF and paste a job description. We send that to an AI model to generate your documents. Once your session ends, that data is gone. We do not retain, store, or log the contents of your resume or job description on our servers.</p>
 
+          <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem', marginTop: '2rem' }}>The JobsUncle Chrome extension</h2>
+          <p>The extension adds a “Tailor your resume for this job” button to job postings. To place the button, it looks at the page you’re viewing to check whether it’s a job posting. When you click the button, it copies that posting’s job title, company and description and opens JobsUncle.ai with them filled in. The job details are held in your browser’s extension storage for a few seconds while JobsUncle.ai opens, then deleted. The extension doesn’t send anything anywhere unless you click the button, and it doesn’t read your browsing history, other tabs, form fields, passwords or personal data.</p>
+
           <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem', marginTop: '2rem' }}>What we do store</h2>
           <ul style={{ paddingLeft: '1.5rem', lineHeight: 2 }}>
             <li>A usage count tied to your IP address to manage free tier limits</li>
-            <li>Your email address if you create a paid account or use the restore access feature</li>
+            <li>Your email address if you sign up for free resumes, create a paid account, or use the restore access feature</li>
             <li>Payment information is handled entirely by Stripe — we never see or store your card details</li>
           </ul>
 
@@ -55,6 +58,8 @@ export default function Privacy() {
             <li><strong>Anthropic</strong> — powers the AI generation. Your data is subject to Anthropic's API data policies.</li>
             <li><strong>Stripe</strong> — handles all payments securely.</li>
             <li><strong>Vercel</strong> — hosts the application.</li>
+            <li><strong>Upstash</strong> — stores usage counts, account emails and access status.</li>
+            <li><strong>Resend</strong> — sends sign-in codes and account emails.</li>
           </ul>
 
           <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem', marginTop: '2rem' }}>Your data rights</h2>
