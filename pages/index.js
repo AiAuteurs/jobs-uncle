@@ -626,17 +626,22 @@ export default function Home() {
     return () => clearInterval(t)
   }, [loading])
 
+  // Practical, true advice. No invented statistics: customers are waiting on a fact-checked resume.
   const LOADING_TIPS = [
-    "70% of recruiters now say they prioritize demonstrated skills over job titles.",
-    "Resumes that lead with relevant experience get 40% more callbacks than chronological ones.",
-    "ATS systems scan for keyword density — your tailored resume is optimized for both bots and humans.",
-    "The average recruiter spends 7 seconds on a resume. Your first 3 lines are everything.",
-    "Hiring managers at Fortune 500s report seeing hundreds of identical AI resumes. Specific beats polished.",
-    "A cover letter that opens with the company's own language gets read. Generic ones don't.",
-    "LinkedIn profiles that match your resume get 3x more recruiter outreach.",
-    "Skill-based resumes are growing 60% faster than chronological formats in 2026.",
-    "The best hiring manager DM leads with a result, not a greeting.",
-    "Recruiters flag resumes with unprofessional email addresses in the first pass.",
+    "Recruiters skim before they read. Your name, title and summary do most of the work.",
+    "Numbers make achievements concrete. \u201cGrew a channel from 20K to 410K\u201d says more than \u201cgrew the channel.\u201d",
+    "Most large employers use applicant tracking systems. Using the job post\u2019s own words for skills you really have helps you get found.",
+    "Hiring managers notice when you\u2019ve read their job post. A tailored resume beats a generic one.",
+    "Keep each win with the job where it happened. Interviewers will ask \u201cWhere was that?\u201d",
+    "Chronological is the format most recruiters expect. Skills-based works best for freelance or contract careers.",
+    "If the job post names the hiring manager, address your cover letter to them by name.",
+    "A short, specific cover letter beats a long one. Three paragraphs is plenty.",
+    "Everything on your resume is fair game in an interview. If you can\u2019t talk about it for two minutes, cut it.",
+    "Recruiters often check LinkedIn too. Make sure it tells the same story as your resume.",
+    "A good hiring manager DM is short and opens with something relevant you\u2019ve done.",
+    "Use a simple, professional email address on your resume. Your first and last name is ideal.",
+    "JobsUncle checks every line against your original resume and flags anything that goes further than it says.",
+    "Save each tailored resume with the company\u2019s name in the file name. It makes follow-ups easy.",
   ]
   const tipIndex = Math.floor(elapsedSeconds / 6) % LOADING_TIPS.length
 
@@ -1685,7 +1690,13 @@ export default function Home() {
                 animation: 'logo-spin-pause 2s ease-in-out infinite', transformOrigin: 'center center' }}
             />
             <div className="loading-text" style={{ marginBottom: '6px', fontSize: '1.3rem' }}>Making you impossible to ignore.</div>
-            <div className="loading-sub">Tailoring every word to this role.</div>
+            <div className="loading-sub">
+              {elapsedSeconds < 40
+                ? 'Tailoring every word to this role.'
+                : elapsedSeconds < 90
+                  ? 'Checking every line against your resume.'
+                  : 'Almost there. Running final checks.'}
+            </div>
             <div style={{
               margin: '24px auto 0',
               maxWidth: '460px',
