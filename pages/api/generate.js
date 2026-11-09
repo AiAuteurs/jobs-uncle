@@ -866,6 +866,7 @@ Respond in this exact format:
 ${outputFormat}`
 
   try {
+    const tStart = Date.now()
     const message = await client.messages.create({
       model: 'claude-sonnet-4-6',
       max_tokens: dualVersion ? 7000 : 5500,
@@ -873,6 +874,8 @@ ${outputFormat}`
     })
 
     const responseText = message.content[0].text
+    const tWritten = Date.now()
+    console.log(`[timing] writing: ${((tWritten - tStart) / 1000).toFixed(1)}s, output tokens: ${message.usage?.output_tokens ?? '?'}`)
 
     // Parse metadata
     let metadata = { candidateName: '', candidateEmail: '', candidatePhone: '', companyName: '', jobTitle: '' }
@@ -887,8 +890,9 @@ ${outputFormat}`
       metadata.candidateEmail = localPart + metadata.candidateEmail.slice(atIdx)
     }
 
-    // Notify you when someone generates a resume
-    try {
+    // Notify you when someone generates a resume. Runs alongside the fact-check instead of
+    // before it; awaited just before responding so the serverless function doesn't drop it.
+    const notifyPromise = (async () => { try {
       await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${process.env.RESEND_API}` },
@@ -905,7 +909,7 @@ ${outputFormat}`
           </div>`
         })
       })
-    } catch (e) { /* fail silently */ }
+    } catch (e) { /* fail silently */ } })()
 
     // Parse recruiter notes
     const recruiterNotesMatch = dualVersion
@@ -954,6 +958,8 @@ ${outputFormat}`
       const resumeB = checkedDual.docs.resumeB
       const rawCover = checkedDual.docs.cover
       const factCheck = checkedDual.factCheck
+      console.log(`[timing] fact-check: ${((Date.now() - tWritten) / 1000).toFixed(1)}s, total: ${((Date.now() - tStart) / 1000).toFixed(1)}s`)
+      await notifyPromise
       const coverLetter = contactHeader + finishCoverLetter(rawCover)
       const hiringManagerDM = dmMatch ? dmMatch[1].trim() : ''
 
@@ -987,6 +993,8 @@ ${outputFormat}`
       const resume = checked.docs.resume
       const rawCover = checked.docs.cover
       const factCheck = checked.factCheck
+      console.log(`[timing] fact-check: ${((Date.now() - tWritten) / 1000).toFixed(1)}s, total: ${((Date.now() - tStart) / 1000).toFixed(1)}s`)
+      await notifyPromise
       const coverLetter = contactHeader + finishCoverLetter(rawCover)
       const hiringManagerDM = dmMatch ? dmMatch[1].trim() : ''
       const companyIntel = intelMatch ? intelMatch[1].trim() : ''
