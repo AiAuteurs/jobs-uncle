@@ -838,7 +838,8 @@ export default function Home() {
       formData.append('resumeFormat', resumeFormat)
 
       const controller = new AbortController()
-      const timeout = setTimeout(() => controller.abort(), 120000)
+      // The server may take up to 300s (writing + fact-check); never give up before it does
+      const timeout = setTimeout(() => controller.abort(), 240000)
 
       let response
       try {
