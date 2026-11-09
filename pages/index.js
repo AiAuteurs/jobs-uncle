@@ -901,6 +901,13 @@ export default function Home() {
           resume: results.resume || (activeResume === 'b' ? results.resumeB : results.resumeA) || '',
           jobDescription: jobDescription,
           recruiterNotes: results.recruiterNotes,
+          // so Version 2 is written and fact-checked against the person's own resume, not Version 1
+          originalResume: results.sourceResume || '',
+          coverHeader: (() => {
+            const first = (results.coverLetter || '').split('\n\n')[0] || ''
+            return /@|·/.test(first) && first.length < 400 ? first : ''
+          })(),
+          metadata: results.metadata || {},
         }),
       })
       const data = await res.json()
@@ -2372,9 +2379,11 @@ export default function Home() {
                     </span>
                   </div>
                 )}
-                {!(activeVersion === 'v2' && regeneratedResults) && (
-                  <FactCheckNote factCheck={results?.factCheck} docs={['resume', 'resumeA', 'resumeB']} />
-                )}
+                <FactCheckNote
+                  key={activeVersion === 'v2' && regeneratedResults ? 'fc-resume-v2' : 'fc-resume-v1'}
+                  factCheck={activeVersion === 'v2' && regeneratedResults ? regeneratedResults.factCheck : results?.factCheck}
+                  docs={['resume', 'resumeA', 'resumeB']}
+                />
                 <div className="result-section-title">Resume</div>
                 {results.dualVersion && activeVersion === 'v1' ? (
                   <>
@@ -2405,9 +2414,11 @@ export default function Home() {
               </div>}
 
               {activeResultTab === 'cover' && <div className="result-section">
-                {!(activeVersion === 'v2' && regeneratedResults) && (
-                  <FactCheckNote factCheck={results?.factCheck} docs={['cover']} />
-                )}
+                <FactCheckNote
+                  key={activeVersion === 'v2' && regeneratedResults ? 'fc-cover-v2' : 'fc-cover-v1'}
+                  factCheck={activeVersion === 'v2' && regeneratedResults ? regeneratedResults.factCheck : results?.factCheck}
+                  docs={['cover']}
+                />
                 <div className="result-section-title">Cover Letter</div>
                 <div className="result-content" dangerouslySetInnerHTML={{__html: renderMarkdown(
                   activeVersion === 'v2' && regeneratedResults

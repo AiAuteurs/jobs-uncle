@@ -3,6 +3,10 @@
 // Frontend-gated at Pro tier — server-side KV hardening can be added once build is stable
 
 import Anthropic from '@anthropic-ai/sdk'
+import { factCheckDocs, finishCoverLetter } from '../../lib/factCheck'
+
+// Two AI calls now (rewrite + fact-check): give it the same time allowance as /api/generate
+export const config = { maxDuration: 300 }
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
@@ -11,6 +15,13 @@ export default async function handler(req, res) {
 
   // ── Parse body ────────────────────────────────────────────────────────────
   const { resume, jobDescription, recruiterNotes } = req.body
+  // The person's original resume (sent back from their own browser; never stored). It is the
+  // source of truth for Version 2 and for the fact-check. Older clients don't send it: fall back to Version 1.
+  const originalResume = typeof req.body.originalResume === 'string' && req.body.originalResume.trim().length > 200
+    ? req.body.originalResume.slice(0, 20000)
+    : ''
+  const coverHeader = typeof req.body.coverHeader === 'string' ? req.body.coverHeader.slice(0, 400).trim() : ''
+  const meta = req.body.metadata && typeof req.body.metadata === 'object' ? req.body.metadata : {}
 
   if (!resume || !jobDescription || !recruiterNotes) {
     return res.status(400).json({ error: 'Missing required fields.' })
@@ -98,19 +109,27 @@ No markdown fences, no preamble, no commentary outside the JSON`
   const userPrompt = `JOB DESCRIPTION:
 ${jobDescription}
 
-ORIGINAL RESUME (the ONLY source of truth — every fact in your output must come from here):
-${resume}
+${originalResume ? `ORIGINAL RESUME (the ONLY source of truth — every fact in your output must come from here):
+${originalResume}
 
+VERSION 1 TAILORED RESUME (improve on this, but where it differs from the original resume, the original wins):
+${resume}
+` : `ORIGINAL RESUME (the ONLY source of truth — every fact in your output must come from here):
+${resume}
+`}
 RECRUITER & ATS ANALYSIS (apply fixes where possible using ONLY facts from the original resume):
 ${recruiterNotes}
 
 IMPORTANT: If a fix requires information not present in the original resume (e.g. "add metrics" when no metrics exist), skip that fix rather than inventing data. Strengthen the language around what IS there instead.
 
-${keywordBlock}Produce an improved Version 2 resume and cover letter. Return ONLY JSON: { "resume": "...", "coverLetter": "..." }`
+${keywordBlock}Produce an improved Version 2 resume and cover letter.
+Keep every achievement with the job or project the original resume attaches it to; never move it, merge it with another item, or explain how a result happened unless the original says so.
+The cover letter starts with a greeting line (use the hiring manager's or founder's first name if the job description names one, otherwise "Hi [Company] team,") and ends with "Best," then the candidate's name. Do not include a contact header.
+Return ONLY JSON: { "resume": "...", "coverLetter": "..." }`
 
   try {
     const message = await client.messages.create({
-      model: 'claude-sonnet-4-20250514',
+      model: process.env.REGENERATE_MODEL || 'claude-sonnet-4-6',
       max_tokens: 4000,
       messages: [{ role: 'user', content: userPrompt }],
       system: systemPrompt,
@@ -136,9 +155,17 @@ ${keywordBlock}Produce an improved Version 2 resume and cover letter. Return ONL
       throw new Error('Incomplete regeneration output.')
     }
 
+    // Same fact-check as Version 1, against the original resume
+    const checked = await factCheckDocs(originalResume || resume, {
+      resume: String(parsed.resume),
+      cover: String(parsed.coverLetter),
+    }, client)
+    const cover = finishCoverLetter(checked.docs.cover, meta)
+
     return res.status(200).json({
-      resume: parsed.resume,
-      coverLetter: parsed.coverLetter,
+      resume: checked.docs.resume,
+      coverLetter: coverHeader ? `${coverHeader}\n\n${cover}` : cover,
+      factCheck: checked.factCheck,
     })
   } catch (err) {
     console.error('Regenerate error:', err)
