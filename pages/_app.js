@@ -7,7 +7,7 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.ico?v=3" />
       </Head>
       <Script
         src="https://cdn.promotekit.com/promotekit.js"
