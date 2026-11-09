@@ -55,7 +55,7 @@ export default function Success() {
           width: '100%',
           textAlign: 'center',
         }}>
-          <img src="/uncle-spin-hero.png" alt="Jobs Uncle" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
+          <img src="/jobsuncle-logo.png" alt="Jobs Uncle" style={{ width: 100, height: 'auto', marginBottom: '24px' }} />
 
           {status === 'verifying' && (
             <>
