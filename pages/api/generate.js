@@ -949,7 +949,7 @@ ${outputFormat}`
         resumeA: resumeAMatch ? resumeAMatch[1].trim() : '',
         resumeB: resumeBMatch ? resumeBMatch[1].trim() : '',
         cover: coverMatch ? coverMatch[1].trim() : '',
-      }, client)
+      }, client, jobDescription)
       const resumeA = checkedDual.docs.resumeA
       const resumeB = checkedDual.docs.resumeB
       const rawCover = checkedDual.docs.cover
@@ -983,7 +983,7 @@ ${outputFormat}`
       const checked = await factCheckDocs(linkedinText, {
         resume: resumeMatch ? resumeMatch[1].trim() : responseText,
         cover: coverMatch ? coverMatch[1].trim() : '',
-      }, client)
+      }, client, jobDescription)
       const resume = checked.docs.resume
       const rawCover = checked.docs.cover
       const factCheck = checked.factCheck

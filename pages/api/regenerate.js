@@ -159,7 +159,7 @@ Return ONLY JSON: { "resume": "...", "coverLetter": "..." }`
     const checked = await factCheckDocs(originalResume || resume, {
       resume: String(parsed.resume),
       cover: String(parsed.coverLetter),
-    }, client)
+    }, client, jobDescription)
     const cover = finishCoverLetter(checked.docs.cover, meta)
 
     return res.status(200).json({
