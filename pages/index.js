@@ -4,6 +4,7 @@ import Header from '../components/Header'
 import ContactModal from '../components/ContactModal'
 import HomepageDemoPanel from '../components/HomepageDemoPanel'
 import { useRouter } from 'next/router'
+import { stripJobBoilerplate } from '../lib/jobPost'
 
 
 // ─── COVER LETTER ATS SCORER — lighter, phrase-aware, tone-adjusted ──────────
@@ -109,6 +110,7 @@ function clientScoreCoverLetter(coverText, jobDescription) {
 // ─── CLIENT-SIDE ATS SCORER — restored to original logic that scored 90% ──────
 function clientScoreATS(resumeText, jobDescription) {
   if (!resumeText || !jobDescription) return null
+  jobDescription = stripJobBoilerplate(jobDescription) // score the job, not the legal text
 
   const STOP = new Set([
     'the','and','or','of','to','a','an','in','for','with','on','at','by','from',

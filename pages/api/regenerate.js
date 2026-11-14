@@ -22,6 +22,7 @@ function missingAdditions(extraInfo, docText) {
   return additionTerms(extraInfo).filter(t => !lower.includes(t))
 }
 import { startKeepAlive } from '../../lib/keepAlive'
+import { stripJobBoilerplate } from '../../lib/jobPost'
 
 // Two AI calls now (rewrite + fact-check): give it the same time allowance as /api/generate
 export const config = { maxDuration: 300 }
@@ -65,6 +66,7 @@ export default async function handler(req, res) {
 
   // ── ATS keyword injection (mirrors generate.js) ───────────────────────────
   function scoreKeywordMatch(resumeText, jd) {
+    jd = stripJobBoilerplate(jd) // score the job, not the legal text
     if (!resumeText || !jd) return { missing: [] }
     const STOP = new Set([
       'the','and','or','of','to','a','an','in','for','with','on','at','by','from',
@@ -242,7 +244,10 @@ Respond in this exact format:
     // Same fact-check as Version 1, against the original resume plus the person's own additions
     // Lines carrying what the person told us ("Robocop", "Avid") skip the fact-check: they are
     // the person's own statement, and the checker kept deleting them. Swapped back in afterwards.
-    const keepTerms = extraInfo ? additionTerms(extraInfo) : []
+    // Only names that are NEW (not already in the resume): "Robocop" yes, "Stillwater" no.
+    // Protecting existing names would hide whole jobs from the fact-check.
+    const sourceLower = String(baseSource).toLowerCase()
+    const keepTerms = extraInfo ? additionTerms(extraInfo).filter(t => !sourceLower.includes(t)) : []
     const keptLines = []
     const maskedResume = String(parsed.resume).split('\n').map(line => {
       if (keepTerms.length && keepTerms.some(t => line.toLowerCase().includes(t))) {

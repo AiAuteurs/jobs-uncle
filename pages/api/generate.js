@@ -3,6 +3,7 @@ import fs from 'fs'
 import Anthropic from '@anthropic-ai/sdk'
 import { factCheckDocs, finishCoverLetter as finishCoverLetterShared } from '../../lib/factCheck'
 import { startKeepAlive } from '../../lib/keepAlive'
+import { stripJobBoilerplate } from '../../lib/jobPost'
 
 export const config = {
   api: {
@@ -61,6 +62,7 @@ async function extractTextFromFile(filePath, mimeType, originalName) {
  * Returns { score, matched, missing, total }
  */
 function scoreKeywordMatch(resumeText, jobDescription) {
+  jobDescription = stripJobBoilerplate(jobDescription) // score the job, not the legal text
   const STOP = new Set([
     'the','and','or','of','to','a','an','in','for','with','on','at','by','from',
     'is','are','was','were','be','been','being','have','has','had','do','does',
