@@ -2441,14 +2441,14 @@ export default function Home() {
                       </div>
                       <div>
                         <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#10b981' }}>ATS Keyword Match — Version 2</div>
-                        <div style={{ fontSize: '0.72rem', color: '#ffffff' }}>
-                          {v1ats ? `Up from ${v1ats.score}% on Version 1` : 'Keyword match against job description'}
+                        <div style={{ fontSize: '0.72rem', color: '#444444' }}>
+                          {v1ats ? (v2ats.score > v1ats.score ? `Up from ${v1ats.score}% on Version 1` : v2ats.score < v1ats.score ? `Down from ${v1ats.score}% on Version 1` : `Same as Version 1`) : 'Keyword match against job description'}
                         </div>
                       </div>
                     </div>
                     {v2ats.missing && v2ats.missing.length > 0 && (
-                      <div style={{ fontSize: '0.72rem', color: '#ffffff' }}>
-                        <span style={{ color: '#ef4444', fontWeight: 600 }}>Still missing: </span>
+                      <div style={{ fontSize: '0.72rem', color: '#333333' }}>
+                        <span style={{ color: '#ef4444', fontWeight: 600 }}>Job-post keywords not in your resume: </span>
                         {v2ats.missing.slice(0, 5).join(', ')}
                         {v2ats.missing.length > 5 ? ` +${v2ats.missing.length - 5} more` : ''}
                       </div>
@@ -2639,7 +2639,7 @@ export default function Home() {
                     ? clientScoreATS(regeneratedResults.resume, jobDescription)
                     : results.atsMatch
                   if (!activeAts) return (
-                    <div className="result-section" style={{ textAlign: 'center', padding: '40px 20px', color: '#ffffff' }}>
+                    <div className="result-section" style={{ textAlign: 'center', padding: '40px 20px', color: '#333333' }}>
                       <div style={{ fontSize: '2rem', marginBottom: '12px' }}>🎯</div>
                       <div style={{ fontWeight: 700, marginBottom: '8px' }}>ATS Keyword Match not available</div>
                       <div style={{ fontSize: '0.85rem' }}>Run a new generation to see your keyword match score.</div>
@@ -2649,8 +2649,8 @@ export default function Home() {
                   return <div id="result-ats" className="result-section" style={{ borderLeft: '3px solid #00D1FF', background: 'rgba(0,209,255,0.04)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
                     <div>
-                      <div className="result-section-title" style={{ margin: 0, marginBottom: '4px' }}>ATS Keyword Match {activeVersion === 'v2' && regeneratedResults ? <span style={{ fontSize: '0.65rem', background: '#10b981', color: 'white', padding: '2px 7px', borderRadius: '10px', marginLeft: '6px', fontWeight: 600 }}>v2 score</span> : null}</div>
-                      <div style={{ fontSize: '0.82rem', color: '#ffffff' }}>{activeVersion === 'v2' && regeneratedResults ? 'Scored against your fixed Version 2 resume.' : 'How well your resume matches the job description keywords — no Jobscan needed.'}</div>
+                      <div className="result-section-title" style={{ margin: 0, marginBottom: '4px', color: '#111111' }}>ATS Keyword Match {activeVersion === 'v2' && regeneratedResults ? <span style={{ fontSize: '0.65rem', background: '#10b981', color: 'white', padding: '2px 7px', borderRadius: '10px', marginLeft: '6px', fontWeight: 600 }}>v2 score</span> : null}</div>
+                      <div style={{ fontSize: '0.82rem', color: '#333333' }}>{activeVersion === 'v2' && regeneratedResults ? 'Scored against your fixed Version 2 resume.' : 'How well your resume matches the job description keywords — no Jobscan needed.'}</div>
                     </div>
                     <div style={{ textAlign: 'center' }}>
                       <div style={{
@@ -2663,7 +2663,7 @@ export default function Home() {
                           <span style={{ fontFamily: 'Inter', fontWeight: 900, fontSize: '1.1rem', color: atsMatch.score >= 75 ? '#10b981' : atsMatch.score >= 55 ? '#f59e0b' : '#ef4444', lineHeight: 1 }}>{atsMatch.score}%</span>
                         </div>
                       </div>
-                      <div style={{ fontSize: '0.65rem', color: '#ffffff', marginTop: '4px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                      <div style={{ fontSize: '0.65rem', color: '#333333', marginTop: '4px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
                         {atsMatch.score >= 75 ? 'Strong' : atsMatch.score >= 55 ? 'Good' : 'Needs work'}
                       </div>
                     </div>
@@ -2673,7 +2673,7 @@ export default function Home() {
 
                   {/* SCORE RANGE LEGEND */}
                   <div style={{ marginBottom: '20px', padding: '12px 14px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid var(--border)' }}>
-                    <div style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#ffffff', marginBottom: '10px' }}>Score guide</div>
+                    <div style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#333333', marginBottom: '10px' }}>Score guide</div>
                     <div style={{ display: 'flex', gap: '6px' }}>
                       {[
                         { label: 'Poor', range: '0–40', color: '#ef4444', bg: 'rgba(239,68,68,0.08)', active: atsMatch.score <= 40 },
