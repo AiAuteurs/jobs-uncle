@@ -133,8 +133,8 @@ QUALITY CHECK before outputting:
 - If any bullet contains information not in the original, rewrite it to remove the fabrication
 - The person will submit this resume to employers — accuracy is non-negotiable
 
-Output ONLY valid JSON with keys: resume, coverLetter
-No markdown fences, no preamble, no commentary outside the JSON`
+Output exactly two sections, each starting with its marker on its own line: ===RESUME=== then ===COVER_LETTER===
+No preamble and no commentary outside the two sections.`
 
   const userPrompt = `JOB DESCRIPTION:
 ${jobDescription}
@@ -155,7 +155,12 @@ IMPORTANT: If a fix requires information not present in the original resume (e.g
 ${keywordBlock}Produce an improved Version 2 resume and cover letter.
 Keep every achievement with the job or project the original resume attaches it to; never move it, merge it with another item, or explain how a result happened unless the original says so.
 The cover letter starts with a greeting line (use the hiring manager's or founder's first name if the job description names one, otherwise "Hi [Company] team,") and ends with "Best," then the candidate's name. Do not include a contact header.
-Return ONLY JSON: { "resume": "...", "coverLetter": "..." }`
+Respond in this exact format:
+===RESUME===
+[improved Version 2 resume here]
+
+===COVER_LETTER===
+[improved cover letter here]`
 
   // From here on the browser gets a space every 10s so the connection never goes quiet
   const keepAlive = startKeepAlive(res)
@@ -164,28 +169,20 @@ Return ONLY JSON: { "resume": "...", "coverLetter": "..." }`
   try {
     const message = await client.messages.create({
       model: process.env.REGENERATE_MODEL || 'claude-sonnet-4-6',
-      max_tokens: 4000,
+      max_tokens: 5000,
       messages: [{ role: 'user', content: userPrompt }],
       system: systemPrompt,
     })
 
-    const raw = message.content[0]?.text || ''
-    const clean = raw.replace(/```json|```/g, '').trim()
-
-    let parsed
-    try {
-      parsed = JSON.parse(clean)
-    } catch {
-      // Fallback: try to extract JSON object
-      const jsonMatch = clean.match(/\{[\s\S]*\}/)
-      if (jsonMatch) {
-        parsed = JSON.parse(jsonMatch[0])
-      } else {
-        throw new Error('Could not parse regenerated output.')
-      }
-    }
+    // Plain section markers instead of JSON: quote marks in a resume can't break them
+    const raw = (message.content || []).map(b => b.text || '').join('')
+    const resumePart = (raw.match(/===RESUME===([\s\S]*?)===COVER_LETTER===/) || [])[1]
+    const coverPart = (raw.match(/===COVER_LETTER===([\s\S]*)$/) || [])[1]
+    const parsed = { resume: (resumePart || '').trim(), coverLetter: (coverPart || '').trim() }
+    if (message.stop_reason === 'max_tokens') console.error('Regenerate output cut off at max_tokens')
 
     if (!parsed.resume || !parsed.coverLetter) {
+      console.error('Regenerate: missing section markers. Output starts:', raw.slice(0, 200))
       throw new Error('Incomplete regeneration output.')
     }
 
@@ -204,6 +201,10 @@ Return ONLY JSON: { "resume": "...", "coverLetter": "..." }`
     })
   } catch (err) {
     console.error('Regenerate error:', err)
-    return keepAlive.send({ error: err.message || 'Regeneration failed. Please try again.' })
+    // Show customers a plain message, never a technical one
+    if (err?.status === 529 || err?.message?.includes('overloaded')) {
+      return keepAlive.send({ error: '⏳ Our AI provider is busy right now. Please try again in a few minutes.' })
+    }
+    return keepAlive.send({ error: 'Regeneration hit a snag. Please click Apply fixes again.' })
   }
 }

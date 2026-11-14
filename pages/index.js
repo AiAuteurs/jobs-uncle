@@ -2783,7 +2783,7 @@ export default function Home() {
                                 <img src="/jobsuncle-logo.png" alt="" style={{ width: 44, height: 'auto', flexShrink: 0, animation: 'logo-spin-pause 2s ease-in-out infinite' }} />
                                 <div>
                                   <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#f59e0b' }}>Applying every fix from the analysis...</div>
-                                  <div style={{ fontSize: '0.78rem', color: '#ffffff', marginTop: '3px' }}>Rewriting your resume and cover letter. About 15 seconds.</div>
+                                  <div style={{ fontSize: '0.78rem', color: '#ffffff', marginTop: '3px' }}>Rewriting your resume and cover letter, then fact-checking every line. Usually under a minute.</div>
                                 </div>
                               </div>
                             )}
@@ -2881,7 +2881,7 @@ export default function Home() {
                         />
                         <div>
                           <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#f59e0b' }}>Applying every fix from the analysis...</div>
-                          <div style={{ fontSize: '0.78rem', color: '#ffffff', marginTop: '3px' }}>Rewriting your resume and cover letter. About 15 seconds.</div>
+                          <div style={{ fontSize: '0.78rem', color: '#ffffff', marginTop: '3px' }}>Rewriting your resume and cover letter, then fact-checking every line. Usually under a minute.</div>
                         </div>
                       </div>
                     )}
