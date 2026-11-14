@@ -4,6 +4,7 @@
 
 import Anthropic from '@anthropic-ai/sdk'
 import { factCheckDocs, finishCoverLetter } from '../../lib/factCheck'
+import { startKeepAlive } from '../../lib/keepAlive'
 
 // Two AI calls now (rewrite + fact-check): give it the same time allowance as /api/generate
 export const config = { maxDuration: 300 }
@@ -156,6 +157,10 @@ Keep every achievement with the job or project the original resume attaches it t
 The cover letter starts with a greeting line (use the hiring manager's or founder's first name if the job description names one, otherwise "Hi [Company] team,") and ends with "Best," then the candidate's name. Do not include a contact header.
 Return ONLY JSON: { "resume": "...", "coverLetter": "..." }`
 
+  // From here on the browser gets a space every 10s so the connection never goes quiet
+  const keepAlive = startKeepAlive(res)
+  const tStart = Date.now()
+
   try {
     const message = await client.messages.create({
       model: process.env.REGENERATE_MODEL || 'claude-sonnet-4-6',
@@ -191,13 +196,14 @@ Return ONLY JSON: { "resume": "...", "coverLetter": "..." }`
     }, client, jobDescription)
     const cover = finishCoverLetter(checked.docs.cover, meta)
 
-    return res.status(200).json({
+    console.log(`[timing] regenerate total: ${((Date.now() - tStart) / 1000).toFixed(1)}s`)
+    return keepAlive.send({
       resume: checked.docs.resume,
       coverLetter: coverHeader ? `${coverHeader}\n\n${cover}` : cover,
       factCheck: checked.factCheck,
     })
   } catch (err) {
     console.error('Regenerate error:', err)
-    return res.status(500).json({ error: err.message || 'Regeneration failed. Please try again.' })
+    return keepAlive.send({ error: err.message || 'Regeneration failed. Please try again.' })
   }
 }

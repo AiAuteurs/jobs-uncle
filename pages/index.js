@@ -859,9 +859,16 @@ export default function Home() {
         clearTimeout(timeout)
       }
 
-      const data = await response.json()
+      // The server sends spaces while it works (keeps the connection alive), then the JSON.
+      // Once it has started, errors arrive as { error } with status 200.
+      let data
+      try {
+        data = await response.json()
+      } catch (_) {
+        throw new Error('Connection failed. Please check your internet and try again.')
+      }
 
-      if (!response.ok) {
+      if (!response.ok || data.error) {
         throw new Error(data.error || 'Generation failed')
       }
 
@@ -920,8 +927,9 @@ export default function Home() {
           extraInfo: extraInfo.trim(),
         }),
       })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Regeneration failed.')
+      let data
+      try { data = await res.json() } catch (_) { throw new Error('Connection failed. Please try again.') }
+      if (!res.ok || data.error) throw new Error(data.error || 'Regeneration failed.')
       setRegeneratedResults(data)
       setActiveVersion('v2')
       setActiveResultTab('ats')

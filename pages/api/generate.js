@@ -2,6 +2,7 @@ import formidable from 'formidable'
 import fs from 'fs'
 import Anthropic from '@anthropic-ai/sdk'
 import { factCheckDocs, finishCoverLetter as finishCoverLetterShared } from '../../lib/factCheck'
+import { startKeepAlive } from '../../lib/keepAlive'
 
 export const config = {
   api: {
@@ -541,30 +542,12 @@ Missing keywords: ${missingKeywords.join(', ')}
 ` : ''
   // ────────────────────────────────────────────────────────────────────────────
 
-  const resumeInstructions = dualVersion ? `
-JOB INCLUSION RULES — READ BEFORE WRITING EITHER VERSION:
-${jobManifest}
 
-RULE 1 — PROTECTED JOBS (marked 🔒 above): Must appear in BOTH resume versions.
-RULE 2 — DROPPABLE JOBS (marked ○ above): May omit only if no gap is created.
-RULE 3 — 7-YEAR HARD FLOOR: Never omit any job from the last 7 years.
-RULE 4 — JOB COUNT INTEGRITY: Both versions must contain all PROTECTED jobs.
-
-RESUME VERSION A — LEADERSHIP FOCUS:
-- Lead with a summary emphasizing strategic impact, team leadership, stakeholder management, and organizational outcomes
-- Prioritize bullet points that show scale: team size, budget owned, cross-functional influence, executive visibility
-- Frame achievements in terms of business outcomes, revenue, cost savings, org transformation
-- Keywords: led, drove, spearheaded, scaled, transformed, aligned, influenced
-
-RESUME VERSION B — TECHNICAL/ACHIEVEMENT FOCUS:
-- Lead with a summary emphasizing domain expertise, measurable results, and hands-on execution
-- Prioritize bullet points with hard metrics: percentages, time saved, volume handled, tools mastered
-- Frame achievements in terms of outputs, efficiency, precision, and technical credibility
-- Keywords: built, engineered, optimized, delivered, executed, launched, reduced, increased
-
-Generate both versions. Each should be complete and standalone — same experience, different lens.
-- Write in implied first person throughout both versions — NO "I", "my", or "me" anywhere. Every bullet leads with an action verb. "Engineered solution" not "I engineered"
-` : effectiveCareerType === 'freelance' ? `
+  // ── Instructions for each part ────────────────────────────────────────────────
+  // The documents are written by separate calls that run at the same time, each with the
+  // same rules, source resume and job description. Waiting time is the longest single
+  // document, not all of them in a row.
+  const singleResumeInstructions = effectiveCareerType === 'freelance' ? `
 RESUME REQUIREMENTS — FREELANCE / CONTRACT CAREER:
 
 YOUR JOB: Act as a master resume writer, not a transcriptionist. Read what you're given, extract what matters for THIS role, and build the strongest possible case in a hybrid format that reads beautifully for humans and passes ATS.
@@ -679,66 +662,42 @@ ANTI-FABRICATION: Every claim must come from the source resume. Reframing is all
 CRITICAL — TITLE INTEGRITY — ZERO EXCEPTIONS: Never use "Director-level", "VP-level", "Senior-level", "Executive-level", or ANY seniority prefix in the summary or anywhere in the resume unless that EXACT title appears verbatim in the source resume. This rule has no exceptions — not even when the candidate is applying for a more senior role. If a teacher is applying for a Director role, the summary says "Learning Experience Designer" or "Curriculum Developer" — whatever they actually ARE. Frame trajectory and capability through the work, not through a title they haven't earned. A false title gets caught in the first 30 seconds of an interview and destroys all credibility. When in doubt, use the most senior title that actually appears in the source.
 `
 
-  const outputFormat = dualVersion ? `
-===METADATA===
-{"candidateName":"...","candidateEmail":"...","candidatePhone":"...","companyName":"...","jobTitle":"..."}
+  const dualRules = `
+JOB INCLUSION RULES — READ BEFORE WRITING EITHER VERSION:
+${jobManifest}
 
-===RECRUITER_NOTES===
-[recruiter gap analysis here]
+RULE 1 — PROTECTED JOBS (marked 🔒 above): Must appear in BOTH resume versions.
+RULE 2 — DROPPABLE JOBS (marked ○ above): May omit only if no gap is created.
+RULE 3 — 7-YEAR HARD FLOOR: Never omit any job from the last 7 years.
+RULE 4 — JOB COUNT INTEGRITY: Both versions must contain all PROTECTED jobs.
+`
+  const dualVersionA = `${dualRules}
+RESUME VERSION A — LEADERSHIP FOCUS:
+- Lead with a summary emphasizing strategic impact, team leadership, stakeholder management, and organizational outcomes
+- Prioritize bullet points that show scale: team size, budget owned, cross-functional influence, executive visibility
+- Frame achievements in terms of business outcomes, revenue, cost savings, org transformation
+- Keywords: led, drove, spearheaded, scaled, transformed, aligned, influenced
 
-===RESUME_A===
-[Leadership-focused resume here]
+Write ONLY Version A here, complete and standalone (Version B is written separately, same experience, different lens).
+- Write in implied first person throughout both versions — NO "I", "my", or "me" anywhere. Every bullet leads with an action verb. "Engineered solution" not "I engineered"
+`
+  const dualVersionB = `${dualRules}
+RESUME VERSION B — TECHNICAL/ACHIEVEMENT FOCUS:
+- Lead with a summary emphasizing domain expertise, measurable results, and hands-on execution
+- Prioritize bullet points with hard metrics: percentages, time saved, volume handled, tools mastered
+- Frame achievements in terms of outputs, efficiency, precision, and technical credibility
+- Keywords: built, engineered, optimized, delivered, executed, launched, reduced, increased
 
-===RESUME_B===
-[Technical/Achievement-focused resume here]
-
-===COVER_LETTER===
-[cover letter here]
-
-===HIRING_MANAGER_DM===
-[hiring manager DM here]
-
-===COMPANY_INTEL===
-COMPANY INTEL
-─────────────────────────────
-⚡ Power center: [1 sentence]
-🎯 Position your work as: [1 sentence]
-🤝 Who thrives here: [1 sentence]
-⚠️ Watch for: [1 sentence]
-🎙️ Interview move: [1 sentence]
-─────────────────────────────
-` : `
-===METADATA===
-{"candidateName":"...","candidateEmail":"...","candidatePhone":"...","companyName":"...","jobTitle":"..."}
-
-===RECRUITER_NOTES===
-[recruiter gap analysis here]
-
-===RESUME===
-[resume content here]
-
-===COVER_LETTER===
-[cover letter content here]
-
-===HIRING_MANAGER_DM===
-[hiring manager DM here]
-
-===COMPANY_INTEL===
-COMPANY INTEL
-─────────────────────────────
-⚡ Power center: [1 sentence]
-🎯 Position your work as: [1 sentence]
-🤝 Who thrives here: [1 sentence]
-⚠️ Watch for: [1 sentence]
-🎙️ Interview move: [1 sentence]
-─────────────────────────────
+Write ONLY Version B here, complete and standalone (Version A is written separately, same experience, different lens).
+- Write in implied first person throughout both versions — NO "I", "my", or "me" anywhere. Every bullet leads with an action verb. "Engineered solution" not "I engineered"
 `
 
   const now = new Date()
   const currentDate = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
   const currentYear = now.getFullYear()
 
-  const prompt = `You are a world-class resume writer and career strategist. Your job is to transform whatever someone gives you into a polished, compelling document that makes them look like the best hire in the room. You write with precision and confidence. You never use corporate filler. You never write generically. You make every person sound like exactly who they are — at their best.
+  // Everything every call needs: the core rules, the source resume and the job description.
+  const sharedContext = `You are a world-class resume writer and career strategist. Your job is to transform whatever someone gives you into a polished, compelling document that makes them look like the best hire in the room. You write with precision and confidence. You never use corporate filler. You never write generically. You make every person sound like exactly who they are — at their best.
 
 CRITICAL — NO YEARS OF EXPERIENCE: Never write "X years of experience", "X+ years", or any numeric experience duration in the summary, cover letter, or job bullets. This invites age discrimination and actively harms the candidate. Instead use: "seasoned", "highly experienced", "veteran", "deep expertise in" — or lead directly with the work itself. The credentials speak. The number doesn't.
 ONE EXCEPTION: If the job description explicitly states a minimum experience requirement (e.g. "8+ years required"), mirror that exact number once — buried in the Skills section or a single bullet only, never in the summary. This is ATS compliance, not positioning. Example: "8+ years editing narrative content" as a skills line, not a headline.
@@ -794,45 +753,9 @@ JOB DESCRIPTION:
 ${jobDescription}
 
 ---
+`
 
-RECRUITER GAP ANALYSIS REQUIREMENTS:
-- Act like a senior recruiter in this industry reviewing this resume for this specific role
-- CRITICAL: Before analyzing, determine whether this is a freelance/contract career or a traditional in-house career. Many clients, many companies, overlapping dates, and a broad range of projects are NORMAL and expected for a successful freelancer — especially in creative, production, tech, and consulting fields. Do NOT penalize or flag these patterns as disorganization. That is how freelancing works.
-- Identify 3-5 specific things that would stop you from reaching out — focus on: skills the job requires that are missing or buried, weak or absent metrics, positioning misalignment with this specific role, or ATS keywords that need strengthening
-- Do NOT flag: number of clients or companies, overlapping engagement dates, or "chaotic" structure that simply reflects a legitimate freelance career
-- For EVERY issue you flag, immediately follow it with a concrete "Fix:" suggestion — exactly what to change, add, reword, or remove
-- ANTI-FABRICATION IN FIXES: When suggesting fixes, never recommend inventing experience the candidate doesn't have. If a gap is real (e.g. no enterprise LMS experience), the fix should be: reframe what they DO have, flag it as a gap to address in the interview, or suggest honest language. Never recommend adding "conducted client discovery sessions" or "managed enterprise stakeholders" if those activities aren't in the source resume.
-- CRITICAL: Only flag employment date overlaps or gaps if you can verify them with absolute certainty from the data. Do NOT infer or assume overlaps. A false date flag can seriously harm someone's confidence and career.
-- Format as a bulleted list. Each bullet = the problem, followed by "Fix:" on a new line with the specific solution
-- Keep it under 200 words total
-- Tone: direct and useful — like a recruiter who genuinely wants to place this person, not discourage them
-
-${resumeInstructions}
-
-COVER LETTER REQUIREMENTS:
-- First line, on its own: a greeting. If the job description names the hiring manager, founder, or the person the candidate would work with (e.g. "You work directly with Jonathan, the founder"), write "Hi Jonathan," using their first name. If no person is named, write "Hi [Company name] team,". Never "To whom it may concern", "Dear Hiring Manager", or "Dear Sir/Madam".
-- Then maximum 3 paragraphs
-- First paragraph opens with something specific about the company or role — not "I am writing to apply for..."
-- Middle paragraph: the 2-3 specific things from their background that make them right for this role
-- Close with confidence, not desperation
-- End with "Best," on its own line, then the candidate's full name on the next line
-- Conversational but professional tone
-- Do NOT use clichés or corporate filler
-- Do NOT include a contact info header (it is added automatically)
-- SAME FACT RULES AS THE RESUME: every claim, number, method, and explanation must come from the source resume. Do not invent how a result was achieved, what the candidate felt, or what they avoided ("not by chasing trends"). Keep each achievement with the job or project the source attaches it to.
-- BANNED PATTERNS in the cover letter: the contrast formula "That's not X. That's Y." / "This isn't X — it's Y." / "Not X, but Y."; "genuinely"; "passionate"; "I'm excited to"; "I'd love to"; "perfect fit"; "hit the ground running". Say the point directly instead.
-- Every sentence must make plain sense on first read. No mixed metaphors or stacked clauses.
-
-HIRING MANAGER DM REQUIREMENTS:
-- 3-4 sentences max
-- NEVER open with "Hi there", "Hello", "Hey", or any generic greeting
-- NEVER open with "I saw your [job posting/opening/listing]" — that's the generic opener every applicant uses
-- Open immediately with a specific hook — lead with one concrete credential or result from their background, then connect it to the role
-- No desperation, no groveling, no "I'd love to", no "Would you be open to"
-- End with a single direct question or low-pressure call to action
-- Tone: confident peer reaching out, not a job seeker begging
-
-CONTACT INFO REQUIREMENTS:
+  const contactRules = `CONTACT INFO REQUIREMENTS:
 - In the resume header, include name, email, phone, and LinkedIn URL if present
 - ALWAYS include a location — city and country or "Remote" if no location found in source. ATS systems use location to validate candidate matches. If no location in source, use "Remote" as default.
 - CRITICAL: Never prefix the LinkedIn URL with the word "LinkedIn:" or "LinkedIn" — just include the bare URL (e.g. linkedin.com/in/matassa, NOT "LinkedIn: linkedin.com/in/matassa")
@@ -849,7 +772,64 @@ SECTION HEADINGS — ATS CRITICAL:
 - Experience section MUST be labeled "Experience" or "Employment History" — ATS must find these exact headings
 - Summary section MUST be labeled "Summary" or "Professional Summary"
 - Skills section MUST be labeled "Skills"
-- These exact labels are non-negotiable for ATS parsing
+- These exact labels are non-negotiable for ATS parsing`
+
+  const resumePrompt = (instructions) => `${sharedContext}
+YOUR TASK IN THIS STEP: write the tailored resume only. The cover letter, recruiter notes and messages are written separately.
+
+${instructions}
+
+${contactRules}
+
+${keywordInjectionBlock}
+Respond in this exact format:
+===RESUME===
+[resume content here]`
+
+  const coverPrompt = `${sharedContext}
+YOUR TASK IN THIS STEP: write the cover letter only. The resume and other documents are written separately from the same source.
+
+COVER LETTER REQUIREMENTS:
+- First line, on its own: a greeting. If the job description names the hiring manager, founder, or the person the candidate would work with (e.g. "You work directly with Jonathan, the founder"), write "Hi Jonathan," using their first name. If no person is named, write "Hi [Company name] team,". Never "To whom it may concern", "Dear Hiring Manager", or "Dear Sir/Madam".
+- Then maximum 3 paragraphs
+- First paragraph opens with something specific about the company or role — not "I am writing to apply for..."
+- Middle paragraph: the 2-3 specific things from their background that make them right for this role
+- Close with confidence, not desperation
+- End with "Best," on its own line, then the candidate's full name on the next line
+- Conversational but professional tone
+- Do NOT use clichés or corporate filler
+- Do NOT include a contact info header (it is added automatically)
+- SAME FACT RULES AS THE RESUME: every claim, number, method, and explanation must come from the source resume. Do not invent how a result was achieved, what the candidate felt, or what they avoided ("not by chasing trends"). Keep each achievement with the job or project the source attaches it to.
+- BANNED PATTERNS in the cover letter: the contrast formula "That's not X. That's Y." / "This isn't X — it's Y." / "Not X, but Y."; "genuinely"; "passionate"; "I'm excited to"; "I'd love to"; "perfect fit"; "hit the ground running". Say the point directly instead.
+- Every sentence must make plain sense on first read. No mixed metaphors or stacked clauses.
+
+Respond in this exact format:
+===COVER_LETTER===
+[cover letter content here]`
+
+  const extrasPrompt = `${sharedContext}
+YOUR TASK IN THIS STEP: write the metadata, the recruiter gap analysis of the source resume for this job, the hiring manager DM, and the company intel. The resume and cover letter are written separately.
+
+RECRUITER GAP ANALYSIS REQUIREMENTS:
+- Act like a senior recruiter in this industry reviewing this resume for this specific role
+- CRITICAL: Before analyzing, determine whether this is a freelance/contract career or a traditional in-house career. Many clients, many companies, overlapping dates, and a broad range of projects are NORMAL and expected for a successful freelancer — especially in creative, production, tech, and consulting fields. Do NOT penalize or flag these patterns as disorganization. That is how freelancing works.
+- Identify 3-5 specific things that would stop you from reaching out — focus on: skills the job requires that are missing or buried, weak or absent metrics, positioning misalignment with this specific role, or ATS keywords that need strengthening
+- Do NOT flag: number of clients or companies, overlapping engagement dates, or "chaotic" structure that simply reflects a legitimate freelance career
+- For EVERY issue you flag, immediately follow it with a concrete "Fix:" suggestion — exactly what to change, add, reword, or remove
+- ANTI-FABRICATION IN FIXES: When suggesting fixes, never recommend inventing experience the candidate doesn't have. If a gap is real (e.g. no enterprise LMS experience), the fix should be: reframe what they DO have, flag it as a gap to address in the interview, or suggest honest language. Never recommend adding "conducted client discovery sessions" or "managed enterprise stakeholders" if those activities aren't in the source resume.
+- CRITICAL: Only flag employment date overlaps or gaps if you can verify them with absolute certainty from the data. Do NOT infer or assume overlaps. A false date flag can seriously harm someone's confidence and career.
+- Format as a bulleted list. Each bullet = the problem, followed by "Fix:" on a new line with the specific solution
+- Keep it under 200 words total
+- Tone: direct and useful — like a recruiter who genuinely wants to place this person, not discourage them
+
+HIRING MANAGER DM REQUIREMENTS:
+- 3-4 sentences max
+- NEVER open with "Hi there", "Hello", "Hey", or any generic greeting
+- NEVER open with "I saw your [job posting/opening/listing]" — that's the generic opener every applicant uses
+- Open immediately with a specific hook — lead with one concrete credential or result from their background, then connect it to the role
+- No desperation, no groveling, no "I'd love to", no "Would you be open to"
+- End with a single direct question or low-pressure call to action
+- Tone: confident peer reaching out, not a job seeker begging
 
 METADATA REQUIREMENTS:
 - candidateName: full name
@@ -861,25 +841,83 @@ METADATA REQUIREMENTS:
 COMPANY INTEL REQUIREMENTS:
 Analyze the job description for organizational power signals. Infer which function holds actual decision-making power based on language patterns, stated priorities, reporting structures, success metrics, and cultural signals in the JD — NOT what the company claims about itself. Be direct. No hedging. If the JD is thin on signals, say so briefly and give your best inference. Never fabricate specifics not in the text.
 
-${keywordInjectionBlock}
 Respond in this exact format:
-${outputFormat}`
+===METADATA===
+{"candidateName":"...","candidateEmail":"...","candidatePhone":"...","companyName":"...","jobTitle":"..."}
 
-  try {
-    const tStart = Date.now()
+===RECRUITER_NOTES===
+[recruiter gap analysis here]
+
+===HIRING_MANAGER_DM===
+[hiring manager DM here]
+
+===COMPANY_INTEL===
+COMPANY INTEL
+─────────────────────────────
+⚡ Power center: [1 sentence]
+🎯 Position your work as: [1 sentence]
+🤝 Who thrives here: [1 sentence]
+⚠️ Watch for: [1 sentence]
+🎙️ Interview move: [1 sentence]
+─────────────────────────────`
+
+  const WRITING_MODEL = process.env.WRITING_MODEL || 'claude-sonnet-4-6'
+  const tStart = Date.now()
+  const secs = (t) => ((Date.now() - t) / 1000).toFixed(1)
+
+  // One writing call; logs how long it took
+  const write = async (label, prompt, maxTokens) => {
+    const t = Date.now()
     const message = await client.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: dualVersion ? 7000 : 5500,
+      model: WRITING_MODEL,
+      max_tokens: maxTokens,
       messages: [{ role: 'user', content: prompt }],
     })
+    const text = (message.content || []).map(b => b.text || '').join('')
+    console.log(`[timing] ${label} writing: ${secs(t)}s, output tokens: ${message.usage?.output_tokens ?? '?'}`)
+    return text
+  }
+  // The text after a section marker (or all of it if the model left the marker out)
+  const after = (text, marker) => {
+    const i = text.indexOf(marker)
+    return (i >= 0 ? text.slice(i + marker.length) : text).trim()
+  }
+  // Fact-check one document as soon as it is written, without waiting for the others
+  const checkOne = async (id, text) => {
+    const r = await factCheckDocs(linkedinText, { [id]: text }, client, jobDescription)
+    return { text: r.docs[id], factCheck: r.factCheck }
+  }
+  const mergeChecks = (list) => list.reduce((m, f) => ({
+    checked: m.checked || !!f.checked,
+    fixes: [...m.fixes, ...(f.fixes || [])],
+    flagged: m.flagged + (f.flagged || 0),
+    needsReview: [...m.needsReview, ...(f.needsReview || [])],
+  }), { checked: false, fixes: [], flagged: 0, needsReview: [] })
 
-    const responseText = message.content[0].text
-    const tWritten = Date.now()
-    console.log(`[timing] writing: ${((tWritten - tStart) / 1000).toFixed(1)}s, output tokens: ${message.usage?.output_tokens ?? '?'}`)
+  // From here on the browser gets a space every 10s so the connection never goes quiet
+  const keepAlive = startKeepAlive(res)
+
+  try {
+    // ── All writing at the same time ──────────────────────────────────────────
+    const resumeJobs = dualVersion
+      ? [
+          write('resume A', resumePrompt(dualVersionA), 4000).then(t => after(t, '===RESUME===')),
+          write('resume B', resumePrompt(dualVersionB), 4000).then(t => after(t, '===RESUME===')),
+        ]
+      : [write('resume', resumePrompt(singleResumeInstructions), 4000).then(t => after(t, '===RESUME==='))]
+    const coverJob = write('cover letter', coverPrompt, 1500).then(t => after(t, '===COVER_LETTER==='))
+    const extrasJob = write('notes + DM + intel', extrasPrompt, 2000)
+
+    // Fact-check each document the moment it's ready
+    const resumeIds = dualVersion ? ['resumeA', 'resumeB'] : ['resume']
+    const checkedResumes = resumeJobs.map((job, i) => job.then(text => checkOne(resumeIds[i], text).then(c => ({ ...c, raw: text }))))
+    const checkedCover = coverJob.then(text => checkOne('cover', text))
+
+    const extrasText = await extrasJob
 
     // Parse metadata
     let metadata = { candidateName: '', candidateEmail: '', candidatePhone: '', companyName: '', jobTitle: '' }
-    const metaMatch = responseText.match(/===METADATA===\s*(\{[\s\S]*?\})\s*===RECRUITER_NOTES===/)
+    const metaMatch = extrasText.match(/===METADATA===\s*(\{[\s\S]*?\})\s*===RECRUITER_NOTES===/)
     if (metaMatch) {
       try { metadata = { ...metadata, ...JSON.parse(metaMatch[1]) } } catch (e) {}
     }
@@ -890,8 +928,8 @@ ${outputFormat}`
       metadata.candidateEmail = localPart + metadata.candidateEmail.slice(atIdx)
     }
 
-    // Notify you when someone generates a resume. Runs alongside the fact-check instead of
-    // before it; awaited just before responding so the serverless function doesn't drop it.
+    // Notify you when someone generates a resume. Runs while the documents finish;
+    // awaited just before responding so the serverless function doesn't drop it.
     const notifyPromise = (async () => { try {
       await fetch('https://api.resend.com/emails', {
         method: 'POST',
@@ -911,19 +949,19 @@ ${outputFormat}`
       })
     } catch (e) { /* fail silently */ } })()
 
-    // Parse recruiter notes
-    const recruiterNotesMatch = dualVersion
-      ? responseText.match(/===RECRUITER_NOTES===([\s\S]*?)===RESUME_A===/)
-      : responseText.match(/===RECRUITER_NOTES===([\s\S]*?)===RESUME===/)
-    const recruiterNotes = recruiterNotesMatch ? recruiterNotesMatch[1].trim() : ''
+    const recruiterNotes = ((extrasText.match(/===RECRUITER_NOTES===([\s\S]*?)===HIRING_MANAGER_DM===/) || [])[1] || '').trim()
+    const hiringManagerDM = ((extrasText.match(/===HIRING_MANAGER_DM===([\s\S]*?)(?:===COMPANY_INTEL===|$)/) || [])[1] || '').trim()
+    const companyIntel = ((extrasText.match(/===COMPANY_INTEL===([\s\S]*)$/) || [])[1] || '').trim()
+
+    const [resumes, coverChecked] = await Promise.all([Promise.all(checkedResumes), checkedCover])
+    const factCheck = mergeChecks([...resumes.map(r => r.factCheck), coverChecked.factCheck])
+    console.log(`[timing] all documents written and fact-checked, total: ${secs(tStart)}s`)
+    await notifyPromise
 
     // Build contact header: name · email · phone · portfolio/reel · LinkedIn
     // Links come from the generated resume's own header, so they're the candidate's real ones.
     const headerLinks = (() => {
-      const resumeText = (dualVersion
-        ? (responseText.match(/===RESUME_A===([\s\S]*?)===RESUME_B===/) || [])[1]
-        : (responseText.match(/===RESUME===([\s\S]*?)===COVER_LETTER===/) || [])[1]) || ''
-      const head = resumeText.trim().split('\n').slice(0, 6).join(' ')
+      const head = (resumes[0].raw || '').trim().split('\n').slice(0, 6).join(' ')
       const urls = (head.match(/\b(?:https?:\/\/)?(?:www\.)?(?:[a-z0-9-]+\.)+[a-z]{2,}(?:\/[^\s·|,;)]*)?/gi) || [])
         .filter(u => !u.includes('@') && !/@/.test(head.slice(Math.max(0, head.indexOf(u) - 1), head.indexOf(u))))
         .map(u => u.replace(/[.,]+$/, ''))
@@ -935,8 +973,7 @@ ${outputFormat}`
     })()
     const contactParts = [metadata.candidateName, metadata.candidateEmail, metadata.candidatePhone, ...headerLinks].filter(Boolean)
     const contactHeader = contactParts.length > 0 ? contactParts.join(' · ') + '\n\n' : ''
-
-    const finishCoverLetter = (raw) => finishCoverLetterShared(raw, metadata)
+    const coverLetter = contactHeader + finishCoverLetterShared(coverChecked.text, metadata)
 
     // Build slug
     const slug = (str) => str.replace(/[^a-zA-Z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '')
@@ -944,72 +981,16 @@ ${outputFormat}`
       .filter(Boolean).join('_') || 'resume'
 
     if (dualVersion) {
-      const resumeAMatch = responseText.match(/===RESUME_A===([\s\S]*?)===RESUME_B===/)
-      const resumeBMatch = responseText.match(/===RESUME_B===([\s\S]*?)===COVER_LETTER===/)
-      const coverMatch = responseText.match(/===COVER_LETTER===([\s\S]*?)===HIRING_MANAGER_DM===/)
-      const dmMatch = responseText.match(/===HIRING_MANAGER_DM===([\s\S]*)$/)
-
-      const checkedDual = await factCheckDocs(linkedinText, {
-        resumeA: resumeAMatch ? resumeAMatch[1].trim() : '',
-        resumeB: resumeBMatch ? resumeBMatch[1].trim() : '',
-        cover: coverMatch ? coverMatch[1].trim() : '',
-      }, client, jobDescription)
-      const resumeA = checkedDual.docs.resumeA
-      const resumeB = checkedDual.docs.resumeB
-      const rawCover = checkedDual.docs.cover
-      const factCheck = checkedDual.factCheck
-      console.log(`[timing] fact-check: ${((Date.now() - tWritten) / 1000).toFixed(1)}s, total: ${((Date.now() - tStart) / 1000).toFixed(1)}s`)
-      await notifyPromise
-      const coverLetter = contactHeader + finishCoverLetter(rawCover)
-      const hiringManagerDM = dmMatch ? dmMatch[1].trim() : ''
-
+      const resumeA = resumes[0].text
+      const resumeB = resumes[1].text
       // ATS keyword match scoring (score against version A)
       const atsMatch = scoreKeywordMatch(resumeA, jobDescription)
-
-      return res.status(200).json({
+      return keepAlive.send({
         dualVersion: true,
         factCheck,
         sourceResume: linkedinText.slice(0, 20000),
         resumeA,
         resumeB,
-        coverLetter,
-        recruiterNotes,
-        hiringManagerDM,
-        atsMatch,
-        metadata,
-        fileBaseName,
-        jobDescriptionText: jobDescription,
-      })
-    } else {
-      const resumeMatch = responseText.match(/===RESUME===([\s\S]*?)===COVER_LETTER===/)
-      const coverMatch = responseText.match(/===COVER_LETTER===([\s\S]*?)===HIRING_MANAGER_DM===/)
-      const dmMatch = responseText.match(/===HIRING_MANAGER_DM===([\s\S]*?)(?:===COMPANY_INTEL===|$)/)
-      const intelMatch = responseText.match(/===COMPANY_INTEL===([\s\S]*)$/)
-
-      const checked = await factCheckDocs(linkedinText, {
-        resume: resumeMatch ? resumeMatch[1].trim() : responseText,
-        cover: coverMatch ? coverMatch[1].trim() : '',
-      }, client, jobDescription)
-      const resume = checked.docs.resume
-      const rawCover = checked.docs.cover
-      const factCheck = checked.factCheck
-      console.log(`[timing] fact-check: ${((Date.now() - tWritten) / 1000).toFixed(1)}s, total: ${((Date.now() - tStart) / 1000).toFixed(1)}s`)
-      await notifyPromise
-      const coverLetter = contactHeader + finishCoverLetter(rawCover)
-      const hiringManagerDM = dmMatch ? dmMatch[1].trim() : ''
-      const companyIntel = intelMatch ? intelMatch[1].trim() : ''
-
-      // ATS keyword match scoring
-      const atsMatch = scoreKeywordMatch(resume, jobDescription)
-
-      return res.status(200).json({
-        dualVersion: false,
-        factCheck,
-        sourceResume: linkedinText.slice(0, 20000),
-        formatUsed: effectiveCareerType === 'freelance' ? 'skills' : 'chronological',
-        formatAuto: resumeFormat === 'auto',
-        formatReason,
-        resume,
         coverLetter,
         recruiterNotes,
         hiringManagerDM,
@@ -1020,14 +1001,34 @@ ${outputFormat}`
         jobDescriptionText: jobDescription,
       })
     }
+
+    const resume = resumes[0].text
+    const atsMatch = scoreKeywordMatch(resume, jobDescription)
+    return keepAlive.send({
+      dualVersion: false,
+      factCheck,
+      sourceResume: linkedinText.slice(0, 20000),
+      formatUsed: effectiveCareerType === 'freelance' ? 'skills' : 'chronological',
+      formatAuto: resumeFormat === 'auto',
+      formatReason,
+      resume,
+      coverLetter,
+      recruiterNotes,
+      hiringManagerDM,
+      companyIntel,
+      atsMatch,
+      metadata,
+      fileBaseName,
+      jobDescriptionText: jobDescription,
+    })
   } catch (err) {
     console.error('Claude API error:', err)
     if (err?.error?.error?.message?.includes('credit balance is too low') || err?.message?.includes('credit balance is too low')) {
-      return res.status(503).json({ error: 'Service temporarily unavailable. Please try again in a few minutes.' })
+      return keepAlive.send({ error: 'Service temporarily unavailable. Please try again in a few minutes.' })
     }
     if (err?.status === 529 || err?.message?.includes('overloaded') || err?.message?.includes('529')) {
-      return res.status(503).json({ error: '⏳ Anthropic (our AI provider) is experiencing high demand and is temporarily overloaded — this is not a JobsUncle issue. Please give it a few minutes and try again.' })
+      return keepAlive.send({ error: '⏳ Anthropic (our AI provider) is experiencing high demand and is temporarily overloaded — this is not a JobsUncle issue. Please give it a few minutes and try again.' })
     }
-    return res.status(500).json({ error: 'Generation failed. Please try again.' })
+    return keepAlive.send({ error: 'Generation failed. Please try again.' })
   }
 }
