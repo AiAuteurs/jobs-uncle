@@ -99,7 +99,11 @@ ADDITIONAL DETAILS FROM THE CANDIDATE (written by the candidate after reading Ve
 <candidate_additions>
 ${extraInfo}
 </candidate_additions>
-Include these details where they fit best. If the candidate says which job or project a detail belongs to, put it there. If they don't, use it in the summary, skills, or the one job it clearly and explicitly relates to; never guess which employer a result belongs to. Do not add numbers, causes, or scope beyond what the candidate wrote.
+You MUST include every one of these details in the Version 2 resume. Do not leave one out because it seems unusual, early, or hard to verify: the candidate has told you it is true and is responsible for it.
+- A role, project or credit with its own date or title (e.g. "in 2016 I was head film editor on X") becomes its own entry in Experience (or Selected Work), in the right date order, using the candidate's own wording for title and date.
+- A detail about an existing job goes under that job. If the candidate doesn't say where it belongs, use it in the summary or skills; never guess which employer a result belongs to.
+- Do not add numbers, causes, or scope beyond what the candidate wrote.
+If you have a real concern about an addition, still include it, and mention the concern in NOTES FOR CANDIDATE (see the output format), never inside the resume or cover letter.
 `
     : ''
 
@@ -128,13 +132,25 @@ WHAT YOU CAN DO:
 - Elevate the positioning of real skills and real work
 - Add specificity only when that specificity is already present in the original resume
 
+ONLY APPLY FIXES THE SOURCE SUPPORTS:
+- Many recruiter fixes are conditional ("if accurate", "if that's true", "if Jordan has X", "if they exist"). Apply a conditional fix ONLY if the original resume or the candidate's additions confirm it. Otherwise skip it. Never add relocation, availability, tools, skills, or responsibilities the candidate hasn't stated.
+- The Skills section lists only skills, tools and techniques that appear in the original resume or the candidate's additions. Do not copy skill lists from the job description.
+
+HOUSE RULES (same as Version 1):
+- NO YEARS OF EXPERIENCE: never write "X years", "X+ years", or any number of years of experience in the summary, cover letter or bullets. Lead with the work instead. Only if the job description states a minimum (e.g. "3+ years required") may that exact phrase appear once, in the Skills section.
+- Never use a seniority prefix or title the candidate hasn't held.
+- Implied first person in the resume: no "I", "my", "me".
+- The resume and cover letter contain ONLY content for the employer. Never include notes, comments, disclaimers, or messages addressed to the hiring team, the recruiter or the candidate.
+- COVER LETTER: greeting line, then at most 3 short paragraphs, then "Best," and the candidate's name. Banned in the cover letter: "genuinely", "passionate", "I'm excited to", "I'd love to", "perfect fit", "hit the ground running", and the contrast formula ("That's not X. That's Y.", "This isn't X, it's Y", "Not X, but Y"). Say the point directly.
+- BANNED anywhere: "Proven expertise", "Leveraged X to drive Y", "Results-driven", "Strong track record", "Demonstrated technical proficiency".
+
 QUALITY CHECK before outputting:
 - Read every bullet point you wrote — is every fact, number, and company in the original resume?
 - If any bullet contains information not in the original, rewrite it to remove the fabrication
 - The person will submit this resume to employers — accuracy is non-negotiable
 
-Output exactly two sections, each starting with its marker on its own line: ===RESUME=== then ===COVER_LETTER===
-No preamble and no commentary outside the two sections.`
+Output exactly three sections, each starting with its marker on its own line: ===RESUME===, ===COVER_LETTER===, ===NOTES_FOR_CANDIDATE===
+No preamble and no commentary outside the sections.`
 
   const userPrompt = `JOB DESCRIPTION:
 ${jobDescription}
@@ -160,7 +176,10 @@ Respond in this exact format:
 [improved Version 2 resume here]
 
 ===COVER_LETTER===
-[improved cover letter here]`
+[improved cover letter here]
+
+===NOTES_FOR_CANDIDATE===
+[Optional. One short line per item, addressed to the candidate in plain English: a recruiter fix you skipped because it needs information only they have (e.g. "Add whether you're open to relocating to Los Angeles"), or a concern about one of their additions. Write "None" if there is nothing.]`
 
   // From here on the browser gets a space every 10s so the connection never goes quiet
   const keepAlive = startKeepAlive(res)
@@ -177,8 +196,24 @@ Respond in this exact format:
     // Plain section markers instead of JSON: quote marks in a resume can't break them
     const raw = (message.content || []).map(b => b.text || '').join('')
     const resumePart = (raw.match(/===RESUME===([\s\S]*?)===COVER_LETTER===/) || [])[1]
-    const coverPart = (raw.match(/===COVER_LETTER===([\s\S]*)$/) || [])[1]
-    const parsed = { resume: (resumePart || '').trim(), coverLetter: (coverPart || '').trim() }
+    const coverPart = (raw.match(/===COVER_LETTER===([\s\S]*?)(?:===NOTES_FOR_CANDIDATE===|$)/) || [])[1]
+    const notesPart = (raw.match(/===NOTES_FOR_CANDIDATE===([\s\S]*)$/) || [])[1] || ''
+    // Safety net: a note addressed to the hiring team or candidate must never ship inside a document.
+    // Pull any such line out of the resume/letter and show it to the candidate instead.
+    const movedNotes = []
+    const stripNotes = (text) => text.split('\n').filter(line => {
+      const t = line.trim()
+      if (/^(>\s*)?(\*\*)?(note|nb|n\.b\.)(\s+to\s+(the\s+)?(hiring|recruit|candidate)[^:]*)?(\*\*)?\s*:/i.test(t)) {
+        movedNotes.push(t.replace(/^>\s*/, '').replace(/\*\*/g, ''))
+        return false
+      }
+      return true
+    }).join('\n').trim()
+    const parsed = { resume: stripNotes((resumePart || '').trim()), coverLetter: stripNotes((coverPart || '').trim()) }
+    const notesForCandidate = [
+      ...notesPart.split('\n').map(l => l.replace(/^[-•*\s]+/, '').trim()).filter(l => l && !/^none\.?$/i.test(l) && !/^\[/.test(l)),
+      ...movedNotes,
+    ].slice(0, 6)
     if (message.stop_reason === 'max_tokens') console.error('Regenerate output cut off at max_tokens')
 
     if (!parsed.resume || !parsed.coverLetter) {
@@ -198,6 +233,7 @@ Respond in this exact format:
       resume: checked.docs.resume,
       coverLetter: coverHeader ? `${coverHeader}\n\n${cover}` : cover,
       factCheck: checked.factCheck,
+      notesForCandidate,
     })
   } catch (err) {
     console.error('Regenerate error:', err)

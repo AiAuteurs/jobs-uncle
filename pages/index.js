@@ -2375,6 +2375,15 @@ export default function Home() {
                   <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#10b981' }}>
                     ✓ Version 2 ready — fixes applied from the recruiter analysis
                   </div>
+                  {Array.isArray(regeneratedResults?.notesForCandidate) && regeneratedResults.notesForCandidate.length > 0 && (
+                    <div style={{ background: '#fffaf0', border: '1.5px solid #f59e0b', borderRadius: '8px', padding: '10px 14px', color: '#1a1a1a' }}>
+                      <div style={{ fontSize: '0.8rem', fontWeight: 800, marginBottom: '4px' }}>📝 A few things only you can answer</div>
+                      <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '0.8rem', lineHeight: 1.55, color: '#333' }}>
+                        {regeneratedResults.notesForCandidate.map((n, i) => <li key={i}>{n}</li>)}
+                      </ul>
+                      <div style={{ fontSize: '0.74rem', color: '#666', marginTop: '6px' }}>Add the answers to your resume and run it again, or use "Anything else to add?" on your next run.</div>
+                    </div>
+                  )}
                   <div style={{ display: 'flex', gap: '8px' }}>
                     {[
                       { v: 'v1', label: 'Version 1 — Original' },
