@@ -935,28 +935,42 @@ export default function Home() {
     }
   }
 
-  // "Anything else to add?" box shown above both Apply fixes buttons (shared value)
+  // "Anything else to add?" box shown above both Apply fixes buttons (shared value).
+  // Self-contained colors so it stands out on both the light Recruiter tab and the dark ATS tab.
   const renderExtraInfoBox = () => (
-    <div style={{ width: '100%', marginBottom: '4px' }}>
-      <label htmlFor="extra-info" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '6px' }}>
-        Anything else to add? <span style={{ fontWeight: 400, opacity: 0.75 }}>(optional)</span>
+    <div style={{
+      width: '100%', boxSizing: 'border-box', margin: '4px 0 6px',
+      padding: '16px 18px', background: '#fffaf0', color: '#1a1a1a',
+      border: '2px solid #f59e0b', borderRadius: '10px',
+      boxShadow: '0 2px 10px rgba(245,158,11,0.15)',
+    }}>
+      <label htmlFor="extra-info" style={{ display: 'block', fontSize: '0.98rem', fontWeight: 800, color: '#1a1a1a', marginBottom: '6px' }}>
+        ✍️ Anything else to add? <span style={{ fontSize: '0.78rem', fontWeight: 500, color: '#6b6b6b' }}>(optional, but worth 30 seconds)</span>
       </label>
+      <div style={{ fontSize: '0.84rem', color: '#333333', lineHeight: 1.55, marginBottom: '10px' }}>
+        Reading the first draft is when most people remember what they left out: a project, a result, a tool, a client.
+        If the recruiter notes above ask whether something is true, this is where you tell us.
+        Add it here and Version 2 will include it. We only ever write from your real experience, so this is how the good stuff gets in.
+      </div>
       <textarea
         id="extra-info"
         value={extraInfo}
         onChange={e => setExtraInfo(e.target.value)}
         maxLength={1500}
-        rows={3}
-        placeholder="Something you left out? e.g. At Stillwater I also ran the YouTube channel (120k subscribers)."
+        rows={4}
+        placeholder={'e.g. At Stillwater I also built kinetic caption animations and lower thirds in After Effects.\nI\'m open to relocating to Los Angeles.'}
         style={{
           width: '100%', boxSizing: 'border-box', padding: '10px 12px',
-          fontSize: '0.85rem', lineHeight: 1.5, fontFamily: 'inherit',
-          color: 'var(--ink)', background: 'rgba(245,158,11,0.06)',
-          border: '1px solid rgba(245,158,11,0.35)', borderRadius: '6px', resize: 'vertical',
+          fontSize: '0.88rem', lineHeight: 1.5, fontFamily: 'inherit',
+          color: '#1a1a1a', background: '#ffffff',
+          border: '1.5px solid #e8b04a', borderRadius: '6px', resize: 'vertical', outline: 'none',
         }}
+        onFocus={e => { e.target.style.borderColor = '#f59e0b'; e.target.style.boxShadow = '0 0 0 3px rgba(245,158,11,0.2)' }}
+        onBlur={e => { e.target.style.borderColor = '#e8b04a'; e.target.style.boxShadow = 'none' }}
       />
-      <div style={{ fontSize: '0.72rem', color: 'var(--ink)', opacity: 0.75, marginTop: '4px', lineHeight: 1.4 }}>
-        Say which job it belongs to. We'll treat it as true, so only add what really happened.
+      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', marginTop: '6px', fontSize: '0.76rem', color: '#555555', lineHeight: 1.45 }}>
+        <span>💡 Say which job it belongs to. We treat what you add as fact, so only add what really happened.</span>
+        <span style={{ flexShrink: 0, color: extraInfo.length > 1400 ? '#d97706' : '#8a8a8a' }}>{extraInfo.length}/1500</span>
       </div>
     </div>
   )
@@ -2783,7 +2797,7 @@ export default function Home() {
 
               {activeResultTab === 'recruiter' && results.recruiterNotes && (
                 <div id="result-recruiter" className="result-section" style={{ borderLeft: '3px solid #f59e0b', background: 'rgba(245,158,11,0.05)' }}>
-                  <div className="result-section-title">Recruiter &amp; ATS Analysis</div>
+                  <div className="result-section-title" style={{ color: '#111111' }}>Recruiter &amp; ATS Analysis</div>
                   <div style={{ fontSize: '0.85rem', color: '#111111', marginBottom: '8px' }}>ATS compatibility check plus honest gaps a recruiter would flag &mdash; and how to own them.</div>
                   <div style={{ fontSize: '0.72rem', color: '#111111', marginBottom: '12px', padding: '8px 12px', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '6px', lineHeight: 1.5 }}>
                     <strong>Important:</strong> This analysis is AI-generated and may contain errors. Always verify all dates, facts, and recommendations against your original resume before taking any action. JobsUncle.ai provides this as a general career tool only and accepts no liability for the accuracy of this analysis or any outcomes resulting from its use.
@@ -2818,7 +2832,7 @@ export default function Home() {
                             : '✦ Apply fixes & regenerate'}
                         </button>
                         {!regeneratedResults && !regenerating && (
-                          <span style={{ fontSize: '0.75rem', color: '#ffffff' }}>
+                          <span style={{ fontSize: '0.75rem', color: '#444444' }}>
                             Applies every fix from the recruiter analysis and rewrites your resume — higher ATS score, stronger positioning, same experience.
                           </span>
                         )}
