@@ -7,8 +7,7 @@ import { factCheckDocs, finishCoverLetter } from '../../lib/factCheck'
 
 // Names and years the person typed in "Anything else to add?" ("Robocop", "Avid") that are missing
 // from Version 2. Lives here so the main resume's fact-check is untouched by this feature.
-function missingAdditions(extraInfo, docText) {
-  const lower = String(docText).toLowerCase()
+function additionTerms(extraInfo) {
   const terms = new Set()
   for (const sentence of String(extraInfo).split(/(?<=[.!?])\s+|\n+/)) {
     sentence.trim().split(/\s+/).forEach((w, i) => {
@@ -16,7 +15,11 @@ function missingAdditions(extraInfo, docText) {
       if (i > 0 && /^[A-Z][A-Za-z0-9&'-]{2,}$/.test(clean)) terms.add(clean.toLowerCase())
     })
   }
-  return [...terms].filter(t => !lower.includes(t))
+  return [...terms]
+}
+function missingAdditions(extraInfo, docText) {
+  const lower = String(docText).toLowerCase()
+  return additionTerms(extraInfo).filter(t => !lower.includes(t))
 }
 import { startKeepAlive } from '../../lib/keepAlive'
 
@@ -226,7 +229,7 @@ Respond in this exact format:
     }).join('\n').trim()
     const parsed = { resume: stripNotes((resumePart || '').trim()), coverLetter: stripNotes((coverPart || '').trim()) }
     let notesForCandidate = [
-      ...notesPart.split('\n').map(l => l.replace(/\*\*/g, '').replace(/^[-•*#\s]+/, '').trim()).filter(l => l && !/^none\.?$/i.test(l) && !/^\[/.test(l)),
+      ...notesPart.split('\n').map(l => l.replace(/\*\*/g, '').replace(/^[-•*#\s]+/, '').replace(/^\d+[.)]\s*/, '').trim()).filter(l => l && !/^none\.?$/i.test(l) && !/^\[/.test(l)),
       ...movedNotes,
     ].slice(0, 6)
     if (message.stop_reason === 'max_tokens') console.error('Regenerate output cut off at max_tokens')
@@ -237,10 +240,23 @@ Respond in this exact format:
     }
 
     // Same fact-check as Version 1, against the original resume plus the person's own additions
+    // Lines carrying what the person told us ("Robocop", "Avid") skip the fact-check: they are
+    // the person's own statement, and the checker kept deleting them. Swapped back in afterwards.
+    const keepTerms = extraInfo ? additionTerms(extraInfo) : []
+    const keptLines = []
+    const maskedResume = String(parsed.resume).split('\n').map(line => {
+      if (keepTerms.length && keepTerms.some(t => line.toLowerCase().includes(t))) {
+        keptLines.push(line)
+        return `⟦${keptLines.length - 1}⟧`
+      }
+      return line
+    }).join('\n')
     const checked = await factCheckDocs(factSource, {
-      resume: String(parsed.resume),
+      resume: maskedResume,
       cover: String(parsed.coverLetter),
     }, client, jobDescription)
+    checked.docs.resume = String(checked.docs.resume).replace(/⟦(\d+)⟧/g, (_, i) => keptLines[Number(i)] ?? '')
+    if (extraInfo) console.log('[additions] terms:', keepTerms.join(', '), '| lines protected:', keptLines.length)
     const cover = finishCoverLetter(checked.docs.cover, meta)
 
     // Be honest if something the person added didn't make it into Version 2
