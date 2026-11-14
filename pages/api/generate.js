@@ -534,11 +534,11 @@ export default async function handler(req, res) {
   const preScore = scoreKeywordMatch(linkedinText, jobDescription)
   const missingKeywords = preScore.missing.slice(0, 12) // top 12 by JD frequency
   const keywordInjectionBlock = missingKeywords.length > 0 ? `
-ATS KEYWORD INJECTION — CRITICAL:
-These keywords appear in the job description but are missing from the source resume.
-Naturally incorporate as many as possible into the resume — summary, bullets, skills — wherever they fit truthfully.
-Do NOT force them awkwardly. Skip any that genuinely cannot be used honestly.
-Missing keywords: ${missingKeywords.join(', ')}
+JOB POST WORDING (use with care):
+These words appear in the job description but not in the source resume.
+Use one ONLY as a different word for something the source resume already describes (e.g. the source says "cut 30 videos a week" and the post says "high-volume editing").
+NEVER use this list to add a skill, tool, technique, format, deliverable, or capability to the resume. If the source doesn't show the candidate doing it, leave the word out, even if it costs ATS points.
+Words: ${missingKeywords.join(', ')}
 ` : ''
   // ────────────────────────────────────────────────────────────────────────────
 
@@ -616,7 +616,7 @@ BANNED: "Proven expertise", "Leveraged X to drive Y", "Delivered premium anythin
 
 Bold (**text**) for section headers and competency block titles only.
 Implied first person — NO "I", "my", "me".
-Mirror job description keywords naturally in competency blocks for ATS.
+Mirror job description wording only where it describes work the source shows.
 ANTI-FABRICATION: Every claim must exist in the source. Reframing allowed. Inventing is not.
 REFRAMING DEFINED — what IS allowed: emphasizing the most relevant aspect of real work, using JD keywords to describe real tasks the candidate actually performed, restructuring bullet order for relevance.
 REFRAMING DEFINED — what is NOT allowed: adding responsibilities the candidate didn't perform, upgrading a role's scope beyond what's stated, or using action verbs that imply a different job function than the source title. For example: if the source says "Senior Video Editor" — do NOT write "Directed video production" or "Managed budgets and vendors" unless those responsibilities are explicitly stated in the source. An Editor edits. If the JD wants a Director and the candidate is an Editor, show Director-caliber results through the editing work — never fabricate Director-level responsibilities.
@@ -657,7 +657,7 @@ REORDER FOR RELEVANCE: If an older role is more relevant to this job, move it up
 FORMAT: Summary, Experience, Skills, Education
 Use markdown bold (**text**) for company names and section headers only.
 Write in implied first person — NO "I", "my", or "me". Every line leads with an action verb.
-Mirror job description keywords naturally for ATS — never at the expense of voice.
+Mirror job description wording only where it describes work the source shows — never at the expense of voice.
 ANTI-FABRICATION: Every claim must come from the source resume. Reframing is allowed. Inventing is not.
 CRITICAL — TITLE INTEGRITY — ZERO EXCEPTIONS: Never use "Director-level", "VP-level", "Senior-level", "Executive-level", or ANY seniority prefix in the summary or anywhere in the resume unless that EXACT title appears verbatim in the source resume. This rule has no exceptions — not even when the candidate is applying for a more senior role. If a teacher is applying for a Director role, the summary says "Learning Experience Designer" or "Curriculum Developer" — whatever they actually ARE. Frame trajectory and capability through the work, not through a title they haven't earned. A false title gets caught in the first 30 seconds of an interview and destroys all credibility. When in doubt, use the most senior title that actually appears in the source.
 `
@@ -716,6 +716,7 @@ ATTRIBUTION INTEGRITY: Every achievement stays with the employer, client, or pro
 - If the source lists an achievement WITHOUT saying which job it happened at (for example under "Selected work", "Projects", or "Portfolio"), do NOT assign it to a job and do NOT guess the employer from context. Keep it in a "Selected Work" section, naming the client exactly as the source does (e.g. "fintech client").
 - Never attach a metric to a different project than the source does. If the source gives a channel-wide or role-wide number, keep it at that level.
 NO INVENTED CAUSES OR METHODS: Restate numbers exactly as given. Do not add "by doing X", "through Y", "thanks to Z", or any explanation of how or why a result happened unless the source states it. Do not invent working methods, motivations, or anecdotes. If the source only says what happened, write only what happened.
+THE JOB POST IS NOT THE CANDIDATE: Skills, techniques, tools, formats, deliverables, availability (nights, weekends, overnights), relocation, and personal traits that appear in the job description but not in the source resume must NOT be claimed for the candidate anywhere: not in the summary, bullets, skills, cover letter or DM. The Skills section lists only skills and tools the source names or clearly shows. If the candidate lacks something the job wants, leave it out; the recruiter notes flag it as a gap.
 VERB FABRICATION IS FABRICATION: Using action verbs that imply responsibilities not in the source is fabrication. "Directed" when the source says "Edited" is fabrication. "Managed budgets" when no budget ownership is stated is fabrication. "Led a team" when no team leadership is in the source is fabrication. Match the candidate's actual function — elevate the OUTPUT of that function, never the implied seniority.
 
 CRITICAL — TITLE INTEGRITY: Never write "Director-level", "VP-level", "Senior-level", "Executive-level" or any seniority prefix the candidate hasn't actually held. Check the source resume — use only titles that appear there. A teacher applying for a Director role is a teacher with Director-level capability, not a "Director-level" anything. Frame ambition through the work, never through a fabricated title.

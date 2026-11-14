@@ -104,7 +104,7 @@ export default async function handler(req, res) {
 
   const { missing: missingKeywords } = scoreKeywordMatch(resume, jobDescription)
   const keywordBlock = missingKeywords.length > 0
-    ? `\nATS KEYWORDS STILL MISSING FROM RESUME (incorporate naturally where the original resume supports it — do not fabricate context):\n${missingKeywords.join(', ')}\n`
+    ? `\nJOB POST WORDING (use with care): these words are in the job description but not the resume. Use one ONLY as a different word for something the original resume (or the candidate's additions) already describes. NEVER use this list to add a skill, tool, technique, format or capability. If in doubt, leave it out.\n${missingKeywords.join(', ')}\n`
     : ''
 
   const extraBlock = extraInfo
@@ -152,6 +152,7 @@ ONLY APPLY FIXES THE SOURCE SUPPORTS:
 
 HOUSE RULES (same as Version 1):
 - NO YEARS OF EXPERIENCE: never write "X years", "X+ years", or any number of years of experience in the summary, cover letter or bullets. Lead with the work instead. Only if the job description states a minimum (e.g. "3+ years required") may that exact phrase appear once, in the Skills section.
+- THE JOB POST IS NOT THE CANDIDATE: skills, techniques, tools, formats, availability (nights, weekends), relocation and traits from the job description must not be claimed unless the original resume or the candidate's additions state them.
 - Never use a seniority prefix or title the candidate hasn't held.
 - Implied first person in the resume: no "I", "my", "me".
 - The resume and cover letter contain ONLY content for the employer. Never include notes, comments, disclaimers, or messages addressed to the hiring team, the recruiter or the candidate.
