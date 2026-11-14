@@ -2458,6 +2458,9 @@ export default function Home() {
               })()}
 
               {activeResultTab === 'resume' && <div id="result-resume" className="result-section">
+                {renderLowMatchNote(activeVersion === 'v2' && regeneratedResults
+                  ? clientScoreATS(regeneratedResults.resume, jobDescription)?.score
+                  : results?.atsMatch?.score)}
                 {results?.formatAuto && results?.formatUsed && !results?.dualVersion && (
                   <div className="format-note" role="note">
                     <span className="format-note-label">Auto format</span>
@@ -2468,9 +2471,6 @@ export default function Home() {
                     </span>
                   </div>
                 )}
-                {renderLowMatchNote(activeVersion === 'v2' && regeneratedResults
-                  ? clientScoreATS(regeneratedResults.resume, jobDescription)?.score
-                  : results?.atsMatch?.score)}
                 <FactCheckNote
                   key={activeVersion === 'v2' && regeneratedResults ? 'fc-resume-v2' : 'fc-resume-v1'}
                   factCheck={activeVersion === 'v2' && regeneratedResults ? regeneratedResults.factCheck : results?.factCheck}
@@ -2647,7 +2647,6 @@ export default function Home() {
                   )
                   const atsMatch = activeAts
                   return <div id="result-ats" className="result-section" style={{ borderLeft: '3px solid #00D1FF', background: 'rgba(0,209,255,0.04)' }}>
-                  {renderLowMatchNote(atsMatch.score)}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
                     <div>
                       <div className="result-section-title" style={{ margin: 0, marginBottom: '4px' }}>ATS Keyword Match {activeVersion === 'v2' && regeneratedResults ? <span style={{ fontSize: '0.65rem', background: '#10b981', color: 'white', padding: '2px 7px', borderRadius: '10px', marginLeft: '6px', fontWeight: 600 }}>v2 score</span> : null}</div>
@@ -2669,6 +2668,8 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
+
+                  {renderLowMatchNote(atsMatch.score)}
 
                   {/* SCORE RANGE LEGEND */}
                   <div style={{ marginBottom: '20px', padding: '12px 14px', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid var(--border)' }}>
