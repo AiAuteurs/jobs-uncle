@@ -943,6 +943,21 @@ export default function Home() {
     }
   }
 
+  // Explains a low keyword score so it reads as a fit gap, not a broken tool
+  const renderLowMatchNote = (score) => {
+    if (score == null || score >= 55) return null
+    return (
+      <div role="note" style={{ margin: '0 0 16px', padding: '12px 16px', background: '#fff7ed', border: '1.5px solid #f97316', borderRadius: '8px', color: '#1a1a1a', fontSize: '0.84rem', lineHeight: 1.55 }}>
+        <strong>Low keyword match ({score}%): this job asks for experience your resume doesn't show.</strong>{' '}
+        We never add skills you don't have, because a recruiter would catch them in the interview, so those keywords stay out.{' '}
+        <button onClick={() => setActiveResultTab('recruiter')} style={{ background: 'none', border: 'none', padding: 0, color: '#c2410c', fontWeight: 700, cursor: 'pointer', textDecoration: 'underline', fontSize: 'inherit' }}>See the gaps in Recruiter Analysis</button>.{' '}
+        {isPaid
+          ? <>If you do have that experience, add it in "Anything else to add?" there and regenerate.</>
+          : <>If you do have that experience, add it to your resume and run it again.</>}
+      </div>
+    )
+  }
+
   // "Anything else to add?" box shown above both Apply fixes buttons (shared value).
   // Self-contained colors so it stands out on both the light Recruiter tab and the dark ATS tab.
   const renderExtraInfoBox = () => (
@@ -2453,6 +2468,9 @@ export default function Home() {
                     </span>
                   </div>
                 )}
+                {renderLowMatchNote(activeVersion === 'v2' && regeneratedResults
+                  ? clientScoreATS(regeneratedResults.resume, jobDescription)?.score
+                  : results?.atsMatch?.score)}
                 <FactCheckNote
                   key={activeVersion === 'v2' && regeneratedResults ? 'fc-resume-v2' : 'fc-resume-v1'}
                   factCheck={activeVersion === 'v2' && regeneratedResults ? regeneratedResults.factCheck : results?.factCheck}
@@ -2629,6 +2647,7 @@ export default function Home() {
                   )
                   const atsMatch = activeAts
                   return <div id="result-ats" className="result-section" style={{ borderLeft: '3px solid #00D1FF', background: 'rgba(0,209,255,0.04)' }}>
+                  {renderLowMatchNote(atsMatch.score)}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
                     <div>
                       <div className="result-section-title" style={{ margin: 0, marginBottom: '4px' }}>ATS Keyword Match {activeVersion === 'v2' && regeneratedResults ? <span style={{ fontSize: '0.65rem', background: '#10b981', color: 'white', padding: '2px 7px', borderRadius: '10px', marginLeft: '6px', fontWeight: 600 }}>v2 score</span> : null}</div>
