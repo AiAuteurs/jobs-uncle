@@ -3,7 +3,7 @@
 // Frontend-gated at Pro tier — server-side KV hardening can be added once build is stable
 
 import Anthropic from '@anthropic-ai/sdk'
-import { factCheckDocs, finishCoverLetter } from '../../lib/factCheck'
+import { factCheckDocs, finishCoverLetter, missingAdditions } from '../../lib/factCheck'
 import { startKeepAlive } from '../../lib/keepAlive'
 
 // Two AI calls now (rewrite + fact-check): give it the same time allowance as /api/generate
@@ -210,8 +210,8 @@ Respond in this exact format:
       return true
     }).join('\n').trim()
     const parsed = { resume: stripNotes((resumePart || '').trim()), coverLetter: stripNotes((coverPart || '').trim()) }
-    const notesForCandidate = [
-      ...notesPart.split('\n').map(l => l.replace(/^[-•*\s]+/, '').trim()).filter(l => l && !/^none\.?$/i.test(l) && !/^\[/.test(l)),
+    let notesForCandidate = [
+      ...notesPart.split('\n').map(l => l.replace(/\*\*/g, '').replace(/^[-•*#\s]+/, '').trim()).filter(l => l && !/^none\.?$/i.test(l) && !/^\[/.test(l)),
       ...movedNotes,
     ].slice(0, 6)
     if (message.stop_reason === 'max_tokens') console.error('Regenerate output cut off at max_tokens')
@@ -227,6 +227,15 @@ Respond in this exact format:
       cover: String(parsed.coverLetter),
     }, client, jobDescription)
     const cover = finishCoverLetter(checked.docs.cover, meta)
+
+    // Be honest if something the person added didn't make it into Version 2
+    const missing = extraInfo ? missingAdditions(factSource, checked.docs.resume) : []
+    if (missing.length) {
+      const names = missing.map(w => w.charAt(0).toUpperCase() + w.slice(1))
+      notesForCandidate = notesForCandidate.filter(n => !missing.some(w => n.toLowerCase().includes(w)))
+      notesForCandidate.unshift(`Your addition about ${names.join(', ')} didn't make it into Version 2. Please add it to your resume directly and run it again.`)
+      console.error('Regenerate: candidate additions missing from resume:', names.join(', '))
+    }
 
     console.log(`[timing] regenerate total: ${((Date.now() - tStart) / 1000).toFixed(1)}s`)
     return keepAlive.send({
