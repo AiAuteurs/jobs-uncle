@@ -535,6 +535,12 @@ export default async function handler(req, res) {
   // missing keywords in naturally — score reliably goes up on every generate.
   const preScore = scoreKeywordMatch(linkedinText, jobDescription)
   const missingKeywords = preScore.missing.slice(0, 12) // top 12 by JD frequency
+  // Words the person's resume ALREADY shares with the job post. They're true and they're what
+  // ATS filters match, so the rewrite must not trim them (it was dropping "projects", "standards").
+  const keepKeywordsBlock = preScore.matched.length > 0 ? `
+KEEP THESE WORDS: the source resume and the job description both use them, so they are true and they are what ATS filters look for. Keep every one of them somewhere in the resume (summary, bullets or skills), in the sense the source uses them:
+${preScore.matched.join(', ')}
+` : ''
   const keywordInjectionBlock = missingKeywords.length > 0 ? `
 JOB POST WORDING (use with care):
 These words appear in the job description but not in the source resume.
@@ -784,7 +790,7 @@ ${instructions}
 
 ${contactRules}
 
-${keywordInjectionBlock}
+${keepKeywordsBlock}${keywordInjectionBlock}
 Respond in this exact format:
 ===RESUME===
 [resume content here]`
