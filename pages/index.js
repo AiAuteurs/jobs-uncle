@@ -652,6 +652,7 @@ export default function Home() {
   const [regeneratedResults, setRegeneratedResults] = useState(null)
   const [activeVersion, setActiveVersion] = useState('v1')
   const [regenError, setRegenError] = useState(null)
+  const [extraInfo, setExtraInfo] = useState('') // "Anything else to add?" before regenerating
 
   // Cover Letter ATS state
   const [coverAts, setCoverAts] = useState(null)
@@ -818,6 +819,7 @@ export default function Home() {
     setError(null)
     setResults(null)
     setRegeneratedResults(null)
+    setExtraInfo('')
     setActiveVersion('v1')
     setTimeout(() => document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50)
 
@@ -914,6 +916,8 @@ export default function Home() {
             return /@|·/.test(first) && first.length < 400 ? first : ''
           })(),
           metadata: results.metadata || {},
+          // details the person adds after reading Version 1; the fact-check treats them as true
+          extraInfo: extraInfo.trim(),
         }),
       })
       const data = await res.json()
@@ -930,6 +934,32 @@ export default function Home() {
       setRegenerating(false)
     }
   }
+
+  // "Anything else to add?" box shown above both Apply fixes buttons (shared value)
+  const renderExtraInfoBox = () => (
+    <div style={{ width: '100%', marginBottom: '4px' }}>
+      <label htmlFor="extra-info" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '6px' }}>
+        Anything else to add? <span style={{ fontWeight: 400, opacity: 0.75 }}>(optional)</span>
+      </label>
+      <textarea
+        id="extra-info"
+        value={extraInfo}
+        onChange={e => setExtraInfo(e.target.value)}
+        maxLength={1500}
+        rows={3}
+        placeholder="Something you left out? e.g. At Stillwater I also ran the YouTube channel (120k subscribers)."
+        style={{
+          width: '100%', boxSizing: 'border-box', padding: '10px 12px',
+          fontSize: '0.85rem', lineHeight: 1.5, fontFamily: 'inherit',
+          color: 'var(--ink)', background: 'rgba(245,158,11,0.06)',
+          border: '1px solid rgba(245,158,11,0.35)', borderRadius: '6px', resize: 'vertical',
+        }}
+      />
+      <div style={{ fontSize: '0.72rem', color: 'var(--ink)', opacity: 0.75, marginTop: '4px', lineHeight: 1.4 }}>
+        Say which job it belongs to. We'll treat it as true, so only add what really happened.
+      </div>
+    </div>
+  )
 
   const handleUpgrade = async (plan = 'pro') => {
     const referral = (typeof window !== 'undefined' && window.promotekit_referral) || ''
@@ -1208,6 +1238,7 @@ export default function Home() {
     setResults(null)
     setError(null)
     setRegeneratedResults(null)
+    setExtraInfo('')
     setActiveVersion('v1')
     setRegenError(null)
     setAtsData(null)
@@ -2690,6 +2721,7 @@ export default function Home() {
                           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
                             {isPaid ? (
                               <>
+                                {!regeneratedResults && !regenerating && renderExtraInfoBox()}
                                 <button
                                   onClick={handleRegenerate}
                                   disabled={regenerating || !!regeneratedResults}
@@ -2766,6 +2798,7 @@ export default function Home() {
                   }}>
                     {isPaid ? (
                       <>
+                        {!regeneratedResults && !regenerating && renderExtraInfoBox()}
                         <button
                           onClick={handleRegenerate}
                           disabled={regenerating || !!regeneratedResults}
