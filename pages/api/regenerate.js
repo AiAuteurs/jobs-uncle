@@ -3,7 +3,21 @@
 // Frontend-gated at Pro tier — server-side KV hardening can be added once build is stable
 
 import Anthropic from '@anthropic-ai/sdk'
-import { factCheckDocs, finishCoverLetter, missingAdditions } from '../../lib/factCheck'
+import { factCheckDocs, finishCoverLetter } from '../../lib/factCheck'
+
+// Names and years the person typed in "Anything else to add?" ("Robocop", "Avid") that are missing
+// from Version 2. Lives here so the main resume's fact-check is untouched by this feature.
+function missingAdditions(extraInfo, docText) {
+  const lower = String(docText).toLowerCase()
+  const terms = new Set()
+  for (const sentence of String(extraInfo).split(/(?<=[.!?])\s+|\n+/)) {
+    sentence.trim().split(/\s+/).forEach((w, i) => {
+      const clean = w.replace(/^[^A-Za-z0-9]+|[^A-Za-z0-9]+$/g, '')
+      if (i > 0 && /^[A-Z][A-Za-z0-9&'-]{2,}$/.test(clean)) terms.add(clean.toLowerCase())
+    })
+  }
+  return [...terms].filter(t => !lower.includes(t))
+}
 import { startKeepAlive } from '../../lib/keepAlive'
 
 // Two AI calls now (rewrite + fact-check): give it the same time allowance as /api/generate
@@ -229,7 +243,7 @@ Respond in this exact format:
     const cover = finishCoverLetter(checked.docs.cover, meta)
 
     // Be honest if something the person added didn't make it into Version 2
-    const missing = extraInfo ? missingAdditions(factSource, checked.docs.resume) : []
+    const missing = extraInfo ? missingAdditions(extraInfo, checked.docs.resume) : []
     if (missing.length) {
       const names = missing.map(w => w.charAt(0).toUpperCase() + w.slice(1))
       notesForCandidate = notesForCandidate.filter(n => !missing.some(w => n.toLowerCase().includes(w)))
